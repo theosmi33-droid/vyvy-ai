@@ -4,8 +4,8 @@ name: Train
 # (pre-release) of this repository and starts bench-lora, which compares it with
 # the base model. Nothing runs on a local machine.
 #
-# Runs without manual approval: a push to main that changes data/train/ or this
-# workflow trains 1.5B, then 7B; it can also be started by hand for one base
+# Runs without manual approval: a push to main that changes data/train/, the
+# training code or this workflow trains 1.5B, then 7B; it can also be started by hand for one base
 # model. Adapters are named vyvy-<size>-d<hash of training data and prompt>; an
 # existing name is skipped, so the same input never uses GPU time twice.
 # The job runs in the environment "kaggle" (secrets usable from main only).
@@ -13,7 +13,7 @@ name: Train
 on:
   push:
     branches: [main]
-    paths: ["data/train/**", ".github/workflows/train.yml"]
+    paths: ["data/train/**", "training/**", "tools/kaggle_job.py", ".github/workflows/train.yml"]
   workflow_dispatch:
     inputs:
       base:

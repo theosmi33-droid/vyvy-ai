@@ -108,6 +108,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--cache", type=Path, help="where llama.cpp is unpacked (default: <out>/.cache)")
     p.add_argument("--prompt", choices=("auto", *bench.PROMPTS), default="auto",
                    help="system prompt; auto = the one the benchmark uses for this base model")
+    p.add_argument("--quant", choices=("auto", "4bit", "none"), default="auto",
+                   help="base weights in training; auto = 4bit for 7B, fp16 otherwise")
     p.add_argument("--epochs", type=float, default=3)
     p.add_argument("--lr", type=float, default=2e-4)
     p.add_argument("--rank", type=int, default=16)
@@ -133,16 +135,28 @@ def main(argv: list[str] | None = None) -> int:
 
     tok = AutoTokenizer.from_pretrained(args.base)
     data = [encode(tok, r, system) for r in rows]
-    model = AutoModelForCausalLM.from_pretrained(
-        args.base,
-        quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4",
-                                               bnb_4bit_compute_dtype=torch.float16,
-                                               bnb_4bit_use_double_quant=True),
-        dtype=torch.float16, device_map={"": 0},
-    )
-    model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True)
+    quant = args.quant if args.quant != "auto" else ("4bit" if "7b" in args.base.lower() else "none")
+    print(f"Base weights: {quant}")
+    if quant == "4bit":
+        # QLoRA: only needed where fp16 weights would not fit next to the training state (7B).
+        model = AutoModelForCausalLM.from_pretrained(
+            args.base,
+            quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4",
+                                                   bnb_4bit_compute_dtype=torch.float16,
+                                                   bnb_4bit_use_double_quant=True),
+            dtype=torch.float16, device_map={"": 0},
+        )
+        model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True)
+    else:
+        model = AutoModelForCausalLM.from_pretrained(args.base, dtype=torch.float16, device_map={"": 0})
+        model.gradient_checkpointing_enable()
+        model.enable_input_require_grads()
     model = get_peft_model(model, LoraConfig(r=args.rank, lora_alpha=args.alpha, lora_dropout=0.05,
                                              target_modules=LORA_TARGETS, task_type="CAUSAL_LM"))
+    # fp16 mixed precision needs fp32 master weights for everything that is trained.
+    for param in model.parameters():
+        if param.requires_grad:
+            param.data = param.data.float()
     model.print_trainable_parameters()
 
     args.out.mkdir(parents=True, exist_ok=True)
@@ -157,7 +171,8 @@ def main(argv: list[str] | None = None) -> int:
             per_device_train_batch_size=args.batch, gradient_accumulation_steps=args.grad_accum,
             learning_rate=args.lr, lr_scheduler_type="cosine", warmup_steps=warmup,
             logging_steps=10, save_strategy="epoch", save_total_limit=2, fp16=True,
-            optim="paged_adamw_8bit", gradient_checkpointing=True, remove_unused_columns=False,
+            optim="paged_adamw_8bit" if quant == "4bit" else "adamw_torch",
+            gradient_checkpointing=True, remove_unused_columns=False,
             report_to=[], seed=0,
         ),
     )
@@ -173,7 +188,7 @@ def main(argv: list[str] | None = None) -> int:
     manifest = {
         "adapter": gguf.name, "adapter_sha256": sha256(gguf), "base": args.base,
         "llama_cpp_commit": LLAMA_CPP_COMMIT, "train_files": {x.name: sha256(x) for x in paths},
-        "train_sentences": len(rows), "prompt": prompt_name,
+        "train_sentences": len(rows), "prompt": prompt_name, "base_weights": quant,
         "prompt_sha256": hashlib.sha256(system.encode("utf-8")).hexdigest(), "epochs": args.epochs, "lr": args.lr, "rank": args.rank,
         "alpha": args.alpha, "batch": args.batch, "grad_accum": args.grad_accum,
         "target_confidence": TARGET_CONFIDENCE, "holdout_lock": "passed",
