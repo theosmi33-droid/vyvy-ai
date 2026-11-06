@@ -3,8 +3,11 @@
 
 Every GGUF file comes from a fixed Hugging Face commit and must match its
 SHA-256 from models.json; files already present are reused only if they match.
-If the upstream repository changes or a file is replaced, the run stops instead
-of measuring a different model. Prints the path to load (the first shard).
+If Hugging Face cannot deliver a file, it is taken from the private Kaggle
+mirror (dataset <KAGGLE_USERNAME>/vyvy-model-mirror, filled by mirror.yml) when
+Kaggle credentials are set, and checked against the same SHA-256. If the
+upstream repository changes or a file is replaced, the run stops instead of
+measuring a different model. Prints the path to load (the first shard).
 
     python tools/fetch_model.py qwen2.5-7b-instruct-q4_k_m --dir models
 """
@@ -15,6 +18,8 @@ import argparse
 import hashlib
 import json
 import os
+import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -30,7 +35,24 @@ def sha256(path: Path) -> str:
     return h.hexdigest()
 
 
-def fetch(name: str, folder: Path, download=None) -> Path:
+MIRROR = "vyvy-model-mirror"
+
+
+def from_mirror(filename: str, folder: Path) -> None:
+    user = os.environ.get("KAGGLE_USERNAME")
+    if not user or not os.environ.get("KAGGLE_API_TOKEN"):
+        raise RuntimeError("no Kaggle credentials for the mirror")
+    if not shutil.which("kaggle"):
+        # kaggle 2.2.5 imports six without declaring it as a dependency
+        subprocess.run([sys.executable, "-m", "pip", "install", "-q", "kaggle==2.2.5", "six==1.17.0"], check=True)
+    subprocess.run(["kaggle", "datasets", "download", f"{user}/{MIRROR}", "-f", filename, "-p", str(folder),
+                    "--unzip", "--force"], check=True)
+    zipped = folder / f"{filename}.zip"
+    if zipped.exists():
+        zipped.unlink()
+
+
+def fetch(name: str, folder: Path, download=None, mirror=from_mirror) -> Path:
     spec = json.loads(MODELS.read_text(encoding="utf-8"))["gguf"].get(name)
     if spec is None:
         raise SystemExit(f"{name} is not pinned in models.json")
@@ -44,7 +66,12 @@ def fetch(name: str, folder: Path, download=None) -> Path:
     for filename, digest in sorted(spec["files"].items()):
         path = folder / filename
         if not (path.is_file() and sha256(path) == digest):
-            download(spec["repo"], filename, spec["revision"])
+            try:
+                download(spec["repo"], filename, spec["revision"])
+            except Exception as exc:  # noqa: BLE001  (any failure: try the mirror, then verify)
+                print(f"Hugging Face failed for {filename} ({type(exc).__name__}); using the Kaggle mirror",
+                      file=sys.stderr)
+                mirror(filename, folder)
         actual = sha256(path)
         if actual != digest:
             raise SystemExit(f"{filename}: checksum {actual} does not match the pinned {digest}")

@@ -56,9 +56,9 @@ jobs:
       EPOCHS: ${{ inputs.epochs || 3 }}
       GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.12"
 
@@ -150,6 +150,8 @@ jobs:
           set -euo pipefail
           pip install -q -r training/convert-requirements.txt
           python tools/convert_adapter.py out --name "$NAME" --cache /tmp/vyvy-cache
+          # Apache 2.0 of the base model travels with the adapter: license text and NOTICE.
+          python tools/license_files.py out
 
       - name: Check the adapter
         if: env.SKIP != 'true'
@@ -172,7 +174,8 @@ jobs:
         run: |
           set -euo pipefail
           notes="Candidate. LoRA adapter for $BASE (Apache License 2.0), trained from commit $GITHUB_SHA on data/train/. Apply it on top of the unchanged base model; see training/README.md. The base model's license and notices apply to its use. Accepted only if bench-lora finds no regression against the base model and a higher accuracy."
-          gh release create "$NAME" "out/$NAME.gguf" out/manifest.json --prerelease \
+          gh release create "$NAME" "out/$NAME.gguf" out/manifest.json \
+            out/LICENSE-base-model.txt out/NOTICE.txt --prerelease \
             --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "$NAME (candidate)" --notes "$notes"
 
       - name: Start bench-lora with the adapter

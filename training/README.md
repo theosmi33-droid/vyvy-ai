@@ -51,12 +51,18 @@ without manual approval or checking.
    On success it fetches only `<name>.gguf` and `manifest.json`; on failure it
    writes the likely cause (out of memory, CUDA or 4-bit error, missing module,
    API mismatch, disk, network) and the last 100 log lines to the job summary.
-5. **Fallbacks in the trainer**: out of GPU memory → batch 1 with the same
+5. **Validation and early stopping**: 10 % of the training sentences of every
+   intent are held out (fixed by hash). Training evaluates them after every
+   epoch, stops once the validation loss no longer improves and keeps the best
+   epoch; the manifest records the losses.
+6. **Fallbacks in the trainer**: out of GPU memory → batch 1 with the same
    effective batch via gradient accumulation; CUDA or 4-bit kernel error →
    plain fp16 weights. At most three attempts; the manifest lists them.
-6. The adapter is checked against its manifest checksum and published as a
-   candidate (pre-release); **Bench LoRA** starts by itself.
-7. **Bench LoRA** measures the current default and the candidate in one job. The
+7. The adapter is checked against its manifest checksum and published as a
+   candidate (pre-release) together with the base model's Apache 2.0 license
+   text and a NOTICE; **Bench LoRA** starts by itself.
+8. **Bench LoRA** measures the current default and the candidate in one job,
+   on the blind holdout (decides) and the development holdout (information). The
    default is the newest accepted adapter for the same base model and prompt,
    or the base model if there is none. The candidate becomes a regular release
    (the new default) only with zero regressions and a higher intent accuracy;

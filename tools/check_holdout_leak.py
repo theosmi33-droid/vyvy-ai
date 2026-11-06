@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Holdout lock: training data must not contain holdout questions or near copies.
 
+Protects the development holdout and the blind holdout.
+
 Compares every training sentence with every holdout sentence after
 normalisation (case, punctuation, whitespace) by two measures:
 
@@ -26,6 +28,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 HOLDOUT = ROOT / "data" / "holdout_benchmarks.json"
+BLIND = ROOT / "data" / "holdout_blind_v1.json"
+HOLDOUTS = [HOLDOUT, BLIND]
 TRAIN_DIR = ROOT / "data" / "train"
 
 
@@ -66,7 +70,8 @@ def find_leaks(train: list[tuple[str, str]], holdout: list[dict], threshold: flo
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Fail if training data overlaps the holdout set")
     p.add_argument("--train", type=Path, nargs="*", help="training files (default: data/train/*.jsonl)")
-    p.add_argument("--holdout", type=Path, default=HOLDOUT)
+    p.add_argument("--holdout", type=Path, nargs="*", default=HOLDOUTS,
+                   help="holdout sets to protect (default: development holdout and blind holdout)")
     p.add_argument("--threshold", type=float, default=0.85)
     args = p.parse_args(argv)
 
@@ -74,7 +79,7 @@ def main(argv: list[str] | None = None) -> int:
     if not paths:
         print("No training data found; nothing to check.")
         return 0
-    holdout = json.loads(args.holdout.read_text(encoding="utf-8"))["items"]
+    holdout = [i for h in args.holdout if h.exists() for i in json.loads(h.read_text(encoding="utf-8"))["items"]]
     train = load_train(paths)
     leaks = find_leaks(train, holdout, args.threshold)
     if leaks:

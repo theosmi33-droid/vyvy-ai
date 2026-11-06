@@ -1,7 +1,9 @@
 name: Bench LoRA
 
 # Measures a trained adapter against the current default in one job on the same
-# runner (same CPU, same prompt, route mode). The default is the newest accepted
+# runner (same CPU, same prompt, route mode). Acceptance is decided only on the
+# blind holdout (data/holdout_blind_v1.json, written without knowledge of any
+# errors); the development holdout is reported for information. The default is the newest accepted
 # adapter for the same base model and prompt, or the base model alone if there is
 # none. The candidate release becomes a regular release (the new default) only
 # with zero regressions and a higher intent accuracy; otherwise it stays a
@@ -30,9 +32,9 @@ jobs:
       ADAPTER: ${{ inputs.adapter }}
       GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.12"
           cache: pip
@@ -88,7 +90,7 @@ jobs:
           CMAKE_ARGS: -DGGML_NATIVE=OFF
         run: pip install -r requirements.txt
 
-      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: models
           key: model-${{ steps.adapter.outputs.model }}
@@ -96,10 +98,13 @@ jobs:
       # Fixed Hugging Face commit and SHA-256 per file (models.json).
       - name: Download the base model
         env:
+          # Only used if Hugging Face fails: private Kaggle mirror (mirror.yml).
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
           MODEL: ${{ steps.adapter.outputs.model }}
         run: python tools/fetch_model.py "$MODEL" --dir models
 
-      - name: Baseline and candidate, one after the other
+      - name: Baseline and candidate on the blind holdout (decides) and the development holdout (information)
         env:
           MODEL: ${{ steps.adapter.outputs.model }}
           GGUF: ${{ steps.adapter.outputs.gguf }}
@@ -107,10 +112,16 @@ jobs:
         run: |
           set -euo pipefail
           file=$(ls models/"$MODEL"*.gguf | sort | head -n 1)
-          VYVY_LORA_PATH="$BASELINE_GGUF" python runner/bench.py --model "$file" --label "$MODEL" --mode route \
-            --threads "$(nproc)" --summary "$GITHUB_STEP_SUMMARY" --json base.json
-          python runner/bench.py --model "$file" --label "$MODEL" --lora "$GGUF" --mode route \
-            --threads "$(nproc)" --summary "$GITHUB_STEP_SUMMARY" --json lora.json
+          run() {  # $1 = data set, $2 = output prefix, $3 = adapter or empty
+            VYVY_LORA_PATH="$3" python runner/bench.py --model "$file" --label "$MODEL" --mode route \
+              --data "$1" --threads "$(nproc)" --summary "$GITHUB_STEP_SUMMARY" --json "$2.json"
+          }
+          echo "## Blind holdout (decides acceptance)" >> "$GITHUB_STEP_SUMMARY"
+          run data/holdout_blind_v1.json base_blind "$BASELINE_GGUF"
+          run data/holdout_blind_v1.json lora_blind "$GGUF"
+          echo "## Development holdout (information only)" >> "$GITHUB_STEP_SUMMARY"
+          run data/holdout_benchmarks.json base_dev "$BASELINE_GGUF"
+          run data/holdout_benchmarks.json lora_dev "$GGUF"
 
       - name: Decide
         id: decide
@@ -118,7 +129,9 @@ jobs:
           BASELINE_NAME: ${{ steps.baseline.outputs.name }}
         run: |
           set -uo pipefail
-          python tools/compare_adapter.py base.json lora.json --name "$ADAPTER" \
+          python tools/compare_adapter.py base_dev.json lora_dev.json --name "$ADAPTER (development holdout)" \
+            --baseline-name "$BASELINE_NAME" | tee -a "$GITHUB_STEP_SUMMARY" || true
+          python tools/compare_adapter.py base_blind.json lora_blind.json --name "$ADAPTER (blind holdout)" \
             --baseline-name "$BASELINE_NAME" --verdict verdict.json \
             | tee -a "$GITHUB_STEP_SUMMARY"
           code=${PIPESTATUS[0]}
@@ -139,7 +152,8 @@ jobs:
           else
             gh release edit "$ADAPTER" --repo "$GITHUB_REPOSITORY" --title "$ADAPTER (rejected)" --notes-file notes.md
           fi
-          gh release upload "$ADAPTER" verdict.json base.json lora.json --repo "$GITHUB_REPOSITORY" --clobber
+          gh release upload "$ADAPTER" verdict.json base_blind.json lora_blind.json base_dev.json lora_dev.json \
+            --repo "$GITHUB_REPOSITORY" --clobber
 
       - name: Fail when rejected
         if: steps.decide.outputs.accepted != 'true'

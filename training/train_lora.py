@@ -83,6 +83,24 @@ def collate(pad_id: int):
     return run
 
 
+def split_rows(rows: list[dict], share: float) -> tuple[list[dict], list[dict]]:
+    """Hold out about `share` of the sentences of every intent for validation.
+
+    Deterministic: a sentence goes to validation by the hash of its text, so the
+    split never changes between runs and never depends on the order of files.
+    """
+    by_intent: dict[str, list[dict]] = {}
+    for r in rows:
+        by_intent.setdefault(json.loads(r["answer"])["intent"], []).append(r)
+    train, held = [], []
+    for group in by_intent.values():
+        ranked = sorted(group, key=lambda r: hashlib.sha256(r["text"].encode("utf-8")).hexdigest())
+        k = max(1, round(len(ranked) * share)) if share > 0 and len(ranked) > 1 else 0
+        held += ranked[:k]
+        train += ranked[k:]
+    return train, held
+
+
 def failure_kind(exc: BaseException) -> str:
     """Classify a training failure: out of GPU memory, a CUDA/4-bit kernel error, or other."""
     text = f"{type(exc).__name__}: {exc}"
@@ -124,7 +142,10 @@ def main(argv: list[str] | None = None) -> int:
                    help="base weights in training; auto = 4bit for 7B, fp16 otherwise")
     p.add_argument("--no-gguf", action="store_true",
                    help="only train and save the PEFT adapter; convert to GGUF elsewhere (tools/convert_adapter.py)")
-    p.add_argument("--epochs", type=float, default=3)
+    p.add_argument("--epochs", type=float, default=3, help="upper limit; training stops earlier when "
+                   "the validation loss no longer improves")
+    p.add_argument("--eval-share", type=float, default=0.1, help="share of training sentences held out for "
+                   "validation (per intent)")
     p.add_argument("--lr", type=float, default=2e-4)
     p.add_argument("--rank", type=int, default=16)
     p.add_argument("--alpha", type=int, default=32)
@@ -145,13 +166,17 @@ def main(argv: list[str] | None = None) -> int:
 
     import torch
     from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
-    from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, Trainer, TrainingArguments
+    from transformers import (AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, EarlyStoppingCallback,
+                              Trainer, TrainingArguments)
 
     # Fixed Hugging Face commit of the base model (models.json), never "latest".
     revision = json.loads((ROOT / "models.json").read_text(encoding="utf-8"))["base"][args.base]
     print(f"Base model: {args.base}@{revision[:7]}")
     tok = AutoTokenizer.from_pretrained(args.base, revision=revision)
-    data = [encode(tok, r, system) for r in rows]
+    train_rows, eval_rows = split_rows(rows, args.eval_share)
+    data = [encode(tok, r, system) for r in train_rows]
+    eval_data = [encode(tok, r, system) for r in eval_rows]
+    print(f"Training sentences: {len(data)} · validation sentences: {len(eval_data)}")
     collator = collate(tok.pad_token_id if tok.pad_token_id is not None else tok.eos_token_id)
     args.out.mkdir(parents=True, exist_ok=True)
     adapter_dir = args.out / "adapter"
@@ -184,12 +209,17 @@ def main(argv: list[str] | None = None) -> int:
         trainer = Trainer(
             model=model,
             train_dataset=data,
+            eval_dataset=eval_data,
             data_collator=collator,
+            # Stop once the validation loss no longer improves; keep the best epoch, not the last.
+            callbacks=[EarlyStoppingCallback(early_stopping_patience=1)],
             args=TrainingArguments(
                 output_dir=str(args.out / "checkpoints"), num_train_epochs=args.epochs,
                 per_device_train_batch_size=batch, gradient_accumulation_steps=accum,
                 learning_rate=args.lr, lr_scheduler_type="cosine", warmup_steps=max(1, round(0.03 * steps)),
                 logging_steps=10, save_strategy="epoch", save_total_limit=2, fp16=True,
+                eval_strategy="epoch", load_best_model_at_end=True, metric_for_best_model="eval_loss",
+                greater_is_better=False, per_device_eval_batch_size=batch,
                 optim="paged_adamw_8bit" if quant == "4bit" else "adamw_torch",
                 gradient_checkpointing=True, remove_unused_columns=False,
                 report_to=[], seed=0,
@@ -198,6 +228,9 @@ def main(argv: list[str] | None = None) -> int:
         try:
             trainer.train()
             model.save_pretrained(adapter_dir)
+            history.clear()
+            history.extend({k: round(v, 5) if isinstance(v, float) else v for k, v in e.items()}
+                           for e in trainer.state.log_history if "eval_loss" in e)
         finally:
             del trainer, model
             gc.collect()
@@ -206,6 +239,7 @@ def main(argv: list[str] | None = None) -> int:
     quant = args.quant if args.quant != "auto" else ("4bit" if "7b" in args.base.lower() else "none")
     batch, accum = args.batch, args.grad_accum
     attempts: list[dict] = []
+    history: list[dict] = []
     while True:
         try:
             train_once(quant, batch, accum)
@@ -228,7 +262,7 @@ def main(argv: list[str] | None = None) -> int:
         "adapter_files": {f.name: sha256(f) for f in sorted(adapter_dir.iterdir()) if f.is_file()},
         "llama_cpp_commit": LLAMA_CPP_COMMIT, "train_files": {x.name: sha256(x) for x in paths},
         "train_sentences": len(rows), "prompt": prompt_name, "base_weights": quant,
-        "attempts": attempts,
+        "attempts": attempts, "validation": history, "validation_sentences": len(eval_rows),
         "prompt_sha256": hashlib.sha256(system.encode("utf-8")).hexdigest(), "epochs": args.epochs, "lr": args.lr,
         "rank": args.rank, "alpha": args.alpha, "batch": batch, "grad_accum": accum,
         "target_confidence": TARGET_CONFIDENCE, "holdout_lock": "passed",

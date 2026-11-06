@@ -47,6 +47,7 @@ measures accuracy and latency on GitHub Actions.
 | `grammars/slots.gbnf` | Output contract: `intent`, `timeframe`, `entity`, `confidence` |
 | `runner/bench.py` | Stateless benchmark runner (llama-cpp-python) |
 | `.github/workflows/bench.yml` | Manual GitHub Actions run on `ubuntu-latest` |
+| `data/holdout_blind_v1.json` | Blind holdout: 90 questions written without knowledge of any errors; decides adapter acceptance |
 | `data/train/` | Training data, one JSON object per line (see its README) |
 | `tools/check_holdout_leak.py` | Holdout lock: rejects training sentences close to a holdout sentence |
 | `.github/workflows/data-check.yml` | Runs the holdout lock on every change below `data/` |
@@ -58,6 +59,8 @@ measures accuracy and latency on GitHub Actions.
 | `tools/kaggle_watchdog.py` | Watches a Kaggle run, fetches the adapter or diagnoses the failure |
 | `models.json` | Fixed Hugging Face commit and SHA-256 of every model file used |
 | `tools/fetch_model.py` | Downloads a model exactly as pinned in `models.json` and verifies it |
+| `tools/license_files.py` | Adds the base model's Apache 2.0 license and a NOTICE to every adapter release |
+| `.github/workflows/mirror.yml` | Keeps a private Kaggle copy of every pinned model file |
 | `tools/convert_adapter.py` | Converts a trained adapter to GGUF on a CPU runner |
 | `tools/quota_guard.py` | Pauses training before the weekly Kaggle GPU quota runs out |
 | `training/` | Trains a LoRA adapter and exports it as GGUF (see its README) |
@@ -135,9 +138,11 @@ Low German, Rhineland, Bavarian, Swabian, Swiss German and other regional
 variants.
 
 The intent definitions in the prompt were sharpened once after looking at
-errors on this holdout set (what is "on today", open vs. overdue tasks). Results
-after that change are therefore not fully blind; an unbiased figure needs a new
-holdout set that was not used for any prompt or training decision.
+errors on this holdout set (what is "on today", open vs. overdue tasks), so it
+serves as the development holdout. A second set, `holdout_blind_v1.json` (90
+questions, 10 per intent), was written in one pass by an independent agent that
+knew only the intent definitions, not the code, prompts, training data or any
+errors. Only the blind set decides whether a trained adapter is accepted.
 
 ### Run locally
 

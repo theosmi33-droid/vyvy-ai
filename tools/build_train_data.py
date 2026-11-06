@@ -5,7 +5,7 @@ Every core sentence below was written for this file in standard German or a
 regional variant. Variants add fillers, lowercase, missing punctuation and
 typos. Each output sentence is unique, and every sentence at or above
 --max-similarity (default 0.8, stricter than the holdout lock's 0.85) to any
-holdout sentence is dropped. The result is deterministic for a given --seed.
+holdout sentence (development and blind holdout) is dropped. The result is deterministic for a given --seed.
 
     python tools/build_train_data.py
 """
@@ -30,7 +30,6 @@ OUT = ROOT / "data" / "train" / "vyvy_train_v1.jsonl"
 # (text, timeframe, entity) per intent. Persons and companies are invented.
 CORE: dict[str, list[tuple[str, str | None, str | None]]] = {
     "appointments_today": [
-        ("Welche Termine habe ich heute?", "today", None),
         ("Habe ich heute noch einen Termin?", "today", None),
         ("Wann ist heute mein nächster Termin?", "today", None),
         ("Zeig mir meinen Kalender für heute.", "today", None),
@@ -55,7 +54,6 @@ CORE: dict[str, list[tuple[str, str | None, str | None]]] = {
         ("termine heut", "today", None),
     ],
     "appointments_tomorrow": [
-        ("Welche Termine habe ich morgen?", "tomorrow", None),
         ("Was steht morgen im Kalender?", "tomorrow", None),
         ("Habe ich morgen früh schon etwas?", "tomorrow", None),
         ("Wann ist morgen mein erster Termin?", "tomorrow", None),
@@ -73,7 +71,6 @@ CORE: dict[str, list[tuple[str, str | None, str | None]]] = {
         ("Kalender morgen?", "tomorrow", None),
     ],
     "tasks_open": [
-        ("Welche Aufgaben sind noch offen?", None, None),
         ("Was steht auf meiner To-do-Liste?", None, None),
         ("Was muss ich noch abarbeiten?", None, None),
         ("Was ist noch nicht erledigt?", None, None),
@@ -89,13 +86,11 @@ CORE: dict[str, list[tuple[str, str | None, str | None]]] = {
         ("Was isch no uf minere Lischte?", None, None),
         ("Was isch no pendent?", None, None),
         ("Was muss i no schaffa?", None, None),
-        ("Wat steiht noch op mien Liste?", None, None),
         ("Was muss isch noch schaffe?", None, None),
         ("To-dos?", None, None),
         ("offene aufgaben", None, None),
     ],
     "tasks_overdue": [
-        ("Welche Aufgaben sind überfällig?", None, None),
         ("Was hätte ich schon längst erledigen müssen?", None, None),
         ("Wo habe ich eine Frist verpasst?", None, None),
         ("Was ist über dem Fälligkeitsdatum?", None, None),
@@ -247,7 +242,7 @@ def variants(text: str, rng: random.Random, n: int) -> list[str]:
 
 def build(seed: int, per_core: int, max_similarity: float) -> tuple[list[dict], list[tuple[str, str, float]]]:
     rng = random.Random(seed)
-    holdout = json.loads((ROOT / "data" / "holdout_benchmarks.json").read_text(encoding="utf-8"))["items"]
+    holdout = [i for h in lock.HOLDOUTS for i in json.loads(h.read_text(encoding="utf-8"))["items"]]
     hold_norm = [(h["id"], lock.normalise(h["text"])) for h in holdout]
     rows, seen, dropped = [], set(), []
     for intent, cores in CORE.items():
