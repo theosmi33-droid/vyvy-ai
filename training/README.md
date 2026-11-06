@@ -31,14 +31,16 @@ stop it; no GitHub credentials are needed on the training machine.
 
 ## Training without a local machine
 
-Kaggle allows 30 GPU hours per week, so training runs in short, approved bursts
-while data checks and measurements run on GitHub's CPU runners.
+Kaggle allows 30 GPU hours per week, so training runs in short bursts while
+data checks and measurements run on GitHub's CPU runners. Everything runs
+without manual approval.
 
-1. A push that changes `data/train/` queues the **Train** workflow (1.5B, then
-   7B); it can also be started by hand for one base model.
-2. The job runs in the environment `kaggle`, which requires the owner's
-   approval. Until then nothing touches Kaggle or its secrets.
-3. After approval: holdout lock, a private Kaggle kernel trains from the exact
+1. A push to `main` that changes `data/train/` or the workflow starts **Train**
+   (1.5B, then 7B, one GPU session at a time); it can also be started by hand
+   for one base model.
+2. The job runs in the environment `kaggle`; its secrets are usable from `main`
+   only.
+3. Holdout lock, a private Kaggle kernel trains from the exact
    commit with the prompt the benchmark uses for that model size, and only
    `<name>.gguf` and `manifest.json` come back, checked against the manifest's
    checksum. The adapter is published as a candidate (pre-release).
