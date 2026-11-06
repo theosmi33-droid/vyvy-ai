@@ -48,6 +48,7 @@ measures accuracy and latency on GitHub Actions.
 | `data/train/` | Training data, one JSON object per line (see its README) |
 | `tools/check_holdout_leak.py` | Holdout lock: rejects training sentences close to a holdout sentence |
 | `.github/workflows/data-check.yml` | Runs the holdout lock on every change below `data/` |
+| `training/` | Trains a LoRA adapter and exports it as GGUF (see its README) |
 
 ### Output contract
 

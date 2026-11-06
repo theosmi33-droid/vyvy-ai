@@ -1,0 +1,4 @@
+# On top of a GPU notebook image that already has torch, transformers,
+# accelerate and safetensors.
+peft>=0.13,<1
+bitsandbytes>=0.45
