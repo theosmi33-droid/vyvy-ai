@@ -31,22 +31,27 @@ stop it; no GitHub credentials are needed on the training machine.
 
 ## Training without a local machine
 
-The **Train** workflow starts by itself when training data in `data/train/`
-changes on `main`: first for 1.5B, then for 7B, each adapter named
-`vyvy-<size>-d<hash of the training data>`; if that adapter already exists, the
-run is skipped, so unchanged data never uses GPU time twice. By hand: Actions → **Train**, pick the base model
-and an adapter name. The workflow
-checks the holdout lock, sends the training job to a Kaggle GPU (private
-kernel, trained from the exact commit of the run), waits for it, fetches only
-`<name>.gguf` and `manifest.json`, checks the adapter against the checksum in
-the manifest, publishes both as release `<name>` and starts the benchmark with
-that adapter in `route` mode.
+Kaggle allows 30 GPU hours per week, so training runs in short, approved bursts
+while data checks and measurements run on GitHub's CPU runners.
 
-It needs two secrets in the repository environment `kaggle`, which accepts runs
-from `main` only: `KAGGLE_API_TOKEN` (Kaggle → Settings → API Tokens) and
-`KAGGLE_USERNAME`. The token can do everything in the Kaggle account; if it ever
-shows up in a log, expire it on Kaggle and set a new one. The Kaggle account needs a verified phone number
-for GPU and internet access.
+1. A push that changes `data/train/` queues the **Train** workflow (1.5B, then
+   7B); it can also be started by hand for one base model.
+2. The job runs in the environment `kaggle`, which requires the owner's
+   approval. Until then nothing touches Kaggle or its secrets.
+3. After approval: holdout lock, a private Kaggle kernel trains from the exact
+   commit with the prompt the benchmark uses for that model size, and only
+   `<name>.gguf` and `manifest.json` come back, checked against the manifest's
+   checksum. The adapter is published as a candidate (pre-release).
+4. **Bench LoRA** measures base model and adapter in one job. The release becomes
+   a regular release only with zero regressions and a higher intent accuracy;
+   otherwise it stays a pre-release marked rejected, with the reason.
+
+Adapters are named `vyvy-<size>-d<hash of training data and prompt>`; if that
+name exists, the run skips training.
+
+Secrets in the environment `kaggle`: `KAGGLE_API_TOKEN` (Kaggle → Settings →
+API Tokens) and `KAGGLE_USERNAME`. The token can do everything in the Kaggle
+account; if it ever shows up in a log, expire it on Kaggle and set a new one.
 
 ## Measuring the adapter
 

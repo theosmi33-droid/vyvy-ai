@@ -23,6 +23,7 @@ import argparse
 import hashlib
 import io
 import json
+import math
 import subprocess
 import sys
 import tarfile
@@ -56,8 +57,8 @@ def load_rows(paths: list[Path], intents: tuple[str, ...]) -> list[dict]:
     return rows
 
 
-def encode(tok, row: dict) -> dict:
-    messages = [{"role": "system", "content": bench.SYSTEM_PROMPT},
+def encode(tok, row: dict, system: str) -> dict:
+    messages = [{"role": "system", "content": system},
                 {"role": "user", "content": f'Question: "{row["text"]}"'}]
     prompt = tok.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
     full = tok.apply_chat_template(messages + [{"role": "assistant", "content": row["answer"]}], tokenize=False)
@@ -105,6 +106,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--train", type=Path, nargs="*", help="training files (default: data/train/*.jsonl)")
     p.add_argument("--out", type=Path, default=Path("out"))
     p.add_argument("--cache", type=Path, help="where llama.cpp is unpacked (default: <out>/.cache)")
+    p.add_argument("--prompt", choices=("auto", *bench.PROMPTS), default="auto",
+                   help="system prompt; auto = the one the benchmark uses for this base model")
     p.add_argument("--epochs", type=float, default=3)
     p.add_argument("--lr", type=float, default=2e-4)
     p.add_argument("--rank", type=int, default=16)
@@ -120,19 +123,22 @@ def main(argv: list[str] | None = None) -> int:
         raise SystemExit("Holdout lock failed; not training.")
     intents = bench.grammar_intents(bench.DEFAULT_GRAMMAR.read_text(encoding="utf-8"))
     rows = load_rows(paths, intents)
+    prompt_name = bench.prompt_for(args.base) if args.prompt == "auto" else args.prompt
+    system = bench.PROMPTS[prompt_name]
+    print(f"Prompt: {prompt_name}")
 
     import torch
     from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
     from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, Trainer, TrainingArguments
 
     tok = AutoTokenizer.from_pretrained(args.base)
-    data = [encode(tok, r) for r in rows]
+    data = [encode(tok, r, system) for r in rows]
     model = AutoModelForCausalLM.from_pretrained(
         args.base,
         quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4",
                                                bnb_4bit_compute_dtype=torch.float16,
                                                bnb_4bit_use_double_quant=True),
-        torch_dtype=torch.float16, device_map={"": 0},
+        dtype=torch.float16, device_map={"": 0},
     )
     model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True)
     model = get_peft_model(model, LoraConfig(r=args.rank, lora_alpha=args.alpha, lora_dropout=0.05,
@@ -140,6 +146,8 @@ def main(argv: list[str] | None = None) -> int:
     model.print_trainable_parameters()
 
     args.out.mkdir(parents=True, exist_ok=True)
+    steps = math.ceil(len(data) / (args.batch * args.grad_accum)) * args.epochs
+    warmup = max(1, round(0.03 * steps))
     trainer = Trainer(
         model=model,
         train_dataset=data,
@@ -147,7 +155,7 @@ def main(argv: list[str] | None = None) -> int:
         args=TrainingArguments(
             output_dir=str(args.out / "checkpoints"), num_train_epochs=args.epochs,
             per_device_train_batch_size=args.batch, gradient_accumulation_steps=args.grad_accum,
-            learning_rate=args.lr, lr_scheduler_type="cosine", warmup_ratio=0.03,
+            learning_rate=args.lr, lr_scheduler_type="cosine", warmup_steps=warmup,
             logging_steps=10, save_strategy="epoch", save_total_limit=2, fp16=True,
             optim="paged_adamw_8bit", gradient_checkpointing=True, remove_unused_columns=False,
             report_to=[], seed=0,
@@ -165,7 +173,8 @@ def main(argv: list[str] | None = None) -> int:
     manifest = {
         "adapter": gguf.name, "adapter_sha256": sha256(gguf), "base": args.base,
         "llama_cpp_commit": LLAMA_CPP_COMMIT, "train_files": {x.name: sha256(x) for x in paths},
-        "train_sentences": len(rows), "epochs": args.epochs, "lr": args.lr, "rank": args.rank,
+        "train_sentences": len(rows), "prompt": prompt_name,
+        "prompt_sha256": hashlib.sha256(system.encode("utf-8")).hexdigest(), "epochs": args.epochs, "lr": args.lr, "rank": args.rank,
         "alpha": args.alpha, "batch": args.batch, "grad_accum": args.grad_accum,
         "target_confidence": TARGET_CONFIDENCE, "holdout_lock": "passed",
     }

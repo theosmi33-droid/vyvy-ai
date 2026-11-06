@@ -1,15 +1,19 @@
 name: Train
 
-# Trains LoRA adapters on a Kaggle GPU, publishes each as a release of this
-# repository and starts the benchmark with it. Nothing runs on a local machine.
-# Starts by itself when training data on main changes (1.5B, then 7B, each
-# named vyvy-<size>-d<hash of the training data>; data that was already trained
-# is skipped), or by hand for one base model.
-# Needs the secrets KAGGLE_API_TOKEN and KAGGLE_USERNAME in the environment "kaggle".
+# Trains LoRA adapters on a Kaggle GPU, publishes each as a candidate release
+# (pre-release) of this repository and starts bench-lora, which compares it with
+# the base model. Nothing runs on a local machine.
+#
+# Human in the loop: the job runs in the environment "kaggle", which requires the
+# owner's approval before any step can use the Kaggle secrets or GPU time. A push
+# that changes data/train/ queues a run (1.5B, then 7B) that waits for that
+# approval; it can also be started by hand for one base model. Adapters are named
+# vyvy-<size>-d<hash of training data and prompt>; an existing name is skipped.
+# Needs the secrets KAGGLE_API_TOKEN and KAGGLE_USERNAME.
 on:
   push:
     branches: [main]
-    paths: ["data/train/**", ".github/workflows/train.yml"]
+    paths: ["data/train/**"]
   workflow_dispatch:
     inputs:
       base:
@@ -67,9 +71,11 @@ jobs:
               Qwen/Qwen2.5-1.5B-Instruct) size=1.5b ;;
               Qwen/Qwen2.5-7B-Instruct)   size=7b ;;
             esac
-            data=$(cat data/train/*.jsonl | sha256sum | cut -c1-8)
+            # The prompt is part of the hash: 1.5B and 7B train on different prompts.
+            prompt=$(python -c "import sys; sys.path.insert(0, 'runner'); import bench; print(bench.PROMPTS[bench.prompt_for(sys.argv[1])])" "$BASE")
+            data=$( { cat data/train/*.jsonl; printf '%s' "$prompt"; } | sha256sum | cut -c1-8)
             name="vyvy-$size-d$data"
-            # Same data, same name: never spend GPU time twice on identical data.
+            # Same data and prompt, same name: never spend GPU time twice on the same input.
             if gh release view "$name" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
               echo "SKIP=true" >> "$GITHUB_ENV"
               echo "Adapter $name exists for this training data; skipped." >> "$GITHUB_STEP_SUMMARY"
@@ -153,22 +159,17 @@ jobs:
           print(json.dumps(m, indent=1))
           PY
 
-      - name: Publish the release
+      - name: Publish the candidate release
         if: env.SKIP != 'true'
         run: |
           set -euo pipefail
-          notes="LoRA adapter for $BASE (Apache License 2.0), trained from commit $GITHUB_SHA on data/train/. Apply it on top of the unchanged base model; see training/README.md. The base model's license and notices apply to its use."
-          gh release create "$NAME" "out/$NAME.gguf" out/manifest.json \
-            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "$NAME" --notes "$notes"
+          notes="Candidate. LoRA adapter for $BASE (Apache License 2.0), trained from commit $GITHUB_SHA on data/train/. Apply it on top of the unchanged base model; see training/README.md. The base model's license and notices apply to its use. Accepted only if bench-lora finds no regression against the base model and a higher accuracy."
+          gh release create "$NAME" "out/$NAME.gguf" out/manifest.json --prerelease \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "$NAME (candidate)" --notes "$notes"
 
-      - name: Start the benchmark with the adapter
+      - name: Start bench-lora with the adapter
         if: env.SKIP != 'true'
         run: |
           set -euo pipefail
-          case "$BASE" in
-            Qwen/Qwen2.5-1.5B-Instruct) model=qwen2.5-1.5b-instruct-q8_0 ;;
-            Qwen/Qwen2.5-7B-Instruct)   model=qwen2.5-7b-instruct-q4_k_m ;;
-          esac
-          gh workflow run bench.yml --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME" \
-            -f model="$model" -f mode=route -f adapter="$NAME"
-          echo "Benchmark started: model $model, mode route, adapter $NAME" >> "$GITHUB_STEP_SUMMARY"
+          gh workflow run bench-lora.yml --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME" -f adapter="$NAME"
+          echo "bench-lora started for adapter $NAME" >> "$GITHUB_STEP_SUMMARY"

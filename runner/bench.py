@@ -66,7 +66,30 @@ def _example(question: str, intent: str, timeframe: str | None, confidence: floa
     return f'Question: "{question}" -> {answer}'
 
 
-SYSTEM_PROMPT = "\n".join([
+# Compact prompt for small models (1.5B): short definitions, three examples.
+# This is the prompt 1.5B was measured best with; longer definitions made it worse.
+COMPACT_PROMPT = (
+    "You translate one short German question or request from an office worker "
+    "(often regional dialect, colloquial wording or typos) into a JSON object. "
+    "You never answer the question.\n"
+    "intent: appointments_today (own appointments today), appointments_tomorrow, "
+    "tasks_open (what is still to do), tasks_overdue (overdue, forgotten or urgent work), "
+    "emails_unread (new or unread email), daily_agenda (what is on today in general), "
+    "create_appointment, create_task, unknown (anything else, including general "
+    "knowledge and questions about other companies).\n"
+    "timeframe: today, tomorrow, week or null. entity: a named person or company, or null. "
+    "confidence: 0 to 1, how sure you are.\n"
+    "Examples:\n"
+    'Question: "Was liegt heut im Kalender, gell?" -> {"intent": "appointments_today", '
+    '"timeframe": "today", "entity": null, "confidence": 0.9}\n'
+    'Question: "Hab ich irgendwas Dringendes verpennt?" -> {"intent": "tasks_overdue", '
+    '"timeframe": null, "entity": null, "confidence": 0.8}\n'
+    'Question: "Wer hat die Glühbirne erfunden?" -> {"intent": "unknown", "timeframe": null, '
+    '"entity": null, "confidence": 0.9}'
+)
+
+# Detailed prompt for larger models (7B): explicit boundaries and more examples.
+DETAILED_PROMPT = "\n".join([
     "You translate one short German question or request from an office worker "
     "(often regional dialect, colloquial wording or typos) into a JSON object. "
     "You never answer the question.",
@@ -81,6 +104,13 @@ SYSTEM_PROMPT = "\n".join([
     _example("Gib mir einen Überblick über den ganzen Tag", "daily_agenda", "today", 0.9),
     _example("Wer hat die Glühbirne erfunden?", "unknown", None, 0.9),
 ])
+
+PROMPTS = {"compact": COMPACT_PROMPT, "detailed": DETAILED_PROMPT}
+
+
+def prompt_for(model: str) -> str:
+    """Prompt name for a model file, label or Hugging Face id: compact for 1.5B, detailed otherwise."""
+    return "compact" if "1.5b" in model.lower() else "detailed"
 
 CLASSIFY_EXAMPLES = (
     ("Was liegt heut im Kalender, gell?", "appointments_today"),
@@ -475,13 +505,15 @@ class VyvyBenchRunner:
     """Runs every dataset item once through the model and scores it."""
 
     def __init__(self, model: Model, grammar: str, parser: IntentParser, min_confidence: float,
-                 timeout_s: float, clock: Callable[[], float] = time.perf_counter):
+                 timeout_s: float, clock: Callable[[], float] = time.perf_counter,
+                 system: str = DETAILED_PROMPT):
         self.model, self.grammar, self.parser = model, grammar, parser
         self.min_confidence, self.timeout_s, self.clock = min_confidence, timeout_s, clock
+        self.system = system
 
     def run(self, items: list[dict]) -> dict:
         return run_benchmark(items, self.model, self.grammar, self.parser.intents,
-                             self.min_confidence, self.timeout_s, self.clock)
+                             self.min_confidence, self.timeout_s, self.clock, system=self.system)
 
 
 def cpu_times() -> tuple[int, int] | None:
@@ -507,7 +539,8 @@ def steal_pct(before: tuple[int, int] | None, after: tuple[int, int] | None) -> 
 def run_benchmark(items: list[dict], model: Model, grammar: str, intents: tuple[str, ...],
                   min_confidence: float, timeout_s: float = 4.0,
                   clock: Callable[[], float] = time.perf_counter,
-                  cpu: Callable[[], tuple[int, int] | None] = cpu_times) -> dict:
+                  cpu: Callable[[], tuple[int, int] | None] = cpu_times,
+                  system: str = DETAILED_PROMPT) -> dict:
     """Intent accuracy and the time limit are scored separately.
 
     intent_correct: right intent regardless of speed. within_timeout: right intent
@@ -518,7 +551,7 @@ def run_benchmark(items: list[dict], model: Model, grammar: str, intents: tuple[
     run_start = cpu()
     for item in items:
         c0, t0 = cpu(), clock()
-        raw, stats = model(SYSTEM_PROMPT, f'Question: "{item["text"]}"', grammar)
+        raw, stats = model(system, f'Question: "{item["text"]}"', grammar)
         ms = (clock() - t0) * 1000
         steal = steal_pct(c0, cpu())
         got = outcome(parse_output(raw, intents), min_confidence)
@@ -643,6 +676,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--label", default="", help="model label for the report header")
     p.add_argument("--summary", type=Path, help="append the Markdown report to this file")
     p.add_argument("--json", type=Path, help="write raw results as JSON")
+    p.add_argument("--prompt", choices=("auto", *PROMPTS), default="auto",
+                   help="system prompt; auto = compact for 1.5B models, detailed otherwise")
     p.add_argument("--mode", choices=("generate", "classify", "route"), default="generate",
                    help="generate: JSON under the grammar; classify: one pass, intent letter by logits; "
                         "route: generate prompt, only the intent branches are computed")
@@ -665,6 +700,9 @@ def main(argv: list[str] | None = None) -> int:
     total = len(items)
     items = sample_items(items, args.sample)
 
+    model_name = args.label or (args.model.name if args.model else "")
+    prompt_name = prompt_for(model_name) if args.prompt == "auto" else args.prompt
+
     if args.dry_run:
         model = mock_model({i["text"]: i["expected_intent"] for i in items})
         header = f"Dry run with mock inference, mode `{args.mode}` (grammar checked statically, no model loaded)."
@@ -683,17 +721,20 @@ def main(argv: list[str] | None = None) -> int:
             model = llama_router(args.model, args.threads, args.ctx, intents, args.lora)
         else:
             model = llama_model(args.model, args.threads, args.ctx, args.lora)
-        model(SYSTEM_PROMPT, 'Question: "Hallo"', grammar)  # warm-up, not timed
+        model(PROMPTS[prompt_name], 'Question: "Hallo"', grammar)  # warm-up, not timed
         adapter = f" + adapter `{args.lora.name}`" if args.lora else " · no adapter"
         header = (f"Model `{args.label or args.model.name}`{adapter} · mode `{args.mode}` · "
+                  f"prompt `{prompt_name}` · "
                   f"{platform.system()} {platform.machine()} · Python {platform.python_version()}"
                   f"\n\n**CPU: {cpu_model()}** · {model.info}\n\n`{cpu_features()}`")
     if len(items) < total:
         header += f"\n\nSample: {len(items)} of {total} questions, spread evenly over the dataset."
 
-    runner = VyvyBenchRunner(model, grammar, IntentParser(intents), args.min_confidence, args.timeout)
+    runner = VyvyBenchRunner(model, grammar, IntentParser(intents), args.min_confidence, args.timeout,
+                             system=PROMPTS[prompt_name])
     result = runner.run(items)
     result["mode"] = args.mode
+    result["prompt"] = prompt_name
     result["cpu"] = None if args.dry_run else cpu_model()
     result["label"] = args.label or (args.model.name if args.model else "dry-run")
     result["adapter"] = args.lora.name if args.lora else None

@@ -52,6 +52,8 @@ measures accuracy and latency on GitHub Actions.
 | `.github/workflows/data-check.yml` | Runs the holdout lock on every change below `data/` |
 | `.github/workflows/compare.yml` | Both classes and a reference in one job on the same machine |
 | `tools/compare_results.py` | One table over several `results.json` |
+| `.github/workflows/bench-lora.yml` | A trained adapter against its base model, one job; accepts or rejects it |
+| `tools/compare_adapter.py` | Accepts an adapter only with zero regressions and higher accuracy |
 | `training/` | Trains a LoRA adapter and exports it as GGUF (see its README) |
 | `.github/workflows/train.yml` | Trains an adapter on a hosted GPU, publishes it as a release and benchmarks it |
 | `tools/build_train_data.py` | Builds the training data from hand-written core sentences |
@@ -106,6 +108,14 @@ question.
   `entity` stay empty.
 
 All modes use the same dataset and report.
+
+### Prompts
+
+Two system prompts, chosen by model size (`--prompt auto`, the default):
+`compact` for 1.5B (short definitions, three examples) and `detailed` for 7B
+(explicit boundaries, six examples). Longer definitions improved 7B and made
+1.5B worse, so 1.5B is never measured or trained on the detailed prompt.
+Reports and adapter manifests name the prompt they used.
 
 Latency is measured on the machine that runs the benchmark. Accuracy transfers
 to other hardware; milliseconds do not.
