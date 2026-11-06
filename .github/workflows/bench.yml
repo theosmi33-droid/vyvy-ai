@@ -8,11 +8,10 @@ on:
       model:
         description: Model to benchmark
         type: choice
-        default: qwen2.5-3b-instruct-q5_k_m
+        default: qwen2.5-1.5b-instruct-q8_0
         options:
-          - qwen2.5-3b-instruct-q5_k_m   # class 4GB
+          - qwen2.5-1.5b-instruct-q8_0   # class 4GB
           - qwen2.5-7b-instruct-q4_k_m   # class 8GB
-          - qwen2.5-3b-instruct-q4_k_m
           - qwen2.5-1.5b-instruct-q4_k_m
       mode:
         description: "generate: JSON under the grammar · classify: intent by letter logits · route: only the intent branches"
@@ -67,9 +66,8 @@ jobs:
           m="${{ inputs.model }}"
           # Split models are loaded through their first shard; llama.cpp finds the rest.
           case "$m" in
-            qwen2.5-1.5b-instruct-q4_k_m) repo=Qwen/Qwen2.5-1.5B-Instruct-GGUF; file="$m.gguf" ;;
-            qwen2.5-3b-instruct-q4_k_m|qwen2.5-3b-instruct-q5_k_m)
-                                          repo=Qwen/Qwen2.5-3B-Instruct-GGUF; file="$m.gguf" ;;
+            qwen2.5-1.5b-instruct-q4_k_m|qwen2.5-1.5b-instruct-q8_0)
+                                          repo=Qwen/Qwen2.5-1.5B-Instruct-GGUF; file="$m.gguf" ;;
             qwen2.5-7b-instruct-q4_k_m)   repo=Qwen/Qwen2.5-7B-Instruct-GGUF; file="$m-00001-of-00002.gguf" ;;
             *) echo "unknown model" >&2; exit 1 ;;
           esac

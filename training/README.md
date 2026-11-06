@@ -11,7 +11,7 @@ Clone this repository on the training machine, then from its root:
 
 ```bash
 pip install -q -r training/requirements.txt
-python training/train_lora.py --base Qwen/Qwen2.5-3B-Instruct --name vyvy-3b-v1
+python training/train_lora.py --base Qwen/Qwen2.5-1.5B-Instruct --name vyvy-1.5b-v1
 # 7B: --base Qwen/Qwen2.5-7B-Instruct --name vyvy-7b-v1 --batch 4 --grad-accum 4
 ```
 

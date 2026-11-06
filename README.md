@@ -28,8 +28,10 @@ it decides what is being asked and hands that decision over in a fixed format.
 
 | Class | Memory used | Target hardware | Base model |
 |---|---|---|---|
-| Vyvy AI 4GB | about 4 GB | computers with 8 GB RAM | Qwen 2.5 3B Instruct |
+| Vyvy AI 4GB | about 4 GB | computers with 8 GB RAM | Qwen 2.5 1.5B Instruct |
 | Vyvy AI 8GB | about 8 GB | computers with 12–16 GB RAM | Qwen 2.5 7B Instruct |
+
+Both base models are released under Apache 2.0.
 
 ## Benchmark
 
@@ -48,6 +50,8 @@ measures accuracy and latency on GitHub Actions.
 | `data/train/` | Training data, one JSON object per line (see its README) |
 | `tools/check_holdout_leak.py` | Holdout lock: rejects training sentences close to a holdout sentence |
 | `.github/workflows/data-check.yml` | Runs the holdout lock on every change below `data/` |
+| `.github/workflows/compare.yml` | Both classes and a reference in one job on the same machine |
+| `tools/compare_results.py` | One table over several `results.json` |
 | `training/` | Trains a LoRA adapter and exports it as GGUF (see its README) |
 
 ### Output contract
@@ -127,6 +131,11 @@ python runner/bench.py --model models/qwen2.5-1.5b-instruct-q4_k_m.gguf
 ```
 
 ### Run on GitHub Actions
+
+Runners differ in CPU from run to run, so milliseconds from separate runs are
+not comparable. Every report names its CPU. To compare variants, use
+Actions → **Compare**: 1.5B `route`, 7B `route` and a 7B `generate` reference
+run one after the other in the same job and end with one table.
 
 Actions → **Benchmark** → *Run workflow*, pick a model and a mode. To measure a
 fine-tuned version, enter the release tag of this repository that holds its LoRA

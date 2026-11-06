@@ -14,7 +14,7 @@ Steps:
 4. <out>/adapter (PEFT) -> <out>/<name>.gguf with convert_lora_to_gguf.py from
    the llama.cpp commit that llama-cpp-python 0.3.16 ships, plus manifest.json.
 
-    python training/train_lora.py --base Qwen/Qwen2.5-3B-Instruct --name vyvy-3b-v1
+    python training/train_lora.py --base Qwen/Qwen2.5-1.5B-Instruct --name vyvy-1.5b-v1
 """
 
 from __future__ import annotations
@@ -99,7 +99,7 @@ def sha256(path: Path) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Train a Vyvy AI LoRA adapter and export it as GGUF")
-    p.add_argument("--base", default="Qwen/Qwen2.5-3B-Instruct", help="Hugging Face id of the base model")
+    p.add_argument("--base", default="Qwen/Qwen2.5-1.5B-Instruct", help="Hugging Face id of the base model")
     p.add_argument("--name", default="vyvy-adapter", help="file name of the exported adapter")
     p.add_argument("--train", type=Path, nargs="*", help="training files (default: data/train/*.jsonl)")
     p.add_argument("--out", type=Path, default=Path("out"))

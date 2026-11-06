@@ -223,6 +223,31 @@ def thread_info(llm) -> str:
     return f"n_threads {llm.n_threads} · n_threads_batch {llm.n_threads_batch} · n_batch {llm.n_batch}"
 
 
+def cpu_model() -> str:
+    """CPU model of this machine; runs on different CPUs are not comparable in milliseconds."""
+    try:
+        for line in Path("/proc/cpuinfo").read_text().splitlines():
+            if line.startswith("model name"):
+                return line.split(":", 1)[1].strip()
+    except OSError:
+        pass
+    return platform.processor() or "unknown CPU"
+
+
+def cpu_features() -> str:
+    """CPU features llama.cpp was built with and detected (AVX, AVX2, FMA, ...)."""
+    import llama_cpp
+
+    return llama_cpp.llama_print_system_info().decode().strip()
+
+
+def sample_items(items: list[dict], n: int) -> list[dict]:
+    """n items spread evenly over the dataset (same items on every run)."""
+    if n <= 0 or n >= len(items):
+        return items
+    return [items[i * len(items) // n] for i in range(n)]
+
+
 def _perf_stats(llama_cpp, llm) -> dict:
     perf = llama_cpp.llama_perf_context(llm.ctx)
     return {
@@ -585,6 +610,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--mode", choices=("generate", "classify", "route"), default="generate",
                    help="generate: JSON under the grammar; classify: one pass, intent letter by logits; "
                         "route: generate prompt, only the intent branches are computed")
+    p.add_argument("--sample", type=int, default=0,
+                   help="measure only this many questions, spread evenly over the dataset (0 = all)")
     p.add_argument("--dry-run", action="store_true", help="no model: grammar check and mock inference")
     args = p.parse_args(argv)
 
@@ -599,6 +626,8 @@ def main(argv: list[str] | None = None) -> int:
     if unknown:
         print(f"Dataset uses intents missing from the grammar: {unknown}", file=sys.stderr)
         return 1
+    total = len(items)
+    items = sample_items(items, args.sample)
 
     if args.dry_run:
         model = mock_model({i["text"]: i["expected_intent"] for i in items})
@@ -622,11 +651,15 @@ def main(argv: list[str] | None = None) -> int:
         adapter = f" + adapter `{args.lora.name}`" if args.lora else " · no adapter"
         header = (f"Model `{args.label or args.model.name}`{adapter} · mode `{args.mode}` · "
                   f"{platform.system()} {platform.machine()} · Python {platform.python_version()}"
-                  f"\n\n{model.info}")
+                  f"\n\n**CPU: {cpu_model()}** · {model.info}\n\n`{cpu_features()}`")
+    if len(items) < total:
+        header += f"\n\nSample: {len(items)} of {total} questions, spread evenly over the dataset."
 
     runner = VyvyBenchRunner(model, grammar, IntentParser(intents), args.min_confidence, args.timeout)
     result = runner.run(items)
     result["mode"] = args.mode
+    result["cpu"] = None if args.dry_run else cpu_model()
+    result["label"] = args.label or (args.model.name if args.model else "dry-run")
     result["adapter"] = args.lora.name if args.lora else None
     text = report(result, header)
     print(text)
