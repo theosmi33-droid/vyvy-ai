@@ -45,6 +45,9 @@ measures accuracy and latency on GitHub Actions.
 | `grammars/slots.gbnf` | Output contract: `intent`, `timeframe`, `entity`, `confidence` |
 | `runner/bench.py` | Stateless benchmark runner (llama-cpp-python) |
 | `.github/workflows/bench.yml` | Manual GitHub Actions run on `ubuntu-latest` |
+| `data/train/` | Training data, one JSON object per line (see its README) |
+| `tools/check_holdout_leak.py` | Holdout lock: rejects training sentences close to a holdout sentence |
+| `.github/workflows/data-check.yml` | Runs the holdout lock on every change below `data/` |
 
 ### Output contract
 

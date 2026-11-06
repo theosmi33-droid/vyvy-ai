@@ -1,0 +1,24 @@
+name: Data check
+
+# Training data must never contain holdout questions or near copies.
+on:
+  push:
+    paths: ["data/**", "tools/check_holdout_leak.py"]
+  pull_request:
+    paths: ["data/**", "tools/check_holdout_leak.py"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  holdout-lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Holdout lock
+        run: python tools/check_holdout_leak.py
