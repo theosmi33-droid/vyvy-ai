@@ -38,8 +38,10 @@ kernel, trained from the exact commit of the run), waits for it, fetches only
 the manifest, publishes both as release `<name>` and starts the benchmark with
 that adapter in `route` mode.
 
-It needs two repository secrets: `KAGGLE_API_TOKEN` (Kaggle → Settings → API
-Tokens) and `KAGGLE_USERNAME`. The Kaggle account needs a verified phone number
+It needs two secrets in the repository environment `kaggle`, which accepts runs
+from `main` only: `KAGGLE_API_TOKEN` (Kaggle → Settings → API Tokens) and
+`KAGGLE_USERNAME`. The token can do everything in the Kaggle account; if it ever
+shows up in a log, expire it on Kaggle and set a new one. The Kaggle account needs a verified phone number
 for GPU and internet access.
 
 ## Measuring the adapter

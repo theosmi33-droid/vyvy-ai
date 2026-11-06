@@ -2,7 +2,7 @@ name: Train
 
 # Trains one LoRA adapter on a Kaggle GPU, publishes it as a release of this
 # repository and starts the benchmark with it. Nothing runs on a local machine.
-# Needs the repository secrets KAGGLE_API_TOKEN and KAGGLE_USERNAME.
+# Needs the secrets KAGGLE_API_TOKEN and KAGGLE_USERNAME in the environment "kaggle".
 on:
   workflow_dispatch:
     inputs:
@@ -34,15 +34,17 @@ jobs:
   train:
     runs-on: ubuntu-latest
     timeout-minutes: 360
+    # The Kaggle secrets live only in this environment, which accepts runs from main only.
+    environment: kaggle
     env:
       BASE: ${{ inputs.base }}
       NAME: ${{ inputs.name }}
       EPOCHS: ${{ inputs.epochs }}
       GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: "3.12"
 
