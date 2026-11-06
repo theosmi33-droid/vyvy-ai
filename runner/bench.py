@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import platform
 import re
@@ -61,6 +62,47 @@ SYSTEM_PROMPT = (
     'Question: "Wer hat die Glühbirne erfunden?" -> {"intent": "unknown", "timeframe": null, '
     '"entity": null, "confidence": 0.9}'
 )
+
+INTENT_HELP = {
+    "appointments_today": "own appointments today",
+    "appointments_tomorrow": "own appointments tomorrow",
+    "tasks_open": "what is still to do",
+    "tasks_overdue": "overdue, forgotten or urgent work",
+    "emails_unread": "new or unread email",
+    "daily_agenda": "what is on today in general",
+    "create_appointment": "make a new appointment",
+    "create_task": "make a new task",
+    "unknown": "anything else, including general knowledge and questions about other companies",
+}
+CLASSIFY_EXAMPLES = (
+    ("Was liegt heut im Kalender, gell?", "appointments_today"),
+    ("Hab ich irgendwas Dringendes verpennt?", "tasks_overdue"),
+    ("Wer hat die Glühbirne erfunden?", "unknown"),
+)
+
+
+def classify_prompt(intents: tuple[str, ...]) -> tuple[str, dict[str, str]]:
+    """System prompt for --mode classify and the letter for each intent (A, B, ...)."""
+    letters = {intent: chr(ord("A") + i) for i, intent in enumerate(intents)}
+    lines = [
+        "You classify one short German question or request from an office worker "
+        "(often regional dialect, colloquial wording or typos). You never answer the question. "
+        "Reply with exactly one letter:",
+        *(f"{letters[i]} = {i} ({INTENT_HELP.get(i, i)})" for i in intents),
+        "Examples:",
+        *(f'Question: "{q}" -> {letters[i]}' for q, i in CLASSIFY_EXAMPLES if i in letters),
+    ]
+    return "\n".join(lines), letters
+
+
+def pick_intent(logits: dict[str, float]) -> tuple[str, dict[str, float]]:
+    """Highest logit wins; confidence is the softmax over the intent letters only."""
+    top = max(logits.values())
+    exp = {i: math.exp(v - top) for i, v in logits.items()}
+    total = sum(exp.values())
+    probs = {i: e / total for i, e in exp.items()}
+    return max(probs, key=probs.get), probs
+
 
 # A model returns its raw text plus timing stats (may be empty).
 Model = Callable[[str, str, str], tuple[str, dict]]
@@ -177,6 +219,20 @@ def outcome(parsed: dict | None, min_confidence: float) -> str:
 # ── Models ─────────────────────────────────────────────────────────────────
 
 
+def thread_info(llm) -> str:
+    return f"n_threads {llm.n_threads} · n_threads_batch {llm.n_threads_batch} · n_batch {llm.n_batch}"
+
+
+def _perf_stats(llama_cpp, llm) -> dict:
+    perf = llama_cpp.llama_perf_context(llm.ctx)
+    return {
+        "prompt_eval_tokens": perf.n_p_eval,
+        "prompt_ms": perf.t_p_eval_ms,
+        "gen_ms": perf.t_eval_ms,
+        "gen_tps": perf.n_eval / perf.t_eval_ms * 1000 if perf.t_eval_ms > 0 else None,
+    }
+
+
 def llama_model(path: Path, threads: int, ctx: int) -> Model:
     import llama_cpp  # imported only for real runs
     from llama_cpp import Llama, LlamaGrammar
@@ -195,18 +251,66 @@ def llama_model(path: Path, threads: int, ctx: int) -> Model:
             max_tokens=80,
         )
         # prompt_eval_tokens < prompt_tokens means the shared prefix came from the cache.
-        perf = llama_cpp.llama_perf_context(llm.ctx)
         usage = out.get("usage") or {}
-        stats = {
-            "prompt_tokens": usage.get("prompt_tokens"),
-            "prompt_eval_tokens": perf.n_p_eval,
-            "completion_tokens": usage.get("completion_tokens"),
-            "prompt_ms": perf.t_p_eval_ms,
-            "gen_ms": perf.t_eval_ms,
-            "gen_tps": perf.n_eval / perf.t_eval_ms * 1000 if perf.t_eval_ms > 0 else None,
-        }
+        stats = {"prompt_tokens": usage.get("prompt_tokens"),
+                 "completion_tokens": usage.get("completion_tokens"), **_perf_stats(llama_cpp, llm)}
         return out["choices"][0]["message"]["content"] or "", stats
 
+    run.info = thread_info(llm)
+    return run
+
+
+def llama_classifier(path: Path, threads: int, ctx: int, intents: tuple[str, ...]) -> Model:
+    """One forward pass over prompt and question, no generation.
+
+    The intent is the letter with the highest logit among the intent letters;
+    confidence is the softmax over those letters only.
+    """
+    import llama_cpp  # imported only for real runs
+    from llama_cpp import Llama
+    from llama_cpp.llama_chat_format import Jinja2ChatFormatter
+
+    llm = Llama(model_path=str(path), n_ctx=ctx, n_threads=threads, seed=0, verbose=False)
+    template = llm.metadata.get("tokenizer.chat_template")
+    if not template:
+        raise SystemExit("Model has no chat template; --mode classify needs one.")
+    eos, bos = llm.token_eos(), llm.token_bos()
+    fmt = Jinja2ChatFormatter(
+        template=template,
+        eos_token=llm._model.token_get_text(eos) if eos != -1 else "",
+        bos_token=llm._model.token_get_text(bos) if bos != -1 else "",
+    )
+    system, letters = classify_prompt(intents)
+    letter_ids: dict[str, int] = {}
+    for intent, letter in letters.items():
+        ids = llm.tokenize(letter.encode(), add_bos=False, special=False)
+        if len(ids) != 1:
+            raise SystemExit(f"Letter {letter} is not a single token: {ids}")
+        letter_ids[intent] = ids[0]
+    if len(set(letter_ids.values())) != len(letter_ids):
+        raise SystemExit("Intent letters share a token.")
+
+    def run(_system: str, question: str, _grammar: str) -> tuple[str, dict]:
+        prompt = fmt(messages=[{"role": "system", "content": system},
+                               {"role": "user", "content": question}]).prompt
+        tokens = llm.tokenize(prompt.encode("utf-8"), special=True)
+        # Same prefix reuse as Llama.generate: keep the cached part, evaluate the rest.
+        prefix = 0
+        for a, b in zip(llm.input_ids[: llm.n_tokens], tokens[:-1]):
+            if a != b:
+                break
+            prefix += 1
+        llm.n_tokens = prefix
+        llama_cpp.llama_perf_context_reset(llm.ctx)
+        llm.eval(tokens[prefix:])
+        logits = llama_cpp.llama_get_logits_ith(llm.ctx, -1)
+        best, probs = pick_intent({i: float(logits[t]) for i, t in letter_ids.items()})
+        stats = {"prompt_tokens": len(tokens), "completion_tokens": 0, **_perf_stats(llama_cpp, llm),
+                 "probs": {i: round(p, 4) for i, p in probs.items()}}
+        return json.dumps({"intent": best, "timeframe": None, "entity": None,
+                           "confidence": round(probs[best], 4)}), stats
+
+    run.info = thread_info(llm) + f" · letters {' '.join(f'{v}={k}' for k, v in letters.items())}"
     return run
 
 
@@ -266,6 +370,8 @@ def run_benchmark(items: list[dict], model: Model, grammar: str, intents: tuple[
                "timeout": timed_out, **{k: stats.get(k) for k in TIMING_KEYS}}
         if rec["prompt_ms"] is not None and rec["gen_ms"] is not None:
             rec["other_ms"] = round(ms - rec["prompt_ms"] - rec["gen_ms"])
+        if "probs" in stats:
+            rec["probs"] = stats["probs"]
         records.append(rec)
         row = per_intent.setdefault(item["expected_intent"],
                                     {"n": 0, "intent_correct": 0, "within_timeout": 0, "timeouts": 0,
@@ -370,6 +476,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--label", default="", help="model label for the report header")
     p.add_argument("--summary", type=Path, help="append the Markdown report to this file")
     p.add_argument("--json", type=Path, help="write raw results as JSON")
+    p.add_argument("--mode", choices=("generate", "classify"), default="generate",
+                   help="generate: JSON under the grammar; classify: one pass, intent letter by logits")
     p.add_argument("--dry-run", action="store_true", help="no model: grammar check and mock inference")
     args = p.parse_args(argv)
 
@@ -387,18 +495,25 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.dry_run:
         model = mock_model({i["text"]: i["expected_intent"] for i in items})
-        header = "Dry run with mock inference (grammar checked statically, no model loaded)."
+        header = f"Dry run with mock inference, mode `{args.mode}` (grammar checked statically, no model loaded)."
+        if args.mode == "classify":
+            header += "\n\n```\n" + classify_prompt(intents)[0] + "\n```"
     else:
         if not args.model or not args.model.is_file():
             print("No model file (--model).", file=sys.stderr)
             return 2
-        model = llama_model(args.model, args.threads, args.ctx)
+        if args.mode == "classify":
+            model = llama_classifier(args.model, args.threads, args.ctx, intents)
+        else:
+            model = llama_model(args.model, args.threads, args.ctx)
         model(SYSTEM_PROMPT, 'Question: "Hallo"', grammar)  # warm-up, not timed
-        header = (f"Model `{args.label or args.model.name}` · {args.threads} threads · "
-                  f"{platform.system()} {platform.machine()} · Python {platform.python_version()}")
+        header = (f"Model `{args.label or args.model.name}` · mode `{args.mode}` · "
+                  f"{platform.system()} {platform.machine()} · Python {platform.python_version()}"
+                  f"\n\n{model.info}")
 
     runner = VyvyBenchRunner(model, grammar, IntentParser(intents), args.min_confidence, args.timeout)
     result = runner.run(items)
+    result["mode"] = args.mode
     text = report(result, header)
     print(text)
     if args.summary:
