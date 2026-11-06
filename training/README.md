@@ -31,7 +31,10 @@ stop it; no GitHub credentials are needed on the training machine.
 
 ## Training without a local machine
 
-Actions → **Train**: pick the base model and an adapter name. The workflow
+The **Train** workflow starts by itself when training data in `data/train/`
+changes on `main`: first for 1.5B, then for 7B, each adapter named
+`vyvy-<size>-<date>-<commit>`. By hand: Actions → **Train**, pick the base model
+and an adapter name. The workflow
 checks the holdout lock, sends the training job to a Kaggle GPU (private
 kernel, trained from the exact commit of the run), waits for it, fetches only
 `<name>.gguf` and `manifest.json`, checks the adapter against the checksum in

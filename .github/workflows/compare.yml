@@ -1,8 +1,17 @@
 name: Compare
 
 # Every variant runs in this one job, one after the other, on the same runner.
-# Only then are the milliseconds comparable. Manual only.
+# Only then are the milliseconds comparable. Starts by itself when the runner,
+# the grammar, the holdout set or the dependencies change on main.
 on:
+  push:
+    branches: [main]
+    paths:
+      - "runner/**"
+      - "grammars/**"
+      - "data/holdout_benchmarks.json"
+      - "requirements.txt"
+      - ".github/workflows/compare.yml"
   workflow_dispatch:
     inputs:
       reference_sample:
@@ -71,9 +80,11 @@ jobs:
             --threads "$(nproc)" --summary "$GITHUB_STEP_SUMMARY" --json results-2-large-route.json
 
       - name: 3/3 Reference, 7B, generate
+        env:
+          REFERENCE_SAMPLE: ${{ inputs.reference_sample || 20 }}
         run: |
           python runner/bench.py --model "models/$M_LARGE-00001-of-00002.gguf" --label "$M_LARGE" --mode generate \
-            --sample "${{ inputs.reference_sample }}" \
+            --sample "$REFERENCE_SAMPLE" \
             --threads "$(nproc)" --summary "$GITHUB_STEP_SUMMARY" --json results-3-large-generate.json
 
       - name: Comparison table

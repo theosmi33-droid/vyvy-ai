@@ -140,8 +140,9 @@ python runner/bench.py --model models/qwen2.5-1.5b-instruct-q4_k_m.gguf
 ### Run on GitHub Actions
 
 Runners differ in CPU from run to run, so milliseconds from separate runs are
-not comparable. Every report names its CPU. To compare variants, use
-Actions → **Compare**: 1.5B `route`, 7B `route` and a 7B `generate` reference
+not comparable. Every report names its CPU. **Compare** starts by
+itself when the runner, the grammar, the holdout set or the dependencies change
+on `main`, and can be started by hand under Actions → **Compare**: 1.5B `route`, 7B `route` and a 7B `generate` reference
 run one after the other in the same job and end with one table.
 
 Actions → **Benchmark** → *Run workflow*, pick a model and a mode. To measure a
