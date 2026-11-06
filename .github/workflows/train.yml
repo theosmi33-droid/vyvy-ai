@@ -9,7 +9,7 @@ name: Train
 on:
   push:
     branches: [main]
-    paths: ["data/train/**"]
+    paths: ["data/train/**", ".github/workflows/train.yml"]
   workflow_dispatch:
     inputs:
       base:
@@ -102,7 +102,8 @@ jobs:
           set -euo pipefail
           test -n "$KAGGLE_API_TOKEN" && test -n "$KAGGLE_USERNAME" \
             || { echo "secrets KAGGLE_API_TOKEN and KAGGLE_USERNAME are required" >&2; exit 1; }
-          pip install -q kaggle==2.2.5
+          # kaggle 2.2.5 imports six without declaring it as a dependency
+          pip install -q kaggle==2.2.5 six==1.17.0
           kid=$(python tools/kaggle_job.py --dir job --owner "$KAGGLE_USERNAME" \
                   --repo "$GITHUB_REPOSITORY" --commit "$GITHUB_SHA" \
                   --base "$BASE" --name "$NAME" --epochs "$EPOCHS")
