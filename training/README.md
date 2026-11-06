@@ -31,49 +31,41 @@ stop it; no GitHub credentials are needed on the training machine.
 
 ## Training without a local machine
 
-Kaggle allows 30 GPU hours per week, so training runs in short bursts while
-data checks and measurements run on GitHub's CPU runners. Everything runs
-without manual approval or checking.
+Kaggle allows 30 GPU hours per week (reset Saturday 00:00 UTC). Each training
+run is a long, budgeted sweep on one GPU; everything else runs on GitHub's CPU
+runners. Nothing needs manual approval or checking.
 
-1. A push to `main` that changes `data/train/`, the training code or the
-   workflow starts **Train** (1.5B, then 7B, one GPU session at a time); it can
-   also be started by hand for one base model.
-2. **Quota guard** (`tools/quota_guard.py`): reads the account's live GPU quota
-   from Kaggle (`kaggle quota`, all sessions including manual notebooks). With
-   less than 2 hours left it skips the run ("Quota paused until …"). If Kaggle
-   does not answer, it counts this pipeline's runs of the week from the GitHub
-   API instead, plus the repository variable `KAGGLE_EXTERNAL_GPU_MIN`.
-3. Holdout lock, then a private Kaggle kernel trains from the exact commit with
-   the prompt the benchmark uses for that model size. It only trains and saves
-   the PEFT adapter; the GitHub runner converts it to GGUF on CPU
-   (`tools/convert_adapter.py`), so a failed conversion costs no GPU time.
-4. **Watchdog** (`tools/kaggle_watchdog.py`): polls every 60 s for up to 3 h.
-   On success it fetches only `<name>.gguf` and `manifest.json`; on failure it
-   writes the likely cause (out of memory, CUDA or 4-bit error, missing module,
-   API mismatch, disk, network) and the last 100 log lines to the job summary.
-5. **Validation and early stopping**: 10 % of the training sentences of every
-   intent are held out (fixed by hash). Training evaluates them after every
-   epoch, stops once the validation loss no longer improves and keeps the best
-   epoch; the manifest records the losses.
-6. **Fallbacks in the trainer**: out of GPU memory → batch 1 with the same
-   effective batch via gradient accumulation; CUDA or 4-bit kernel error →
-   plain fp16 weights. At most three attempts; the manifest lists them.
-7. The adapter is checked against its manifest checksum and published as a
-   candidate (pre-release) together with the base model's Apache 2.0 license
-   text and a NOTICE; **Bench LoRA** starts by itself.
-8. **Bench LoRA** measures the current default and the candidate in one job,
-   on the blind holdout (decides) and the development holdout (information). The
-   default is the newest accepted adapter for the same base model and prompt,
-   or the base model if there is none. The candidate becomes a regular release
-   (the new default) only with zero regressions and a higher intent accuracy;
-   otherwise it stays a pre-release marked rejected, with the report and the
-   missed questions attached.
+1. **Train** (`train.yml`) plans the run (`tools/plan_train.py`): size, sweep,
+   time budget and the adapter name, a hash of training data, prompt, trainer
+   and sweep. It checks the holdout lock, the live Kaggle quota (the whole
+   budget plus a 2 h reserve must be left) and that no kernel of the account is
+   running (`tools/kaggle_busy.py`, also other projects' kernels). Then it starts
+   a private Kaggle kernel and ends. A push to `main` that changes the training
+   data or code starts it for 1.5B.
+2. **On Kaggle** the trainer runs a sweep within its budget (1.5B: 4 h over
+   ranks 16/8/32 × learning rates 2e-4/1e-4/5e-4; 7B: 6 h over ranks 16/32 ×
+   2e-4/1e-4). The proven default runs first. Every config holds out 10 % per
+   intent for validation, stops early when the validation loss no longer
+   improves, and is scored by validation accuracy with the same decision the
+   benchmark's route mode makes. No new config starts if it would likely not
+   finish within the budget. The best config's PEFT adapter is kept; fallbacks
+   handle out-of-memory and 4-bit kernel errors.
+3. **Collect** (`collect.yml`, every 20 minutes) picks up finished runs:
+   converts the adapter to GGUF on the runner, adds the base model's Apache 2.0
+   license and a NOTICE, publishes a candidate (pre-release) with the sweep
+   table and starts **Bench LoRA**. A failed run becomes one GitHub issue with
+   the likely cause and the last 100 log lines; the same inputs are not retried
+   until that issue is closed, while changed data or code start anew. When no
+   kernel is running, Collect starts the next missing run (1.5B before 7B).
+4. **Bench LoRA** measures the current default and the candidate in one job,
+   on the blind holdout (decides) and the development holdout (information).
+   The candidate becomes a regular release, the new default, only with zero
+   regressions and a higher accuracy; otherwise it stays a pre-release marked
+   rejected, with the report attached.
 
-Adapters are named `vyvy-<size>-d<hash of training data and prompt>`; if that
-name exists, the run skips training. Secrets in the environment `kaggle`:
-`KAGGLE_API_TOKEN` and `KAGGLE_USERNAME`. The token can do everything in the
-Kaggle account; if it ever shows up in a log, expire it on Kaggle and set a new
-one.
+Secrets in the environment `kaggle`: `KAGGLE_API_TOKEN` and `KAGGLE_USERNAME`.
+The token can do everything in the Kaggle account; if it ever shows up in a log,
+expire it on Kaggle and set a new one.
 
 ## Measuring the adapter
 

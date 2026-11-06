@@ -1,0 +1,42 @@
+name: Collect
+
+# Every 20 minutes: picks up finished Kaggle training runs (convert to GGUF,
+# license files, candidate release, bench-lora), reports failures as one issue
+# each, and starts the next missing training run when no kernel of the account
+# is running. See tools/collect.py. Costs a few CPU seconds when nothing changed.
+on:
+  schedule:
+    - cron: "7,27,47 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write  # candidate releases
+  actions: write   # start bench-lora and train
+  issues: write    # one issue per distinct failure
+
+concurrency:
+  group: collect
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    environment: kaggle
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Collect and schedule
+        run: |
+          set -euo pipefail
+          # kaggle 2.2.5 imports six without declaring it as a dependency
+          pip install -q kaggle==2.2.5 six==1.17.0 huggingface_hub==0.36.2
+          python tools/collect.py

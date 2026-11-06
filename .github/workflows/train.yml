@@ -1,20 +1,23 @@
 name: Train
 
-# Trains LoRA adapters on a Kaggle GPU, publishes each as a candidate release
-# (pre-release) of this repository and starts bench-lora, which compares it with
-# the base model. Nothing runs on a local machine.
+# Starts one LoRA training run on a Kaggle GPU and ends; the Collect workflow
+# picks up the result (convert, license files, candidate release, bench-lora)
+# because a sweep can run far longer than a GitHub job may wait.
 #
-# Runs without manual approval: a push to main that changes data/train/, the
-# training code or this workflow trains 1.5B, then 7B; it can also be started by hand for one base
-# model. Adapters are named vyvy-<size>-d<hash of training data and prompt>; an
-# existing name is skipped, so the same input never uses GPU time twice.
-# The job runs in the environment "kaggle" (secrets usable from main only).
-# Needs the secrets KAGGLE_API_TOKEN and KAGGLE_USERNAME.
+# Each run is a sweep: several LoRA ranks and learning rates are trained one
+# after the other within a time budget (1.5B: 4 h, 7B: 6 h); the config with the
+# best validation accuracy is exported. The blind holdout is not touched here.
+#
+# Runs without manual approval: a push to main that changes the training data,
+# the training code or this workflow starts 1.5B; Collect starts 7B once 1.5B is
+# collected. It can also be started by hand for one base model. Adapters are
+# named vyvy-<size>-d<hash of data, prompt, trainer and sweep>; an existing name
+# is skipped. No run starts while another kernel of the account is running.
+# The job runs in the environment "kaggle"; needs KAGGLE_API_TOKEN and KAGGLE_USERNAME.
 on:
   push:
     branches: [main]
-    paths: ["data/train/**", "training/**", "tools/kaggle_job.py", "tools/kaggle_watchdog.py",
-            "tools/convert_adapter.py", ".github/workflows/train.yml"]
+    paths: ["data/train/**", "training/**", "tools/kaggle_job.py", "tools/plan_train.py", ".github/workflows/train.yml"]
   workflow_dispatch:
     inputs:
       base:
@@ -25,35 +28,30 @@ on:
           - Qwen/Qwen2.5-1.5B-Instruct
           - Qwen/Qwen2.5-7B-Instruct
       name:
-        description: Adapter name and release tag, e.g. vyvy-1.5b-v1
+        description: Adapter name and release tag (empty = derived from data, prompt and trainer)
         type: string
-        required: true
+        required: false
       epochs:
-        description: Training epochs
+        description: Upper limit of epochs per config (early stopping usually ends sooner)
         type: number
-        default: 3
+        default: 4
 
 permissions:
-  contents: write  # create the release
-  actions: write   # start the benchmark
+  contents: read
+
+concurrency:
+  group: train
+  cancel-in-progress: false
 
 jobs:
   train:
-    strategy:
-      max-parallel: 1  # one Kaggle GPU session at a time
-      matrix:
-        base: ${{ github.event_name == 'push' && fromJSON('["Qwen/Qwen2.5-1.5B-Instruct", "Qwen/Qwen2.5-7B-Instruct"]') || fromJSON(format('["{0}"]', inputs.base)) }}
-    concurrency:
-      group: train-${{ matrix.base }}
-      cancel-in-progress: false
     runs-on: ubuntu-latest
-    timeout-minutes: 360
-    # The Kaggle secrets live only in this environment, which accepts runs from main only.
+    timeout-minutes: 30
     environment: kaggle
     env:
-      BASE: ${{ matrix.base }}
+      BASE: ${{ inputs.base || 'Qwen/Qwen2.5-1.5B-Instruct' }}
       NAME_INPUT: ${{ inputs.name }}
-      EPOCHS: ${{ inputs.epochs || 3 }}
+      EPOCHS: ${{ inputs.epochs || 4 }}
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -62,125 +60,58 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Adapter name
+      - name: Plan (size, sweep, budget, name)
         run: |
           set -euo pipefail
-          if [ -n "$NAME_INPUT" ]; then
-            name="$NAME_INPUT"
-          else
-            case "$BASE" in
-              Qwen/Qwen2.5-1.5B-Instruct) size=1.5b ;;
-              Qwen/Qwen2.5-7B-Instruct)   size=7b ;;
-            esac
-            # The prompt is part of the hash: 1.5B and 7B train on different prompts.
-            prompt=$(python -c "import sys; sys.path.insert(0, 'runner'); import bench; print(bench.PROMPTS[bench.prompt_for(sys.argv[1])])" "$BASE")
-            data=$( { cat data/train/*.jsonl; printf '%s' "$prompt"; } | sha256sum | cut -c1-8)
-            name="vyvy-$size-d$data"
-            # Same data and prompt, same name: never spend GPU time twice on the same input.
-            if gh release view "$name" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-              echo "SKIP=true" >> "$GITHUB_ENV"
-              echo "Adapter $name exists for this training data; skipped." >> "$GITHUB_STEP_SUMMARY"
-            fi
-          fi
-          echo "NAME=$name" >> "$GITHUB_ENV"
-          echo "Adapter: $name" >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Kaggle quota guard
-        if: env.SKIP != 'true'
-        env:
-          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
-          KAGGLE_EXTERNAL_GPU_MIN: ${{ vars.KAGGLE_EXTERNAL_GPU_MIN }}
-        # Reads the account's live GPU quota from Kaggle (all sessions, also manual
-        # ones) and pauses (skips the rest, no failure) when less than 2 of the
-        # weekly hours are left.
-        run: |
-          set -euo pipefail
-          # kaggle 2.2.5 imports six without declaring it as a dependency
-          pip install -q kaggle==2.2.5 six==1.17.0
-          python tools/quota_guard.py --repo "$GITHUB_REPOSITORY" | tee guard.txt
-          if grep -q "Quota paused" guard.txt; then echo "SKIP=true" >> "$GITHUB_ENV"; fi
-
-      - name: Check inputs
-        if: env.SKIP != 'true'
-        run: |
-          set -euo pipefail
-          [[ "$NAME" =~ ^[a-z0-9][a-z0-9.-]{0,60}$ ]] || { echo "invalid name" >&2; exit 1; }
-          if gh release view "$NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            echo "release $NAME already exists" >&2; exit 1
+          plan=$(python tools/plan_train.py "$BASE" --epochs "$EPOCHS")
+          size=$(echo "$plan" | python -c "import json,sys; print(json.load(sys.stdin)['size'])")
+          budget=$(echo "$plan" | python -c "import json,sys; print(json.load(sys.stdin)['budget'])")
+          sweep=$(echo "$plan" | python -c "import json,sys; print(json.load(sys.stdin)['sweep'])")
+          name=${NAME_INPUT:-$(echo "$plan" | python -c "import json,sys; print(json.load(sys.stdin)['name'])")}
+          [[ "$name" =~ ^[a-z0-9][a-z0-9.-]{0,60}$ ]] || { echo "invalid name" >&2; exit 1; }
+          if gh release view "$name" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "SKIP=true" >> "$GITHUB_ENV"
+            echo "Adapter $name already exists; nothing to train." >> "$GITHUB_STEP_SUMMARY"
           fi
           ls data/train/*.jsonl >/dev/null 2>&1 || { echo "no training data in data/train/" >&2; exit 1; }
+          { echo "NAME=$name"; echo "SWEEP=$sweep"; echo "BUDGET=$budget"; } >> "$GITHUB_ENV"
+          echo "Adapter: $name · sweep $sweep · budget $budget min" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Holdout lock
         if: env.SKIP != 'true'
         run: python tools/check_holdout_leak.py
 
+      - name: Kaggle quota and free GPU
+        if: env.SKIP != 'true'
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_EXTERNAL_GPU_MIN: ${{ vars.KAGGLE_EXTERNAL_GPU_MIN }}
+        # Starts only if the whole budget plus 2 h reserve is left this week and no
+        # other kernel of the account (also another project's) is running.
+        run: |
+          set -euo pipefail
+          # kaggle 2.2.5 imports six without declaring it as a dependency
+          pip install -q kaggle==2.2.5 six==1.17.0
+          python tools/quota_guard.py --repo "$GITHUB_REPOSITORY" --need "$((BUDGET + 30))" | tee guard.txt
+          if grep -q "Quota paused" guard.txt; then echo "SKIP=true" >> "$GITHUB_ENV"; exit 0; fi
+          # Any running kernel of the account (also another project's) keeps the GPU busy.
+          running=$(python tools/kaggle_busy.py | tr '\n' ' ')
+          if [ -n "$running" ]; then
+            echo "SKIP=true" >> "$GITHUB_ENV"
+            echo "GPU busy ($running); Collect or the next push starts this run later." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - name: Push the training job to Kaggle
         if: env.SKIP != 'true'
-        id: job
         env:
           KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
         run: |
           set -euo pipefail
-          test -n "$KAGGLE_API_TOKEN" && test -n "$KAGGLE_USERNAME" \
-            || { echo "secrets KAGGLE_API_TOKEN and KAGGLE_USERNAME are required" >&2; exit 1; }
-          # kaggle 2.2.5 imports six without declaring it as a dependency
-          pip install -q kaggle==2.2.5 six==1.17.0
           kid=$(python tools/kaggle_job.py --dir job --owner "$KAGGLE_USERNAME" \
-                  --repo "$GITHUB_REPOSITORY" --commit "$GITHUB_SHA" \
-                  --base "$BASE" --name "$NAME" --epochs "$EPOCHS")
-          echo "kernel=$kid" >> "$GITHUB_OUTPUT"
-          kaggle kernels push -p job --accelerator NvidiaTeslaT4 --timeout 32400
-
-      - name: Watch the Kaggle run
-        if: env.SKIP != 'true'
-        env:
-          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
-          KID: ${{ steps.job.outputs.kernel }}
-        # Polls every 60 s for up to 3 h; on failure the cause and the last 100
-        # log lines go to the job summary.
-        run: |
-          python tools/kaggle_watchdog.py --kernel "$KID" --out out --summary "$GITHUB_STEP_SUMMARY" \
-            --pattern '(^|/)(adapter/[^/]+|manifest\.json)$'
-
-      - name: Convert the adapter to GGUF on this runner
-        if: env.SKIP != 'true'
-        # CPU only: a failed conversion costs no GPU time and can be repeated.
-        run: |
-          set -euo pipefail
-          pip install -q -r training/convert-requirements.txt
-          python tools/convert_adapter.py out --name "$NAME" --cache /tmp/vyvy-cache
-          # Apache 2.0 of the base model travels with the adapter: license text and NOTICE.
-          python tools/license_files.py out
-
-      - name: Check the adapter
-        if: env.SKIP != 'true'
-        run: |
-          set -euo pipefail
-          test -f "out/$NAME.gguf" && test -f out/manifest.json
-          python - <<'PY'
-          import hashlib, json, os
-          m = json.load(open("out/manifest.json"))
-          name = os.environ["NAME"]
-          digest = hashlib.sha256(open(f"out/{name}.gguf", "rb").read()).hexdigest()
-          assert m["adapter"] == f"{name}.gguf", m["adapter"]
-          assert m["adapter_sha256"] == digest, "adapter checksum does not match the manifest"
-          assert m["holdout_lock"] == "passed"
-          print(json.dumps(m, indent=1))
-          PY
-
-      - name: Publish the candidate release
-        if: env.SKIP != 'true'
-        run: |
-          set -euo pipefail
-          notes="Candidate. LoRA adapter for $BASE (Apache License 2.0), trained from commit $GITHUB_SHA on data/train/. Apply it on top of the unchanged base model; see training/README.md. The base model's license and notices apply to its use. Accepted only if bench-lora finds no regression against the base model and a higher accuracy."
-          gh release create "$NAME" "out/$NAME.gguf" out/manifest.json \
-            out/LICENSE-base-model.txt out/NOTICE.txt --prerelease \
-            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "$NAME (candidate)" --notes "$notes"
-
-      - name: Start bench-lora with the adapter
-        if: env.SKIP != 'true'
-        run: |
-          set -euo pipefail
-          gh workflow run bench-lora.yml --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME" -f adapter="$NAME"
-          echo "bench-lora started for adapter $NAME" >> "$GITHUB_STEP_SUMMARY"
+                  --repo "$GITHUB_REPOSITORY" --commit "$GITHUB_SHA" --base "$BASE" --name "$NAME" \
+                  --epochs "$EPOCHS" --sweep "$SWEEP" --budget "$BUDGET")
+          # Kernel limit: budget plus 1 h for setup and export, below Kaggle's 12 h.
+          kaggle kernels push -p job --accelerator NvidiaTeslaT4 --timeout "$(( (BUDGET + 60) * 60 ))"
+          echo "Started $kid for $NAME; Collect publishes the result when it is done." >> "$GITHUB_STEP_SUMMARY"

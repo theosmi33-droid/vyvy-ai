@@ -36,6 +36,8 @@ COMMIT = {commit}
 BASE = {base}
 NAME = {name}
 EPOCHS = {epochs}
+SWEEP = {sweep}
+BUDGET = {budget}
 SRC = "/tmp/vyvy"
 
 
@@ -54,7 +56,7 @@ sh("git", "-C", SRC, "checkout", "--quiet", COMMIT)
 sh(sys.executable, "-m", "pip", "install", "-q", "-r", SRC + "/training/requirements.txt")
 # GGUF conversion happens on the GitHub runner (tools/convert_adapter.py).
 sh(sys.executable, SRC + "/training/train_lora.py", "--base", BASE, "--name", NAME,
-   "--epochs", EPOCHS, "--out", "/kaggle/working", "--no-gguf")
+   "--epochs", EPOCHS, "--out", "/kaggle/working", "--no-gguf", "--sweep", SWEEP, "--time-budget", BUDGET)
 '''
 
 
@@ -62,7 +64,8 @@ def kernel_slug(base: str) -> str:
     return "vyvy-train-" + re.sub(r"[^a-z0-9]+", "-", base.split("/")[-1].lower()).strip("-")
 
 
-def write_job(folder: Path, owner: str, repo: str, commit: str, base: str, name: str, epochs: float) -> str:
+def write_job(folder: Path, owner: str, repo: str, commit: str, base: str, name: str, epochs: float,
+              sweep: str = "", budget: float = 0) -> str:
     if base not in BASES:
         raise SystemExit(f"base must be one of {BASES}")
     if not NAME.match(name):
@@ -75,12 +78,17 @@ def write_job(folder: Path, owner: str, repo: str, commit: str, base: str, name:
         raise SystemExit("owner must be a Kaggle user name")
     if not 0 < epochs <= 10:
         raise SystemExit("epochs must be between 0 and 10")
+    if not re.match(r"^[a-z0-9=.,;e+-]*$", sweep):
+        raise SystemExit("sweep may only contain keys, numbers and = , ;")
+    if not 0 <= budget <= 660:
+        raise SystemExit("budget must be between 0 and 660 minutes (Kaggle sessions end after 12 h)")
 
     slug = kernel_slug(base)
     folder.mkdir(parents=True, exist_ok=True)
     (folder / "train.py").write_text(ENTRY.format(
         repo=json.dumps(repo), commit=json.dumps(commit), base=json.dumps(base),
-        name=json.dumps(name), epochs=json.dumps(f"{epochs:g}"),
+        name=json.dumps(name), epochs=json.dumps(f"{epochs:g}"), sweep=json.dumps(sweep),
+        budget=json.dumps(f"{budget:g}"),
     ), encoding="utf-8")
     (folder / "kernel-metadata.json").write_text(json.dumps({
         "id": f"{owner}/{slug}",
@@ -112,8 +120,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--base", required=True, choices=BASES)
     p.add_argument("--name", required=True, help="adapter name, also the release tag")
     p.add_argument("--epochs", type=float, default=3)
+    p.add_argument("--sweep", default="", help='e.g. "rank=16,8,32;lr=2e-4,1e-4,5e-4"')
+    p.add_argument("--budget", type=float, default=0, help="minutes for the whole sweep")
     args = p.parse_args(argv)
-    print(write_job(args.dir, args.owner, args.repo, args.commit, args.base, args.name, args.epochs))
+    print(write_job(args.dir, args.owner, args.repo, args.commit, args.base, args.name, args.epochs,
+                    args.sweep, args.budget))
     return 0
 
 

@@ -9,7 +9,7 @@ time used outside the pipeline is then added with --external or the repository
 variable KAGGLE_EXTERNAL_GPU_MIN.
 
 With less than --reserve minutes left (default 120, i.e. pause at 28 hours) it
-prints "Quota paused until Monday ..." and writes paused=true to $GITHUB_OUTPUT.
+prints "Quota paused until <refresh time>" and writes paused=true to $GITHUB_OUTPUT.
 Exit code is 0 in both cases; the workflow decides what to skip.
 
     python tools/quota_guard.py --repo OWNER/REPO
@@ -29,8 +29,9 @@ KAGGLE_STEPS = ("Push the training job to Kaggle", "Watch the Kaggle run", "Wait
 
 
 def week_start(now: dt.datetime) -> dt.datetime:
-    monday = now - dt.timedelta(days=now.weekday())
-    return monday.replace(hour=0, minute=0, second=0, microsecond=0)
+    """Start of the current Kaggle quota week: Saturday 00:00 UTC (Kaggle's refreshAt)."""
+    saturday = now - dt.timedelta(days=(now.weekday() - 5) % 7)
+    return saturday.replace(hour=0, minute=0, second=0, microsecond=0)
 
 
 def parse(ts: str | None) -> dt.datetime | None:
@@ -81,7 +82,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--repo", default=os.environ.get("GITHUB_REPOSITORY"))
     p.add_argument("--workflow", default="train.yml")
     p.add_argument("--limit", type=float, default=30 * 60, help="weekly GPU minutes")
-    p.add_argument("--reserve", type=float, default=120, help="minutes that must remain")
+    p.add_argument("--reserve", type=float, default=120, help="minutes that must remain after the run")
+    p.add_argument("--need", type=float, default=0, help="minutes the planned run will use")
     p.add_argument("--external", type=float, default=float(os.environ.get("KAGGLE_EXTERNAL_GPU_MIN") or 0),
                    help="GPU minutes used this week outside this pipeline")
     args = p.parse_args(argv)
@@ -100,9 +102,9 @@ def main(argv: list[str] | None = None) -> int:
         limit, refresh = args.limit, (since + dt.timedelta(days=7)).isoformat()
         source = f"this pipeline, incl. {args.external:.0f} min external"
     left = limit - used
-    paused = left < args.reserve
+    paused = left < args.reserve + args.need
     msg = (f"Kaggle GPU this week ({source}): {used:.0f} of {limit:.0f} min used, "
-           f"{left:.0f} left, reserve {args.reserve:.0f}.")
+           f"{left:.0f} left; this run needs {args.need:.0f} plus a reserve of {args.reserve:.0f}.")
     if paused:
         msg += f" Quota paused until {refresh or 'the weekly reset'}."
     print(msg)

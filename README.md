@@ -66,6 +66,10 @@ measures accuracy and latency on GitHub Actions.
 | `training/` | Trains a LoRA adapter and exports it as GGUF (see its README) |
 | `.github/workflows/train.yml` | Trains an adapter on a hosted GPU, publishes it as a release and benchmarks it |
 | `tools/build_train_data.py` | Builds the training data from hand-written core sentences |
+| `.github/workflows/collect.yml` | Every 20 min: collects finished Kaggle runs and starts the next missing one |
+| `tools/collect.py` | Collect logic: publish candidates, report failures, schedule |
+| `tools/plan_train.py` | Sweep, time budget and adapter name of a training run |
+| `tools/kaggle_busy.py` | Lists running kernels of the Kaggle account |
 | `tools/kaggle_job.py` | Writes the training job for the hosted GPU from a fixed commit |
 
 ### Output contract

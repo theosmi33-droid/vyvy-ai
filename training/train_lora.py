@@ -25,6 +25,7 @@ import hashlib
 import json
 import math
 import shutil
+import time
 import sys
 from pathlib import Path
 
@@ -101,6 +102,82 @@ def split_rows(rows: list[dict], share: float) -> tuple[list[dict], list[dict]]:
     return train, held
 
 
+def sweep_configs(spec: str, rank: int, lr: float) -> list[tuple[int, float]]:
+    """(rank, lr) pairs to train; the first values of each list (or --rank/--lr) come first."""
+    values = {"rank": [rank], "lr": [lr]}
+    for part in filter(None, (p.strip() for p in spec.split(";"))):
+        key, _, items = part.partition("=")
+        if key.strip() not in values:
+            raise SystemExit(f"unknown sweep key: {key}")
+        cast = int if key.strip() == "rank" else float
+        values[key.strip()] = [cast(x) for x in items.split(",") if x.strip()]
+    pairs = [(r, x) for r in values["rank"] for x in values["lr"]]
+    return sorted(pairs, key=lambda p: (p != (values["rank"][0], values["lr"][0])))
+
+
+def time_left_for_next(elapsed: float, durations: list[float], budget: float, margin: float = 15) -> bool:
+    """Start another config only if the slowest one so far would still fit, plus a margin for export."""
+    if budget <= 0:
+        return True
+    return elapsed + max(durations) * 1.15 + margin <= budget
+
+
+def pick_best(results: list[dict]) -> int:
+    """Highest validation accuracy; ties and missing accuracies decided by the lower validation loss."""
+    def key(i: int):
+        r = results[i]
+        acc = r.get("val_accuracy")
+        loss = r.get("eval_loss")
+        return (-(acc if acc is not None else -1), loss if loss is not None else float("inf"), i)
+    return min(range(len(results)), key=key)
+
+
+def validation_accuracy(model, tok, rows: list[dict], system: str, intents: tuple[str, ...]) -> float:
+    """Share of validation sentences whose expected intent scores highest after '{"intent": '.
+
+    Every intent value is scored by the summed log-probability of its tokens, the
+    same decision the benchmark's route mode makes, so selection matches what is
+    later measured. Left padding with explicit positions keeps all endings aligned.
+    """
+    import torch
+
+    model.eval()
+    device = next(model.parameters()).device
+    pad = tok.pad_token_id if tok.pad_token_id is not None else tok.eos_token_id
+    cands = [json.dumps(i) for i in intents]
+    correct = 0
+    with torch.no_grad():
+        for r in rows:
+            messages = [{"role": "system", "content": system},
+                        {"role": "user", "content": f'Question: "{r["text"]}"'}]
+            prompt = tok.apply_chat_template(messages, tokenize=False, add_generation_prompt=True) + '{"intent": '
+            p_ids = tok(prompt, add_special_tokens=False)["input_ids"]
+            seqs, spans = [], []
+            for c in cands:
+                f_ids = tok(prompt + c, add_special_tokens=False)["input_ids"]
+                k = 0
+                while k < min(len(p_ids), len(f_ids)) and p_ids[k] == f_ids[k]:
+                    k += 1
+                seqs.append(f_ids)
+                spans.append(k)
+            width = max(len(x) for x in seqs)
+            keep = max(len(x) - k for x, k in zip(seqs, spans)) + 1
+            ids = torch.tensor([[pad] * (width - len(x)) + x for x in seqs], device=device)
+            mask = torch.tensor([[0] * (width - len(x)) + [1] * len(x) for x in seqs], device=device)
+            pos = (mask.cumsum(-1) - 1).clamp(min=0)
+            logits = model(input_ids=ids, attention_mask=mask, position_ids=pos).logits[:, -keep:].float()
+            logp = torch.log_softmax(logits, dim=-1)
+            scores = []
+            for j, (x, k) in enumerate(zip(seqs, spans)):
+                total = 0.0
+                for q in range(width - len(x) + k, width):  # padded positions of the candidate tokens
+                    total += logp[j, (q - 1) - (width - keep), ids[j, q]].item()
+                scores.append(total)
+            best = max(range(len(cands)), key=lambda j: scores[j])
+            correct += intents[best] == json.loads(r["answer"])["intent"]
+    return round(correct / len(rows), 4) if rows else None
+
+
 def failure_kind(exc: BaseException) -> str:
     """Classify a training failure: out of GPU memory, a CUDA/4-bit kernel error, or other."""
     text = f"{type(exc).__name__}: {exc}"
@@ -148,7 +225,10 @@ def main(argv: list[str] | None = None) -> int:
                    "validation (per intent)")
     p.add_argument("--lr", type=float, default=2e-4)
     p.add_argument("--rank", type=int, default=16)
-    p.add_argument("--alpha", type=int, default=32)
+    p.add_argument("--sweep", default="", help='configs to try, e.g. "rank=16,8,32;lr=2e-4,1e-4,5e-4"; '
+                   "the first values are tried first; empty = only --rank and --lr")
+    p.add_argument("--time-budget", type=float, default=0, help="minutes for the whole sweep; no new config "
+                   "starts when it would likely not finish in time (0 = no limit)")
     p.add_argument("--batch", type=int, default=8)
     p.add_argument("--grad-accum", type=int, default=2)
     args = p.parse_args(argv)
@@ -181,8 +261,9 @@ def main(argv: list[str] | None = None) -> int:
     args.out.mkdir(parents=True, exist_ok=True)
     adapter_dir = args.out / "adapter"
 
-    def train_once(quant: str, batch: int, accum: int) -> None:
-        print(f"Base weights: {quant} · batch {batch} · gradient accumulation {accum}", flush=True)
+    def train_once(quant: str, batch: int, accum: int, rank: int, lr: float, target: Path) -> dict:
+        print(f"Config: rank {rank} · lr {lr:g} · weights {quant} · batch {batch} · accumulation {accum}",
+              flush=True)
         if quant == "4bit":
             # QLoRA: only needed where fp16 weights would not fit next to the training state (7B).
             model = AutoModelForCausalLM.from_pretrained(
@@ -198,7 +279,7 @@ def main(argv: list[str] | None = None) -> int:
                                                          revision=revision)
             model.gradient_checkpointing_enable()
             model.enable_input_require_grads()
-        model = get_peft_model(model, LoraConfig(r=args.rank, lora_alpha=args.alpha, lora_dropout=0.05,
+        model = get_peft_model(model, LoraConfig(r=rank, lora_alpha=2 * rank, lora_dropout=0.05,
                                                  target_modules=LORA_TARGETS, task_type="CAUSAL_LM"))
         # fp16 mixed precision needs fp32 master weights for everything that is trained.
         for param in model.parameters():
@@ -216,7 +297,7 @@ def main(argv: list[str] | None = None) -> int:
             args=TrainingArguments(
                 output_dir=str(args.out / "checkpoints"), num_train_epochs=args.epochs,
                 per_device_train_batch_size=batch, gradient_accumulation_steps=accum,
-                learning_rate=args.lr, lr_scheduler_type="cosine", warmup_steps=max(1, round(0.03 * steps)),
+                learning_rate=lr, lr_scheduler_type="cosine", warmup_steps=max(1, round(0.03 * steps)),
                 logging_steps=10, save_strategy="epoch", save_total_limit=2, fp16=True,
                 eval_strategy="epoch", load_best_model_at_end=True, metric_for_best_model="eval_loss",
                 greater_is_better=False, per_device_eval_batch_size=batch,
@@ -227,35 +308,72 @@ def main(argv: list[str] | None = None) -> int:
         )
         try:
             trainer.train()
-            model.save_pretrained(adapter_dir)
-            history.clear()
-            history.extend({k: round(v, 5) if isinstance(v, float) else v for k, v in e.items()}
-                           for e in trainer.state.log_history if "eval_loss" in e)
+            model.save_pretrained(target)
+            history = [{k: round(v, 5) if isinstance(v, float) else v for k, v in e.items()}
+                       for e in trainer.state.log_history if "eval_loss" in e]
+            try:
+                accuracy = validation_accuracy(model, tok, eval_rows, system, intents)
+            except Exception as exc:  # noqa: BLE001  (selection then falls back to the validation loss)
+                print(f"Validation accuracy not available ({type(exc).__name__}: {exc})", flush=True)
+                accuracy = None
+            return {"eval_loss": min((h["eval_loss"] for h in history), default=None),
+                    "val_accuracy": accuracy, "history": history}
         finally:
             del trainer, model
             gc.collect()
             torch.cuda.empty_cache()
-
-    quant = args.quant if args.quant != "auto" else ("4bit" if "7b" in args.base.lower() else "none")
-    batch, accum = args.batch, args.grad_accum
-    attempts: list[dict] = []
-    history: list[dict] = []
-    while True:
-        try:
-            train_once(quant, batch, accum)
-            attempts.append({"weights": quant, "batch": batch, "grad_accum": accum, "result": "ok"})
-            break
-        except Exception as exc:  # noqa: BLE001  (classified below, re-raised if no fallback is left)
-            kind = failure_kind(exc)
-            attempts.append({"weights": quant, "batch": batch, "grad_accum": accum, "result": kind,
-                             "error": f"{type(exc).__name__}: {str(exc)[:300]}"})
-            nxt = fallback(kind, quant, batch, accum)
-            if nxt is None or len(attempts) >= 3:
-                print(json.dumps(attempts, indent=1), file=sys.stderr)
-                raise
-            print(f"Training failed ({kind}); retrying with {nxt}", flush=True)
             shutil.rmtree(args.out / "checkpoints", ignore_errors=True)
-            quant, batch, accum = nxt
+
+    def train_with_fallback(rank: int, lr: float, target: Path) -> dict:
+        quant = args.quant if args.quant != "auto" else ("4bit" if "7b" in args.base.lower() else "none")
+        batch, accum = args.batch, args.grad_accum
+        attempts: list[dict] = []
+        while True:
+            try:
+                metrics = train_once(quant, batch, accum, rank, lr, target)
+                attempts.append({"weights": quant, "batch": batch, "grad_accum": accum, "result": "ok"})
+                return {**metrics, "attempts": attempts, "weights": quant, "batch": batch, "grad_accum": accum}
+            except Exception as exc:  # noqa: BLE001  (classified below, re-raised if no fallback is left)
+                kind = failure_kind(exc)
+                attempts.append({"weights": quant, "batch": batch, "grad_accum": accum, "result": kind,
+                                 "error": f"{type(exc).__name__}: {str(exc)[:300]}"})
+                nxt = fallback(kind, quant, batch, accum)
+                if nxt is None or len(attempts) >= 3:
+                    print(json.dumps(attempts, indent=1), file=sys.stderr)
+                    raise
+                print(f"Training failed ({kind}); retrying with {nxt}", flush=True)
+                quant, batch, accum = nxt
+
+    configs = sweep_configs(args.sweep, args.rank, args.lr)
+    started = time.monotonic()
+    results: list[dict] = []
+    for i, (rank, lr) in enumerate(configs):
+        elapsed = (time.monotonic() - started) / 60
+        if results and not time_left_for_next(elapsed, [r["minutes"] for r in results], args.time_budget):
+            print(f"Time budget: stopping after {len(results)} of {len(configs)} configs", flush=True)
+            break
+        t0 = time.monotonic()
+        target = args.out / "sweep" / f"{i:02d}-r{rank}-lr{lr:g}"
+        try:
+            metrics = train_with_fallback(rank, lr, target)
+        except Exception as exc:  # noqa: BLE001  (one bad config must not lose the others)
+            if not results:
+                raise
+            print(f"Config rank {rank} lr {lr:g} failed: {type(exc).__name__}: {exc}", flush=True)
+            continue
+        results.append({"rank": rank, "lr": lr, "dir": target.name,
+                        "minutes": round((time.monotonic() - t0) / 60, 1), **metrics})
+        (args.out / "sweep.json").write_text(json.dumps(results, indent=1) + "\n", encoding="utf-8")
+        print(f"Result: rank {rank} lr {lr:g} -> val accuracy {metrics['val_accuracy']} "
+              f"eval loss {metrics['eval_loss']}", flush=True)
+    best = results[pick_best(results)]
+    print(f"Chosen: rank {best['rank']} lr {best['lr']:g}", flush=True)
+    if adapter_dir.exists():
+        shutil.rmtree(adapter_dir)
+    shutil.copytree(args.out / "sweep" / best["dir"], adapter_dir)
+    shutil.rmtree(args.out / "sweep", ignore_errors=True)
+    attempts, history = best["attempts"], best["history"]
+    quant, batch, accum = best["weights"], best["batch"], best["grad_accum"]
 
     manifest = {
         "name": args.name, "base": args.base, "base_revision": revision, "adapter_dir": adapter_dir.name,
@@ -263,8 +381,11 @@ def main(argv: list[str] | None = None) -> int:
         "llama_cpp_commit": LLAMA_CPP_COMMIT, "train_files": {x.name: sha256(x) for x in paths},
         "train_sentences": len(rows), "prompt": prompt_name, "base_weights": quant,
         "attempts": attempts, "validation": history, "validation_sentences": len(eval_rows),
-        "prompt_sha256": hashlib.sha256(system.encode("utf-8")).hexdigest(), "epochs": args.epochs, "lr": args.lr,
-        "rank": args.rank, "alpha": args.alpha, "batch": batch, "grad_accum": accum,
+        "prompt_sha256": hashlib.sha256(system.encode("utf-8")).hexdigest(), "epochs": args.epochs, "lr": best["lr"],
+        "rank": best["rank"], "alpha": 2 * best["rank"], "batch": batch, "grad_accum": accum,
+        "chosen_lr": best["lr"], "val_accuracy": best["val_accuracy"],
+        "sweep": [{k: r[k] for k in ("rank", "lr", "minutes", "val_accuracy", "eval_loss")} for r in results],
+        "time_budget_min": args.time_budget,
         "target_confidence": TARGET_CONFIDENCE, "holdout_lock": "passed",
     }
     (args.out / "manifest.json").write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8")
