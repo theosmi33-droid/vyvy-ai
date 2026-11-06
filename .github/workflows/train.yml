@@ -3,7 +3,8 @@ name: Train
 # Trains LoRA adapters on a Kaggle GPU, publishes each as a release of this
 # repository and starts the benchmark with it. Nothing runs on a local machine.
 # Starts by itself when training data on main changes (1.5B, then 7B, each
-# named vyvy-<size>-<date>-<commit>), or by hand for one base model.
+# named vyvy-<size>-d<hash of the training data>; data that was already trained
+# is skipped), or by hand for one base model.
 # Needs the secrets KAGGLE_API_TOKEN and KAGGLE_USERNAME in the environment "kaggle".
 on:
   push:
@@ -66,12 +67,19 @@ jobs:
               Qwen/Qwen2.5-1.5B-Instruct) size=1.5b ;;
               Qwen/Qwen2.5-7B-Instruct)   size=7b ;;
             esac
-            name="vyvy-$size-$(date -u +%Y%m%d)-${GITHUB_SHA:0:7}"
+            data=$(cat data/train/*.jsonl | sha256sum | cut -c1-8)
+            name="vyvy-$size-d$data"
+            # Same data, same name: never spend GPU time twice on identical data.
+            if gh release view "$name" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+              echo "SKIP=true" >> "$GITHUB_ENV"
+              echo "Adapter $name exists for this training data; skipped." >> "$GITHUB_STEP_SUMMARY"
+            fi
           fi
           echo "NAME=$name" >> "$GITHUB_ENV"
           echo "Adapter: $name" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Check inputs
+        if: env.SKIP != 'true'
         run: |
           set -euo pipefail
           [[ "$NAME" =~ ^[a-z0-9][a-z0-9.-]{0,60}$ ]] || { echo "invalid name" >&2; exit 1; }
@@ -81,9 +89,11 @@ jobs:
           ls data/train/*.jsonl >/dev/null 2>&1 || { echo "no training data in data/train/" >&2; exit 1; }
 
       - name: Holdout lock
+        if: env.SKIP != 'true'
         run: python tools/check_holdout_leak.py
 
       - name: Push the training job to Kaggle
+        if: env.SKIP != 'true'
         id: job
         env:
           KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
@@ -100,6 +110,7 @@ jobs:
           kaggle kernels push -p job --accelerator NvidiaTeslaT4 --timeout 32400
 
       - name: Wait for Kaggle
+        if: env.SKIP != 'true'
         env:
           KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
           KID: ${{ steps.job.outputs.kernel }}
@@ -122,6 +133,7 @@ jobs:
           exit 1
 
       - name: Fetch the adapter
+        if: env.SKIP != 'true'
         env:
           KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
           KID: ${{ steps.job.outputs.kernel }}
@@ -141,6 +153,7 @@ jobs:
           PY
 
       - name: Publish the release
+        if: env.SKIP != 'true'
         run: |
           set -euo pipefail
           notes="LoRA adapter for $BASE (Apache License 2.0), trained from commit $GITHUB_SHA on data/train/. Apply it on top of the unchanged base model; see training/README.md. The base model's license and notices apply to its use."
@@ -148,6 +161,7 @@ jobs:
             --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "$NAME" --notes "$notes"
 
       - name: Start the benchmark with the adapter
+        if: env.SKIP != 'true'
         run: |
           set -euo pipefail
           case "$BASE" in
