@@ -56,6 +56,7 @@ measures accuracy and latency on GitHub Actions.
 | `tools/compare_adapter.py` | Accepts an adapter only with zero regressions and higher accuracy |
 | `tools/previous_adapter.py` | Finds the current default adapter (newest accepted) per base model |
 | `tools/kaggle_watchdog.py` | Watches a Kaggle run, fetches the adapter or diagnoses the failure |
+| `tools/convert_adapter.py` | Converts a trained adapter to GGUF on a CPU runner |
 | `tools/quota_guard.py` | Pauses training before the weekly Kaggle GPU quota runs out |
 | `training/` | Trains a LoRA adapter and exports it as GGUF (see its README) |
 | `.github/workflows/train.yml` | Trains an adapter on a hosted GPU, publishes it as a release and benchmarks it |

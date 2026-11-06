@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Stop new Kaggle runs before the weekly GPU quota runs out.
 
-Kaggle grants 30 GPU hours per week (reset Monday 00:00 UTC) and has no API for
-the remaining quota. This guard counts what this pipeline used: the duration of
-the Kaggle steps of every Train run in the current ISO week, read from the
-GitHub API. GPU time used outside this pipeline (notebooks started by hand on
-the same account) is not visible here; pass it with --external (minutes) or the
-repository variable KAGGLE_EXTERNAL_GPU_MIN.
+Primary source: Kaggle's own account quota (`kaggle quota`, the same figure as
+Settings -> Quotas), which includes every GPU session of the account, also
+notebooks started by hand. If that call fails, the guard falls back to counting
+this pipeline's Kaggle steps of the current ISO week from the GitHub API; GPU
+time used outside the pipeline is then added with --external or the repository
+variable KAGGLE_EXTERNAL_GPU_MIN.
 
 With less than --reserve minutes left (default 120, i.e. pause at 28 hours) it
 prints "Quota paused until Monday ..." and writes paused=true to $GITHUB_OUTPUT.
@@ -55,6 +55,22 @@ def used_minutes(runs: list[dict], jobs_of: Callable[[int], list[dict]], since: 
     return total
 
 
+def kaggle_quota() -> tuple[float, float, str] | None:
+    """(used minutes, total minutes, refresh time) from the Kaggle API, or None."""
+    try:
+        from kaggle.api.kaggle_api_extended import KaggleApi
+
+        api = KaggleApi()
+        api.authenticate()
+        r = api.quota_view()
+        q = r.gpu_quota
+        return (q.time_used.total_seconds() / 60, q.total_time_allowed.total_seconds() / 60,
+                r.quota_refresh_time.isoformat() if r.quota_refresh_time else "")
+    except Exception as exc:  # noqa: BLE001  (any failure means: use the fallback)
+        print(f"Kaggle quota not available ({type(exc).__name__}: {exc}); counting from GitHub instead.")
+        return None
+
+
 def gh_json(path: str) -> dict:
     out = subprocess.run(["gh", "api", path], capture_output=True, text=True, check=True).stdout
     return json.loads(out)
@@ -72,17 +88,23 @@ def main(argv: list[str] | None = None) -> int:
 
     now = dt.datetime.now(dt.UTC)
     since = week_start(now)
-    runs = gh_json(f"repos/{args.repo}/actions/workflows/{args.workflow}/runs"
-                   f"?per_page=100&created=>={since.date().isoformat()}")["workflow_runs"]
-    used = used_minutes(runs, lambda rid: gh_json(f"repos/{args.repo}/actions/runs/{rid}/jobs")["jobs"],
-                        since, now) + args.external
-    left = args.limit - used
+    live = kaggle_quota()
+    if live:
+        used, limit, refresh = live
+        source = "Kaggle account"
+    else:
+        runs = gh_json(f"repos/{args.repo}/actions/workflows/{args.workflow}/runs"
+                       f"?per_page=100&created=>={since.date().isoformat()}")["workflow_runs"]
+        used = used_minutes(runs, lambda rid: gh_json(f"repos/{args.repo}/actions/runs/{rid}/jobs")["jobs"],
+                            since, now) + args.external
+        limit, refresh = args.limit, (since + dt.timedelta(days=7)).isoformat()
+        source = f"this pipeline, incl. {args.external:.0f} min external"
+    left = limit - used
     paused = left < args.reserve
-    next_monday = (since + dt.timedelta(days=7)).strftime("%Y-%m-%d")
-    msg = (f"Kaggle GPU this week: {used:.0f} of {args.limit:.0f} min used (incl. {args.external:.0f} external), "
+    msg = (f"Kaggle GPU this week ({source}): {used:.0f} of {limit:.0f} min used, "
            f"{left:.0f} left, reserve {args.reserve:.0f}.")
     if paused:
-        msg += f" Quota paused until Monday {next_monday} 00:00 UTC."
+        msg += f" Quota paused until {refresh or 'the weekly reset'}."
     print(msg)
     if os.environ.get("GITHUB_STEP_SUMMARY"):
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:

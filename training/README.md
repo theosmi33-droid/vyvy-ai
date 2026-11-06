@@ -38,13 +38,15 @@ without manual approval or checking.
 1. A push to `main` that changes `data/train/`, the training code or the
    workflow starts **Train** (1.5B, then 7B, one GPU session at a time); it can
    also be started by hand for one base model.
-2. **Quota guard** (`tools/quota_guard.py`): sums the Kaggle time of all Train
-   runs since Monday 00:00 UTC from the GitHub API. With less than 2 of the 30
-   hours left it skips the run ("Quota paused until Monday"). GPU time used
-   outside this pipeline on the same Kaggle account is not visible to it; set
-   the repository variable `KAGGLE_EXTERNAL_GPU_MIN` to add it.
+2. **Quota guard** (`tools/quota_guard.py`): reads the account's live GPU quota
+   from Kaggle (`kaggle quota`, all sessions including manual notebooks). With
+   less than 2 hours left it skips the run ("Quota paused until …"). If Kaggle
+   does not answer, it counts this pipeline's runs of the week from the GitHub
+   API instead, plus the repository variable `KAGGLE_EXTERNAL_GPU_MIN`.
 3. Holdout lock, then a private Kaggle kernel trains from the exact commit with
-   the prompt the benchmark uses for that model size.
+   the prompt the benchmark uses for that model size. It only trains and saves
+   the PEFT adapter; the GitHub runner converts it to GGUF on CPU
+   (`tools/convert_adapter.py`), so a failed conversion costs no GPU time.
 4. **Watchdog** (`tools/kaggle_watchdog.py`): polls every 60 s for up to 3 h.
    On success it fetches only `<name>.gguf` and `manifest.json`; on failure it
    writes the likely cause (out of memory, CUDA or 4-bit error, missing module,

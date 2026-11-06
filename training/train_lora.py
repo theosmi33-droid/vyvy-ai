@@ -22,14 +22,10 @@ from __future__ import annotations
 import argparse
 import gc
 import hashlib
-import io
 import json
 import math
 import shutil
-import subprocess
 import sys
-import tarfile
-import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -39,7 +35,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 import bench  # noqa: E402  (same prompt and contract as the benchmark)
 import check_holdout_leak  # noqa: E402
 
-LLAMA_CPP_COMMIT = "4227c9be4268ac844921b90f31595f81236bd317"  # vendored by llama-cpp-python 0.3.16
+from convert_adapter import LLAMA_CPP_COMMIT  # noqa: E402
 TARGET_CONFIDENCE = 0.9
 LORA_TARGETS = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
 
@@ -87,16 +83,6 @@ def collate(pad_id: int):
     return run
 
 
-def llama_cpp_dir(cache: Path) -> Path:
-    cache.mkdir(parents=True, exist_ok=True)
-    target = cache / f"llama.cpp-{LLAMA_CPP_COMMIT}"
-    if not target.is_dir():
-        url = f"https://github.com/ggml-org/llama.cpp/archive/{LLAMA_CPP_COMMIT}.tar.gz"
-        with urllib.request.urlopen(url) as resp:
-            tarfile.open(fileobj=io.BytesIO(resp.read()), mode="r:gz").extractall(cache, filter="data")
-    return target
-
-
 def failure_kind(exc: BaseException) -> str:
     """Classify a training failure: out of GPU memory, a CUDA/4-bit kernel error, or other."""
     text = f"{type(exc).__name__}: {exc}"
@@ -136,6 +122,8 @@ def main(argv: list[str] | None = None) -> int:
                    help="system prompt; auto = the one the benchmark uses for this base model")
     p.add_argument("--quant", choices=("auto", "4bit", "none"), default="auto",
                    help="base weights in training; auto = 4bit for 7B, fp16 otherwise")
+    p.add_argument("--no-gguf", action="store_true",
+                   help="only train and save the PEFT adapter; convert to GGUF elsewhere (tools/convert_adapter.py)")
     p.add_argument("--epochs", type=float, default=3)
     p.add_argument("--lr", type=float, default=2e-4)
     p.add_argument("--rank", type=int, default=16)
@@ -231,22 +219,22 @@ def main(argv: list[str] | None = None) -> int:
             shutil.rmtree(args.out / "checkpoints", ignore_errors=True)
             quant, batch, accum = nxt
 
-    gguf = args.out / f"{args.name}.gguf"
-    convert = llama_cpp_dir(args.cache or args.out / ".cache") / "convert_lora_to_gguf.py"
-    subprocess.run([sys.executable, str(convert), str(adapter_dir), "--outfile", str(gguf),
-                    "--outtype", "f16", "--base-model-id", args.base], check=True)
-
     manifest = {
-        "adapter": gguf.name, "adapter_sha256": sha256(gguf), "base": args.base,
+        "name": args.name, "base": args.base, "adapter_dir": adapter_dir.name,
+        "adapter_files": {f.name: sha256(f) for f in sorted(adapter_dir.iterdir()) if f.is_file()},
         "llama_cpp_commit": LLAMA_CPP_COMMIT, "train_files": {x.name: sha256(x) for x in paths},
         "train_sentences": len(rows), "prompt": prompt_name, "base_weights": quant,
         "attempts": attempts,
-        "prompt_sha256": hashlib.sha256(system.encode("utf-8")).hexdigest(), "epochs": args.epochs, "lr": args.lr, "rank": args.rank,
-        "alpha": args.alpha, "batch": batch, "grad_accum": accum,
+        "prompt_sha256": hashlib.sha256(system.encode("utf-8")).hexdigest(), "epochs": args.epochs, "lr": args.lr,
+        "rank": args.rank, "alpha": args.alpha, "batch": batch, "grad_accum": accum,
         "target_confidence": TARGET_CONFIDENCE, "holdout_lock": "passed",
     }
     (args.out / "manifest.json").write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8")
-    print(json.dumps(manifest, indent=1))
+    if not args.no_gguf:
+        # Locally: convert right away. On Kaggle the GitHub runner converts (no GPU time, retryable).
+        import convert_adapter
+        convert_adapter.convert(args.out, args.name, args.cache or args.out / ".cache")
+    print((args.out / "manifest.json").read_text(encoding="utf-8"))
     return 0
 
 

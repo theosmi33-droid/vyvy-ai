@@ -3,7 +3,8 @@
 
 The kernel clones this public repository at exactly that commit, installs the
 training requirements and runs training/train_lora.py. Its output folder
-(/kaggle/working) then holds <name>.gguf and manifest.json. No credentials are
+(/kaggle/working) then holds the PEFT adapter in adapter/ and manifest.json;
+the GitHub runner converts it to GGUF. No credentials are
 written into the kernel; the repository is public.
 
     python tools/kaggle_job.py --dir job --owner USER --repo OWNER/REPO \
@@ -51,8 +52,9 @@ def sh(*args):
 sh("git", "clone", "--quiet", "https://github.com/" + REPO, SRC)
 sh("git", "-C", SRC, "checkout", "--quiet", COMMIT)
 sh(sys.executable, "-m", "pip", "install", "-q", "-r", SRC + "/training/requirements.txt")
+# GGUF conversion happens on the GitHub runner (tools/convert_adapter.py).
 sh(sys.executable, SRC + "/training/train_lora.py", "--base", BASE, "--name", NAME,
-   "--epochs", EPOCHS, "--out", "/kaggle/working", "--cache", "/tmp/vyvy-cache")
+   "--epochs", EPOCHS, "--out", "/kaggle/working", "--no-gguf")
 '''
 
 
