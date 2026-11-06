@@ -19,9 +19,10 @@ def row(path: Path) -> str:
         return f"{t[key]['median']:.0f}" if key in t else "–"
 
     n = d["n"]
+    steal = "–" if d.get("steal_pct") is None else f"{d['steal_pct']:.1f}"
     return (f"| {d.get('label') or path.stem} | {d['mode']} | {n} | {d['intent_correct']}/{n} "
             f"({d['intent_correct'] / n:.1%}) | {d['within_timeout']}/{n} | {d['median_ms']} "
-            f"| {med('prompt_ms')} | {med('gen_ms')} |")
+            f"| {med('prompt_ms')} | {med('gen_ms')} | {steal} |")
 
 
 def main(paths: list[str]) -> int:
@@ -31,8 +32,8 @@ def main(paths: list[str]) -> int:
              f"CPU: {', '.join(sorted(c or 'unknown' for c in cpus))}"
              + (" · **runs used different CPUs, milliseconds are not comparable**" if len(cpus) > 1 else ""),
              "",
-             "| Model | Mode | N | Accuracy (intent) | Within timeout | Median ms | Prompt ms | After prompt ms |",
-             "|---|---|---:|---:|---:|---:|---:|---:|"]
+             "| Model | Mode | N | Accuracy (intent) | Within timeout | Median ms | Prompt ms | After prompt ms | CPU steal % |",
+             "|---|---|---:|---:|---:|---:|---:|---:|---:|"]
     lines += [row(f) for f in files]
     print("\n".join(lines) + "\n")
     return 0

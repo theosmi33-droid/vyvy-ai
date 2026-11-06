@@ -484,9 +484,30 @@ class VyvyBenchRunner:
                              self.min_confidence, self.timeout_s, self.clock)
 
 
+def cpu_times() -> tuple[int, int] | None:
+    """(steal, total) jiffies of all CPUs from /proc/stat; None where that file does not exist.
+
+    Steal is time the hypervisor gave to other guests while this machine wanted
+    to run. A high share explains slow runs on shared cloud runners.
+    """
+    try:
+        with open("/proc/stat") as f:
+            fields = [int(x) for x in f.readline().split()[1:]]
+    except (OSError, ValueError):
+        return None
+    return (fields[7] if len(fields) > 7 else 0), sum(fields[:8])
+
+
+def steal_pct(before: tuple[int, int] | None, after: tuple[int, int] | None) -> float | None:
+    if not before or not after or after[1] <= before[1]:
+        return None
+    return 100 * (after[0] - before[0]) / (after[1] - before[1])
+
+
 def run_benchmark(items: list[dict], model: Model, grammar: str, intents: tuple[str, ...],
                   min_confidence: float, timeout_s: float = 4.0,
-                  clock: Callable[[], float] = time.perf_counter) -> dict:
+                  clock: Callable[[], float] = time.perf_counter,
+                  cpu: Callable[[], tuple[int, int] | None] = cpu_times) -> dict:
     """Intent accuracy and the time limit are scored separately.
 
     intent_correct: right intent regardless of speed. within_timeout: right intent
@@ -494,10 +515,12 @@ def run_benchmark(items: list[dict], model: Model, grammar: str, intents: tuple[
     """
     per_intent: dict[str, dict] = {}
     records: list[dict] = []
+    run_start = cpu()
     for item in items:
-        t0 = clock()
+        c0, t0 = cpu(), clock()
         raw, stats = model(SYSTEM_PROMPT, f'Question: "{item["text"]}"', grammar)
         ms = (clock() - t0) * 1000
+        steal = steal_pct(c0, cpu())
         got = outcome(parse_output(raw, intents), min_confidence)
         ok = got == item["expected_intent"]
         timed_out = ms > timeout_s * 1000
@@ -505,6 +528,8 @@ def run_benchmark(items: list[dict], model: Model, grammar: str, intents: tuple[
                "timeout": timed_out, **{k: stats.get(k) for k in TIMING_KEYS}}
         if rec["prompt_ms"] is not None and rec["gen_ms"] is not None:
             rec["other_ms"] = round(ms - rec["prompt_ms"] - rec["gen_ms"])
+        if steal is not None:
+            rec["steal_pct"] = round(steal, 1)
         for extra in ("probs", "route_passes"):
             if extra in stats:
                 rec[extra] = stats[extra]
@@ -528,6 +553,7 @@ def run_benchmark(items: list[dict], model: Model, grammar: str, intents: tuple[
         "timeouts": sum(r["timeouts"] for r in per_intent.values()),
         "median_ms": round(statistics.median(all_ms)) if all_ms else 0,
         "timeout_s": timeout_s,
+        "steal_pct": None if (s := steal_pct(run_start, cpu())) is None else round(s, 1),
         "timing": timing_summary(records),
         "per_intent": {
             k: {"n": r["n"], "intent_correct": r["intent_correct"], "within_timeout": r["within_timeout"],
@@ -542,7 +568,7 @@ def run_benchmark(items: list[dict], model: Model, grammar: str, intents: tuple[
 
 def timing_summary(records: list[dict]) -> dict:
     out = {}
-    for key in ("ms", *TIMING_KEYS, "other_ms", "route_passes"):
+    for key in ("ms", *TIMING_KEYS, "other_ms", "route_passes", "steal_pct"):
         vals = [r[key] for r in records if r.get(key) is not None]
         if vals:
             out[key] = {"median": statistics.median(vals), "min": min(vals), "max": max(vals)}
@@ -559,6 +585,7 @@ TIMING_LABELS = {
     "other_ms": "Other ms (sampling, grammar, overhead)",
     "gen_tps": "Generation tokens/s",
     "route_passes": "Branch passes after the prompt (route)",
+    "steal_pct": "CPU steal % (time taken by the hypervisor)",
 }
 
 
@@ -576,7 +603,8 @@ def report(result: dict, header: str) -> str:
         f"**Accuracy (intent): {c}/{n} ({c / n:.1%})** · right intent, regardless of speed",
         "",
         f"**Within timeout: {w}/{n} ({w / n:.1%})** · right intent and at most {result['timeout_s']:g} s"
-        f" · {result['timeouts']} timeouts · median {result['median_ms']} ms per question",
+        f" · {result['timeouts']} timeouts · median {result['median_ms']} ms per question"
+        + ("" if result.get("steal_pct") is None else f" · CPU steal {result['steal_pct']:.1f} %"),
         "",
         "| Intent | Correct | Within timeout | Timeouts | N | Accuracy | Median ms | Mean ms |",
         "|---|---:|---:|---:|---:|---:|---:|---:|",
