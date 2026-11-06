@@ -60,9 +60,19 @@ def convert(folder: Path, name: str | None = None, cache: Path | None = None) ->
     name = name or manifest["name"]
     adapter = check_files(folder, manifest)
     gguf = folder / f"{name}.gguf"
-    script = llama_cpp_dir(cache or folder / ".cache") / "convert_lora_to_gguf.py"
+    cache = cache or folder / ".cache"
+    script = llama_cpp_dir(cache) / "convert_lora_to_gguf.py"
+    base_args = ["--base-model-id", manifest["base"]]
+    if manifest.get("base_revision"):
+        # Only config and tokenizer files of the exact base commit the adapter was trained on.
+        from huggingface_hub import snapshot_download
+
+        base_dir = snapshot_download(manifest["base"], revision=manifest["base_revision"],
+                                     allow_patterns=["*.json", "*.txt", "*.model"],
+                                     local_dir=cache / "base-config")
+        base_args = ["--base", str(base_dir)]
     subprocess.run([sys.executable, str(script), str(adapter), "--outfile", str(gguf),
-                    "--outtype", "f16", "--base-model-id", manifest["base"]], check=True)
+                    "--outtype", "f16", *base_args], check=True)
     manifest.update({"adapter": gguf.name, "adapter_sha256": sha256(gguf), "llama_cpp_commit": LLAMA_CPP_COMMIT})
     manifest_path.write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8")
     return gguf

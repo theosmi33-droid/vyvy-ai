@@ -59,34 +59,17 @@ jobs:
       - name: Grammar check and dry run
         run: python runner/bench.py --dry-run --mode "${{ inputs.mode }}" > /dev/null
 
-      - name: Resolve model
-        id: model
-        run: |
-          set -euo pipefail
-          m="${{ inputs.model }}"
-          # Split models are loaded through their first shard; llama.cpp finds the rest.
-          case "$m" in
-            qwen2.5-1.5b-instruct-q4_k_m|qwen2.5-1.5b-instruct-q8_0)
-                                          repo=Qwen/Qwen2.5-1.5B-Instruct-GGUF; file="$m.gguf" ;;
-            qwen2.5-7b-instruct-q4_k_m)   repo=Qwen/Qwen2.5-7B-Instruct-GGUF; file="$m-00001-of-00002.gguf" ;;
-            *) echo "unknown model" >&2; exit 1 ;;
-          esac
-          echo "repo=$repo" >> "$GITHUB_OUTPUT"
-          echo "file=$file" >> "$GITHUB_OUTPUT"
-
       - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: models
           key: model-${{ inputs.model }}
 
-      - name: Download model
-        run: |
-          set -euo pipefail
-          test -f "models/${{ steps.model.outputs.file }}" || python -c "
-          from huggingface_hub import snapshot_download
-          snapshot_download('${{ steps.model.outputs.repo }}', allow_patterns=['${{ inputs.model }}*.gguf'], local_dir='models')
-          "
-          sha256sum models/${{ inputs.model }}*.gguf
+      # Fixed Hugging Face commit and SHA-256 per file (models.json); stops on any mismatch.
+      - name: Download the pinned model
+        id: model
+        env:
+          MODEL: ${{ inputs.model }}
+        run: python tools/fetch_model.py "$MODEL" --dir models
 
       - name: Download adapter
         id: adapter
@@ -108,7 +91,7 @@ jobs:
         run: |
           set -euo pipefail
           python runner/bench.py \
-            --model "models/${{ steps.model.outputs.file }}" \
+            --model "${{ steps.model.outputs.path }}" \
             --label "${{ inputs.model }}" \
             --mode "${{ inputs.mode }}" \
             --threads "$(nproc)" \

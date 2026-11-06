@@ -56,6 +56,8 @@ measures accuracy and latency on GitHub Actions.
 | `tools/compare_adapter.py` | Accepts an adapter only with zero regressions and higher accuracy |
 | `tools/previous_adapter.py` | Finds the current default adapter (newest accepted) per base model |
 | `tools/kaggle_watchdog.py` | Watches a Kaggle run, fetches the adapter or diagnoses the failure |
+| `models.json` | Fixed Hugging Face commit and SHA-256 of every model file used |
+| `tools/fetch_model.py` | Downloads a model exactly as pinned in `models.json` and verifies it |
 | `tools/convert_adapter.py` | Converts a trained adapter to GGUF on a CPU runner |
 | `tools/quota_guard.py` | Pauses training before the weekly Kaggle GPU quota runs out |
 | `training/` | Trains a LoRA adapter and exports it as GGUF (see its README) |
@@ -165,7 +167,8 @@ fine-tuned version, enter the release tag of this repository that holds its LoRA
 adapter (one `*.gguf`); the adapter is applied on top of the base model, which
 is still downloaded unchanged from Hugging Face. Locally: `--lora path/to/adapter.gguf`. The report appears as
 the job summary; raw numbers are attached as the `results-…` artifact. Models
-are downloaded from Hugging Face during the job and never stored in this
+are downloaded from Hugging Face during the job, from the commit pinned in
+`models.json`, and checked against their SHA-256; they are never stored in this
 repository. Each model keeps its own license (see its Hugging Face page).
 
 ## License

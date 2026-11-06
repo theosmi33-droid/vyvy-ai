@@ -147,7 +147,10 @@ def main(argv: list[str] | None = None) -> int:
     from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
     from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, Trainer, TrainingArguments
 
-    tok = AutoTokenizer.from_pretrained(args.base)
+    # Fixed Hugging Face commit of the base model (models.json), never "latest".
+    revision = json.loads((ROOT / "models.json").read_text(encoding="utf-8"))["base"][args.base]
+    print(f"Base model: {args.base}@{revision[:7]}")
+    tok = AutoTokenizer.from_pretrained(args.base, revision=revision)
     data = [encode(tok, r, system) for r in rows]
     collator = collate(tok.pad_token_id if tok.pad_token_id is not None else tok.eos_token_id)
     args.out.mkdir(parents=True, exist_ok=True)
@@ -162,11 +165,12 @@ def main(argv: list[str] | None = None) -> int:
                 quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4",
                                                        bnb_4bit_compute_dtype=torch.float16,
                                                        bnb_4bit_use_double_quant=True),
-                dtype=torch.float16, device_map={"": 0},
+                dtype=torch.float16, device_map={"": 0}, revision=revision,
             )
             model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True)
         else:
-            model = AutoModelForCausalLM.from_pretrained(args.base, dtype=torch.float16, device_map={"": 0})
+            model = AutoModelForCausalLM.from_pretrained(args.base, dtype=torch.float16, device_map={"": 0},
+                                                         revision=revision)
             model.gradient_checkpointing_enable()
             model.enable_input_require_grads()
         model = get_peft_model(model, LoraConfig(r=args.rank, lora_alpha=args.alpha, lora_dropout=0.05,
@@ -220,7 +224,7 @@ def main(argv: list[str] | None = None) -> int:
             quant, batch, accum = nxt
 
     manifest = {
-        "name": args.name, "base": args.base, "adapter_dir": adapter_dir.name,
+        "name": args.name, "base": args.base, "base_revision": revision, "adapter_dir": adapter_dir.name,
         "adapter_files": {f.name: sha256(f) for f in sorted(adapter_dir.iterdir()) if f.is_file()},
         "llama_cpp_commit": LLAMA_CPP_COMMIT, "train_files": {x.name: sha256(x) for x in paths},
         "train_sentences": len(rows), "prompt": prompt_name, "base_weights": quant,

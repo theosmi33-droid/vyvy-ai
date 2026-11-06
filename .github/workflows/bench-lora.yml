@@ -93,18 +93,11 @@ jobs:
           path: models
           key: model-${{ steps.adapter.outputs.model }}
 
+      # Fixed Hugging Face commit and SHA-256 per file (models.json).
       - name: Download the base model
         env:
-          REPO: ${{ steps.adapter.outputs.repo }}
           MODEL: ${{ steps.adapter.outputs.model }}
-        run: |
-          set -euo pipefail
-          ls models/"$MODEL"*.gguf >/dev/null 2>&1 || python -c "
-          import os
-          from huggingface_hub import snapshot_download
-          snapshot_download(os.environ['REPO'], allow_patterns=[os.environ['MODEL'] + '*.gguf'], local_dir='models')
-          "
-          sha256sum models/"$MODEL"*.gguf
+        run: python tools/fetch_model.py "$MODEL" --dir models
 
       - name: Baseline and candidate, one after the other
         env:

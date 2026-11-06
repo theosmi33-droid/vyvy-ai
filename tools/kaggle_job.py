@@ -92,6 +92,9 @@ def write_job(folder: Path, owner: str, repo: str, commit: str, base: str, name:
         "enable_gpu": True,
         "enable_internet": True,
         "machine_shape": "NvidiaTeslaT4",
+        # Keep the container of the kernel's first version: an image update cannot
+        # change the environment under a running pipeline.
+        "docker_image_pinning_type": "original",
         "dataset_sources": [],
         "competition_sources": [],
         "kernel_sources": [],
