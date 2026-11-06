@@ -40,6 +40,11 @@ jobs:
           CMAKE_ARGS: -DGGML_NATIVE=OFF
         run: pip install -r requirements.txt
 
+      - name: CPU features of the build
+        run: |
+          grep -m1 'model name' /proc/cpuinfo
+          python -c "import llama_cpp; print(llama_cpp.llama_print_system_info().decode())"
+
       - name: Grammar check and dry run
         run: python runner/bench.py --dry-run > /dev/null
 
