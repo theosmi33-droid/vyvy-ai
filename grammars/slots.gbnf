@@ -1,0 +1,11 @@
+# Output contract for the intent & slot extractor.
+# Exactly one JSON object, fields in fixed order. "unknown" is mandatory:
+# when nothing fits, the model is forced there instead of inventing an intent.
+# "ws" is an alternation with an empty branch, not a repetition (some
+# llama.cpp builds crash on unbounded whitespace repetition).
+root ::= "{" ws "\"intent\":" ws intent "," ws "\"timeframe\":" ws timeframe "," ws "\"entity\":" ws entity "," ws "\"confidence\":" ws confidence ws "}"
+intent ::= "\"appointments_today\"" | "\"appointments_tomorrow\"" | "\"tasks_open\"" | "\"tasks_overdue\"" | "\"emails_unread\"" | "\"daily_agenda\"" | "\"create_appointment\"" | "\"create_task\"" | "\"unknown\""
+timeframe ::= "\"today\"" | "\"tomorrow\"" | "\"week\"" | "null"
+entity ::= "null" | "\"" [^"\\\x7F\x00-\x1F]* "\""
+confidence ::= "0" | "1" | "0." [0-9] [0-9]? | "1.0"
+ws ::= | " "

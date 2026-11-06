@@ -1,0 +1,366 @@
+{
+ "name": "German office intent holdout",
+ "description": "Synthetic, hand-written German questions (regional dialects, colloquial phrasing, typos) asking an office assistant about appointments, tasks and emails. No real persons, companies or customer data. Each item has exactly one expected intent.",
+ "items": [
+  {
+   "id": "set_a-001",
+   "set": "set_a",
+   "text": "Wat steiht hüt an Terminen an?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "set_a-002",
+   "set": "set_a",
+   "text": "Wat hann ich hück för Termine, ne?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "set_a-003",
+   "set": "set_a",
+   "text": "Wos hob i heid fia Termine?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "set_a-004",
+   "set": "set_a",
+   "text": "Was hao i heit fir Termin?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "set_a-005",
+   "set": "set_a",
+   "text": "Was stoht hüt aa, Termine?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "set_a-006",
+   "set": "set_a",
+   "text": "Was steht heit auf'm Programm?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "set_a-007",
+   "set": "set_a",
+   "text": "Watt steiht heut an, Termine oder wat?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "set_a-008",
+   "set": "set_a",
+   "text": "Wat för Afspraken hebbt wi hüt?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "set_a-009",
+   "set": "set_a",
+   "text": "Wat moß ich noch alles maache?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "set_a-010",
+   "set": "set_a",
+   "text": "Wos hob i no alles z'doa?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "set_a-011",
+   "set": "set_a",
+   "text": "Was hao i no alles z'due?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "set_a-012",
+   "set": "set_a",
+   "text": "Watt hab ich noch so zu tun?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "set_a-013",
+   "set": "set_a",
+   "text": "Wat is noch över to doon?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "set_a-014",
+   "set": "set_a",
+   "text": "Was han i no z'mache?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "set_a-015",
+   "set": "set_a",
+   "text": "Was is no übrig an Arbeit?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "set_a-016",
+   "set": "set_a",
+   "text": "Wat ess noch an Arbeit üvrig?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "set_a-017",
+   "set": "set_a",
+   "text": "Wos hob i vagessn, wos brennt scho?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "set_a-018",
+   "set": "set_a",
+   "text": "Was hao i iberseha, was pressiert?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "set_a-019",
+   "set": "set_a",
+   "text": "Wat hab ich verschusselt, wat brennt?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "set_a-020",
+   "set": "set_a",
+   "text": "Wat is leegen bleven un eilig?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "set_a-021",
+   "set": "set_a",
+   "text": "Wat brennt, und han ich verjesse?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "set_a-022",
+   "set": "set_a",
+   "text": "Was han i vergässe, wo scho z'spoot isch?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "set_a-023",
+   "set": "set_a",
+   "text": "Wos hob i liegn lossn, wos scho z'spot is?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "set_a-024",
+   "set": "set_a",
+   "text": "Was is eh scho überfällig, hob i vergessn?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "set_a-025",
+   "set": "set_a",
+   "text": "Sünd nee Mails binnenkamen?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "set_a-026",
+   "set": "set_a",
+   "text": "Sin do neu Mails, die ich noch nit gelese han?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "set_a-027",
+   "set": "set_a",
+   "text": "Sen neue Mail komma, ungelesa?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "set_a-028",
+   "set": "set_a",
+   "text": "Is wos Neis im Postkastn, ungelesn?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "set_a-029",
+   "set": "set_a",
+   "text": "Sind neue Mails da, watt ich noch nich gelesen hab?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "set_a-030",
+   "set": "set_a",
+   "text": "Hät's neui Mail, wo i no nid gläse ha?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "set_b-001",
+   "set": "set_b",
+   "text": "Wat steiht vandaag bi mi an?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "set_b-002",
+   "set": "set_b",
+   "text": "Wat hab ick heute för Termine?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "set_b-003",
+   "set": "set_b",
+   "text": "Was steht ma heid so an?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "set_b-004",
+   "set": "set_b",
+   "text": "Wos hob i heid fer Termine?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "set_b-005",
+   "set": "set_b",
+   "text": "Hann ich hück noch Termine?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "set_b-006",
+   "set": "set_b",
+   "text": "Was hao i heut fir Termine?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "set_b-007",
+   "set": "set_b",
+   "text": "Was hab ich heid fer Termine?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "set_b-008",
+   "set": "set_b",
+   "text": "Was hann ich heit fer Termine?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "set_b-009",
+   "set": "set_b",
+   "text": "Wat is noch nich dahn bi mi?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "set_b-010",
+   "set": "set_b",
+   "text": "Wat moss ich noch maache?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "set_b-011",
+   "set": "set_b",
+   "text": "Wos hob i no alles zum mochn?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "set_b-012",
+   "set": "set_b",
+   "text": "Was is nu noch offn bei mir?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "set_b-013",
+   "set": "set_b",
+   "text": "Was isch no alles z'due?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "set_b-014",
+   "set": "set_b",
+   "text": "Was is noch offe bei mir?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "set_b-015",
+   "set": "set_b",
+   "text": "Wat is bei mir noch offen, ne?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "set_b-016",
+   "set": "set_b",
+   "text": "Wos hob i no z'erledigen?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "set_b-017",
+   "set": "set_b",
+   "text": "Wat hebb ick all lang vergeten?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "set_b-018",
+   "set": "set_b",
+   "text": "Wat han ich all vergesse?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "set_b-019",
+   "set": "set_b",
+   "text": "Wos hob i vergessn, wos eilt?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "set_b-020",
+   "set": "set_b",
+   "text": "Was hab ich verschusselt, was eilt?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "set_b-021",
+   "set": "set_b",
+   "text": "Wat is bei mir liegen jeblieben?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "set_b-022",
+   "set": "set_b",
+   "text": "Was isch überfällig bei mir?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "set_b-023",
+   "set": "set_b",
+   "text": "Wos hob i no liegn, wos pressiert?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "set_b-024",
+   "set": "set_b",
+   "text": "Was is bei mir iwwerfällig?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "set_b-025",
+   "set": "set_b",
+   "text": "Hao i neue Mails, noch ungelesa?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "set_b-026",
+   "set": "set_b",
+   "text": "Sinn heid neie Mails kumma?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "set_b-027",
+   "set": "set_b",
+   "text": "Sünd dor nee Mails bi mi?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "set_b-028",
+   "set": "set_b",
+   "text": "Sin neue Mails kumme?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "set_b-029",
+   "set": "set_b",
+   "text": "Gibbet neue Mails, wa, ungelesen?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "set_b-030",
+   "set": "set_b",
+   "text": "Hobn mer neiche Mails, ungelesn?",
+   "expected_intent": "emails_unread"
+  }
+ ]
+}

@@ -1,0 +1,90 @@
+name: Benchmark
+
+# Manual only. The model is downloaded into the runner for this job and never
+# committed to the repository.
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: Model to benchmark
+        type: choice
+        default: qwen2.5-3b-instruct-q5_k_m
+        options:
+          - qwen2.5-3b-instruct-q5_k_m   # class 4GB
+          - qwen2.5-7b-instruct-q4_k_m   # class 8GB
+          - qwen2.5-3b-instruct-q4_k_m
+          - qwen2.5-1.5b-instruct-q4_k_m
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bench-${{ inputs.model }}
+  cancel-in-progress: false
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies (CPU build)
+        env:
+          CMAKE_ARGS: -DGGML_NATIVE=OFF
+        run: pip install -r requirements.txt
+
+      - name: Grammar check and dry run
+        run: python runner/bench.py --dry-run > /dev/null
+
+      - name: Resolve model
+        id: model
+        run: |
+          set -euo pipefail
+          m="${{ inputs.model }}"
+          # Split models are loaded through their first shard; llama.cpp finds the rest.
+          case "$m" in
+            qwen2.5-1.5b-instruct-q4_k_m) repo=Qwen/Qwen2.5-1.5B-Instruct-GGUF; file="$m.gguf" ;;
+            qwen2.5-3b-instruct-q4_k_m|qwen2.5-3b-instruct-q5_k_m)
+                                          repo=Qwen/Qwen2.5-3B-Instruct-GGUF; file="$m.gguf" ;;
+            qwen2.5-7b-instruct-q4_k_m)   repo=Qwen/Qwen2.5-7B-Instruct-GGUF; file="$m-00001-of-00002.gguf" ;;
+            *) echo "unknown model" >&2; exit 1 ;;
+          esac
+          echo "repo=$repo" >> "$GITHUB_OUTPUT"
+          echo "file=$file" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/cache@v4
+        with:
+          path: models
+          key: model-${{ inputs.model }}
+
+      - name: Download model
+        run: |
+          set -euo pipefail
+          test -f "models/${{ steps.model.outputs.file }}" || python -c "
+          from huggingface_hub import snapshot_download
+          snapshot_download('${{ steps.model.outputs.repo }}', allow_patterns=['${{ inputs.model }}*.gguf'], local_dir='models')
+          "
+          sha256sum models/${{ inputs.model }}*.gguf
+
+      - name: Benchmark
+        run: |
+          set -euo pipefail
+          python runner/bench.py \
+            --model "models/${{ steps.model.outputs.file }}" \
+            --label "${{ inputs.model }}" \
+            --threads "$(nproc)" \
+            --summary "$GITHUB_STEP_SUMMARY" \
+            --json results.json
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: results-${{ inputs.model }}
+          path: results.json
+          retention-days: 30

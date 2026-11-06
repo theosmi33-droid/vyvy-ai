@@ -1,0 +1,19 @@
+Copyright (c) 2026 Vyvy AI. All rights reserved.
+
+This repository, including all code, grammar files, benchmark datasets, and
+documentation, is proprietary.
+
+1. No License Granted: Viewing the code within GitHub is permitted under the
+   GitHub Terms of Service. No license, express or implied, is granted to use,
+   copy, modify, merge, publish, distribute, sublicense, or sell copies of this
+   software or data.
+
+2. Prohibition of Automated Scraping and AI Training: Any reproduction,
+   extraction, or scraping of content, data, or code from this repository for
+   the purposes of training, fine-tuning, evaluating, or developing artificial
+   intelligence models, machine learning systems, or commercial data mining is
+   strictly prohibited (reservation pursuant to Article 4(3) of Directive (EU)
+   2019/790).
+
+Third-party models downloaded during benchmark runs are not part of this
+repository and remain under their own licenses.
