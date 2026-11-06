@@ -15,12 +15,13 @@ on:
           - qwen2.5-3b-instruct-q4_k_m
           - qwen2.5-1.5b-instruct-q4_k_m
       mode:
-        description: "generate: JSON under the grammar · classify: one pass, intent by letter logits"
+        description: "generate: JSON under the grammar · classify: intent by letter logits · route: only the intent branches"
         type: choice
         default: generate
         options:
           - generate
           - classify
+          - route
 
 permissions:
   contents: read

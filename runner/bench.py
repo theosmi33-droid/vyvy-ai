@@ -260,12 +260,8 @@ def llama_model(path: Path, threads: int, ctx: int) -> Model:
     return run
 
 
-def llama_classifier(path: Path, threads: int, ctx: int, intents: tuple[str, ...]) -> Model:
-    """One forward pass over prompt and question, no generation.
-
-    The intent is the letter with the highest logit among the intent letters;
-    confidence is the softmax over those letters only.
-    """
+def _chat_llm(path: Path, threads: int, ctx: int, mode: str):
+    """Model plus a formatter for its own chat template (classify and route build prompts themselves)."""
     import llama_cpp  # imported only for real runs
     from llama_cpp import Llama
     from llama_cpp.llama_chat_format import Jinja2ChatFormatter
@@ -273,13 +269,36 @@ def llama_classifier(path: Path, threads: int, ctx: int, intents: tuple[str, ...
     llm = Llama(model_path=str(path), n_ctx=ctx, n_threads=threads, seed=0, verbose=False)
     template = llm.metadata.get("tokenizer.chat_template")
     if not template:
-        raise SystemExit("Model has no chat template; --mode classify needs one.")
+        raise SystemExit(f"Model has no chat template; --mode {mode} needs one.")
     eos, bos = llm.token_eos(), llm.token_bos()
     fmt = Jinja2ChatFormatter(
         template=template,
         eos_token=llm._model.token_get_text(eos) if eos != -1 else "",
         bos_token=llm._model.token_get_text(bos) if bos != -1 else "",
     )
+    return llama_cpp, llm, fmt
+
+
+def _eval_cached(llama_cpp, llm, tokens: list[int]) -> Callable[[int], float]:
+    """Evaluate tokens, reusing the cached prefix like Llama.generate; logits of the last position."""
+    prefix = 0
+    for a, b in zip(llm.input_ids[: llm.n_tokens], tokens[:-1]):
+        if a != b:
+            break
+        prefix += 1
+    llm.n_tokens = prefix
+    llm.eval(tokens[prefix:])
+    logits = llama_cpp.llama_get_logits_ith(llm.ctx, -1)
+    return lambda t: float(logits[t])
+
+
+def llama_classifier(path: Path, threads: int, ctx: int, intents: tuple[str, ...]) -> Model:
+    """One forward pass over prompt and question, no generation.
+
+    The intent is the letter with the highest logit among the intent letters;
+    confidence is the softmax over those letters only.
+    """
+    llama_cpp, llm, fmt = _chat_llm(path, threads, ctx, "classify")
     system, letters = classify_prompt(intents)
     letter_ids: dict[str, int] = {}
     for intent, letter in letters.items():
@@ -294,23 +313,102 @@ def llama_classifier(path: Path, threads: int, ctx: int, intents: tuple[str, ...
         prompt = fmt(messages=[{"role": "system", "content": system},
                                {"role": "user", "content": question}]).prompt
         tokens = llm.tokenize(prompt.encode("utf-8"), special=True)
-        # Same prefix reuse as Llama.generate: keep the cached part, evaluate the rest.
-        prefix = 0
-        for a, b in zip(llm.input_ids[: llm.n_tokens], tokens[:-1]):
-            if a != b:
-                break
-            prefix += 1
-        llm.n_tokens = prefix
         llama_cpp.llama_perf_context_reset(llm.ctx)
-        llm.eval(tokens[prefix:])
-        logits = llama_cpp.llama_get_logits_ith(llm.ctx, -1)
-        best, probs = pick_intent({i: float(logits[t]) for i, t in letter_ids.items()})
+        logit = _eval_cached(llama_cpp, llm, tokens)
+        best, probs = pick_intent({i: logit(t) for i, t in letter_ids.items()})
         stats = {"prompt_tokens": len(tokens), "completion_tokens": 0, **_perf_stats(llama_cpp, llm),
                  "probs": {i: round(p, 4) for i, p in probs.items()}}
         return json.dumps({"intent": best, "timeframe": None, "entity": None,
                            "confidence": round(probs[best], 4)}), stats
 
     run.info = thread_info(llm) + f" · letters {' '.join(f'{v}={k}' for k, v in letters.items())}"
+    return run
+
+
+ROUTE_PREFILL = '{"intent": '
+
+
+def route_candidates(tokenize: Callable[[str], list[int]], prompt: str,
+                     intents: tuple[str, ...]) -> tuple[list[int], dict[str, list[int]]]:
+    """Shared token prefix and the remaining tokens of each intent value.
+
+    Every candidate is tokenized as one text (prompt + prefill + '"intent"'), so
+    the token boundary at the join is the one the tokenizer itself would choose.
+    """
+    full = {i: tokenize(prompt + ROUTE_PREFILL + json.dumps(i)) for i in intents}
+    seqs = list(full.values())
+    n = 0
+    while all(len(t) > n for t in seqs) and len({t[n] for t in seqs}) == 1:
+        n += 1
+    return seqs[0][:n], {i: t[n:] for i, t in full.items()}
+
+
+def walk_route(cands: dict[str, list[int]], logit: Callable[[int], float],
+               eval_more: Callable[[list[int]], Callable[[int], float]]) -> tuple[str, float, int, int]:
+    """Greedy walk through the token trie of the intent values.
+
+    Only branch points cost a model pass; forced tokens up to the next branch are
+    evaluated together. This picks the intent that greedy decoding under the
+    grammar would pick, and stops as soon as one intent is left.
+    Returns intent, path probability, extra passes and extra tokens evaluated.
+    """
+    alive, depth, conf, pending, passes, tokens = list(cands), 0, 1.0, [], 0, 0
+    while len(alive) > 1:
+        groups: dict[int, list[str]] = {}
+        for i in alive:
+            if len(cands[i]) <= depth:
+                raise ValueError(f"intent {i} is a token prefix of another intent")
+            groups.setdefault(cands[i][depth], []).append(i)
+        if len(groups) > 1:
+            if pending:
+                logit = eval_more(pending)
+                passes, tokens, pending = passes + 1, tokens + len(pending), []
+            tok, probs = pick_intent({t: logit(t) for t in groups})
+            conf *= probs[tok]
+            alive = groups[tok]
+        else:
+            tok = next(iter(groups))
+        pending.append(tok)
+        depth += 1
+    return alive[0], conf, passes, tokens
+
+
+def llama_router(path: Path, threads: int, ctx: int, intents: tuple[str, ...]) -> Model:
+    """Same prompt as --mode generate, but only the intent decision is computed.
+
+    The answer is prefilled with '{"intent": '; then walk_route reads the logits
+    at each branch of the intent names. timeframe and entity stay empty.
+    prompt_ms is the pass over prompt and question, gen_ms the branch passes
+    (both wall-clock).
+    """
+    llama_cpp, llm, fmt = _chat_llm(path, threads, ctx, "route")
+
+    def tokenize(text: str) -> list[int]:
+        return llm.tokenize(text.encode("utf-8"), special=True)
+
+    def eval_more(toks: list[int]) -> Callable[[int], float]:
+        llm.eval(toks)
+        logits = llama_cpp.llama_get_logits_ith(llm.ctx, -1)
+        return lambda t: float(logits[t])
+
+    def run(system: str, question: str, _grammar: str) -> tuple[str, dict]:
+        prompt = fmt(messages=[{"role": "system", "content": system},
+                               {"role": "user", "content": question}]).prompt
+        shared, cands = route_candidates(tokenize, prompt, intents)
+        llama_cpp.llama_perf_context_reset(llm.ctx)
+        t0 = time.perf_counter()
+        logit = _eval_cached(llama_cpp, llm, shared)
+        t1 = time.perf_counter()
+        best, conf, passes, extra = walk_route(cands, logit, eval_more)
+        t2 = time.perf_counter()
+        perf = _perf_stats(llama_cpp, llm)
+        stats = {"prompt_tokens": len(shared), "prompt_eval_tokens": perf["prompt_eval_tokens"],
+                 "completion_tokens": extra, "prompt_ms": (t1 - t0) * 1000, "gen_ms": (t2 - t1) * 1000,
+                 "gen_tps": None, "route_passes": passes}
+        return json.dumps({"intent": best, "timeframe": None, "entity": None,
+                           "confidence": round(conf, 4)}), stats
+
+    run.info = thread_info(llm) + f" · prefill `{ROUTE_PREFILL}`"
     return run
 
 
@@ -370,8 +468,9 @@ def run_benchmark(items: list[dict], model: Model, grammar: str, intents: tuple[
                "timeout": timed_out, **{k: stats.get(k) for k in TIMING_KEYS}}
         if rec["prompt_ms"] is not None and rec["gen_ms"] is not None:
             rec["other_ms"] = round(ms - rec["prompt_ms"] - rec["gen_ms"])
-        if "probs" in stats:
-            rec["probs"] = stats["probs"]
+        for extra in ("probs", "route_passes"):
+            if extra in stats:
+                rec[extra] = stats[extra]
         records.append(rec)
         row = per_intent.setdefault(item["expected_intent"],
                                     {"n": 0, "intent_correct": 0, "within_timeout": 0, "timeouts": 0,
@@ -406,7 +505,7 @@ def run_benchmark(items: list[dict], model: Model, grammar: str, intents: tuple[
 
 def timing_summary(records: list[dict]) -> dict:
     out = {}
-    for key in ("ms", *TIMING_KEYS, "other_ms"):
+    for key in ("ms", *TIMING_KEYS, "other_ms", "route_passes"):
         vals = [r[key] for r in records if r.get(key) is not None]
         if vals:
             out[key] = {"median": statistics.median(vals), "min": min(vals), "max": max(vals)}
@@ -422,6 +521,7 @@ TIMING_LABELS = {
     "gen_ms": "Generation ms",
     "other_ms": "Other ms (sampling, grammar, overhead)",
     "gen_tps": "Generation tokens/s",
+    "route_passes": "Branch passes after the prompt (route)",
 }
 
 
@@ -476,8 +576,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--label", default="", help="model label for the report header")
     p.add_argument("--summary", type=Path, help="append the Markdown report to this file")
     p.add_argument("--json", type=Path, help="write raw results as JSON")
-    p.add_argument("--mode", choices=("generate", "classify"), default="generate",
-                   help="generate: JSON under the grammar; classify: one pass, intent letter by logits")
+    p.add_argument("--mode", choices=("generate", "classify", "route"), default="generate",
+                   help="generate: JSON under the grammar; classify: one pass, intent letter by logits; "
+                        "route: generate prompt, only the intent branches are computed")
     p.add_argument("--dry-run", action="store_true", help="no model: grammar check and mock inference")
     args = p.parse_args(argv)
 
@@ -504,6 +605,8 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         if args.mode == "classify":
             model = llama_classifier(args.model, args.threads, args.ctx, intents)
+        elif args.mode == "route":
+            model = llama_router(args.model, args.threads, args.ctx, intents)
         else:
             model = llama_model(args.model, args.threads, args.ctx)
         model(SYSTEM_PROMPT, 'Question: "Hallo"', grammar)  # warm-up, not timed

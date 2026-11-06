@@ -86,7 +86,15 @@ question.
   `timeframe` and `entity` stay empty in this mode. The run stops if a letter
   is not a single token of the model's tokenizer.
 
-Both modes use the same dataset and report.
+- `--mode route`: the same prompt as `generate`, with the answer prefilled up
+  to `{"intent": `. The intent names form a token tree; the model is run only at
+  its branch points (for example after `appointments_` or `tasks_`), forced
+  tokens in between are evaluated together. This picks the intent greedy
+  decoding under the grammar would pick, without writing the rest of the
+  object. `confidence` is the probability of the chosen path; `timeframe` and
+  `entity` stay empty.
+
+All modes use the same dataset and report.
 
 Latency is measured on the machine that runs the benchmark. Accuracy transfers
 to other hardware; milliseconds do not.
