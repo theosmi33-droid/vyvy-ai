@@ -53,6 +53,8 @@ measures accuracy and latency on GitHub Actions.
 | `.github/workflows/compare.yml` | Both classes and a reference in one job on the same machine |
 | `tools/compare_results.py` | One table over several `results.json` |
 | `training/` | Trains a LoRA adapter and exports it as GGUF (see its README) |
+| `.github/workflows/train.yml` | Trains an adapter on a hosted GPU, publishes it as a release and benchmarks it |
+| `tools/kaggle_job.py` | Writes the training job for the hosted GPU from a fixed commit |
 
 ### Output contract
 

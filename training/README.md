@@ -29,6 +29,19 @@ What the script does, in this order:
 Run it as a background job of the notebook so that closing the browser does not
 stop it; no GitHub credentials are needed on the training machine.
 
+## Training without a local machine
+
+Actions → **Train**: pick the base model and an adapter name. The workflow
+checks the holdout lock, sends the training job to a Kaggle GPU (private
+kernel, trained from the exact commit of the run), waits for it, fetches only
+`<name>.gguf` and `manifest.json`, checks the adapter against the checksum in
+the manifest, publishes both as release `<name>` and starts the benchmark with
+that adapter in `route` mode.
+
+It needs two repository secrets: `KAGGLE_API_TOKEN` (Kaggle → Settings → API
+Tokens) and `KAGGLE_USERNAME`. The Kaggle account needs a verified phone number
+for GPU and internet access.
+
 ## Measuring the adapter
 
 Publish `out/<name>.gguf` as the only `.gguf` asset of a release in this

@@ -85,6 +85,7 @@ def collate(pad_id: int):
 
 
 def llama_cpp_dir(cache: Path) -> Path:
+    cache.mkdir(parents=True, exist_ok=True)
     target = cache / f"llama.cpp-{LLAMA_CPP_COMMIT}"
     if not target.is_dir():
         url = f"https://github.com/ggml-org/llama.cpp/archive/{LLAMA_CPP_COMMIT}.tar.gz"
@@ -103,6 +104,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--name", default="vyvy-adapter", help="file name of the exported adapter")
     p.add_argument("--train", type=Path, nargs="*", help="training files (default: data/train/*.jsonl)")
     p.add_argument("--out", type=Path, default=Path("out"))
+    p.add_argument("--cache", type=Path, help="where llama.cpp is unpacked (default: <out>/.cache)")
     p.add_argument("--epochs", type=float, default=3)
     p.add_argument("--lr", type=float, default=2e-4)
     p.add_argument("--rank", type=int, default=16)
@@ -156,7 +158,7 @@ def main(argv: list[str] | None = None) -> int:
     model.save_pretrained(adapter_dir)
 
     gguf = args.out / f"{args.name}.gguf"
-    convert = llama_cpp_dir(args.out / ".cache") / "convert_lora_to_gguf.py"
+    convert = llama_cpp_dir(args.cache or args.out / ".cache") / "convert_lora_to_gguf.py"
     subprocess.run([sys.executable, str(convert), str(adapter_dir), "--outfile", str(gguf),
                     "--outtype", "f16", "--base-model-id", args.base], check=True)
 

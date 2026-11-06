@@ -1,0 +1,134 @@
+name: Train
+
+# Trains one LoRA adapter on a Kaggle GPU, publishes it as a release of this
+# repository and starts the benchmark with it. Nothing runs on a local machine.
+# Needs the repository secrets KAGGLE_API_TOKEN and KAGGLE_USERNAME.
+on:
+  workflow_dispatch:
+    inputs:
+      base:
+        description: Base model
+        type: choice
+        default: Qwen/Qwen2.5-1.5B-Instruct
+        options:
+          - Qwen/Qwen2.5-1.5B-Instruct
+          - Qwen/Qwen2.5-7B-Instruct
+      name:
+        description: Adapter name and release tag, e.g. vyvy-1.5b-v1
+        type: string
+        required: true
+      epochs:
+        description: Training epochs
+        type: number
+        default: 3
+
+permissions:
+  contents: write  # create the release
+  actions: write   # start the benchmark
+
+concurrency:
+  group: train-${{ inputs.base }}
+  cancel-in-progress: false
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      BASE: ${{ inputs.base }}
+      NAME: ${{ inputs.name }}
+      EPOCHS: ${{ inputs.epochs }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Check inputs
+        run: |
+          set -euo pipefail
+          [[ "$NAME" =~ ^[a-z0-9][a-z0-9.-]{0,60}$ ]] || { echo "invalid name" >&2; exit 1; }
+          if gh release view "$NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "release $NAME already exists" >&2; exit 1
+          fi
+          ls data/train/*.jsonl >/dev/null 2>&1 || { echo "no training data in data/train/" >&2; exit 1; }
+
+      - name: Holdout lock
+        run: python tools/check_holdout_leak.py
+
+      - name: Push the training job to Kaggle
+        id: job
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+        run: |
+          set -euo pipefail
+          test -n "$KAGGLE_API_TOKEN" && test -n "$KAGGLE_USERNAME" \
+            || { echo "secrets KAGGLE_API_TOKEN and KAGGLE_USERNAME are required" >&2; exit 1; }
+          pip install -q kaggle==2.2.5
+          kid=$(python tools/kaggle_job.py --dir job --owner "$KAGGLE_USERNAME" \
+                  --repo "$GITHUB_REPOSITORY" --commit "$GITHUB_SHA" \
+                  --base "$BASE" --name "$NAME" --epochs "$EPOCHS")
+          echo "kernel=$kid" >> "$GITHUB_OUTPUT"
+          kaggle kernels push -p job --accelerator NvidiaTeslaT4 --timeout 32400
+
+      - name: Wait for Kaggle
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+          KID: ${{ steps.job.outputs.kernel }}
+        run: |
+          set -uo pipefail
+          sleep 120
+          for i in $(seq 1 320); do
+            status=$(kaggle kernels status "$KID" 2>&1 | tr 'A-Z' 'a-z')
+            echo "$(date -u +%H:%M) $status"
+            case "$status" in
+              *complete*) exit 0 ;;
+              *error*|*cancel*)
+                kaggle kernels output "$KID" -p log --file-pattern '\.log$' >/dev/null 2>&1 || true
+                tail -n 80 log/*.log 2>/dev/null || true
+                exit 1 ;;
+            esac
+            sleep 60
+          done
+          echo "Kaggle run did not finish in time" >&2
+          exit 1
+
+      - name: Fetch the adapter
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+          KID: ${{ steps.job.outputs.kernel }}
+        run: |
+          set -euo pipefail
+          kaggle kernels output "$KID" -p out --file-pattern '(^|/)([a-z0-9.-]+\.gguf|manifest\.json)$'
+          test -f "out/$NAME.gguf" && test -f out/manifest.json
+          python - <<'PY'
+          import hashlib, json, os
+          m = json.load(open("out/manifest.json"))
+          name = os.environ["NAME"]
+          digest = hashlib.sha256(open(f"out/{name}.gguf", "rb").read()).hexdigest()
+          assert m["adapter"] == f"{name}.gguf", m["adapter"]
+          assert m["adapter_sha256"] == digest, "adapter checksum does not match the manifest"
+          assert m["holdout_lock"] == "passed"
+          print(json.dumps(m, indent=1))
+          PY
+
+      - name: Publish the release
+        run: |
+          set -euo pipefail
+          notes="LoRA adapter for $BASE (Apache License 2.0), trained from commit $GITHUB_SHA on data/train/. Apply it on top of the unchanged base model; see training/README.md. The base model's license and notices apply to its use."
+          gh release create "$NAME" "out/$NAME.gguf" out/manifest.json \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "$NAME" --notes "$notes"
+
+      - name: Start the benchmark with the adapter
+        run: |
+          set -euo pipefail
+          case "$BASE" in
+            Qwen/Qwen2.5-1.5B-Instruct) model=qwen2.5-1.5b-instruct-q8_0 ;;
+            Qwen/Qwen2.5-7B-Instruct)   model=qwen2.5-7b-instruct-q4_k_m ;;
+          esac
+          gh workflow run bench.yml --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME" \
+            -f model="$model" -f mode=route -f adapter="$NAME"
+          echo "Benchmark started: model $model, mode route, adapter $NAME" >> "$GITHUB_STEP_SUMMARY"
