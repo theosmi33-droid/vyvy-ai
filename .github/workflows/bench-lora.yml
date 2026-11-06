@@ -1,9 +1,11 @@
 name: Bench LoRA
 
-# Measures a trained adapter against its own base model in one job on the same
-# runner (same CPU, same prompt, route mode). The candidate release becomes a
-# regular release only with zero regressions and a higher intent accuracy;
-# otherwise it stays a pre-release with the reason in its notes.
+# Measures a trained adapter against the current default in one job on the same
+# runner (same CPU, same prompt, route mode). The default is the newest accepted
+# adapter for the same base model and prompt, or the base model alone if there is
+# none. The candidate release becomes a regular release (the new default) only
+# with zero regressions and a higher intent accuracy; otherwise it stays a
+# pre-release marked rejected, with the report and the missed questions attached.
 # Started by the Train workflow, or by hand with a release tag.
 on:
   workflow_dispatch:
@@ -60,8 +62,26 @@ jobs:
               sys.exit(f"adapter was trained on prompt {m.get('prompt')} ({m.get('prompt_sha256', '')[:12]}), "
                        f"the benchmark now uses {prompt} ({current[:12]}); retrain before measuring")
           with open(os.environ["GITHUB_OUTPUT"], "a") as out:
-              out.write(f"repo={repo}\nmodel={model}\ngguf={gguf}\n")
+              out.write(f"repo={repo}\nmodel={model}\ngguf={gguf}\nbase={m['base']}\nprompt_sha={current}\n")
           PY
+
+      - name: Find the current default adapter (the baseline to beat)
+        id: baseline
+        env:
+          BASE: ${{ steps.adapter.outputs.base }}
+          PROMPT_SHA: ${{ steps.adapter.outputs.prompt_sha }}
+        run: |
+          set -euo pipefail
+          prev=$(python tools/previous_adapter.py --repo "$GITHUB_REPOSITORY" --base "$BASE" \
+                   --prompt-sha256 "$PROMPT_SHA" --exclude "$ADAPTER")
+          if [ -n "$prev" ]; then
+            gh release download "$prev" --repo "$GITHUB_REPOSITORY" --pattern "$prev.gguf" --dir baseline
+            echo "gguf=baseline/$prev.gguf" >> "$GITHUB_OUTPUT"
+            echo "Baseline: accepted adapter \`$prev\`" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Baseline: base model without adapter (no accepted adapter yet)" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo "name=${prev:-base model}" >> "$GITHUB_OUTPUT"
 
       - name: Install dependencies (CPU build)
         env:
@@ -86,23 +106,27 @@ jobs:
           "
           sha256sum models/"$MODEL"*.gguf
 
-      - name: Base model and adapter, one after the other
+      - name: Baseline and candidate, one after the other
         env:
           MODEL: ${{ steps.adapter.outputs.model }}
           GGUF: ${{ steps.adapter.outputs.gguf }}
+          BASELINE_GGUF: ${{ steps.baseline.outputs.gguf }}
         run: |
           set -euo pipefail
           file=$(ls models/"$MODEL"*.gguf | sort | head -n 1)
-          python runner/bench.py --model "$file" --label "$MODEL" --mode route \
+          VYVY_LORA_PATH="$BASELINE_GGUF" python runner/bench.py --model "$file" --label "$MODEL" --mode route \
             --threads "$(nproc)" --summary "$GITHUB_STEP_SUMMARY" --json base.json
           python runner/bench.py --model "$file" --label "$MODEL" --lora "$GGUF" --mode route \
             --threads "$(nproc)" --summary "$GITHUB_STEP_SUMMARY" --json lora.json
 
       - name: Decide
         id: decide
+        env:
+          BASELINE_NAME: ${{ steps.baseline.outputs.name }}
         run: |
           set -uo pipefail
-          python tools/compare_adapter.py base.json lora.json --name "$ADAPTER" --verdict verdict.json \
+          python tools/compare_adapter.py base.json lora.json --name "$ADAPTER" \
+            --baseline-name "$BASELINE_NAME" --verdict verdict.json \
             | tee -a "$GITHUB_STEP_SUMMARY"
           code=${PIPESTATUS[0]}
           [ "$code" -le 1 ] || exit "$code"

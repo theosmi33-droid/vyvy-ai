@@ -41,22 +41,22 @@ def decide(base: dict, lora: dict) -> dict:
         "fixed": [{"id": k, "expected": b[k]["expected"], "base": b[k]["got"]} for k in fixed],
         "reason": ("no regression and higher accuracy" if accepted else
                    f"{len(regressions)} regression(s)" if regressions else
-                   "accuracy not higher than the base model"),
+                   "accuracy not higher than the baseline"),
         "cpu": lora.get("cpu"), "prompt": lora.get("prompt"), "mode": lora.get("mode"),
     }
 
 
-def report(v: dict, adapter: str) -> str:
+def report(v: dict, adapter: str, baseline: str = "base model") -> str:
     n = v["n"]
     lines = [
-        f"## Adapter `{adapter}` against its base model",
+        f"## Adapter `{adapter}` against the baseline ({baseline})",
         "",
         f"**{'Accepted' if v['accepted'] else 'Rejected'}:** {v['reason']}. "
         f"Same job, CPU {v['cpu']}, prompt `{v['prompt']}`, mode `{v['mode']}`.",
         "",
         "| | Accuracy (intent) | Within timeout | Median ms |",
         "|---|---:|---:|---:|",
-        f"| Base model | {v['base_correct']}/{n} | {v['base_within_timeout']}/{n} | {v['base_median_ms']} |",
+        f"| Baseline: {baseline} | {v['base_correct']}/{n} | {v['base_within_timeout']}/{n} | {v['base_median_ms']} |",
         f"| With adapter | {v['adapter_correct']}/{n} | {v['adapter_within_timeout']}/{n} | {v['adapter_median_ms']} |",
     ]
     if v["regressions"]:
@@ -74,6 +74,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("base", type=Path)
     p.add_argument("adapter", type=Path)
     p.add_argument("--name", default="adapter")
+    p.add_argument("--baseline-name", default="base model")
     p.add_argument("--verdict", type=Path, help="write the decision as JSON")
     args = p.parse_args(argv)
     try:
@@ -82,7 +83,8 @@ def main(argv: list[str] | None = None) -> int:
     except ValueError as e:
         print(e, file=sys.stderr)
         return 2
-    print(report(v, args.name))
+    v["baseline"] = args.baseline_name
+    print(report(v, args.name, args.baseline_name))
     if args.verdict:
         args.verdict.write_text(json.dumps(v, indent=1) + "\n", encoding="utf-8")
     return 0 if v["accepted"] else 1

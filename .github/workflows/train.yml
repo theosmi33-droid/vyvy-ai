@@ -13,7 +13,8 @@ name: Train
 on:
   push:
     branches: [main]
-    paths: ["data/train/**", "training/**", "tools/kaggle_job.py", ".github/workflows/train.yml"]
+    paths: ["data/train/**", "training/**", "tools/kaggle_job.py", "tools/kaggle_watchdog.py",
+            ".github/workflows/train.yml"]
   workflow_dispatch:
     inputs:
       base:
@@ -84,6 +85,17 @@ jobs:
           echo "NAME=$name" >> "$GITHUB_ENV"
           echo "Adapter: $name" >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Kaggle quota guard
+        if: env.SKIP != 'true'
+        env:
+          KAGGLE_EXTERNAL_GPU_MIN: ${{ vars.KAGGLE_EXTERNAL_GPU_MIN }}
+        # Pauses (skips the rest, no failure) when less than 2 of the 30 weekly
+        # GPU hours are left; the count resets Monday 00:00 UTC.
+        run: |
+          set -euo pipefail
+          python tools/quota_guard.py --repo "$GITHUB_REPOSITORY" | tee guard.txt
+          if grep -q "Quota paused" guard.txt; then echo "SKIP=true" >> "$GITHUB_ENV"; fi
+
       - name: Check inputs
         if: env.SKIP != 'true'
         run: |
@@ -116,37 +128,19 @@ jobs:
           echo "kernel=$kid" >> "$GITHUB_OUTPUT"
           kaggle kernels push -p job --accelerator NvidiaTeslaT4 --timeout 32400
 
-      - name: Wait for Kaggle
+      - name: Watch the Kaggle run
         if: env.SKIP != 'true'
         env:
           KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
           KID: ${{ steps.job.outputs.kernel }}
-        run: |
-          set -uo pipefail
-          sleep 120
-          for i in $(seq 1 320); do
-            status=$(kaggle kernels status "$KID" 2>&1 | tr 'A-Z' 'a-z')
-            echo "$(date -u +%H:%M) $status"
-            case "$status" in
-              *complete*) exit 0 ;;
-              *error*|*cancel*)
-                kaggle kernels output "$KID" -p log --file-pattern '\.log$' >/dev/null 2>&1 || true
-                tail -n 80 log/*.log 2>/dev/null || true
-                exit 1 ;;
-            esac
-            sleep 60
-          done
-          echo "Kaggle run did not finish in time" >&2
-          exit 1
+        # Polls every 60 s for up to 3 h; on failure the cause and the last 100
+        # log lines go to the job summary.
+        run: python tools/kaggle_watchdog.py --kernel "$KID" --out out --summary "$GITHUB_STEP_SUMMARY"
 
-      - name: Fetch the adapter
+      - name: Check the adapter
         if: env.SKIP != 'true'
-        env:
-          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
-          KID: ${{ steps.job.outputs.kernel }}
         run: |
           set -euo pipefail
-          kaggle kernels output "$KID" -p out --file-pattern '(^|/)([a-z0-9.-]+\.gguf|manifest\.json)$'
           test -f "out/$NAME.gguf" && test -f out/manifest.json
           python - <<'PY'
           import hashlib, json, os

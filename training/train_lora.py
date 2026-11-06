@@ -20,10 +20,12 @@ Steps:
 from __future__ import annotations
 
 import argparse
+import gc
 import hashlib
 import io
 import json
 import math
+import shutil
 import subprocess
 import sys
 import tarfile
@@ -95,6 +97,30 @@ def llama_cpp_dir(cache: Path) -> Path:
     return target
 
 
+def failure_kind(exc: BaseException) -> str:
+    """Classify a training failure: out of GPU memory, a CUDA/4-bit kernel error, or other."""
+    text = f"{type(exc).__name__}: {exc}"
+    if "OutOfMemoryError" in text or "out of memory" in text.lower():
+        return "oom"
+    if any(k in text for k in ("CUBLAS", "CUDA error", "cuDNN", "bitsandbytes")):
+        return "kernel"
+    return "other"
+
+
+def fallback(kind: str, quant: str, batch: int, accum: int) -> tuple[str, int, int] | None:
+    """Next configuration after a failure, or None if there is nothing sensible left to try.
+
+    Out of memory: batch 1, gradient accumulation raised so the effective batch stays.
+    Kernel error with 4-bit weights: plain fp16 weights (fits for 1.5B; 7B will then
+    run out of memory on a 16 GB GPU and stop).
+    """
+    if kind == "oom" and batch > 1:
+        return quant, 1, batch * accum
+    if kind == "kernel" and quant == "4bit":
+        return "none", batch, accum
+    return None
+
+
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -135,50 +161,75 @@ def main(argv: list[str] | None = None) -> int:
 
     tok = AutoTokenizer.from_pretrained(args.base)
     data = [encode(tok, r, system) for r in rows]
-    quant = args.quant if args.quant != "auto" else ("4bit" if "7b" in args.base.lower() else "none")
-    print(f"Base weights: {quant}")
-    if quant == "4bit":
-        # QLoRA: only needed where fp16 weights would not fit next to the training state (7B).
-        model = AutoModelForCausalLM.from_pretrained(
-            args.base,
-            quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4",
-                                                   bnb_4bit_compute_dtype=torch.float16,
-                                                   bnb_4bit_use_double_quant=True),
-            dtype=torch.float16, device_map={"": 0},
-        )
-        model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True)
-    else:
-        model = AutoModelForCausalLM.from_pretrained(args.base, dtype=torch.float16, device_map={"": 0})
-        model.gradient_checkpointing_enable()
-        model.enable_input_require_grads()
-    model = get_peft_model(model, LoraConfig(r=args.rank, lora_alpha=args.alpha, lora_dropout=0.05,
-                                             target_modules=LORA_TARGETS, task_type="CAUSAL_LM"))
-    # fp16 mixed precision needs fp32 master weights for everything that is trained.
-    for param in model.parameters():
-        if param.requires_grad:
-            param.data = param.data.float()
-    model.print_trainable_parameters()
-
+    collator = collate(tok.pad_token_id if tok.pad_token_id is not None else tok.eos_token_id)
     args.out.mkdir(parents=True, exist_ok=True)
-    steps = math.ceil(len(data) / (args.batch * args.grad_accum)) * args.epochs
-    warmup = max(1, round(0.03 * steps))
-    trainer = Trainer(
-        model=model,
-        train_dataset=data,
-        data_collator=collate(tok.pad_token_id if tok.pad_token_id is not None else tok.eos_token_id),
-        args=TrainingArguments(
-            output_dir=str(args.out / "checkpoints"), num_train_epochs=args.epochs,
-            per_device_train_batch_size=args.batch, gradient_accumulation_steps=args.grad_accum,
-            learning_rate=args.lr, lr_scheduler_type="cosine", warmup_steps=warmup,
-            logging_steps=10, save_strategy="epoch", save_total_limit=2, fp16=True,
-            optim="paged_adamw_8bit" if quant == "4bit" else "adamw_torch",
-            gradient_checkpointing=True, remove_unused_columns=False,
-            report_to=[], seed=0,
-        ),
-    )
-    trainer.train()
     adapter_dir = args.out / "adapter"
-    model.save_pretrained(adapter_dir)
+
+    def train_once(quant: str, batch: int, accum: int) -> None:
+        print(f"Base weights: {quant} · batch {batch} · gradient accumulation {accum}", flush=True)
+        if quant == "4bit":
+            # QLoRA: only needed where fp16 weights would not fit next to the training state (7B).
+            model = AutoModelForCausalLM.from_pretrained(
+                args.base,
+                quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4",
+                                                       bnb_4bit_compute_dtype=torch.float16,
+                                                       bnb_4bit_use_double_quant=True),
+                dtype=torch.float16, device_map={"": 0},
+            )
+            model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True)
+        else:
+            model = AutoModelForCausalLM.from_pretrained(args.base, dtype=torch.float16, device_map={"": 0})
+            model.gradient_checkpointing_enable()
+            model.enable_input_require_grads()
+        model = get_peft_model(model, LoraConfig(r=args.rank, lora_alpha=args.alpha, lora_dropout=0.05,
+                                                 target_modules=LORA_TARGETS, task_type="CAUSAL_LM"))
+        # fp16 mixed precision needs fp32 master weights for everything that is trained.
+        for param in model.parameters():
+            if param.requires_grad:
+                param.data = param.data.float()
+        model.print_trainable_parameters()
+        steps = math.ceil(len(data) / (batch * accum)) * args.epochs
+        trainer = Trainer(
+            model=model,
+            train_dataset=data,
+            data_collator=collator,
+            args=TrainingArguments(
+                output_dir=str(args.out / "checkpoints"), num_train_epochs=args.epochs,
+                per_device_train_batch_size=batch, gradient_accumulation_steps=accum,
+                learning_rate=args.lr, lr_scheduler_type="cosine", warmup_steps=max(1, round(0.03 * steps)),
+                logging_steps=10, save_strategy="epoch", save_total_limit=2, fp16=True,
+                optim="paged_adamw_8bit" if quant == "4bit" else "adamw_torch",
+                gradient_checkpointing=True, remove_unused_columns=False,
+                report_to=[], seed=0,
+            ),
+        )
+        try:
+            trainer.train()
+            model.save_pretrained(adapter_dir)
+        finally:
+            del trainer, model
+            gc.collect()
+            torch.cuda.empty_cache()
+
+    quant = args.quant if args.quant != "auto" else ("4bit" if "7b" in args.base.lower() else "none")
+    batch, accum = args.batch, args.grad_accum
+    attempts: list[dict] = []
+    while True:
+        try:
+            train_once(quant, batch, accum)
+            attempts.append({"weights": quant, "batch": batch, "grad_accum": accum, "result": "ok"})
+            break
+        except Exception as exc:  # noqa: BLE001  (classified below, re-raised if no fallback is left)
+            kind = failure_kind(exc)
+            attempts.append({"weights": quant, "batch": batch, "grad_accum": accum, "result": kind,
+                             "error": f"{type(exc).__name__}: {str(exc)[:300]}"})
+            nxt = fallback(kind, quant, batch, accum)
+            if nxt is None or len(attempts) >= 3:
+                print(json.dumps(attempts, indent=1), file=sys.stderr)
+                raise
+            print(f"Training failed ({kind}); retrying with {nxt}", flush=True)
+            shutil.rmtree(args.out / "checkpoints", ignore_errors=True)
+            quant, batch, accum = nxt
 
     gguf = args.out / f"{args.name}.gguf"
     convert = llama_cpp_dir(args.cache or args.out / ".cache") / "convert_lora_to_gguf.py"
@@ -189,8 +240,9 @@ def main(argv: list[str] | None = None) -> int:
         "adapter": gguf.name, "adapter_sha256": sha256(gguf), "base": args.base,
         "llama_cpp_commit": LLAMA_CPP_COMMIT, "train_files": {x.name: sha256(x) for x in paths},
         "train_sentences": len(rows), "prompt": prompt_name, "base_weights": quant,
+        "attempts": attempts,
         "prompt_sha256": hashlib.sha256(system.encode("utf-8")).hexdigest(), "epochs": args.epochs, "lr": args.lr, "rank": args.rank,
-        "alpha": args.alpha, "batch": args.batch, "grad_accum": args.grad_accum,
+        "alpha": args.alpha, "batch": batch, "grad_accum": accum,
         "target_confidence": TARGET_CONFIDENCE, "holdout_lock": "passed",
     }
     (args.out / "manifest.json").write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8")
