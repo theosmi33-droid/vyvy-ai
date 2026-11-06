@@ -14,12 +14,19 @@ on:
           - qwen2.5-7b-instruct-q4_k_m   # class 8GB
           - qwen2.5-3b-instruct-q4_k_m
           - qwen2.5-1.5b-instruct-q4_k_m
+      mode:
+        description: "generate: JSON under the grammar · classify: one pass, intent by letter logits"
+        type: choice
+        default: generate
+        options:
+          - generate
+          - classify
 
 permissions:
   contents: read
 
 concurrency:
-  group: bench-${{ inputs.model }}
+  group: bench-${{ inputs.model }}-${{ inputs.mode }}
   cancel-in-progress: false
 
 jobs:
@@ -46,7 +53,7 @@ jobs:
           python -c "import llama_cpp; print(llama_cpp.llama_print_system_info().decode())"
 
       - name: Grammar check and dry run
-        run: python runner/bench.py --dry-run > /dev/null
+        run: python runner/bench.py --dry-run --mode "${{ inputs.mode }}" > /dev/null
 
       - name: Resolve model
         id: model
@@ -84,12 +91,13 @@ jobs:
           python runner/bench.py \
             --model "models/${{ steps.model.outputs.file }}" \
             --label "${{ inputs.model }}" \
+            --mode "${{ inputs.mode }}" \
             --threads "$(nproc)" \
             --summary "$GITHUB_STEP_SUMMARY" \
             --json results.json
 
       - uses: actions/upload-artifact@v4
         with:
-          name: results-${{ inputs.model }}
+          name: results-${{ inputs.model }}-${{ inputs.mode }}
           path: results.json
           retention-days: 30

@@ -48,6 +48,18 @@ the rest (sampling, grammar, overhead), with token counts and generation speed,
 taken from llama.cpp's own counters. `results.json` holds these values for every
 question.
 
+## Modes
+
+- `--mode generate` (default): the model writes the full JSON object under the
+  GBNF grammar, one token at a time.
+- `--mode classify`: one forward pass over prompt and question, no generation.
+  The prompt lists one letter per intent (A–I); the intent is the letter with
+  the highest logit, and `confidence` is the softmax over those letters only.
+  `timeframe` and `entity` stay empty in this mode. The run stops if a letter
+  is not a single token of the model's tokenizer.
+
+Both modes use the same dataset and report.
+
 Latency is measured on the machine that runs the benchmark. Accuracy transfers
 to other hardware; milliseconds do not.
 
@@ -85,7 +97,7 @@ The 1.5B and 3B Q4_K_M variants stay available as reference points.
 
 ## Run on GitHub Actions
 
-Actions → **Benchmark** → *Run workflow*, pick a model. The report appears as
+Actions → **Benchmark** → *Run workflow*, pick a model and a mode. The report appears as
 the job summary; raw numbers are attached as the `results-…` artifact. Models
 are downloaded from Hugging Face during the job and never stored in this
 repository. Each model keeps its own license (see its Hugging Face page).
