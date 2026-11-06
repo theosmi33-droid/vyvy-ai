@@ -117,6 +117,11 @@ companies or customer data. The current sets cover four read intents
 Low German, Rhineland, Bavarian, Swabian, Swiss German and other regional
 variants.
 
+The intent definitions in the prompt were sharpened once after looking at
+errors on this holdout set (what is "on today", open vs. overdue tasks). Results
+after that change are therefore not fully blind; an unbiased figure needs a new
+holdout set that was not used for any prompt or training decision.
+
 ### Run locally
 
 ```bash

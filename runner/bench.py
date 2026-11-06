@@ -43,37 +43,45 @@ DEFAULT_GRAMMAR = ROOT / "grammars" / "slots.gbnf"
 FIELDS = ("intent", "timeframe", "entity", "confidence")
 TIMEFRAMES = ("today", "tomorrow", "week")
 
-SYSTEM_PROMPT = (
-    "You translate one short German question or request from an office worker "
-    "(often regional dialect, colloquial wording or typos) into a JSON object. "
-    "You never answer the question.\n"
-    "intent: appointments_today (own appointments today), appointments_tomorrow, "
-    "tasks_open (what is still to do), tasks_overdue (overdue, forgotten or urgent work), "
-    "emails_unread (new or unread email), daily_agenda (what is on today in general), "
-    "create_appointment, create_task, unknown (anything else, including general "
-    "knowledge and questions about other companies).\n"
-    "timeframe: today, tomorrow, week or null. entity: a named person or company, or null. "
-    "confidence: 0 to 1, how sure you are.\n"
-    "Examples:\n"
-    'Question: "Was liegt heut im Kalender, gell?" -> {"intent": "appointments_today", '
-    '"timeframe": "today", "entity": null, "confidence": 0.9}\n'
-    'Question: "Hab ich irgendwas Dringendes verpennt?" -> {"intent": "tasks_overdue", '
-    '"timeframe": null, "entity": null, "confidence": 0.8}\n'
-    'Question: "Wer hat die Glühbirne erfunden?" -> {"intent": "unknown", "timeframe": null, '
-    '"entity": null, "confidence": 0.9}'
-)
-
+# One definition per intent, shared by every mode. The boundaries that small
+# models confuse most are spelled out: what is "on today" means appointments,
+# daily_agenda only covers an explicit whole-day overview; open vs. overdue
+# depends on the due date, not on urgency.
 INTENT_HELP = {
-    "appointments_today": "own appointments today",
-    "appointments_tomorrow": "own appointments tomorrow",
-    "tasks_open": "what is still to do",
-    "tasks_overdue": "overdue, forgotten or urgent work",
+    "appointments_today": "own calendar appointments today, including what is on, planned or scheduled today",
+    "appointments_tomorrow": "own calendar appointments tomorrow",
+    "tasks_open": "tasks not done yet, whatever their due date",
+    "tasks_overdue": "tasks whose due date has already passed, or that were forgotten or missed",
     "emails_unread": "new or unread email",
-    "daily_agenda": "what is on today in general",
+    "daily_agenda": "only an explicit overview of the whole day: appointments, tasks and email together",
     "create_appointment": "make a new appointment",
     "create_task": "make a new task",
     "unknown": "anything else, including general knowledge and questions about other companies",
 }
+
+
+def _example(question: str, intent: str, timeframe: str | None, confidence: float) -> str:
+    answer = json.dumps({"intent": intent, "timeframe": timeframe, "entity": None, "confidence": confidence},
+                        ensure_ascii=False)
+    return f'Question: "{question}" -> {answer}'
+
+
+SYSTEM_PROMPT = "\n".join([
+    "You translate one short German question or request from an office worker "
+    "(often regional dialect, colloquial wording or typos) into a JSON object. "
+    "You never answer the question.",
+    "intent: " + ", ".join(f"{k} ({v})" for k, v in INTENT_HELP.items()) + ".",
+    "timeframe: today, tomorrow, week or null. entity: a named person or company, or null. "
+    "confidence: 0 to 1, how sure you are.",
+    "Examples:",
+    _example("Was liegt heut im Kalender, gell?", "appointments_today", "today", 0.9),
+    _example("Was ist heute geplant?", "appointments_today", "today", 0.9),
+    _example("Was muss ich diese Woche noch erledigen?", "tasks_open", "week", 0.9),
+    _example("Hab ich irgendwas Dringendes verpennt?", "tasks_overdue", None, 0.8),
+    _example("Gib mir einen Überblick über den ganzen Tag", "daily_agenda", "today", 0.9),
+    _example("Wer hat die Glühbirne erfunden?", "unknown", None, 0.9),
+])
+
 CLASSIFY_EXAMPLES = (
     ("Was liegt heut im Kalender, gell?", "appointments_today"),
     ("Hab ich irgendwas Dringendes verpennt?", "tasks_overdue"),
