@@ -233,11 +233,12 @@ def _perf_stats(llama_cpp, llm) -> dict:
     }
 
 
-def llama_model(path: Path, threads: int, ctx: int) -> Model:
+def llama_model(path: Path, threads: int, ctx: int, lora: Path | None = None) -> Model:
     import llama_cpp  # imported only for real runs
     from llama_cpp import Llama, LlamaGrammar
 
-    llm = Llama(model_path=str(path), n_ctx=ctx, n_threads=threads, seed=0, verbose=False)
+    llm = Llama(model_path=str(path), n_ctx=ctx, n_threads=threads, seed=0, verbose=False,
+                lora_path=str(lora) if lora else None)
     cache: dict[str, object] = {}
 
     def run(system: str, question: str, grammar: str) -> tuple[str, dict]:
@@ -260,13 +261,14 @@ def llama_model(path: Path, threads: int, ctx: int) -> Model:
     return run
 
 
-def _chat_llm(path: Path, threads: int, ctx: int, mode: str):
+def _chat_llm(path: Path, threads: int, ctx: int, mode: str, lora: Path | None = None):
     """Model plus a formatter for its own chat template (classify and route build prompts themselves)."""
     import llama_cpp  # imported only for real runs
     from llama_cpp import Llama
     from llama_cpp.llama_chat_format import Jinja2ChatFormatter
 
-    llm = Llama(model_path=str(path), n_ctx=ctx, n_threads=threads, seed=0, verbose=False)
+    llm = Llama(model_path=str(path), n_ctx=ctx, n_threads=threads, seed=0, verbose=False,
+                lora_path=str(lora) if lora else None)
     template = llm.metadata.get("tokenizer.chat_template")
     if not template:
         raise SystemExit(f"Model has no chat template; --mode {mode} needs one.")
@@ -292,13 +294,14 @@ def _eval_cached(llama_cpp, llm, tokens: list[int]) -> Callable[[int], float]:
     return lambda t: float(logits[t])
 
 
-def llama_classifier(path: Path, threads: int, ctx: int, intents: tuple[str, ...]) -> Model:
+def llama_classifier(path: Path, threads: int, ctx: int, intents: tuple[str, ...],
+                     lora: Path | None = None) -> Model:
     """One forward pass over prompt and question, no generation.
 
     The intent is the letter with the highest logit among the intent letters;
     confidence is the softmax over those letters only.
     """
-    llama_cpp, llm, fmt = _chat_llm(path, threads, ctx, "classify")
+    llama_cpp, llm, fmt = _chat_llm(path, threads, ctx, "classify", lora)
     system, letters = classify_prompt(intents)
     letter_ids: dict[str, int] = {}
     for intent, letter in letters.items():
@@ -373,7 +376,8 @@ def walk_route(cands: dict[str, list[int]], logit: Callable[[int], float],
     return alive[0], conf, passes, tokens
 
 
-def llama_router(path: Path, threads: int, ctx: int, intents: tuple[str, ...]) -> Model:
+def llama_router(path: Path, threads: int, ctx: int, intents: tuple[str, ...],
+                 lora: Path | None = None) -> Model:
     """Same prompt as --mode generate, but only the intent decision is computed.
 
     The answer is prefilled with '{"intent": '; then walk_route reads the logits
@@ -381,7 +385,7 @@ def llama_router(path: Path, threads: int, ctx: int, intents: tuple[str, ...]) -
     prompt_ms is the pass over prompt and question, gen_ms the branch passes
     (both wall-clock).
     """
-    llama_cpp, llm, fmt = _chat_llm(path, threads, ctx, "route")
+    llama_cpp, llm, fmt = _chat_llm(path, threads, ctx, "route", lora)
 
     def tokenize(text: str) -> list[int]:
         return llm.tokenize(text.encode("utf-8"), special=True)
@@ -566,6 +570,8 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Vyvy AI intent & slot extraction benchmark")
     p.add_argument("--model", type=Path, default=os.environ.get("VYVY_MODEL_PATH") or None,
                    help="GGUF model file (default: $VYVY_MODEL_PATH)")
+    p.add_argument("--lora", type=Path, default=os.environ.get("VYVY_LORA_PATH") or None,
+                   help="LoRA adapter in GGUF format, applied on top of --model (default: $VYVY_LORA_PATH)")
     p.add_argument("--data", type=Path, default=DEFAULT_DATA)
     p.add_argument("--grammar", type=Path, default=DEFAULT_GRAMMAR)
     p.add_argument("--min-confidence", type=float, default=0.5)
@@ -603,20 +609,25 @@ def main(argv: list[str] | None = None) -> int:
         if not args.model or not args.model.is_file():
             print("No model file (--model).", file=sys.stderr)
             return 2
+        if args.lora and not args.lora.is_file():
+            print(f"No adapter file: {args.lora}", file=sys.stderr)
+            return 2
         if args.mode == "classify":
-            model = llama_classifier(args.model, args.threads, args.ctx, intents)
+            model = llama_classifier(args.model, args.threads, args.ctx, intents, args.lora)
         elif args.mode == "route":
-            model = llama_router(args.model, args.threads, args.ctx, intents)
+            model = llama_router(args.model, args.threads, args.ctx, intents, args.lora)
         else:
-            model = llama_model(args.model, args.threads, args.ctx)
+            model = llama_model(args.model, args.threads, args.ctx, args.lora)
         model(SYSTEM_PROMPT, 'Question: "Hallo"', grammar)  # warm-up, not timed
-        header = (f"Model `{args.label or args.model.name}` · mode `{args.mode}` · "
+        adapter = f" + adapter `{args.lora.name}`" if args.lora else " · no adapter"
+        header = (f"Model `{args.label or args.model.name}`{adapter} · mode `{args.mode}` · "
                   f"{platform.system()} {platform.machine()} · Python {platform.python_version()}"
                   f"\n\n{model.info}")
 
     runner = VyvyBenchRunner(model, grammar, IntentParser(intents), args.min_confidence, args.timeout)
     result = runner.run(items)
     result["mode"] = args.mode
+    result["adapter"] = args.lora.name if args.lora else None
     text = report(result, header)
     print(text)
     if args.summary:

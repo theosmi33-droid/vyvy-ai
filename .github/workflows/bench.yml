@@ -22,12 +22,16 @@ on:
           - generate
           - classify
           - route
+      adapter:
+        description: "Optional: release tag of this repository with one LoRA adapter (*.gguf); empty = base model only"
+        type: string
+        default: ""
 
 permissions:
   contents: read
 
 concurrency:
-  group: bench-${{ inputs.model }}-${{ inputs.mode }}
+  group: bench-${{ inputs.model }}-${{ inputs.mode }}-${{ inputs.adapter }}
   cancel-in-progress: false
 
 jobs:
@@ -86,7 +90,23 @@ jobs:
           "
           sha256sum models/${{ inputs.model }}*.gguf
 
+      - name: Download adapter
+        id: adapter
+        if: inputs.adapter != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.adapter }}
+        run: |
+          set -euo pipefail
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern '*.gguf' --dir adapters
+          files=(adapters/*.gguf)
+          test "${#files[@]}" -eq 1 || { echo "release $TAG must contain exactly one .gguf" >&2; exit 1; }
+          sha256sum "${files[0]}"
+          echo "path=${files[0]}" >> "$GITHUB_OUTPUT"
+
       - name: Benchmark
+        env:
+          VYVY_LORA_PATH: ${{ steps.adapter.outputs.path }}
         run: |
           set -euo pipefail
           python runner/bench.py \
@@ -99,6 +119,6 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: results-${{ inputs.model }}-${{ inputs.mode }}
+          name: results-${{ inputs.model }}-${{ inputs.mode }}${{ inputs.adapter && format('-{0}', inputs.adapter) || '' }}
           path: results.json
           retention-days: 30

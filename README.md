@@ -127,7 +127,10 @@ python runner/bench.py --model models/qwen2.5-1.5b-instruct-q4_k_m.gguf
 
 ### Run on GitHub Actions
 
-Actions → **Benchmark** → *Run workflow*, pick a model and a mode. The report appears as
+Actions → **Benchmark** → *Run workflow*, pick a model and a mode. To measure a
+fine-tuned version, enter the release tag of this repository that holds its LoRA
+adapter (one `*.gguf`); the adapter is applied on top of the base model, which
+is still downloaded unchanged from Hugging Face. Locally: `--lora path/to/adapter.gguf`. The report appears as
 the job summary; raw numbers are attached as the `results-…` artifact. Models
 are downloaded from Hugging Face during the job and never stored in this
 repository. Each model keeps its own license (see its Hugging Face page).
