@@ -1,15 +1,43 @@
-# Vyvy AI: Structured German Intent & Slot Extraction Benchmarks for Local SLMs
+# Vyvy AI
 
-A standalone, low-latency German intent and slot-extraction benchmark suite for
-small language models (SLMs) using GBNF grammars.
+Vyvy AI is a local language model for German office work. It understands
+requests the way people actually phrase them, in regional dialect, everyday
+speech or with typos, and turns each one into a structured action that an
+application can carry out: show today's appointments, list overdue tasks,
+create a task.
 
-How well does a small language model running on a CPU turn colloquial German
-(regional dialects, slang, typos) into a structured, machine-readable request?
+It runs entirely on the user's own computer, without a cloud service and
+without a graphics card. It does not chat and does not answer questions itself;
+it decides what is being asked and hands that decision over in a fixed format.
 
-The benchmark sends each question once to a local GGUF model, constrained by a
-GBNF grammar, and checks the resulting JSON object against the expected intent.
+## What it does
 
-## Contents
+- **German as it is spoken.** Low German, Rhineland, Bavarian, Swabian, Swiss
+  German and colloquial phrasing are understood, not only standard German.
+- **One fixed output format.** Every answer is a valid JSON object with
+  `intent`, `timeframe`, `entity` and `confidence`. When the request is not
+  covered, the answer is `unknown` instead of an invented action.
+- **Fast on ordinary hardware.** A decision within 4 seconds on a CPU.
+- **Voice, text and documents.** Typed requests, dictated voice messages via
+  local speech recognition and, in the larger class, images and scanned
+  documents.
+- **Measured before release.** Every model version is checked against the
+  public holdout set in this repository.
+
+## Model classes
+
+| Class | Memory used | Target hardware | Base model |
+|---|---|---|---|
+| Vyvy AI 4GB | about 4 GB | computers with 8 GB RAM | Qwen 2.5 3B Instruct |
+| Vyvy AI 8GB | about 8 GB | computers with 12–16 GB RAM | Qwen 2.5 7B Instruct |
+
+## Benchmark
+
+This repository contains the public benchmark every Vyvy AI model has to pass:
+a holdout set of German office questions, the output grammar and a runner that
+measures accuracy and latency on GitHub Actions.
+
+### Contents
 
 | Path | Purpose |
 |---|---|
@@ -18,7 +46,7 @@ GBNF grammar, and checks the resulting JSON object against the expected intent.
 | `runner/bench.py` | Stateless benchmark runner (llama-cpp-python) |
 | `.github/workflows/bench.yml` | Manual GitHub Actions run on `ubuntu-latest` |
 
-## Output contract
+### Output contract
 
 ```json
 {"intent": "tasks_overdue", "timeframe": null, "entity": null, "confidence": 0.8}
@@ -29,7 +57,7 @@ Intents: `appointments_today`, `appointments_tomorrow`, `tasks_open`,
 `create_task`, `unknown`. The grammar makes `unknown` always available, so the
 model has a legal way out instead of inventing an intent.
 
-## Scoring
+### Scoring
 
 A prediction is correct only if the output parses, the intent matches, and the
 model's own `confidence` is at least `--min-confidence` (default 0.5). The
@@ -48,7 +76,7 @@ the rest (sampling, grammar, overhead), with token counts and generation speed,
 taken from llama.cpp's own counters. `results.json` holds these values for every
 question.
 
-## Modes
+### Modes
 
 - `--mode generate` (default): the model writes the full JSON object under the
   GBNF grammar, one token at a time.
@@ -63,7 +91,7 @@ Both modes use the same dataset and report.
 Latency is measured on the machine that runs the benchmark. Accuracy transfers
 to other hardware; milliseconds do not.
 
-## Dataset
+### Dataset
 
 All questions are hand-written and synthetic. They contain no real persons,
 companies or customer data. The current sets cover four read intents
@@ -71,7 +99,7 @@ companies or customer data. The current sets cover four read intents
 Low German, Rhineland, Bavarian, Swabian, Swiss German and other regional
 variants.
 
-## Run locally
+### Run locally
 
 ```bash
 python -m venv .venv && . .venv/bin/activate
@@ -86,16 +114,7 @@ python runner/bench.py --model models/qwen2.5-1.5b-instruct-q4_k_m.gguf
 # or: VYVY_MODEL_PATH=models/qwen2.5-1.5b-instruct-q4_k_m.gguf python runner/bench.py
 ```
 
-## Model classes
-
-| Class | Target hardware | Model | Choice in the workflow |
-|---|---|---|---|
-| Vyvy AI 4GB | 8 GB RAM | Qwen 2.5 3B Instruct, Q5_K_M | `qwen2.5-3b-instruct-q5_k_m` |
-| Vyvy AI 8GB | 12–16 GB RAM | Qwen 2.5 7B Instruct, Q4_K_M | `qwen2.5-7b-instruct-q4_k_m` |
-
-The 1.5B and 3B Q4_K_M variants stay available as reference points.
-
-## Run on GitHub Actions
+### Run on GitHub Actions
 
 Actions → **Benchmark** → *Run workflow*, pick a model and a mode. The report appears as
 the job summary; raw numbers are attached as the `results-…` artifact. Models
