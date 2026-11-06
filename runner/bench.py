@@ -4,8 +4,11 @@
 Every question in the dataset is sent once to the model, constrained by a GBNF
 grammar, at temperature 0. A prediction counts as correct only if the output
 parses, the intent matches and the model's own confidence is at least
---min-confidence. Latency is wall-clock time per question on the machine that
-runs the benchmark; it does not transfer to other hardware.
+--min-confidence. The time limit is scored separately ("within timeout"), so a
+slow but right answer still counts for intent accuracy. Latency is wall-clock
+time per question on the machine that runs the benchmark, split into prompt
+processing and generation from llama.cpp's own counters; it does not transfer
+to other hardware.
 
     python runner/bench.py --model models/model.gguf
     VYVY_MODEL_PATH=models/model.gguf python runner/bench.py
@@ -59,7 +62,10 @@ SYSTEM_PROMPT = (
     '"entity": null, "confidence": 0.9}'
 )
 
-Model = Callable[[str, str, str], str]
+# A model returns its raw text plus timing stats (may be empty).
+Model = Callable[[str, str, str], tuple[str, dict]]
+TIMING_KEYS = ("prompt_tokens", "prompt_eval_tokens", "completion_tokens",
+               "prompt_ms", "gen_ms", "gen_tps")
 
 
 def _env_float(name: str, default: float) -> float:
@@ -172,21 +178,34 @@ def outcome(parsed: dict | None, min_confidence: float) -> str:
 
 
 def llama_model(path: Path, threads: int, ctx: int) -> Model:
-    from llama_cpp import Llama, LlamaGrammar  # imported only for real runs
+    import llama_cpp  # imported only for real runs
+    from llama_cpp import Llama, LlamaGrammar
 
     llm = Llama(model_path=str(path), n_ctx=ctx, n_threads=threads, seed=0, verbose=False)
     cache: dict[str, object] = {}
 
-    def run(system: str, question: str, grammar: str) -> str:
+    def run(system: str, question: str, grammar: str) -> tuple[str, dict]:
         if grammar not in cache:
             cache[grammar] = LlamaGrammar.from_string(grammar, verbose=False)
+        llama_cpp.llama_perf_context_reset(llm.ctx)
         out = llm.create_chat_completion(
             messages=[{"role": "system", "content": system}, {"role": "user", "content": question}],
             grammar=cache[grammar],
             temperature=0.0,
             max_tokens=80,
         )
-        return out["choices"][0]["message"]["content"] or ""
+        # prompt_eval_tokens < prompt_tokens means the shared prefix came from the cache.
+        perf = llama_cpp.llama_perf_context(llm.ctx)
+        usage = out.get("usage") or {}
+        stats = {
+            "prompt_tokens": usage.get("prompt_tokens"),
+            "prompt_eval_tokens": perf.n_p_eval,
+            "completion_tokens": usage.get("completion_tokens"),
+            "prompt_ms": perf.t_p_eval_ms,
+            "gen_ms": perf.t_eval_ms,
+            "gen_tps": perf.n_eval / perf.t_eval_ms * 1000 if perf.t_eval_ms > 0 else None,
+        }
+        return out["choices"][0]["message"]["content"] or "", stats
 
     return run
 
@@ -195,15 +214,17 @@ def mock_model(expected: dict[str, str]) -> Model:
     """Deterministic stand-in: right for most items, wrong, unsure or broken for a few."""
     counter = {"n": 0}
 
-    def run(_system: str, question: str, _grammar: str) -> str:
+    def run(_system: str, question: str, _grammar: str) -> tuple[str, dict]:
         counter["n"] += 1
         n, intent = counter["n"], expected[question.removeprefix('Question: "').removesuffix('"')]
+        stats = {"prompt_tokens": 300, "prompt_eval_tokens": 20, "completion_tokens": 30,
+                 "prompt_ms": 0.0, "gen_ms": 0.0, "gen_tps": None}
         if n % 13 == 0:
-            return "not json"
+            return "not json", stats
         if n % 11 == 0:
             intent = "unknown"
         conf = 0.3 if n % 17 == 0 else 0.9
-        return json.dumps({"intent": intent, "timeframe": None, "entity": None, "confidence": conf})
+        return json.dumps({"intent": intent, "timeframe": None, "entity": None, "confidence": conf}), stats
 
     return run
 
@@ -227,55 +248,111 @@ class VyvyBenchRunner:
 def run_benchmark(items: list[dict], model: Model, grammar: str, intents: tuple[str, ...],
                   min_confidence: float, timeout_s: float = 4.0,
                   clock: Callable[[], float] = time.perf_counter) -> dict:
+    """Intent accuracy and the time limit are scored separately.
+
+    intent_correct: right intent regardless of speed. within_timeout: right intent
+    and at most timeout_s. A timeout never changes what the model answered.
+    """
     per_intent: dict[str, dict] = {}
+    records: list[dict] = []
     for item in items:
         t0 = clock()
-        raw = model(SYSTEM_PROMPT, f'Question: "{item["text"]}"', grammar)
+        raw, stats = model(SYSTEM_PROMPT, f'Question: "{item["text"]}"', grammar)
         ms = (clock() - t0) * 1000
         got = outcome(parse_output(raw, intents), min_confidence)
-        if ms > timeout_s * 1000:
-            got = f"timeout ({ms:.0f} ms, {got})"
-        row = per_intent.setdefault(item["expected_intent"], {"n": 0, "correct": 0, "ms": [], "misses": []})
+        ok = got == item["expected_intent"]
+        timed_out = ms > timeout_s * 1000
+        rec = {"id": item["id"], "expected": item["expected_intent"], "got": got, "ms": round(ms),
+               "timeout": timed_out, **{k: stats.get(k) for k in TIMING_KEYS}}
+        if rec["prompt_ms"] is not None and rec["gen_ms"] is not None:
+            rec["other_ms"] = round(ms - rec["prompt_ms"] - rec["gen_ms"])
+        records.append(rec)
+        row = per_intent.setdefault(item["expected_intent"],
+                                    {"n": 0, "intent_correct": 0, "within_timeout": 0, "timeouts": 0,
+                                     "ms": [], "misses": []})
         row["n"] += 1
         row["ms"].append(ms)
-        if got == item["expected_intent"]:
-            row["correct"] += 1
-        else:
-            row["misses"].append({"id": item["id"], "text": item["text"], "got": got})
+        row["intent_correct"] += ok
+        row["within_timeout"] += ok and not timed_out
+        row["timeouts"] += timed_out
+        if not ok or timed_out:
+            row["misses"].append({"id": item["id"], "text": item["text"], "got": got,
+                                  "ms": round(ms), "timeout": timed_out})
     all_ms = [m for r in per_intent.values() for m in r["ms"]]
     return {
         "n": sum(r["n"] for r in per_intent.values()),
-        "correct": sum(r["correct"] for r in per_intent.values()),
+        "intent_correct": sum(r["intent_correct"] for r in per_intent.values()),
+        "within_timeout": sum(r["within_timeout"] for r in per_intent.values()),
+        "timeouts": sum(r["timeouts"] for r in per_intent.values()),
         "median_ms": round(statistics.median(all_ms)) if all_ms else 0,
         "timeout_s": timeout_s,
+        "timing": timing_summary(records),
         "per_intent": {
-            k: {"n": r["n"], "correct": r["correct"], "accuracy": r["correct"] / r["n"],
+            k: {"n": r["n"], "intent_correct": r["intent_correct"], "within_timeout": r["within_timeout"],
+                "timeouts": r["timeouts"], "accuracy": r["intent_correct"] / r["n"],
                 "median_ms": round(statistics.median(r["ms"])), "mean_ms": round(statistics.mean(r["ms"])),
                 "misses": r["misses"]}
             for k, r in sorted(per_intent.items())
         },
+        "items": records,
     }
 
 
+def timing_summary(records: list[dict]) -> dict:
+    out = {}
+    for key in ("ms", *TIMING_KEYS, "other_ms"):
+        vals = [r[key] for r in records if r.get(key) is not None]
+        if vals:
+            out[key] = {"median": statistics.median(vals), "min": min(vals), "max": max(vals)}
+    return out
+
+
+TIMING_LABELS = {
+    "ms": "Total ms per question",
+    "prompt_tokens": "Prompt tokens",
+    "prompt_eval_tokens": "Prompt tokens evaluated (rest from cache)",
+    "completion_tokens": "Completion tokens",
+    "prompt_ms": "Prompt processing ms",
+    "gen_ms": "Generation ms",
+    "other_ms": "Other ms (sampling, grammar, overhead)",
+    "gen_tps": "Generation tokens/s",
+}
+
+
+def _fmt(v: float) -> str:
+    return f"{v:.0f}" if abs(v) >= 100 or float(v).is_integer() else f"{v:.1f}"
+
+
 def report(result: dict, header: str) -> str:
-    n, c = result["n"], result["correct"]
+    n, c, w = result["n"], result["intent_correct"], result["within_timeout"]
     lines = [
         "## Vyvy AI benchmark",
         "",
         header,
         "",
-        f"**Accuracy: {c}/{n} ({c / n:.1%})** · median {result['median_ms']} ms per question"
-        f" · timeout {result['timeout_s']:g} s",
+        f"**Accuracy (intent): {c}/{n} ({c / n:.1%})** · right intent, regardless of speed",
         "",
-        "| Intent | Correct | N | Accuracy | Median ms | Mean ms |",
-        "|---|---:|---:|---:|---:|---:|",
+        f"**Within timeout: {w}/{n} ({w / n:.1%})** · right intent and at most {result['timeout_s']:g} s"
+        f" · {result['timeouts']} timeouts · median {result['median_ms']} ms per question",
+        "",
+        "| Intent | Correct | Within timeout | Timeouts | N | Accuracy | Median ms | Mean ms |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for k, r in result["per_intent"].items():
-        lines.append(f"| {k} | {r['correct']} | {r['n']} | {r['accuracy']:.1%} | {r['median_ms']} | {r['mean_ms']} |")
+        lines.append(f"| {k} | {r['intent_correct']} | {r['within_timeout']} | {r['timeouts']} | {r['n']}"
+                     f" | {r['accuracy']:.1%} | {r['median_ms']} | {r['mean_ms']} |")
+    if result["timing"]:
+        lines += ["", "### Timing per question", "", "| Value | Median | Min | Max |", "|---|---:|---:|---:|"]
+        for key, label in TIMING_LABELS.items():
+            t = result["timing"].get(key)
+            if t:
+                lines.append(f"| {label} | {_fmt(t['median'])} | {_fmt(t['min'])} | {_fmt(t['max'])} |")
     misses = [(k, m) for k, r in result["per_intent"].items() for m in r["misses"]]
     if misses:
-        lines += ["", "### Misses", "", "| Expected | ID | Question | Got |", "|---|---|---|---|"]
-        lines += [f"| {k} | {m['id']} | {m['text']} | {m['got']} |" for k, m in misses]
+        lines += ["", "### Misses", "", "| Expected | ID | Question | Got | ms | Timeout |",
+                  "|---|---|---|---|---:|---|"]
+        lines += [f"| {k} | {m['id']} | {m['text']} | {m['got']} | {m['ms']} | {'yes' if m['timeout'] else ''} |"
+                  for k, m in misses]
     return "\n".join(lines) + "\n"
 
 

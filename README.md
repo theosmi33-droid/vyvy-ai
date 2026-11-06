@@ -33,10 +33,20 @@ model has a legal way out instead of inventing an intent.
 
 A prediction is correct only if the output parses, the intent matches, and the
 model's own `confidence` is at least `--min-confidence` (default 0.5). The
-report lists accuracy and latency per intent plus every miss with what the
-model returned (`invalid`, `low confidence (…)`, `timeout (…)` or the wrong
-intent). Answers slower than `--timeout` seconds (default 4, or
-`VYVY_SLOT_TIMEOUT_S`) count as misses.
+report gives two numbers:
+
+- **Accuracy (intent):** right intent, regardless of speed.
+- **Within timeout:** right intent and at most `--timeout` seconds (default 4,
+  or `VYVY_SLOT_TIMEOUT_S`).
+
+Per intent it lists both plus the number of timeouts. Every miss shows what the
+model returned (`invalid`, `low confidence (…)` or the wrong intent), its time
+and whether it ran over the limit.
+
+The timing table splits each question into prompt processing, generation and
+the rest (sampling, grammar, overhead), with token counts and generation speed,
+taken from llama.cpp's own counters. `results.json` holds these values for every
+question.
 
 Latency is measured on the machine that runs the benchmark. Accuracy transfers
 to other hardware; milliseconds do not.
