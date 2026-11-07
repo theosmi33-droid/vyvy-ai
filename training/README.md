@@ -58,10 +58,11 @@ runners. Nothing needs manual approval or checking.
    until that issue is closed, while changed data or code start anew. When no
    kernel is running, Collect starts the next missing run (1.5B before 7B).
 4. **Bench LoRA** measures the current default and the candidate in one job,
-   on the blind holdout (decides) and the development holdout (information).
-   The candidate becomes a regular release, the new default, only with zero
-   regressions and a higher accuracy; otherwise it stays a pre-release marked
-   rejected, with the report attached.
+   on blind holdout v2 (decides) and on blind holdout v1 and the development
+   holdout (information). The candidate becomes a regular release, the new
+   default, only under the statistical rule in the main README (exact McNemar
+   p < 0.05, b ≥ 2c, per-intent tolerance, no loss on `unknown`); otherwise it
+   stays a pre-release marked rejected, with the report attached.
 
 Secrets in the environment `kaggle`: `KAGGLE_API_TOKEN` and `KAGGLE_USERNAME`.
 The token can do everything in the Kaggle account; if it ever shows up in a log,

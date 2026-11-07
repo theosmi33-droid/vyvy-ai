@@ -47,14 +47,15 @@ measures accuracy and latency on GitHub Actions.
 | `grammars/slots.gbnf` | Output contract: `intent`, `timeframe`, `entity`, `confidence` |
 | `runner/bench.py` | Stateless benchmark runner (llama-cpp-python) |
 | `.github/workflows/bench.yml` | Manual GitHub Actions run on `ubuntu-latest` |
-| `data/holdout_blind_v1.json` | Blind holdout: 90 questions written without knowledge of any errors; decides adapter acceptance |
+| `data/holdout_blind_v2.json` | Blind holdout v2: 270 questions, 30 per intent, from four independent writers; decides adapter acceptance |
+| `data/holdout_blind_v1.json` | Blind holdout v1: 90 questions, reported for information |
 | `data/train/` | Training data, one JSON object per line (see its README) |
 | `tools/check_holdout_leak.py` | Holdout lock: rejects training sentences close to a holdout sentence |
 | `.github/workflows/data-check.yml` | Runs the holdout lock on every change below `data/` |
 | `.github/workflows/compare.yml` | Both classes and a reference in one job on the same machine |
 | `tools/compare_results.py` | One table over several `results.json` |
 | `.github/workflows/bench-lora.yml` | A trained adapter against its base model, one job; accepts or rejects it |
-| `tools/compare_adapter.py` | Accepts an adapter only with zero regressions and higher accuracy |
+| `tools/compare_adapter.py` | Statistical acceptance rule (exact McNemar test, net gain, per-intent tolerance, no loss on `unknown`) |
 | `tools/previous_adapter.py` | Finds the current default adapter (newest accepted) per base model |
 | `tools/kaggle_watchdog.py` | Watches a Kaggle run, fetches the adapter or diagnoses the failure |
 | `models.json` | Fixed Hugging Face commit and SHA-256 of every model file used |
@@ -146,7 +147,25 @@ errors on this holdout set (what is "on today", open vs. overdue tasks), so it
 serves as the development holdout. A second set, `holdout_blind_v1.json` (90
 questions, 10 per intent), was written in one pass by an independent agent that
 knew only the intent definitions, not the code, prompts, training data or any
-errors. Only the blind set decides whether a trained adapter is accepted.
+errors. A third set, `holdout_blind_v2.json` (270 questions, 30 per intent), was
+written the same way by four independent agents with different focuses
+(southern German and phone typing, northern and western German and dictation,
+workplace variety and German as a second language, less common phrasings);
+sentences close to training data or the other sets were removed. Only v2
+decides whether a trained adapter is accepted.
+
+### Accepting an adapter
+
+On few questions per intent a zero-tolerance rule measures noise: one
+borderline sentence decides. The rule therefore compares baseline and adapter
+question by question. With b questions the adapter fixed and c it broke, it is
+accepted only if
+
+1. the exact one-sided McNemar test on these discordant pairs gives p < 0.05,
+2. b ≥ 2c,
+3. no intent loses more than max(1, ⌊5 % of its questions⌋) net, and
+4. no question of `unknown` gets worse (a wrong action instead of "I don't know"
+   is never acceptable).
 
 ### Run locally
 

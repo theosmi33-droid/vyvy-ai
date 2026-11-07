@@ -1,9 +1,11 @@
 name: Bench LoRA
 
 # Measures a trained adapter against the current default in one job on the same
-# runner (same CPU, same prompt, route mode). Acceptance is decided only on the
-# blind holdout (data/holdout_blind_v1.json, written without knowledge of any
-# errors); the development holdout is reported for information. The default is the newest accepted
+# runner (same CPU, same prompt, route mode). Acceptance is decided only on
+# blind holdout v2 (data/holdout_blind_v2.json, 30 questions per intent, written
+# without knowledge of any errors) by a statistical rule (tools/compare_adapter.py:
+# exact McNemar p < 0.05, b >= 2c, per-intent tolerance, no loss on "unknown");
+# blind holdout v1 and the development holdout are reported for information. The default is the newest accepted
 # adapter for the same base model and prompt, or the base model alone if there is
 # none. The candidate release becomes a regular release (the new default) only
 # with zero regressions and a higher intent accuracy; otherwise it stays a
@@ -104,7 +106,7 @@ jobs:
           MODEL: ${{ steps.adapter.outputs.model }}
         run: python tools/fetch_model.py "$MODEL" --dir models
 
-      - name: Baseline and candidate on the blind holdout (decides) and the development holdout (information)
+      - name: Baseline and candidate on blind holdout v2 (decides), v1 and the development holdout (information)
         env:
           MODEL: ${{ steps.adapter.outputs.model }}
           GGUF: ${{ steps.adapter.outputs.gguf }}
@@ -116,9 +118,12 @@ jobs:
             VYVY_LORA_PATH="$3" python runner/bench.py --model "$file" --label "$MODEL" --mode route \
               --data "$1" --threads "$(nproc)" --summary "$GITHUB_STEP_SUMMARY" --json "$2.json"
           }
-          echo "## Blind holdout (decides acceptance)" >> "$GITHUB_STEP_SUMMARY"
-          run data/holdout_blind_v1.json base_blind "$BASELINE_GGUF"
-          run data/holdout_blind_v1.json lora_blind "$GGUF"
+          echo "## Blind holdout v2, 30 per intent (decides acceptance)" >> "$GITHUB_STEP_SUMMARY"
+          run data/holdout_blind_v2.json base_blind "$BASELINE_GGUF"
+          run data/holdout_blind_v2.json lora_blind "$GGUF"
+          echo "## Blind holdout v1 (information only)" >> "$GITHUB_STEP_SUMMARY"
+          run data/holdout_blind_v1.json base_v1 "$BASELINE_GGUF"
+          run data/holdout_blind_v1.json lora_v1 "$GGUF"
           echo "## Development holdout (information only)" >> "$GITHUB_STEP_SUMMARY"
           run data/holdout_benchmarks.json base_dev "$BASELINE_GGUF"
           run data/holdout_benchmarks.json lora_dev "$GGUF"
@@ -131,7 +136,9 @@ jobs:
           set -uo pipefail
           python tools/compare_adapter.py base_dev.json lora_dev.json --name "$ADAPTER (development holdout)" \
             --baseline-name "$BASELINE_NAME" | tee -a "$GITHUB_STEP_SUMMARY" || true
-          python tools/compare_adapter.py base_blind.json lora_blind.json --name "$ADAPTER (blind holdout)" \
+          python tools/compare_adapter.py base_v1.json lora_v1.json --name "$ADAPTER (blind holdout v1)" \
+            --baseline-name "$BASELINE_NAME" | tee -a "$GITHUB_STEP_SUMMARY" || true
+          python tools/compare_adapter.py base_blind.json lora_blind.json --name "$ADAPTER (blind holdout v2)" \
             --baseline-name "$BASELINE_NAME" --verdict verdict.json \
             | tee -a "$GITHUB_STEP_SUMMARY"
           code=${PIPESTATUS[0]}
@@ -152,7 +159,8 @@ jobs:
           else
             gh release edit "$ADAPTER" --repo "$GITHUB_REPOSITORY" --title "$ADAPTER (rejected)" --notes-file notes.md
           fi
-          gh release upload "$ADAPTER" verdict.json base_blind.json lora_blind.json base_dev.json lora_dev.json \
+          gh release upload "$ADAPTER" verdict.json base_blind.json lora_blind.json base_v1.json lora_v1.json \
+            base_dev.json lora_dev.json \
             --repo "$GITHUB_REPOSITORY" --clobber
 
       - name: Fail when rejected

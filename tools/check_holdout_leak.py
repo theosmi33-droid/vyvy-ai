@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Holdout lock: training data must not contain holdout questions or near copies.
 
-Protects the development holdout and the blind holdout.
+Protects the development holdout and both blind holdouts.
 
 Compares every training sentence with every holdout sentence after
 normalisation (case, punctuation, whitespace) by two measures:
@@ -29,7 +29,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 HOLDOUT = ROOT / "data" / "holdout_benchmarks.json"
 BLIND = ROOT / "data" / "holdout_blind_v1.json"
-HOLDOUTS = [HOLDOUT, BLIND]
+BLIND_V2 = ROOT / "data" / "holdout_blind_v2.json"
+HOLDOUTS = [HOLDOUT, BLIND, BLIND_V2]
 TRAIN_DIR = ROOT / "data" / "train"
 
 

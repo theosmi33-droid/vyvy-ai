@@ -242,7 +242,7 @@ def variants(text: str, rng: random.Random, n: int) -> list[str]:
 
 def build(seed: int, per_core: int, max_similarity: float) -> tuple[list[dict], list[tuple[str, str, float]]]:
     rng = random.Random(seed)
-    holdout = [i for h in lock.HOLDOUTS for i in json.loads(h.read_text(encoding="utf-8"))["items"]]
+    holdout = [i for h in lock.HOLDOUTS if h.exists() for i in json.loads(h.read_text(encoding="utf-8"))["items"]]
     hold_norm = [(h["id"], lock.normalise(h["text"])) for h in holdout]
     rows, seen, dropped = [], set(), []
     for intent, cores in CORE.items():
