@@ -18,3 +18,13 @@ sentences written for it, in standard German and regional variants, with
 fillers, lowercase and typos added. Persons and companies in it are invented.
 The generator drops every sentence with a similarity of 0.8 or more to a
 holdout sentence, which is stricter than the lock.
+
+`unknown_negatives.txt` holds more than 300 sentences written for it that Vyvy
+has no intent for: office and IT trouble, actions it cannot take (delete, move,
+send, pay), questions about other people and companies, specialist knowledge,
+arithmetic, small talk, everyday questions, writing help and regional speech.
+The generator adds each of them once as `unknown`, without generated variants.
+
+All training data is written for this repository. No external dataset is used
+for training or loaded by a workflow, so the data carries no third-party
+licence terms.

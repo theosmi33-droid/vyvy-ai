@@ -1,0 +1,336 @@
+# Hand-written negatives for intent "unknown": requests Vyvy has no intent for.
+# Written for this file, no external source. One sentence per line; lines
+# starting with # are comments. tools/build_train_data.py adds each sentence
+# once, without generated variants, and drops near copies of holdout sentences.
+#
+# Office and IT trouble
+Der Drucker druckt nur noch Streifen.
+Wie setze ich das WLAN-Passwort zurück?
+Mein Bildschirm flackert seit heute früh.
+Warum ist der Laptop so langsam?
+Wie verbinde ich mich mit dem Firmen-VPN?
+Das Headset geht in der Videokonferenz nicht.
+Wo finde ich den Ordner mit den Vorlagen auf dem Server?
+Wie mache ich einen Screenshot unter Windows?
+Der Scanner erkennt das Papier nicht.
+Wie ändere ich mein Passwort fürs Intranet?
+Warum hängt Excel beim Speichern?
+Wie richte ich eine Abwesenheitsnotiz ein?
+Der Beamer im Besprechungsraum zeigt kein Bild.
+Wie lege ich einen Netzwerkdrucker an?
+Wie bekomme ich die Tastatur wieder auf Deutsch?
+Das Telefon klingelt nicht mehr durch.
+Kann man PDFs zusammenfügen, ohne was zu installieren?
+Wie groß darf ein Anhang höchstens sein?
+Wie leere ich den Browser-Cache?
+Die Maus reagiert nur noch ruckelig.
+Wie stelle ich die Schrift im Word größer?
+Warum startet der Rechner ständig neu?
+Wie komme ich an eine gelöschte Datei aus dem Papierkorb?
+Der Kopierer meldet Papierstau in Fach zwei.
+Wer ist bei uns für die IT zuständig?
+Wie aktiviere ich die Zwei-Faktor-Anmeldung?
+Was mache ich, wenn das Handy kein Netz hat?
+Wie spiegle ich mein Handy auf den Fernseher?
+Wie mache ich eine Tabelle in Word quer?
+Warum kommen meine Ausdrucke doppelseitig raus?
+Der Akku vom Laptop hält keine Stunde mehr.
+Wie installiere ich Updates auf dem Tablet?
+Welches Kabel brauche ich für den zweiten Monitor?
+Der Router blinkt die ganze Zeit rot.
+Wie teile ich meinen Bildschirm in der Besprechung?
+# Actions Vyvy cannot do (no intent for them)
+Lösch den Termin um drei.
+Verschieb das Meeting mit dem Vertrieb auf Freitag.
+Sag den Termin beim Zahnarzt ab.
+Schick eine Mail an das ganze Team, dass ich später komme.
+Antworte auf die letzte Mail mit „passt“.
+Leite die Rechnung an die Buchhaltung weiter.
+Lösch alle Werbemails.
+Markier die Aufgabe Angebot schreiben als erledigt.
+Streich die Aufgabe mit dem Lager, die hat sich erledigt.
+Setz den Status vom Auftrag auf abgeschlossen.
+Storniere die Rechnung Nummer 4711.
+Überweis dem Lieferanten den offenen Betrag.
+Buch mir einen Flug nach Hamburg.
+Reservier einen Tisch für vier Personen heute Abend.
+Ruf Herrn Brandauer an.
+Schick dem Kunden eine SMS, dass wir uns verspäten.
+Druck mir das Angebot zweimal aus.
+Speicher den Anhang auf dem Server.
+Zahl die Stromrechnung.
+Bestell zehn Kartons Kopierpapier.
+Leg einen neuen Kunden im System an.
+Ändere die Telefonnummer von Frau Yilmaz.
+Schick die Lohnabrechnung an den Steuerberater.
+Trag meine Arbeitszeit von heute ein.
+Stemple mich aus.
+Beantrag Urlaub für die erste Augustwoche.
+Melde mich für die Schulung am Montag ab.
+Archivier alle Mails vom letzten Jahr.
+Blockier den Absender, der ständig Spam schickt.
+Mach die Mail von heute Morgen wieder ungelesen.
+Verschieb die Mails vom Finanzamt in den Ordner Steuer.
+Gib die Aufgabe an Kollegin Petrović weiter.
+Erhöh die Priorität vom Auftrag Dachsanierung.
+Lad die Fotos von der Baustelle hoch.
+Unterschreib das Dokument digital.
+Schalt das Licht im Büro aus.
+Stell die Heizung auf zweiundzwanzig Grad.
+Mach Musik an.
+Stell einen Wecker auf sechs Uhr.
+Starte einen Timer für zehn Minuten.
+Übersetz den Brief ins Englische.
+Fass mir den Vertrag zusammen.
+Les mir die AGB vom Lieferanten vor.
+Teil den Kalender mit meinem Kollegen.
+Lösch meinen Account.
+Schalt die Benachrichtigungen für eine Stunde stumm.
+Lad die Kollegen zur Weihnachtsfeier ein.
+Sag Frau Okonkwo, dass ich sie zurückrufe.
+Kündige den Handyvertrag.
+Melde den Firmenwagen zur Inspektion an.
+# Other people and other companies
+Was hat mein Chef heute für Termine?
+Ist die Kollegin aus der Buchhaltung heute im Haus?
+Wann hat der Steuerberater Sprechstunde?
+Welche Öffnungszeiten hat der Baumarkt?
+Hat die Firma Kranzbühler Bau noch freie Kapazitäten?
+Wie viele Mitarbeiter hat die Spedition Nordwind?
+Wer ist der Geschäftsführer von der Malerei Haberkorn?
+Wann liefert der Großhändler normalerweise?
+Was verlangt die Konkurrenz für eine Badsanierung?
+Ist der Kunde Wetzlarer Fensterbau zahlungsfähig?
+Wo sitzt die Firma Elbmetall?
+Hat Herr Duarte heute Urlaub?
+Was macht der Außendienst gerade?
+Welche Aufgaben hat der Azubi diese Woche?
+Wie läuft das Geschäft bei unserem Mitbewerber?
+Wann hat die Werkstatt am Samstag offen?
+Hat das Finanzamt heute geöffnet?
+Wie erreiche ich die Hotline vom Softwarehersteller?
+Welche Termine hat die Praxis Dr. Albrecht noch frei?
+Arbeitet der Hausmeister heute?
+# Specialist knowledge: office, law, tax, trade
+Was ist ein Skontoabzug?
+Wie lange muss ich Rechnungen aufbewahren?
+Was gehört alles auf eine ordentliche Rechnung?
+Ab wann muss ich Umsatzsteuer abführen?
+Was ist der Unterschied zwischen Angebot und Kostenvoranschlag?
+Wie hoch ist der Mindestlohn?
+Wie viele Urlaubstage stehen einem gesetzlich zu?
+Was bedeutet Reverse-Charge?
+Wie berechne ich einen Stundenverrechnungssatz?
+Was ist eine Abschlagsrechnung?
+Wie lange gilt die Gewährleistung am Bau?
+Was ist der Unterschied zwischen GmbH und UG?
+Wann ist die Umsatzsteuervoranmeldung fällig?
+Was muss in einen Arbeitsvertrag rein?
+Darf ich Kunden ohne Einwilligung anrufen?
+Was ist eine Bauabnahme?
+Wie viel Sozialabgaben zahlt ein Minijobber?
+Was heißt Vorsteuerabzug?
+Wie funktioniert die Abschreibung von einem Firmenwagen?
+Was ist eine Fristsetzung mit Ablehnungsandrohung?
+Wie dick muss Dämmung im Dach sein?
+Welcher Mörtel eignet sich für Natursteinmauern?
+Wie lange muss Estrich trocknen?
+Was ist die richtige Fliesengröße für ein kleines Bad?
+Wie viel Gefälle braucht eine Dusche?
+Welche Schutzausrüstung braucht man beim Schleifen?
+Wie oft muss eine Leiter geprüft werden?
+Was ist ein Aufmaß?
+Was bedeutet VOB?
+Wie rechne ich Quadratmeter in Kubikmeter um?
+Was kostet ein Meisterkurs ungefähr?
+Was ist eine Gefährdungsbeurteilung?
+Wie funktioniert die Kurzarbeit?
+Was ist der Unterschied zwischen Prokura und Handlungsvollmacht?
+Welche Versicherungen braucht ein Handwerksbetrieb?
+Was ist eine Pivot-Tabelle?
+Wie mache ich einen SVERWEIS?
+Was bedeutet DSGVO für meine Kundendaten?
+Wie schreibe ich eine Kündigung für einen Mitarbeiter?
+Was ist eine Zwischenrechnung?
+Wie berechne ich den Deckungsbeitrag?
+Wofür steht die Abkürzung KW?
+Was ist ein Lieferschein?
+Wann verjährt eine Rechnung?
+Was ist eine Gutschrift?
+# Arithmetic, units, time
+Was sind neunzehn Prozent von zweitausend?
+Wie viel ist dreihundert durch zwölf?
+Wie viele Tage hat der Februar dieses Jahr?
+Rechne zwölf Euro fünfzig mal acht.
+Wie viel sind dreißig Grad in Fahrenheit?
+Wie viele Zentimeter hat ein Zoll?
+Welches Datum ist in neunzig Tagen?
+Welcher Wochentag war der erste Mai?
+Wie viel Uhr ist es gerade?
+Wie viele Stunden hat eine Arbeitswoche mit vier Tagen?
+Was ist die Wurzel aus hundertvierundvierzig?
+Wie viel Liter passen in einen Kubikmeter?
+In welcher Kalenderwoche sind wir?
+Wann ist Ostern nächstes Jahr?
+Ist der Pfingstmontag ein Feiertag?
+Wie viele Arbeitstage hat der Dezember?
+Was sind drei Viertel von achtzig?
+Wie spät ist es in New York?
+Wie rechne ich Netto in Brutto um?
+Wie lang ist eine Meile?
+# Small talk
+Guten Morgen!
+Wie geht es dir heute?
+Wer bist du eigentlich?
+Was kannst du alles?
+Bist du ein Mensch?
+Danke, das war's.
+Tschüss, bis morgen.
+Du bist super.
+Das hat nicht geklappt.
+Ich hab schlechte Laune.
+Hast du Hobbys?
+Wie alt bist du?
+Kannst du singen?
+Erzähl mir was Lustiges.
+Mir ist langweilig.
+Was hältst du von Montagen?
+Bist du müde?
+Okay.
+Ja genau.
+Nein, das meinte ich nicht.
+Moment mal.
+Vergiss es.
+Hörst du mich?
+Test, test, eins, zwei.
+Schönen Feierabend!
+# Everyday life and general knowledge
+Wie wird das Wetter am Wochenende?
+Regnet es heute Nachmittag?
+Brauch ich morgen einen Schirm?
+Wo ist die nächste Apotheke?
+Wann fährt der nächste Bus zum Bahnhof?
+Ist auf der A8 Stau?
+Wo kann ich in der Nähe günstig tanken?
+Was gibt es heute in der Kantine?
+Wo bekomme ich mittags eine schnelle Pizza?
+Wie koche ich Spaghetti Carbonara?
+Gib mir ein Rezept für Pfannkuchen.
+Wie lange kocht ein weiches Ei?
+Wer hat das Telefon erfunden?
+Wie hoch ist die Zugspitze?
+Was ist die Hauptstadt von Australien?
+Wie viele Einwohner hat Leipzig?
+Wann war die Wiedervereinigung?
+Wer hat gestern das Spiel gewonnen?
+Wie steht der Dax?
+Was kostet gerade ein Liter Diesel?
+Wie ist der Kurs vom Euro zum Franken?
+Welche Filme laufen heute im Kino?
+Was sind die Nachrichten von heute?
+Empfiehl mir ein gutes Buch.
+Wie lange braucht man mit dem Auto nach Köln?
+Wann geht heute die Sonne unter?
+Welche Pflanzen vertragen Schatten?
+Wie bekomme ich Kalk aus der Kaffeemaschine?
+Wie oft muss man Winterreifen wechseln?
+Was hilft gegen Kopfschmerzen?
+Wie mache ich einen guten Cappuccino?
+Wie lange ist der Baumarkt heute offen?
+Was schenke ich meiner Kollegin zum Geburtstag?
+Wie viele Kalorien hat eine Banane?
+Wie weit ist der Mond weg?
+Welcher Tag ist heute?
+Wann sind in Bayern Sommerferien?
+Wie heißt der Bundeskanzler?
+Wie funktioniert eine Wärmepumpe?
+Warum ist der Himmel blau?
+Wie viele Bundesländer hat Deutschland?
+Was bedeutet das Wort nachhaltig?
+Wie schreibt man Rhythmus?
+Was ist das Gegenteil von pünktlich?
+Wie spricht man Worcestershire aus?
+# Writing help
+Schreib mir eine Absage für den Bewerber.
+Formulier eine freundliche Zahlungserinnerung.
+Wie beginne ich eine Mail an eine Behörde?
+Wie schreibe ich eine Entschuldigung an den Kunden?
+Mach mir einen Text für die Stellenanzeige.
+Wie formuliere ich eine Preiserhöhung höflich?
+Schreib einen Glückwunsch zum Firmenjubiläum.
+Wie lautet die richtige Anrede für einen Professor?
+Schreib mir eine kurze Beschreibung für unsere Website.
+Wie verfasse ich ein Arbeitszeugnis?
+Formulier eine Beschwerde an den Lieferanten.
+Wie schreibt man ein Protokoll?
+Gib mir eine Vorlage für ein Angebot.
+Wie fasse ich eine Besprechung kurz zusammen?
+Hilf mir bei einem Post für Social Media.
+Wie schließe ich einen Geschäftsbrief ab?
+Schreib eine Einladung zum Tag der offenen Tür.
+Wie bedanke ich mich bei einem Kunden für den Auftrag?
+Was schreib ich in eine Kondolenzkarte?
+Wie lehne ich einen Auftrag freundlich ab?
+# Regional speech and colloquial
+Wia schaut's mit'm Weda aus?
+Wo gibt's do a gscheide Brotzeit?
+Wer hod denn des Auto erfundn?
+Mei Drucka spinnt scho wieda.
+Wos kost a Mass auf da Wiesn?
+Wie wird's Wetter morge im Ländle?
+Wo isch de nägschte Bäckerei?
+Mei Kischt druckt nix meh.
+Was koschtet en Liter Benzin?
+Wia spät is'n jetzt?
+Wat kost dat Brötchen hier?
+Wo is hier ne Tankstelle in de Nähe?
+Mien Rechner deit dat nich mehr.
+Wie is dat Wedder an de Küst?
+Wo krieg ick hier 'ne Currywurst?
+Wat is'n dit für'n Wetter heute?
+Mein Rechna is kaputt, wat nu?
+Wie wird's Wätter am Wuchenend?
+Wo chan i hüt z'Mittag ässe?
+Was choschtet es Zugbillet uf Bärn?
+Gibt's hüt Räge?
+Wo is dor nächsde Bäcker?
+Wie werd'n des Wedder?
+Ei gude, wie?
+Grüß Gott, wie geht's da so?
+Servus, alles klar bei dir?
+Moin moin!
+Na, allet jut?
+Hallöchen, bist du wach?
+Mahlzeit!
+# Incomplete or unclear
+Äh.
+Was war das noch mal?
+Kannst du das wiederholen?
+Hä?
+Ich weiß nicht.
+Irgendwas mit Ordnern.
+Also das mit dem Ding da.
+Wie meinst du das?
+Egal.
+Hmm, keine Ahnung.
+# More near misses: calendar, mail and tasks, but not one of Vyvy's intents
+Wer hat mir den Termin am Donnerstag eingetragen?
+Welche Termine hatte ich letzten Monat?
+Wie viele Mails hab ich dieses Jahr verschickt?
+Wie lautet die Mailadresse von der Buchhaltung?
+Wie lege ich im Kalender eine Serie an?
+Wie färbe ich Termine im Kalender ein?
+Warum kommen meine Mails beim Kunden nicht an?
+Wie füge ich eine Signatur in die Mail ein?
+Wie exportiere ich meine Aufgaben nach Excel?
+Wer hat die Aufgabe Gerüst abbauen angelegt?
+Wie viele Aufgaben hat das Team letzte Woche erledigt?
+Wie stelle ich die Kalenderwoche im Kalender ein?
+Kann ich Aufgaben auch per Sprachnachricht anlegen lassen?
+Wie viel Speicher hat mein Postfach noch?
+Welche Zeitzone hat mein Kalender?
+Wie synchronisiere ich den Kalender mit dem Handy?
+Wo stelle ich ein, dass Mails automatisch weitergeleitet werden?
+Was ist der Unterschied zwischen Aufgabe und Termin?
+Wie plane ich ein Projekt mit vielen Schritten?
+Wie verschicke ich eine Kalendereinladung an Externe?

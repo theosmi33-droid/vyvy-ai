@@ -26,6 +26,7 @@ import bench  # noqa: E402
 import check_holdout_leak as lock  # noqa: E402
 
 OUT = ROOT / "data" / "train" / "vyvy_train_v1.jsonl"
+NEGATIVES = ROOT / "data" / "train" / "unknown_negatives.txt"
 
 # (text, timeframe, entity) per intent. Persons and companies are invented.
 CORE: dict[str, list[tuple[str, str | None, str | None]]] = {
@@ -240,23 +241,31 @@ def variants(text: str, rng: random.Random, n: int) -> list[str]:
     return out
 
 
+def load_negatives(path: Path = NEGATIVES) -> list[str]:
+    lines = path.read_text(encoding="utf-8").splitlines() if path.exists() else []
+    return [line.strip() for line in lines if line.strip() and not line.startswith("#")]
+
+
 def build(seed: int, per_core: int, max_similarity: float) -> tuple[list[dict], list[tuple[str, str, float]]]:
     rng = random.Random(seed)
     holdout = [i for h in lock.HOLDOUTS if h.exists() for i in json.loads(h.read_text(encoding="utf-8"))["items"]]
     hold_norm = [(h["id"], lock.normalise(h["text"])) for h in holdout]
     rows, seen, dropped = [], set(), []
-    for intent, cores in CORE.items():
-        for text, timeframe, entity in cores:
-            for v in variants(text, rng, per_core):
-                key = lock.normalise(v)
-                if not key or key in seen:
-                    continue
-                worst = max((max(lock.similarity(key, h)), hid) for hid, h in hold_norm)
-                if worst[0] >= max_similarity:
-                    dropped.append((v, worst[1], round(worst[0], 3)))
-                    continue
-                seen.add(key)
-                rows.append({"text": v, "intent": intent, "timeframe": timeframe, "entity": entity})
+    # Core sentences get generated variants; the negatives list is already varied and
+    # long, so each of its sentences is used once to keep "unknown" from dominating.
+    sources = [(intent, core, per_core) for intent, cores in CORE.items() for core in cores]
+    sources += [("unknown", (text, None, None), 0) for text in load_negatives()]
+    for intent, (text, timeframe, entity), n in sources:
+        for v in variants(text, rng, n):
+            key = lock.normalise(v)
+            if not key or key in seen:
+                continue
+            worst = max((max(lock.similarity(key, h)), hid) for hid, h in hold_norm)
+            if worst[0] >= max_similarity:
+                dropped.append((v, worst[1], round(worst[0], 3)))
+                continue
+            seen.add(key)
+            rows.append({"text": v, "intent": intent, "timeframe": timeframe, "entity": entity})
     rng.shuffle(rows)
     return rows, dropped
 

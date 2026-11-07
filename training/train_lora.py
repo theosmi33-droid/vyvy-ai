@@ -202,16 +202,16 @@ def failure_kind(exc: BaseException) -> str:
     return "other"
 
 
-def fallback(kind: str, quant: str, batch: int, accum: int) -> tuple[str, int, int] | None:
+def fallback(kind: str, quant: str, batch: int, accum: int, fp16_fits: bool = True) -> tuple[str, int, int] | None:
     """Next configuration after a failure, or None if there is nothing sensible left to try.
 
     Out of memory: batch 1, gradient accumulation raised so the effective batch stays.
-    Kernel error with 4-bit weights: plain fp16 weights (fits for 1.5B; 7B will then
-    run out of memory on a 16 GB GPU and stop).
+    Kernel error with 4-bit weights: plain fp16 weights, but only where they fit a 16 GB
+    GPU (1.5B); 7B in fp16 needs about 15 GB for the weights alone, so it stops instead.
     """
     if kind == "oom" and batch > 1:
         return quant, 1, batch * accum
-    if kind == "kernel" and quant == "4bit":
+    if kind == "kernel" and quant == "4bit" and fp16_fits:
         return "none", batch, accum
     return None
 
@@ -352,11 +352,11 @@ def main(argv: list[str] | None = None) -> int:
                 kind = failure_kind(exc)
                 attempts.append({"weights": quant, "batch": batch, "grad_accum": accum, "result": kind,
                                  "error": f"{type(exc).__name__}: {str(exc)[:300]}"})
-                nxt = fallback(kind, quant, batch, accum)
+                nxt = fallback(kind, quant, batch, accum, fp16_fits="7b" not in args.base.lower())
                 if nxt is None or len(attempts) >= 3:
                     print(json.dumps(attempts, indent=1), file=sys.stderr)
                     raise
-                print(f"Training failed ({kind}); retrying with {nxt}", flush=True)
+                print(f"Training failed ({kind}: {attempts[-1]['error'][:200]}); retrying with {nxt}", flush=True)
                 quant, batch, accum = nxt
 
     # Grid first; then, while the budget allows, refine around the best config so
