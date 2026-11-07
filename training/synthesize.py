@@ -54,6 +54,33 @@ INTENTS = {
                "Firmen, und Aktionen ohne eigene Funktion wie Termin löschen oder verschieben, Mail senden oder "
                "beantworten, Aufgabe abhaken, Überweisen",
 }
+# Sharper rules for the intents the 2026-W45 round got wrong most often (Qwen's blind
+# check kept only 17 create_task, 28 tasks_open and 13 daily_agenda sentences):
+# what makes the intent, what it must not be confused with, and two examples
+# written for this file (no holdout sentence, no error case of a holdout).
+RULES = {
+    "create_task": (
+        "Es geht um etwas, das die Person selbst erledigen muss und als Aufgabe oder To-do notiert haben will. "
+        "Kein Treffen mit anderen, kein Kalendereintrag, keine Uhrzeit für ein Gespräch: das wäre ein Termin. "
+        "Typisch: Aufgabe, To-do, notier, merk dir, schreib auf, setz auf die Liste.",
+        ["Setz auf meine Liste, dass ich die Materialrechnung vom Großhandel prüfen muss.",
+         "Notier mir als To-do: Bohrmaschine zur Reparatur bringen."]),
+    "tasks_open": (
+        "Die Person will wissen, was insgesamt noch zu erledigen ist, unabhängig von Fristen. "
+        "Nicht nach Verpasstem, Überfälligem oder Vergessenem fragen: das wäre überfällig. "
+        "Nicht nach Terminen oder Treffen fragen.",
+        ["Was steht auf meiner Liste noch alles aus?",
+         "Zeig mir die Sachen, die ich noch abarbeiten muss, egal bis wann."]),
+    "daily_agenda": (
+        "Die Person will einen Gesamtüberblick über den heutigen Tag und nennt dafür ausdrücklich mehrere "
+        "Bereiche zusammen (Termine und Aufgaben und Mails) oder sagt klar, dass sie alles für heute auf einmal will. "
+        "Fragt sie nur nach Terminen, ist es kein Tagesüberblick.",
+        ["Gib mir den kompletten Überblick für heute mit Kalender, offenen Aufgaben und neuer Post.",
+         "Fass mir alles zusammen, was heute ansteht, Termine wie To-dos wie Mails."]),
+}
+# These intents get twice as many requests per style.
+WEAK = set(RULES)
+
 STYLES = [
     "kurzes, sauberes Hochdeutsch",
     "lockere Umgangssprache mit Füllwörtern wie halt, mal, eigentlich",
@@ -85,6 +112,9 @@ LETTERS = "ABCDEFGHI"
 def gen_prompt(intent: str, style: str, role: str, n: int, near: str | None) -> str:
     task = (f"Schreibe {n} verschiedene Sätze, die eine Person aus dem Beruf {role} zu ihrem digitalen Büro-Assistenten sagt. "
             f"Jeder Satz {INTENTS[intent]}. Sprachstil: {style}.")
+    if intent in RULES:
+        rule, examples = RULES[intent]
+        task += f" Regel: {rule} Beispiele für die Art (nicht wiederholen): " + " | ".join(examples)
     if near:
         task += (f" Wichtig: Jeder Satz soll auf den ersten Blick so klingen, als ob er {INTENTS[near]}, "
                  f"gehört aber eindeutig zur ersten Beschreibung.")
@@ -205,7 +235,8 @@ def main(argv: list[str] | None = None) -> int:
     started = time.time()
 
     qwen_requests = [(intent, None, gen_prompt(intent, style, rng.choice(ROLES), args.per_request, None))
-                     for intent in INTENTS for style in STYLES for _ in range(args.rounds)]
+                     for intent in INTENTS for style in STYLES
+                     for _ in range(args.rounds * (2 if intent in WEAK else 1))]
     qwen_requests += [(intent, near, gen_prompt(intent, style, rng.choice(ROLES), args.per_request, near))
                       for intent, near in NEAR for style in rng.sample(STYLES, args.near_styles)]
     # Phi-4 only writes the hard cases: near misses and "unknown" in every style.
