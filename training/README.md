@@ -82,7 +82,9 @@ Nothing has to be started by hand:
    itself again; there is always one chain, and no outside service is needed.
 2. **Collect** picks up finished Kaggle runs and starts the next one when no
    kernel of the account runs and quota is left: first the week's teacher
-   synthesis, then 1.5B, then 7B.
+   synthesis, then 1.5B, then 7B. A failed run gets an issue and one automatic
+   retry; only a second failure waits for a fix. The issue closes itself once
+   the kernel trains an adapter.
 3. **Synthesis rounds**: one per ISO week (`training/synthesize.py`, seed from
    the week). New sentences mean new training data, so every week brings a new
    training run of both classes.

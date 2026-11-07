@@ -10,7 +10,9 @@ For every base model it checks the latest kernel run once:
   already exists, convert to GGUF on this runner, add the license files, publish
   a candidate (pre-release), start bench-lora, and after 1.5B start the 7B run
 - error, or complete without an adapter: open one GitHub issue per distinct
-  failure with the likely cause and the last 100 log lines
+  failure with the likely cause and the last 100 log lines; the run is retried
+  once automatically, a second failure waits for a fix; issues of a kernel are
+  closed when a later run of it trains an adapter
 
 Then it schedules: if no kernel of the account is running (any project), it
 starts the first missing training run (1.5B before 7B) whose adapter does not
@@ -45,6 +47,7 @@ BASES = {
     "Qwen/Qwen2.5-7B-Instruct": {"size": "7b", "next": None},
 }
 PATTERN = r"(^|/)(adapter/[^/]+|manifest\.json|sweep\.json)$"
+RETRY_NOTE = "Retried automatically once by Collect."
 
 
 def run(*args: str, check: bool = True) -> str:
@@ -155,6 +158,7 @@ def main(argv: list[str] | None = None) -> int:
                 summary(f"{kid}: latest run already collected.")
                 continue
             summary(f"{kid}: published candidate `{name}`, bench-lora started.")
+            close_failures(args.repo, kid, name)
         else:
             logdir = out / "log"
             run("kaggle", "kernels", "output", kid, "-p", str(logdir), "--file-pattern", r"\.log$", check=False)
@@ -246,11 +250,34 @@ def any_kernel_running() -> bool:
 
 
 def open_failure(repo: str, kid: str, name: str) -> bool:
-    """True if this exact planned run (same inputs, same name) already failed and is not closed."""
+    """True if this exact planned run already failed, is not closed and was already retried once.
+
+    The first time a run is found failed, it is retried automatically (a comment on the
+    issue records that); only a second failure waits for a fix. Most first failures on a
+    free GPU are passing ones: no GPU assigned, a stalled download, a dropped session.
+    """
     title = failure_title(kid, name, [])
-    titles = run("gh", "issue", "list", "--repo", repo, "--state", "open", "--search",
-                 f'"{title}" in:title', "--json", "title", "--jq", ".[].title", check=False)
-    return title in titles.splitlines()
+    found = run("gh", "issue", "list", "--repo", repo, "--state", "open", "--search", f'"{title}" in:title',
+                "--json", "number,title", "--jq", f'.[] | select(.title == "{title}") | .number', check=False)
+    number = found.strip().splitlines()[0] if found.strip() else ""
+    if not number:
+        return False
+    comments = run("gh", "issue", "view", number, "--repo", repo, "--json", "comments",
+                   "--jq", ".comments[].body", check=False)
+    if RETRY_NOTE in comments:
+        return True
+    run("gh", "issue", "comment", number, "--repo", repo, "--body",
+        f"{RETRY_NOTE} If it fails again, the run waits for a fix.", check=False)
+    return False
+
+
+def close_failures(repo: str, kid: str, name: str) -> None:
+    """Close the open failure issues of a kernel once a run of it trained an adapter."""
+    numbers = run("gh", "issue", "list", "--repo", repo, "--state", "open", "--search",
+                  f'"Kaggle training failed: {kid}" in:title', "--json", "number", "--jq", ".[].number", check=False)
+    for number in numbers.split():
+        run("gh", "issue", "close", number, "--repo", repo, "--comment",
+            f"Closed by Collect: `{name}` was trained on this kernel afterwards.", check=False)
 
 
 def schedule(repo: str, owner: str) -> None:
