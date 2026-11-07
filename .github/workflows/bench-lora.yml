@@ -190,6 +190,9 @@ jobs:
         env:
           BASELINE_NAME: ${{ needs.measure.outputs.baseline }}
         run: |
+          # GitHub runs steps with bash -e; a rejection (exit 1) must not end the step
+          # before the shadow check and the marking of the release.
+          set +e
           set -uo pipefail
           python tools/compare_adapter.py base_dev.json lora_dev.json --name "$ADAPTER (development holdout)" \
             --baseline-name "$BASELINE_NAME" | tee -a "$GITHUB_STEP_SUMMARY" || true
