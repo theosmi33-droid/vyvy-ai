@@ -138,15 +138,18 @@ def load(name: str, revision: str):
     return model, tok
 
 
-def unload(model, name: str) -> None:
-    """Free the GPU and the downloaded weights before the next teacher is loaded."""
+def unload(name: str) -> None:
+    """Free the GPU and the downloaded weights before the next teacher is loaded.
+
+    The caller must drop its own reference to the model first (del model); a
+    reference left anywhere keeps all of its ~9 GB on the GPU.
+    """
     import gc
     import os
     import shutil
 
     import torch
 
-    del model
     gc.collect()
     torch.cuda.empty_cache()
     hub = Path(os.environ.get("HF_HOME", Path.home() / ".cache" / "huggingface")) / "hub"
@@ -222,7 +225,10 @@ def main(argv: list[str] | None = None) -> int:
         model, tok = load(SECOND, SECOND_REVISION)
         print(f"{SECOND} loaded after {time.time() - started:.0f} s", flush=True)
         candidates += generate(model, tok, phi_requests, "phi-4", args.per_request, args.batch, started)
-        unload(model, SECOND)
+        del model, tok
+        unload(SECOND)
+        if torch.cuda.memory_allocated() > 2**30:
+            raise SystemExit("Phi-4 still holds GPU memory after unloading; Qwen would not fit")
     model, tok = load(TEACHER, REVISION)
     print(f"{TEACHER} loaded after {time.time() - started:.0f} s", flush=True)
     candidates += generate(model, tok, qwen_requests, "qwen2.5-14b", args.per_request, args.batch, started)
