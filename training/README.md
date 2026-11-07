@@ -105,8 +105,7 @@ Nothing has to be started by hand:
    sets are written by independent writers who know only the intent
    definitions; that step is not automated.
 
-Kaggle is Vyvy's GPU; Colab is used by the Kukanilea project, and either takes
-the other's when it is free (see the sessions' agreement).
+Kaggle and Colab are used by Vyvy only.
 
 ## Weekly budget
 

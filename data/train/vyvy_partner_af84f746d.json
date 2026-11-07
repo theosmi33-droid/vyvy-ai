@@ -1,0 +1,24 @@
+{
+ "source_sha256": "af84f746d4c7069efa15ba678489d07b24954b292bef61ac7d1eb877660b4a76",
+ "kind": "partner data, synthetic, anonymised",
+ "imported": 1042,
+ "dropped": {
+  "personal": 0,
+  "contract": 0,
+  "near_holdout": 28,
+  "duplicate": 6
+ },
+ "personal_hits": {},
+ "max_similarity": 0.8,
+ "per_intent": {
+  "appointments_today": 62,
+  "appointments_tomorrow": 49,
+  "tasks_open": 155,
+  "tasks_overdue": 131,
+  "emails_unread": 28,
+  "daily_agenda": 87,
+  "create_appointment": 87,
+  "create_task": 78,
+  "unknown": 365
+ }
+}

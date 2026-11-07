@@ -26,11 +26,13 @@ import bench  # noqa: E402
 # model, activations and optimizer fit a 16 GB T4.
 PLANS = {
     "Qwen/Qwen2.5-1.5B-Instruct": {"size": "1.5b", "budget": 360, "sweep": "rank=16,8,32,64;lr=2e-4,1e-4,5e-4",
-                                   "batch": 8, "grad_accum": 2, "gpus": 1},
+                                   "batch": 8, "grad_accum": 2, "gpus": 1, "gpus_after_7b": True},
     "Qwen/Qwen2.5-7B-Instruct": {"size": "7b", "budget": 600, "sweep": "rank=16,32;lr=2e-4,1e-4,3e-4",
-                                 "batch": 2, "grad_accum": 8, "gpus": 1},
+                                 "batch": 2, "grad_accum": 8, "gpus": 1, "gpus_after_7b": True},
 }
-ORDER = list(PLANS)
+# 7B first: it needs the longer budget and decides whether two GPUs are safe
+# (see seven_b_passed); 1.5B follows in the same quota week.
+ORDER = ["Qwen/Qwen2.5-7B-Instruct", "Qwen/Qwen2.5-1.5B-Instruct"]
 
 
 def plan(base: str, epochs: float = 4) -> dict:
@@ -81,6 +83,20 @@ def trained_release(repo: str, base: str) -> str | None:
     return None
 
 
+def seven_b_passed(repo: str) -> bool:
+    """True once a 7B run trained an adapter (any release vyvy-7b-…, candidate or not).
+
+    Two GPUs per run (one sweep shard each) stay off until then: the 7B runs of
+    07.11. failed on one GPU (bitsandbytes), and a failure on two GPUs would not
+    tell whether the library or the split is to blame.
+    """
+    import subprocess
+
+    out = subprocess.run(["gh", "release", "list", "--repo", repo, "--limit", "100", "--json", "tagName"],
+                         capture_output=True, text=True)
+    return any(r["tagName"].startswith("vyvy-7b-") for r in json.loads(out.stdout or "[]"))
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Plan a training run")
     ap.add_argument("base")
@@ -90,6 +106,8 @@ def main(argv: list[str] | None = None) -> int:
     p = plan(args.base, args.epochs)
     if args.repo:
         p["trained"] = trained_release(args.repo, args.base)
+        if p["gpus"] == 1 and PLANS[args.base].get("gpus_after_7b") and seven_b_passed(args.repo):
+            p["gpus"] = 2
     print(json.dumps(p))
     return 0
 

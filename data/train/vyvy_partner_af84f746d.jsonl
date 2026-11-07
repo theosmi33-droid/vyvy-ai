@@ -1,0 +1,1042 @@
+{"text": "Vereinbar Aufmaß mit Herrn Talheim.", "intent": "create_appointment", "timeframe": null, "entity": "Herrn Talheim"}
+{"text": "Du, ich fang jetzt an, Zeit läuft, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag mir Baubesprechung mit Nordstern Bau GmbH ein.", "intent": "create_appointment", "timeframe": null, "entity": "Nordstern Bau GmbH"}
+{"text": "Was ist heute so los?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Was macht ein Statiker, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: zeig die Termine von morgen.", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Mal ehrlich, wos steht heute o bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Was kannst du eigentlich alles bitte?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann muss ich eine Bauabzugssteuer abführen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: streich Bauleiter anrufen komplett, das fällt aus.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, schieb Gerüst abbauen auf Freitag, gell.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mach einen Termin mit Herrn Talheim.", "intent": "create_appointment", "timeframe": null, "entity": "Herrn Talheim"}
+{"text": "Wann wurde die Mauer gebaut?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, is morgn a Kundntermin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Mal ehrlich, zeiterfassung beenden, Feierabend – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was fehlt im Sanierung Süd noch?", "intent": "tasks_open", "timeframe": null, "entity": "Sanierung Süd"}
+{"text": "Mal ehrlich, wann muss ich heute wo sein, danke?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Schau online nach die neuen Förderregeln.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was muss ich im Projekt Nordlicht noch machen, danke?", "intent": "tasks_open", "timeframe": null, "entity": "Projekt Nordlicht"}
+{"text": "Habe ich noch Aufgaben, die bald fällig werden bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Guck ma im Netz nach den Preis für Dämmwolle, gell.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: was ist noch zu tun, die Frist läuft aber noch?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Hey, sünd dor Mails, de ick noch nich lest heff?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, mach de Zeit aus, Feierabend.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mein Akku am Bohrhammer hält nur noch zehn Minuten.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, wat is morgen anjesetzt?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Merk dir als Aufgabe: Rechnung prüfen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Vereinbar Rückruf mit Frau Wiesental.", "intent": "create_appointment", "timeframe": null, "entity": "Frau Wiesental"}
+{"text": "Wo stelle ich im Programm die Zeiterfassung ein?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, hob i muan wos ausgmacht?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Hak ma Rechnung prüfen ab, is fertig, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: schreib dem Sägewerk Ahorn a neue Mail wegen die Materialbestellung, ne.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welche Aufgaben hat Projekt Nordlicht noch offen?", "intent": "tasks_open", "timeframe": null, "entity": "Projekt Nordlicht"}
+{"text": "Wie dick muss Estrich auf Fußbodenheizung sein?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Des Ziel jeden Monat zwei neue Kunden hamma gschafft bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Nur die Termine heute, sonst nichts, ne.", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Vereinbar Abnahme mit Herrn Ostwald.", "intent": "create_appointment", "timeframe": null, "entity": "Herrn Ostwald"}
+{"text": "Trag hück Rückruf bei Nordstern Bau GmbH ein, oder.", "intent": "create_appointment", "timeframe": "today", "entity": "Nordstern Bau GmbH"}
+{"text": "Kurz: mail an Frau Birkenfeld: die Mängel, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, wo stelle ich im Programm die Kundenliste ein, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Gerüst abbauen ist erledigt – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: schieb ma Rechnung prüfen auf nächste Woch – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: fliesen abholen kann weg, bitte entfernen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: mir brauche en Termin mit Herrn Kieselbach, gell.", "intent": "create_appointment", "timeframe": null, "entity": "Herrn Kieselbach"}
+{"text": "Guck mal: was muss ich im Dachsanierung West noch machen, danke?", "intent": "tasks_open", "timeframe": null, "entity": "Dachsanierung West"}
+{"text": "Guck mal: was hend mir no vor uns bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Du, aufgabe Bauleiter anrufen bis morgn anlegen, gell.", "intent": "create_task", "timeframe": "tomorrow", "entity": null}
+{"text": "Mal ehrlich, trag moije Abnahme bei Fliesen Mosaik OHG ein.", "intent": "create_appointment", "timeframe": "tomorrow", "entity": "Fliesen Mosaik OHG"}
+{"text": "Wos is mir durchgurtscht – schnell bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Hey, mach einen Termin mit Frau Wiesental, gell.", "intent": "create_appointment", "timeframe": null, "entity": "Frau Wiesental"}
+{"text": "Trag mir Aufmaß mit Elektro Blitz KG ein.", "intent": "create_appointment", "timeframe": null, "entity": "Elektro Blitz KG"}
+{"text": "Mach einen Termin mit Herrn Ostwald.", "intent": "create_appointment", "timeframe": null, "entity": "Herrn Ostwald"}
+{"text": "Sag mal, nur den Kalender für heute, ich muss glecih los.", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Das Faxgerät sendet nur leere Seiten.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was ist beim Dachsanierung West noch zu tun?", "intent": "tasks_open", "timeframe": null, "entity": "Dachsanierung West"}
+{"text": "Ähm, mach Zaun streichen weg, brauch ma nimma, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Erinnere mich an Angebot nachfassen.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Antworte Herrn Kieselbach auf die letzte Mail, nur als Entwurf.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg eine Aufgabe Bauleiter anrufen an.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Bauleiter anrufen ist erledigt.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Verschieb Aufmaß nehmen auf nächste Woche, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, kannst du mir erklären, wie das Passwort hier geht, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was erwartet mich heute – schnell bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Schreib dem Elektro Blitz KG a Antwort wegen die Materialbestellung, ne.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, wie viele Tremine habe ich heute?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Kurz: was steht heit so an, oder?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Hak ma Bauleiter anrufen ab, is fertig, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: mach ma an Termin mit Herrn Kieselbach, gell, gell.", "intent": "create_appointment", "timeframe": null, "entity": "Herrn Kieselbach"}
+{"text": "Was han i verpennt, wo scho fällig wär?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Guck mal: schreib ma als Ziel auf: bis Jahresende zehn Bäder fertig bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Halt als Ziel fest: weniger Überstunden.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Erinnere mich an Gerüst abbauen.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Ähm, rechnung prüfen hab ich gemacht, weg damit.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: welche Aufgaben sind noch nicht abgehakt – schnell bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Entwirf eine Antwort an Fliesen Mosaik OHG zu das Aufmaß.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, was kommt heute alles auf mich zu?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Ähm, wos is liegn blieb'n und scho z'spat?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Guck mal: was hab ich noch alles zu erledigen, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Ähm, was is muan so los?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Kurz: hab ich heit noch einen Termin mit Sanitär Tropfen GmbH bitte?", "intent": "appointments_today", "timeframe": "today", "entity": "Sanitär Tropfen GmbH"}
+{"text": "Vereinbar Baubesprechung mit Frau Sonnberg.", "intent": "create_appointment", "timeframe": null, "entity": "Frau Sonnberg"}
+{"text": "Du, des Ziel ein neuer Transporter bis Sommer hamma gschafft – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Des Ziel alle Angebote binnen drei Tagen hamma gschafft, ne.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, mir brauche en Termin mit Herrn Ostwald, danke.", "intent": "create_appointment", "timeframe": null, "entity": "Herrn Ostwald"}
+{"text": "Vereinbar Rückruf mit Herrn Kieselbach.", "intent": "create_appointment", "timeframe": null, "entity": "Herrn Kieselbach"}
+{"text": "Hey, was steht morgen an, gell?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Guck mal: wos gibt's no z'tun fia mi?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Mach Angebot nachfassen weg, brauch ma nimma, gell.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: wie funktioniert in der Software die Rechnungsvorlage?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: schreib dem Malerei Farbklecks a Antwort wegen das Angebot – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hab ich hück noch einen Termin mit Malerei Farbklecks, ne?", "intent": "appointments_today", "timeframe": "today", "entity": "Malerei Farbklecks"}
+{"text": "Schreib ma als Ziel auf: ein neuer Transporter bis Sommer, ne.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Merk dir als Aufgabe: Aufmaß nehmen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Mach einen Termin mit Herrn Kieselbach.", "intent": "create_appointment", "timeframe": null, "entity": "Herrn Kieselbach"}
+{"text": "Mal ehrlich, zeig mir den Kalender von heute, danke.", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Ähm, aufgabe Angebot nachfassen bis hüt anlegen.", "intent": "create_task", "timeframe": "today", "entity": null}
+{"text": "Vereinbar Aufmaß mit Frau Wiesental.", "intent": "create_appointment", "timeframe": null, "entity": "Frau Wiesental"}
+{"text": "Mal ehrlich, markier das Ziel jeden Monat zwei neue Kunden als erledigt.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, angebot nachfassen hab ich gemacht, weg damit, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, was hätt scho lang erledigt sei solle?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Mach ma de Zeit o fürs Sanierung Süd, ne.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg ein neues Projekt Dachsanierung West an.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, wos is no ois ausständig, gell?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Ähm, wat hab ick morgn so an Terminen, danke?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Was hab ich heute alles vor, Termine und Aufgaben zusammen, danke?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Welche Augfaben habe ich noch, egal wann sie fällig sind, ne?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Wos is muan fia a Termin bitte?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Guck mal: wos is über'm Termin, des wo i ned gmacht hbo, gell?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Hey, starte die Zeit für Projekt Nordlicht – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was is morge so los, gell?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Hey, wird's morgen in Freiburg frostig?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, wos is scho überfällig, schau ma moi, gell.", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Guck mal: wie wird das Wetter am Wochenende, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sünd dor Mails, de ick noch nich lest heff?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Du, wos is heit ois los, danke?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Entwirf eine Antwort an Sägewerk Ahorn zu die Materialbestellung.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, entwirf eine Antwort an Sanitär Tropfen GmbH zu die Mängel.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: wos pressiert, weil's z'spät is?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Was fehlt im Projekt Nordlicht noch?", "intent": "tasks_open", "timeframe": null, "entity": "Projekt Nordlicht"}
+{"text": "Guck mal, hat Fliesen Mosaik OHG gemailt?", "intent": "emails_unread", "timeframe": null, "entity": "Fliesen Mosaik OHG"}
+{"text": "Mal ehrlich, was habe ich veregssen, das längst dran war?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, was steht heit so an, gell?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Halt als Ziel fest: bis Jahresende zehn Bäder fertig.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, welche Aufgaben sind noch nicht abgehakt, ne?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Sag mal, wos liegt no auf mein Tisch, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Du, wat steiht hüt allens an?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Sag mal, was steht heid so an bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Kurz: wat jeiht hück alles?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Du, wos pressiert, weil's z'spät is, gell?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Nur den Kalender für heute, ich muss gliech los.", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Hey, wo bin ich hintnedran, gell?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Archivier die Baustelle am Kirchweg.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: des Ziel weniger Überstunden hamma gschafft.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, was is muan so los, gell?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "aWs isch hüt alles?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Was habe ich vergessen, das längst dran war, gell?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, was steht auf meiner Liste, das noch nicht erledigt ist – schnell bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Was kann diese Software eigentlich alles, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Notier: Zaun streichen.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Guck mal: wos is no ois ausständig?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Guck mal: das Ziel jeden Monat zwei neue Kunden ist erreicht.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Neue Aufgabe für Dachsanierung West: Material bestellen", "intent": "create_task", "timeframe": null, "entity": "Dachsanierung West"}
+{"text": "Wos steht morgen o?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Sind Mails von Nordstern Bau GmbH da?", "intent": "emails_unread", "timeframe": null, "entity": "Nordstern Bau GmbH"}
+{"text": "Ähm, wos pressiert, weil's z'spät is, danke?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "To-do für Sanierung Süd: Angebot nachfassen", "intent": "create_task", "timeframe": null, "entity": "Sanierung Süd"}
+{"text": "Guck mal: wos hamma no ned erledigt?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Starte die Zeit für Dachsanierung West.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin für Rückruf mit Sägewerk Ahorn an.", "intent": "create_appointment", "timeframe": null, "entity": "Sägewerk Ahorn"}
+{"text": "Erinnere mich an Bauleiter anrufen.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Hab ich morge noch einen Termin mit Nordstern Bau GmbH?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Nordstern Bau GmbH"}
+{"text": "Du, hab ich morgen noch einen Termin mit Dachdeckerei Ziegelrot, oder?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Dachdeckerei Ziegelrot"}
+{"text": "Kurz: was zahlt man gerade für Dämmwolle?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, mach mir den Tag klar, Termine, Aufgaben und alles.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Pack Angebot nachfassen auf meine Liste.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Den Termin beim Steuerberater bitte streichen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, wos is mir durchgrutscht bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Guck mal: hätt i hüt no en Termin, ne?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Weg mit Zaun streichen, der Kunde hat abgesagt.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: is a Mail kemma?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Erinnere mich an Rechnung prüfen.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Mein Tag heute in Kürze?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Hey, was hend mir no vor uns, gell?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Wat steiht hüt för Afsprooken an, oder?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Kurz: fliesen abholen isch erledigt, mach's zu, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag mir Besichtigung mit Elektro Blitz KG ein.", "intent": "create_appointment", "timeframe": null, "entity": "Elektro Blitz KG"}
+{"text": "Welche Aufgaben hat Badumbau Lindenhof noch offen?", "intent": "tasks_open", "timeframe": null, "entity": "Badumbau Lindenhof"}
+{"text": "Du, was ist noch zu tun, die Frist läuft aber noch, gell?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Kurz: was sit noch zu tun, die Frist läuft aber noch?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Ähm, welche offenen Aufgaben sind schon zu spät bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, was isch bi mir no pendent, oder?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Setz Aufmaß mit Nordstern Bau GmbH in den Kalender.", "intent": "create_appointment", "timeframe": null, "entity": "Nordstern Bau GmbH"}
+{"text": "Mal ehrlich, was isch bi mir no pendent – schnell bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Lösch die Aufgabe Bauleiter anrufen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat Holzbau Eiche AG geschrieben?", "intent": "emails_unread", "timeframe": null, "entity": "Holzbau Eiche AG"}
+{"text": "Kurz: welche Aufgaben stehen noch auf der Liste, oder?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Wie funktioniert in der Software die Zeiterfassung, gell?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: was hab ich heute alles vor, Termine und Aufgaben zusammen?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Mal ehrlich, häkchen an Zaun streichen, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Starte die Zeit für Badumbau Lindenhof.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: wos hamma no ned erledigt, oder?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, was liegt heute alles an?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Mal ehrlich, was habe ich morgen für Termine, gell?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Sag mal, zeig mir alles Unerledigte, auch ohne Frits, danke.", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Ähm, wie funktioniert in der Software den Kalender, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, wo stelle ich im Programm die Kundenliste ein, gell?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, neue Aufgabe für Badumbau Lindenhof: Zaun streichen", "intent": "create_task", "timeframe": null, "entity": "Badumbau Lindenhof"}
+{"text": "To-do für Dachsanierung West: Bauleiter anrufen", "intent": "create_task", "timeframe": null, "entity": "Dachsanierung West"}
+{"text": "Entwirf eine Antwort an Malerei Farbklecks zu das Aufmaß.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: zeig mir den Kalender von heuet – schnell bitte.", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Mail an Frau Sonnberg: das Angebot.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: wos hob i ehid ois fia Termin, ne?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Kurz: was muss ich heute alles im Blick haben – schnell bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Leg einen Termin für Baubesprechung mit Holzbau Eiche AG an.", "intent": "create_appointment", "timeframe": null, "entity": "Holzbau Eiche AG"}
+{"text": "Sag mal, markier Zaun streichen als fertig, gell.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Setz Baubesprechung mit Nordstern Bau GmbH in den Kalender.", "intent": "create_appointment", "timeframe": null, "entity": "Nordstern Bau GmbH"}
+{"text": "Du, mir brauche en Termin mit Frau Birkenfeld, danke.", "intent": "create_appointment", "timeframe": null, "entity": "Frau Birkenfeld"}
+{"text": "Wie mach i a guade Brotzeit?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: kannst du mir einen Witz erzählen, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Bist du ein Mensch oder ein Programm?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: wos is on ned fertig, oder?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Hey, was steht hück im Kalender, oder?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Kurz: wo bin ich hintendran, danke?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Was ist über das Fälligkeitsdatum hinaus, oder?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Ähm, wos is muan fia a Termin – schnell bitte?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Vereinbar Abnahme mit Frau Birkenfeld.", "intent": "create_appointment", "timeframe": null, "entity": "Frau Birkenfeld"}
+{"text": "Wann muss ich heute wo sein, oder?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Markier Gerüst abbauen als fertig, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: is morgn a Kundntermin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Markier das Ziel alle Angebote binnen drei Tagen als erledigt.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, zeiterfassung beenden, Feierabend, gell.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, was ist über das Fälligkeitsdatum hinaus, danke?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Wie voll ist mein Tag heute insgesamt, gell?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Hey, wat hab ick morgn so an Terminen bitte?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Du, zaun streichen ist erledigt, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, was is heit so los, gell?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Setz Besichtigung mit Dachdeckerei Ziegelrot in den Kalender.", "intent": "create_appointment", "timeframe": null, "entity": "Dachdeckerei Ziegelrot"}
+{"text": "Mal ehrlich, welche Aufgaben im Umbau Werkhalle 7 sind schon überfällig?", "intent": "tasks_overdue", "timeframe": null, "entity": "Umbau Werkhalle 7"}
+{"text": "Zeig die Termine von morgen.", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Du, entwirf eine Antwort an Sanitär Tropfen GmbH zu den Liefertermin.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Merk dir als Aufgabe: Bauleiter anrufen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Kurz: habe ich noch Aufgaben, die bald fällig werden, ne?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Aufgabe Angebot nachfassen bis die Woch anlegen, danke.", "intent": "create_task", "timeframe": "week", "entity": null}
+{"text": "Hob i no wos Offns?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Mail an Herrn Kieselbach: die offene Rechnung.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Termin hück mit Herrn Ostwald anlegen.", "intent": "create_appointment", "timeframe": "today", "entity": "Herrn Ostwald"}
+{"text": "Ähm, wos is no ned obghakt, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, was isch hüt alles, oder?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Mal ehrlich, mir brauche en Termin mit Herrn Talheim.", "intent": "create_appointment", "timeframe": null, "entity": "Herrn Talheim"}
+{"text": "Leg einen Termin für Besichtigung mit Nordstern Bau GmbH an.", "intent": "create_appointment", "timeframe": null, "entity": "Nordstern Bau GmbH"}
+{"text": "Kurz: wo bin ich mit Aufgaben im Verzug, oder?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Lösch den Termin mit dem Gutachter.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: zeit aus, wie lange war ich dran?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist auf der A8 gerade Stau, oder?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, welche Aufgaben stehen noch auf der Liste?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Guck mal: such im Internet nach die neuen Förderregeln.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wo bin ich mit Aufgaben im Verzug?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Hey, wos musas no gmacht wern – schnell bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, guck ma im Netz nach den Kupferpreis.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: was ist noch zu tun, die Frist läuft aber noch?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Schreib eine neue Mail an Nordstern Bau GmbH wegen das Angebot.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, wos is scho abglaffa, de Frist, oder?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Hey, welche offenen Aufgaben sind schon zu spät, gell?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Hey, was steht heut so an, danke?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Hob i nei Post kriagt, gell?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Sag mal, hob i muan wos ausgmacht, danke?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Ist das Komma in diesem Satz richtig?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Vereinbar Beratung mit Herrn Talheim.", "intent": "create_appointment", "timeframe": null, "entity": "Herrn Talheim"}
+{"text": "Kurz: wann muss ich heute wo sein?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Die Frist für Fliesen abholen bitte um zwei Tage nach hinten.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, kannst du Gerüst abbauen rausnehmen? Die gibt's nicht mehr.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: mein Plan für heute bitte, ne.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Was ist beim Sanierung Süd noch zu tun?", "intent": "tasks_open", "timeframe": null, "entity": "Sanierung Süd"}
+{"text": "Du, such im Internet nach die neuen Förderregeln – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie funktioniert in der Software die Benachrichtigungen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, was ist im Rückstand, gell?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Du, schreib dem Sägewerk Ahorn a Antwort wegen die offene Rechnung.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, antworte Herrn Ostwald auf die letzte Mail, nur als Entwurf, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, gibt's heute Abend Gewitter – schnell bitte?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie stelle ich in Outlook eine Abwesenheitsnotiz ein?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: hob i no wos Offns?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Mail an Frau Birkenfeld: die offene Rechnung.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, wos is scho abglaffa, de Frist, danke?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Entwirf eine Antwort an Nordstern Bau GmbH zu das Angebot.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was sind 15 Prozent Rabatt auf 890 Euro?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, entwirf eine Antwort an Dachdeckerei Ziegelrot zu die Materialbestellung – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, wann macht der Baumarkt morgen auf, ne?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: das Ziel ein neuer Transporter bis Sommer ist erreicht.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "To-do für Neubau Ahornweg: Gerüst abbauen", "intent": "create_task", "timeframe": null, "entity": "Neubau Ahornweg"}
+{"text": "Entwirf eine Antwort an Fliesen Mosaik OHG zu die Abnahme.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "To-do für Projekt Nordlicht: Aufmaß nehmen", "intent": "create_task", "timeframe": null, "entity": "Projekt Nordlicht"}
+{"text": "Hey, wie bekomme ich Rotweinflecken uas dem Teppich, oder?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, welche Fristen habe ich schon gerissen, danke?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, welche Aufgaben sind noch nicht abgehakt bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Sag mal, wo stelle ich im Programm das Passwort ein, oder?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, was isch scho z'spot dra bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Du, was ist im Rcükstand?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Wie viele Stunden darf ein Minijobber arbeiten?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie funktioniert in der Software die Zeiterfassung?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, wia geht in dera App die Kundenliste?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, was ist eine Schlussrechnung, gell?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: hab ich mojen noch einen Termin mit Malerei Farbklecks bitte?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Malerei Farbklecks"}
+{"text": "Kurz: liste mir meine Aufgaben auf bitte.", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Ähm, wia vui Aufgabn hob i no?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Entwirf eine Antwort an Sanitär Tropfen GmbH zu die Mängel.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wos is über'm Termin, des wo i ned gmacht hob, ne?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Notier: Aufmaß nehmen.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Du, zaun streichen kannst du als fertig markieren, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Schua ma moi, wos no zum doa is – schnell bitte.", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Kurz: wat steiht hüt allens an, gell?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Kurz: was ist im Rückstand, oder?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Sag mal, wat hab ick morgn so an Terminen?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Kurz: wat jeiht hück alles, danke?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Du, was hab ich heute alles vor, Termine und Aufgaben zusammen?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Guck mal: mach mir den Tag klar, Termine, Aufgaben und alles, oder.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Wo bin ich hintendran?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Zeig mir den Kalender von heute, ne.", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Hob i wos vaschlafn, wos fällig wor, danke?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Ähm, was liegt bei mir no rum, was i macha muss, ne?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Sag mal, kannst du mir erklären, wie die Zeiterfassung hier geht, gell?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, to-do für Projekt Nordlicht: Fliesen abholen", "intent": "create_task", "timeframe": null, "entity": "Projekt Nordlicht"}
+{"text": "Vereinbar Rückruf mit Frau Birkenfeld.", "intent": "create_appointment", "timeframe": null, "entity": "Frau Birkenfeld"}
+{"text": "Kurz: aufgabe Fliesen abholen bis heut anlegen, danke.", "intent": "create_task", "timeframe": "today", "entity": null}
+{"text": "Mal ehrlich, mail an Herrn Kieselbach: das Aufmaß.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was ist noch offen, auch wenn es erst nächsten Monat fällig ist, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Kurz: mach de Zeit aus, Feierabend.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Womit hänge ich hinterher, ne?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Sag mal, mach mer en Termin mit Fliesen Mosaik OHG aus, oder.", "intent": "create_appointment", "timeframe": null, "entity": "Fliesen Mosaik OHG"}
+{"text": "Hey, welche offenen Aufgaben sind schon zu spät, oder?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Hey, welche fofenen Aufgaben sind schon zu spät – schnell bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Mal erhlich, mach de Zeit aus, Feierabend, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hab ich ungelesene Nachrichten im Postfach?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Du, schreib ma als Ziel auf: jeden Monat zwei neue Kunden, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Vereinbar Besichtigung mit Herrn Ostwald.", "intent": "create_appointment", "timeframe": null, "entity": "Herrn Ostwald"}
+{"text": "Hey, wos hätt scho fertig sei miassn, oder?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Sag mal, mein Plan für heute bitte.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Trag mir Beratung mit Sanitär Tropfen GmbH ein.", "intent": "create_appointment", "timeframe": null, "entity": "Sanitär Tropfen GmbH"}
+{"text": "Du, was ist im Rückstand?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Wos steht heute o bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Die Maus reagiert nicht, Batterie ist neu.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, wo finde ich das Passwort, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: hak die Aufgabe Gerüst abbauen ab bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was ist im Sanierung Süd noch offen?", "intent": "tasks_open", "timeframe": null, "entity": "Sanierung Süd"}
+{"text": "Sag mal, wie stelle ich in Outlook eine Abwesenheitsnotiz ein, gell?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was isch no ned gmacht, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Wos is über'm Termin, des wo i ned gmacht hob, oder?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Antworte Frau Sonnberg auf die letzte Mail, nur als Entwurf bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welche Aufgaben hat Umbau Werkhalle 7 noch offen?", "intent": "tasks_open", "timeframe": null, "entity": "Umbau Werkhalle 7"}
+{"text": "Sag mal, verschieb Gerüst abbauen auf nächste Woche, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, womit hänge ich hinterher?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Vereinbar Besichtigung mit Frau Birkenfeld.", "intent": "create_appointment", "timeframe": null, "entity": "Frau Birkenfeld"}
+{"text": "okay und jetzt", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Neue Aufgabe für Neubau Ahornweg: Zaun streichen", "intent": "create_task", "timeframe": null, "entity": "Neubau Ahornweg"}
+{"text": "Setz Beratung mit Elektro Blitz KG in den Kalender.", "intent": "create_appointment", "timeframe": null, "entity": "Elektro Blitz KG"}
+{"text": "Du, wat hab ick morgn so an Terminen, ne?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Neue Aufgabe für Neubau Ahornweg: Bauleiter anrufen", "intent": "create_task", "timeframe": null, "entity": "Neubau Ahornweg"}
+{"text": "Notier: Bauleiter anrufen.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Guck mal: markier das Ziel alle Angebote binnen drei Tagen als erledigt, ne.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, wos pressiert, weil's z'spät is – schnell bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Ähm, nur den Kalender für heute, ich muss gleich los.", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Markier Material bestellen als fertig – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Merk dir als Aufgabe: Material bestellen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Ähm, wia geht in dera App den Export, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welche Aufgaben stehen noch auf der Liste bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Guck mal: wos fehlt no, bis i fertig bin, oder?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Sag mal, was is moiej so los, oder?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Ähm, schau ma moi, wos no zum doa is, gell.", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Du, weg mit Aufmaß nehmen, der Kunde hat abgesagt – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck ma im Netz nach die Öffnungszeiten vom Baustoffhandel, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wo stelle ich im Programm das Passwort ein?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, ows is no offn und scho z'spät, oder?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Plan einen Termin mit Malerei Farbklecks ein.", "intent": "create_appointment", "timeframe": null, "entity": "Malerei Farbklecks"}
+{"text": "Welche Kundentermine stehen heute im Kalender bitte?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Guck mal: hab i was liegn lassn, was z'spät is bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Leg eine Aufgabe Rechnung prüfen an.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Du, was isch liege blibe und scho drüber, ne?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Sag mal, was steht auf meiner Liste, das noch nicht erledigt ist, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Neues Projekt: Dachsanierung West, gell.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Setz Beratung mit Sägewerk Ahorn in den Kalender.", "intent": "create_appointment", "timeframe": null, "entity": "Sägewerk Ahorn"}
+{"text": "Welche Aufgaben hat Dachsanierung West noch offen?", "intent": "tasks_open", "timeframe": null, "entity": "Dachsanierung West"}
+{"text": "Was steht hüt bei mir an, danke?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Ähm, schau online nach den Kupferpreis, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, welche Aufgaben habe ich noch, egal wann sie fällig sind, ne?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Hey, welche Aufgaben sind noch nicht abgehakt, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Du, was hätt scho lang erledigt sei solle, oder?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Angebot nachfassen kann weg, bitte entfernen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, offene Puknte bitte.", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Was sind 19 Prozent von 2.480 Euro?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wo stelle ich im Programm den Export ein?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, guck mal, hat Nordstern Bau GmbH gemailt?", "intent": "emails_unread", "timeframe": null, "entity": "Nordstern Bau GmbH"}
+{"text": "Hey, erledigt: Gerüst abbauen bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann ist bei der Handwerkskammer die nächste Prüfung?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, was bringt der Tag heute, alles auf einen Blick bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Du, womit hänge ich hinterher, oder?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Hey, neue Aufgabe für Badumbau Lindenhof: Angebot nachfassen", "intent": "create_task", "timeframe": null, "entity": "Badumbau Lindenhof"}
+{"text": "Sag mal, schau online nach die Öffnungszeiten vom Baustoffhandel, ne.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, hab ich morge noch einen Termin mit Malerei Farbklecks?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Malerei Farbklecks"}
+{"text": "Kurz: mein Plan für heute bitte.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Lösch die Aufgabe Gerüst abbauen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, neues Projekt: Sanierung Süd.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: wos is aussätndig und scho drüber?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Guck mal: wie sieht mein Tag aus?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Schieb Rechnung prüfen auf Freitag.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, was kommt heute alles auf mich zu, ne?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Mal ehrlich, was hat die Frist schon üebrschritten, gell?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Hey, was steht heid im Kalender, oder?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Schreib einen Text für unsere Stellenanzeige.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, ich fang jetzt an, Zeit läuft.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welche Aufgaben im Sanierung Süd sind schon überfällig?", "intent": "tasks_overdue", "timeframe": null, "entity": "Sanierung Süd"}
+{"text": "Hey, mir brauche en Termin mit Frau Birkenfeld.", "intent": "create_appointment", "timeframe": null, "entity": "Frau Birkenfeld"}
+{"text": "Hat Sanitär Tropfen GmbH geschrieben?", "intent": "emails_unread", "timeframe": null, "entity": "Sanitär Tropfen GmbH"}
+{"text": "Merk dir als Aufgabe: Zaun streichen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Guck mal: wos is no auf da Listn, odre?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Kurz: mit wem bin ich heute verabredet bitte?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Sind Mails von Dachdeckerei Ziegelrot da?", "intent": "emails_unread", "timeframe": null, "entity": "Dachdeckerei Ziegelrot"}
+{"text": "Ähm, was isch no ned gmacht – schnlel bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Ähm, was isch no ned gmacht, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, welche Fristen habe ich schon gerissen?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Du, wie stelle ich in Outlook eine Abwesenheitsnotiz ein, gell?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, such im Internet nach den Kupferpreis, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Markier Gerüst abbauen als fertig.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, was hab ich heute alles vor, Termine und Aufgaben zusammen?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Du, schau online nach den Preis für Dämmwolle, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, womit hänge ich hinterher?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Was liegt heute alles an?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Markier Rechnung prüfen als fertig.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, hob i nei Post kriagt, danke?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Du, des Ziel alle Angebote binnen drei Tagen hamma gschafft.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was habe ich vergessen, das lnägst dran war?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Sag mal, find im Internet raus: die Öffnungszeiten vom Baustoffhandel bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, wie sieht mein Tag aus, oder?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Trag mir Abnahme mit Holzbau Eiche AG ein.", "intent": "create_appointment", "timeframe": null, "entity": "Holzbau Eiche AG"}
+{"text": "Ähm, wo bin ich hintendran bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Regnet es heute noch bitte?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: wos hätt i scho längst macha soin bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Kurz: was hätt i no z'erledige?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Zeiterfassung an, ne.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Womit hänge ich hinterher – schnell bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Ähm, was steht muan bei mir an?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Hey, wos gibt's no z'tun fia mi?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Guck mal: wo bin ich hintendran, ne?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Guck mal: nur die Termine heute, sonst nichts.", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Du, hat Elektro Blitz KG heute auf, oder?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin für Besichtigung mit Holzbau Eiche AG an.", "intent": "create_appointment", "timeframe": null, "entity": "Holzbau Eiche AG"}
+{"text": "Guck mal: wos war scho gestern fällig, danke?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Du, aufmaß nehmen ist fertig, bitte abhaken, nicht löschen – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, mach de Uhr an, i fang an – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Das Kopiergerät meldet Papierstau, aber da ist nichts.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg eine Aufgabe Gerüst abbauen an.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Welche Aufgaben im Neubau Ahornweg sind schon überfällig, danke?", "intent": "tasks_overdue", "timeframe": null, "entity": "Neubau Ahornweg"}
+{"text": "Du, was isch heit im Kalender, Termin, gell?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Mail an Herrn Ostwald: die Abnahme, gell.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Merk dir als Aufgabe: Fliesen abholen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Ähm, wo is de Frist scho vorbei bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Was steht auf meiner Liste, das noch nicht erledigt ist?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, wie formatiere ich in Word eine Tabelle?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mach einen Termin mit Frau Birkenfeld.", "intent": "create_appointment", "timeframe": null, "entity": "Frau Birkenfeld"}
+{"text": "Ähm, was is mojen so los, gell?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Was muss ich heute alles im Blick haben bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Wos liegt no auf mein Tisch, ne?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, was is am heutigen Tag so los, danke?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Mail an Herrn Ostwald: die Mängel.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "nee doch nicht", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, is a Mail kemma?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Entwirf eine Antwort an Sanitär Tropfen GmbH zu die Abnahme, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wia geht in dera App das Passwort?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: welche offenen Aufgaben sind schon zu spät?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Kurz: habe ich noch Aufgaben, die bald fällig werden?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Sag mal, wos pressiert, weil's z'spät is?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Wos is scho abglaffa, de Frist, odre?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Du, was kann diese Software eigentlich alles – schnell bitte?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Plan einen Termin mit Sanitär Tropfen GmbH ein.", "intent": "create_appointment", "timeframe": null, "entity": "Sanitär Tropfen GmbH"}
+{"text": "Ähm, schreib ma als Ziel auf: bis Jahresende zehn Bäder fertig.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was ist beim Neubau Ahornweg noch zu tun?", "intent": "tasks_open", "timeframe": null, "entity": "Neubau Ahornweg"}
+{"text": "Was ist im Posteingang neu?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Was ist ein Kalender mit Wochennummern?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, was steht huet bei mir an, oder?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Kurz: welche Aufgaben habe ich noch, egal wann sie fällig sind?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Wos is no offn nud scho z'spät, danke?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, neues Projekt: Badumbau Lindenhof – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, recherchier online die neuen Förderregeln.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Notier: Material bestellen.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Du, hak ma Aufmaß nehmen ab, is fertig.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, hab ich hüt noch einen Termin mit Holzbau Eiche AG?", "intent": "appointments_today", "timeframe": "today", "entity": "Holzbau Eiche AG"}
+{"text": "Guck mal: wo stelle ich im Programm das Passwort ein, oder?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: wo bin ich mit Aufgaben im Verzug?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Du, heute so Plan – schnell bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Was is morgen so los, danke?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Trag mir Besichtigung mit Malerei Farbklecks ein.", "intent": "create_appointment", "timeframe": null, "entity": "Malerei Farbklecks"}
+{"text": "Was liegt bei mir no rum, was i macha muss bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Schreib eine neue Mail an Dachdeckerei Ziegelrot wegen die Materialbestellung.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat Elektro Blitz KG geschrieben?", "intent": "emails_unread", "timeframe": null, "entity": "Elektro Blitz KG"}
+{"text": "Ähm, wat is morgen anjesetzt, gell?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Zeig alle offenen Aufgaben.", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Du, die Aufgabe Material bestellen brauch ich nicht mehr, weg damit, gell.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Die Stempeluhr am Eingang zeigt die falsche Uhrzeit.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, wat steiht hüt allens an bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Du, was steht auf meiner Liste, das noch nicht erledigt ist?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Sag mal, wo bin ich imt Aufgaben im Verzug – schnell bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Kurz: wos hätt i letzte Woch scho macha miassn?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, entwirf eine Antwort an Dachdeckerei Ziegelrot zu das Angebot bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, mach a Notiz: Zaun streichen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Des Ziel alle Angebote binnen drei Tagen hamma gschafft.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, heute so Plan?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Was hab ich heute alles vor, Termine und Aufgaben zusammen, gell?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Wann wurde die Mauer geöffnet bitte?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mir brauche en Termin mit Herrn Talheim, ne.", "intent": "create_appointment", "timeframe": null, "entity": "Herrn Talheim"}
+{"text": "Neues Projekt: Dachsanierung West, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, rechnung prüfen bitte löschen, nicht abhaken bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, welche Termine hab ich moije?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Hey, was ist im Rückstand?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Was hätte schon gestern fertig sein müssen?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Guck ma im Netz nach den Kupferpreis, ne.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Neue Aufgabe für Neubau Ahornweg: Rechnung prüfen", "intent": "create_task", "timeframe": null, "entity": "Neubau Ahornweg"}
+{"text": "Was ist noch zu tun, die Frist läuft aber noch?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Guck mal: bauleiter anrufen isch erledigt, mach's zu, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: leg eine Aufgabe Zaun streichen an, ne.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Du, wat is all över de Teid, gell?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Gell, du bisch au bloß a Maschin?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck ma im Netz nach Lieferzeiten für Fenster, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: mach Angebot nachfassen weg, brauch ma nimma bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wos war scho gestern fällig, gell?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Pack Material bestellen auf meine Liste.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Entwirf eine Antwort an Fliesen Mosaik OHG zu die offene Rechnung.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: was ist der Untesrchied zwischen Putz und Estrich, gell?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Die Aufgabe Material bestellen ist doppelt angelegt, bitte entfernen – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, schreib ma für Neubau Ahornweg auf: Angebot nachfassen", "intent": "create_task", "timeframe": null, "entity": "Neubau Ahornweg"}
+{"text": "Ähm, was han i verpennt, wo scho fällig wär, gell?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Was ist im Badumbau Lindenhof noch offen?", "intent": "tasks_open", "timeframe": null, "entity": "Badumbau Lindenhof"}
+{"text": "uD, wat steiht hüt allens an, gell?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Was ist beim Projekt Nordlicht noch zu tun?", "intent": "tasks_open", "timeframe": null, "entity": "Projekt Nordlicht"}
+{"text": "Mach de Zeit aus, Feierabend, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was steht heid so an – schnell bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "To-do für Projekt Nordlicht: Material bestellen", "intent": "create_task", "timeframe": null, "entity": "Projekt Nordlicht"}
+{"text": "Guck mal: hob i wos vaschlafn, wos fällig wor bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Ähm, wos is no ned fertig, gell?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Sag mal, was ist heute alles, Termine wie Aufgaben?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Was ist größer, ein Hektar oder ein Morgen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Fass mir den heutigen Tag zusammen.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Ähm, nur den Kalendre für heute, ich muss gleich los, danke.", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Kurz: recherchier online den Preis für Dämmwolle, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: wie funktioniert eigentlich eine Wärmepumpe – schnell bitte?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Termin heute mit Herrn Kieselbach anlegen, oder.", "intent": "create_appointment", "timeframe": "today", "entity": "Herrn Kieselbach"}
+{"text": "Guck mal: I hätt gern gwusst, wos no offn is – schnell bitte.", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Ähm, was passt zu Spargel außer Kartoffeln, ne?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wos mauss no gmacht wern?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Sag mal, wos hob i vaschwitzt?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "To-do für Badumbau Lindenhof: Zaun streichen", "intent": "create_task", "timeframe": null, "entity": "Badumbau Lindenhof"}
+{"text": "Mal ehrlich, womit hänge ich hinterher?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Formulier mir einen Spruch für die Weihnachtskarte an Kunden.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: was ist noch offen, auch wenn es erst nächsten Monat fällig ist, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Was steht auf meiner Liste, das noch nicht erledigt ist, en?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Womit hänge ich hinterher, gell?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Zeiterfassung an bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, fliesen abholen bitte löschen, nicht abhaken – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wos muass i heid no ois erledign, gell?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, nur die Termine heute, sonst nichts bitte.", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Du, schau online nach die neuen Förderregeln, gell.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: nur die Termine heute, sonst nichts, gell.", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Du, wos hob i vaschwitzt, danke?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Was habe ich vergessen, das längst dran war bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Leg ma bitte a Aufgab Angebot nachfassen o, danke.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Offene Punkte bitte, ne.", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Was fehlt im Umbau Werkhalle 7 noch?", "intent": "tasks_open", "timeframe": null, "entity": "Umbau Werkhalle 7"}
+{"text": "Welche Aufgaben hat Projekt Nordlicht noch offen bitte?", "intent": "tasks_open", "timeframe": null, "entity": "Projekt Nordlicht"}
+{"text": "Sag mal, leg ma bitte a Aufgab Bauleiter anrufen o – schnell bitte.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Pack Aufmaß nehmen auf meine Liste.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Guck mal: was han i verpennt, wo scho fällig wär, oder?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Du, lösch die Aufgabe Zaun streichen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie viel ist im Umbau Werkhalle 7 noch offen?", "intent": "tasks_open", "timeframe": null, "entity": "Umbau Werkhalle 7"}
+{"text": "Was steht auf meiner Liste, das noch nicht erledigt ist – schnell bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Ähm, aufgabe Zaun streichen bis heute anlegen, oder.", "intent": "create_task", "timeframe": "today", "entity": null}
+{"text": "Kurz: markier Rechnung prüfen als fertig, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin für Besichtigung mit Malerei Farbklecks an.", "intent": "create_appointment", "timeframe": null, "entity": "Malerei Farbklecks"}
+{"text": "Sag mal, welche Kundentermine stehen heute im Kalender bitte?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Ich fang jetzt an, eZit läuft, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: entwirf eine Antwort an Fliesen Mosaik OHG zu das Aufmaß – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wos steht heid o?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Hey, was kommt heute alles auf mich zu, danke?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Schieb Zaun streichen auf Freitag.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: markier Material bestellen als fertig.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sind Mails von Malerei Farbklecks da?", "intent": "emails_unread", "timeframe": null, "entity": "Malerei Farbklecks"}
+{"text": "Welche Aufgaben muss ich noch erledigen?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Sag mal, wos is no auf da Listn, gell?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Wann ist eigentlich Ostern nächstes Jahr?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, guck ma im Netz nach den Kupferpreis, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, was hab ich heute alles vor, Termine und Aufgaben zusammen – schnell bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Zeiterfassung an – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, wie stelle ich in Outlook eine Abwesenheitsnotiz ein, oder?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, wie funktioniert in der Software das Passwort, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: wo is de Frist scho ovrbei, oder?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Was hab ich noch alles zu erledigen, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Sind Mails von Holzbau Eiche AG da?", "intent": "emails_unread", "timeframe": null, "entity": "Holzbau Eiche AG"}
+{"text": "Wo is de Frist scho vorbei, gell?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, wos hätt scho fretig sei miassn, ne?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Du, wos brennt scho, wos hob i vaschlampt?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Ich bin müde, sag was Aufmunterndes.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: wos is scho üba da Zeit?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Kurz: hob i nei Post kriagt, oder?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Du, wat is noch to doon bi mi, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Wos is no ois ausständig, oder?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Guck mal: hab ich muan noch einen Termin mit Elektro Blitz KG, gell?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Elektro Blitz KG"}
+{"text": "Wos steht bei ima no offn, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Kurz: welche Aufgabn san no offn, gell?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Wos is scho üba da eZit?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Du, neues Projekt: Projekt Nordlicht, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: welche Aufgaben habe ich noch, egal wann sie fällig sind bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Was machst du so am Wochenende?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, mit wem bin ich heute verabredet, ne?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Die Frist für Angebot nachfassen bitte um zwei Tage nach hinten.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Pack Gerüst abbauen auf meine Liste.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Was ligt no uf mim Stapel, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin für Beratung mit Holzbau Eiche AG an.", "intent": "create_appointment", "timeframe": null, "entity": "Holzbau Eiche AG"}
+{"text": "Hat Nordstern Bau GmbH geschrieben?", "intent": "emails_unread", "timeframe": null, "entity": "Nordstern Bau GmbH"}
+{"text": "Hab ich moije noch einen Termin mit Elektro Blitz KG?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Elektro Blitz KG"}
+{"text": "Was ist beim Badumbau Lindenhof noch zu tun?", "intent": "tasks_open", "timeframe": null, "entity": "Badumbau Lindenhof"}
+{"text": "Wann spielt der FC heute, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, briefing für heute, bitte komplett.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Kurz: wos is über'm Termin, des wo i ned gmacht hob, ne?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Sag mal, wos steht huete o?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Pack Rechnung prüfen auf meine Liste.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Wos pressiert, weil's z'spät is?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Kurz: welche Aufgaben muss ich noch erledigen bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Kurz: termin muan mit Herrn Talheim anlegen.", "intent": "create_appointment", "timeframe": "tomorrow", "entity": "Herrn Talheim"}
+{"text": "Was bedeutet VOB/B eigentlich?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: was hat die Frist schon überschritten, gell?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Sag mal, fass mir den heutigen Tag zusammen, oder.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Leg eine Aufgabe Zaun streichen an.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, welche Termine hab ich heut, ne?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Guck mal: was hab ich noch alles zu erledigen, ne?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Ähm, wos steht moije o – schnell bitte?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Hey, was steht morge so an, ne?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Ähm, wos is ausständig und scho dürber, gell?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "To-do für Umbau Werkhalle 7: Angebot nachfassen", "intent": "create_task", "timeframe": null, "entity": "Umbau Werkhalle 7"}
+{"text": "Mail an Frau Wiesental: die Abnahme.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: was steht heut bei mir an, oder?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Leg einen Termin für Beratung mit Sanitär Tropfen GmbH an.", "intent": "create_appointment", "timeframe": null, "entity": "Sanitär Tropfen GmbH"}
+{"text": "Kurz: markier Aufmaß nehmen als fertig, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: mach ma de Zeit o fürs Neubau Ahornweg – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Regnet es morgen in Stuttgart, oder?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, was ist noch zu tun, die Frist läuft aber noch, ne?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Guck mal: was isch liege blibe und scho drüber – schnell bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Was muss ich im Neubau Ahornweg noch machen – schnell bitte?", "intent": "tasks_open", "timeframe": null, "entity": "Neubau Ahornweg"}
+{"text": "Das Telefon klingelt, aber ich höre niemanden.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, wos steht hüt o?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Ist auf der A8 gerade Stau bitte?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat Fliesen Mosaik OHG geschrieben?", "intent": "emails_unread", "timeframe": null, "entity": "Fliesen Mosaik OHG"}
+{"text": "Mal ehrlich, bis wann hat Dachdeckerei Ziegelrot morgen offen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: was steht moije bei mir an, ne?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Was hab ich heute alles vor, Termine und Aufgaben zusammen?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Welche offenen Aufgaben sind schon zu spät, oder?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Was steht hück bei mir an, gell?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Kurz: was bringt der Tag heute, alles auf einen Blick, danke?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Plan einen Termin mit Sägewerk Ahorn ein.", "intent": "create_appointment", "timeframe": null, "entity": "Sägewerk Ahorn"}
+{"text": "Du, was ist im Rückstand, oder?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Kurz: was steht am heutigen Tag im Kalender?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Nur die Termine heute, sonst nichts – schnell bitte.", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Setz Aufmaß mit Fliesen Mosaik OHG in den Kalender.", "intent": "create_appointment", "timeframe": null, "entity": "Fliesen Mosaik OHG"}
+{"text": "Mach mir den Tag klar, Termine, Aufgaben und alles.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Neues Projekt: Umbau Werkhalle 7 bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Vereinbar Aufmaß mit Herrn Kieselbach.", "intent": "create_appointment", "timeframe": null, "entity": "Herrn Kieselbach"}
+{"text": "Gibt es hier eine Anleitung für den Export, gell?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, was ist über das Fälligkeitsdatum hinaus, danke?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Wie stell ich den Kalender um, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Der Lieferwagen springt morgens schlecht an.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie viel ist im Projekt Nordlicht noch offen?", "intent": "tasks_open", "timeframe": null, "entity": "Projekt Nordlicht"}
+{"text": "Sag mal, wo bin ich hintednran?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Wos is dringend, wei's scho überzogn is, gell?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Hey, wo bin ich mit Aufgaben im Verzug, danke?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Mach ma de Zeit o fürs Projekt Nordlicht, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, kann ich mit dir auch Rechnunegn machen, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Zeig alle offenen Aufgaben, ne.", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Sag mal, leg ma a Projekt Badumbau Lindenhof o – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, was ist dein Lieblingsessen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, leg ma a Projekt Neubau Ahornweg o.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: wird's morgen in Freiburg frostig, gell?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: schreib dem Sägewerk Ahorn a Antwort wegen die Abnahme, ne.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was ist über das Fälligkeitsdatum hinaus?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Leg eine Aufgabe Aufmaß nehmen an.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Kurz: plan einen Termin mit Dachdeckerei Ziegelrot ein – schnell bitte.", "intent": "create_appointment", "timeframe": null, "entity": "Dachdeckerei Ziegelrot"}
+{"text": "Mal ehrlich, wos hätt scho fertig sei miassn, danke?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "To-do für Projekt Nordlicht: Bauleiter anrufen", "intent": "create_task", "timeframe": null, "entity": "Projekt Nordlicht"}
+{"text": "Kurz: was steht hüt bei mir an, ne?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Guck mal: was isch hüt alles?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Mal ehrlich, was ist noch offen, auch wenn es erst nächsten Monat fälilg ist?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Ähm, wos is ausständig und scho drüber?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Setz Rückruf mit Malerei Farbklecks in den Kalender.", "intent": "create_appointment", "timeframe": null, "entity": "Malerei Farbklecks"}
+{"text": "Gerüst abbauen kann weg, bitte entfernen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, hab ich heit noch einen Termin mit Sanitär Tropfen GmbH?", "intent": "appointments_today", "timeframe": "today", "entity": "Sanitär Tropfen GmbH"}
+{"text": "Sag mal, guck ma im Netz nach den Preis für Dämmwolle.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, wos war scho gestern fällig, ne?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Bauleiter anrufen kann weg, bitte entfernen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wo bin ich hintendran bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Du, leg ma bitte a Aufgab Fliesen abholen o, danke.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Verschieb Angebot nachfassen auf nächste Woche.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Offene Punkte bitte.", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Hey, lösch die Aufgabe Material bestellen, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, leg ma a Projekt Umbau Werkhalle 7 o, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie viel ist im Sanierung Süd noch offen?", "intent": "tasks_open", "timeframe": null, "entity": "Sanierung Süd"}
+{"text": "Was ist heute alles, Termine wie Aufgaben?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Hey, wos is no ois zum Abarbeitn, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Was hätt i no z'erledige, oder?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Hey, guck ma im Netz nach die Öffnungszeiten vom Baustoffhandel, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was ist noch zu tun, die Frist läuft aber noch, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Guck mal: brauche ich heute einen Schirm, oder?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welche Sprache spricht man in Belgien?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, trag am heutigen Tag Besichtigung bei Elektro Blitz KG ein – schnell bitte.", "intent": "create_appointment", "timeframe": "today", "entity": "Elektro Blitz KG"}
+{"text": "Was steht hüt im Kalender, danke?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Guck mal: hak die Aufgabe Angebot nachfassen ab.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Schreib dem Dachdeckerei Ziegelrot a neue Mail wegen das Angebot.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, was steht heit so an – schenll bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Hey, was steht hück bei mir an bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Leg ein neues Projekt Badumbau Lindenhof an.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, mach ma de Zeit o fürs Dachsanierung West.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, was muss i no schaffe – schnell bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Gibt es hier eine Anleitung für den Kalender?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg eine Aufgabe Angebot nachfassen an.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Neue Aufgabe für Umbau Werkhalle 7: Angebot nachfassen", "intent": "create_task", "timeframe": null, "entity": "Umbau Werkhalle 7"}
+{"text": "Kurz: wos is muan fia a Termin, danke?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Du, was hat die Frist schon überschritten, gell?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Erinnere mich an Zaun streichen.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Was gehört alles in eine ordentliche Rechnung?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Schreib ma auf: Gerüst abbauen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Neue Aufgabe für Projekt Nordlicht: Zaun streichen", "intent": "create_task", "timeframe": null, "entity": "Projekt Nordlicht"}
+{"text": "Du, hab ich moije noch einen Termin mit Elektro Blitz KG?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Elektro Blitz KG"}
+{"text": "Markier das Ziel ein neuer Transporter bis Sommer als erledigt.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: was ist eine Gewährleistungsfrist bitte?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, zeig mir den Kalender von heute – schnell bitte.", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Guck mal: was hat die Frist schon überschritten – schnell bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Guck mal: erledigt: Rechnung prüfen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: wie heißt der längste Fluss Europas, oder?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Das Ziel jeden Monat zwei neue Kunden ist erreicht, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, wie leg ich eine Aufgabe an, die jede Woche kommt – schnell bitte?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin für Rückruf mit Dachdeckerei Ziegelrot an.", "intent": "create_appointment", "timeframe": null, "entity": "Dachdeckerei Ziegelrot"}
+{"text": "Sind Mails von Elektro Blitz KG da?", "intent": "emails_unread", "timeframe": null, "entity": "Elektro Blitz KG"}
+{"text": "Mit wem bin ich heute verabredet bitte?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Hey, markier das Ziel jeden Monat zwei neue Kunden als erledigt, ne.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, habe ich noch Aufgaben, die bald fällig werden – schnell bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Kurz: refassung beenden, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: was steht am heutigen Tag so an – schnell bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Welche Schrauben nimmt man für Lärche?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, was ist heute alles, Termine wie Aufgaben – schnell bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Welche Version läuft hier eigentlich, gell?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, was steht mojen so an, ne?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Sind Mails von Fliesen Mosaik OHG da?", "intent": "emails_unread", "timeframe": null, "entity": "Fliesen Mosaik OHG"}
+{"text": "Kurz: find im Internet raus: den Preis für Dämmwolle.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, to-do für Umbau Werkhalle 7: Gerüst abbauen", "intent": "create_task", "timeframe": null, "entity": "Umbau Werkhalle 7"}
+{"text": "Plan einen Termin mit Nordstern Bau GmbH ein.", "intent": "create_appointment", "timeframe": null, "entity": "Nordstern Bau GmbH"}
+{"text": "Kurz: des Ziel ein neuer Transporter bis Sommer hamma gschafft, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, such im Internet nach Lieferzeiten für Fenster – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Rechnung prüfen ist erledigt, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: hob i no wos Offns, ne?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Du, zeig alle offenen Aufgaben, danke.", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Du, wos liegt no uaf mein Tisch bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Hak ma Aufmaß nehmen ab, is fertig bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: wia geht in dera App die Kundenliste – schnell bitte?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Vereinbar Rückruf mit Herrn Talheim.", "intent": "create_appointment", "timeframe": null, "entity": "Herrn Talheim"}
+{"text": "Schieb ma Angebot nachfassen auf nächste Woch bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, was steht hück im Kalender, gell?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Sag mal, leg ma bitte a Aufgab Material bestellen o.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Habe ich noch Aufgaben, die bald fällig werden, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Plan einen Termin mit Fliesen Mosaik OHG ein.", "intent": "create_appointment", "timeframe": null, "entity": "Fliesen Mosaik OHG"}
+{"text": "Is heut a Besprechung ogsetzt, oder?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Zeig mir alles Unerledigte, auch ohne Frist.", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Guck mal: was isch no offe uf dr Lischt bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Mein Handy lädt nicht mehr richtig.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, trag mojen Baubesprechung bei Dachdeckerei Ziegelrot ein.", "intent": "create_appointment", "timeframe": "tomorrow", "entity": "Dachdeckerei Ziegelrot"}
+{"text": "Du, mein Plan für heute bitte, oder.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Neue Aufgabe für Neubau Ahornweg: Fliesen abholen", "intent": "create_task", "timeframe": null, "entity": "Neubau Ahornweg"}
+{"text": "Ähm, die Aufgabe Aufmaß nehmen brauch ich nicht mehr, weg damit – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: was steht auf meiner Liste, das noch nicht erledigt ist, ne?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Kurz: wos is no ois zum Abarbeitn, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Wie bekomme ich den Toner aus dem Hemd?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin für Beratung mit Dachdeckerei Ziegelrot an.", "intent": "create_appointment", "timeframe": null, "entity": "Dachdeckerei Ziegelrot"}
+{"text": "Kurz: trag am heutigen Tag Baubesprechung bei Fliesen Mosaik OHG ein.", "intent": "create_appointment", "timeframe": "today", "entity": "Fliesen Mosaik OHG"}
+{"text": "Kurz: wos is heit ois los, ne?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Kurz: was hab ich noch alles zu erledigen?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Darf ich am Sonntag auf der Baustelle arbeiten?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, hab ich heid noch einen Termin mit Dachdeckerei Ziegelrot – schnell bitte?", "intent": "appointments_today", "timeframe": "today", "entity": "Dachdeckerei Ziegelrot"}
+{"text": "Notier: Gerüst abbauen.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, was is hück so los, ne?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Setz Abnahme mit Holzbau Eiche AG in den Kalender.", "intent": "create_appointment", "timeframe": null, "entity": "Holzbau Eiche AG"}
+{"text": "Neue Aufgabe für Dachsanierung West: Gerüst abbauen", "intent": "create_task", "timeframe": null, "entity": "Dachsanierung West"}
+{"text": "Notier: Rechnung prüfen.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Hey, zeiterfassung beenden, Feierabend – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, wie viel isnd 15 Prozent von 240?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was ist bei Hozlwerk Tanne los, sind die pleite?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, wo finde ich den Kalender, gell?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, welche Termine hab ich moije bitte?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Hak die Aufgabe Rechnung prüfen ab.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, wie viele Tage hat ein Schaltjahr – scnhell bitte?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: schau online nach die neuen Förderregeln.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was ist im Umbau Werkhalle 7 noch offen?", "intent": "tasks_open", "timeframe": null, "entity": "Umbau Werkhalle 7"}
+{"text": "Ähm, hab ich moije noch einen Termin mit Dachdeckerei Ziegelrot?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Dachdeckerei Ziegelrot"}
+{"text": "Wos is heit ois los, gell?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Ähm, was hab ich heute alles vor, Termine und Aufgaben zusammen bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Guck mal: termin moije mit Herrn Talheim anlegen.", "intent": "create_appointment", "timeframe": "tomorrow", "entity": "Herrn Talheim"}
+{"text": "Hey, markier das Ziel weniger Überstunden als erledigt.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, was kannst du eigentlich alles, ne?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, wo finde ich die Rechnungsvorlage bitte?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, schreib ma als Ziel auf: weniger Überstunden – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, wsa ist noch offen, auch wenn es erst nächsten Monat fällig ist?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Gibt's neue Förderung für Wärmepumpen – schnell bitte?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: was ist ein Kalender mit Wochennummern?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, hab i aws liegn lassn, was z'spät is bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Kurz: wat steiht hüt för Afsprooken an?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Sag mal, welche Termine hab ich hück, oder?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Habe ich noch Aufgaben, die bald fällig werden, gell?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Vereinbar Rückruf mit Herrn Ostwald.", "intent": "create_appointment", "timeframe": null, "entity": "Herrn Ostwald"}
+{"text": "Ähm, zaun streichen hab ich gemacht, weg damit – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, mach de Uhr an, i fang an, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Erledigt: Angebot nachfassen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, hab ich heute Nacmhittag einen Termin?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Erinnere mich an Fliesen abholen.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Kurz: was steht muan im Kalender, ne?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Hey, was hat die Frist schon überschritten?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Was bedeutet Voraksse?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, erfassung beenden – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, wie stell ich die Kundenliste um?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was fehlt im Neubau Ahornweg noch?", "intent": "tasks_open", "timeframe": null, "entity": "Neubau Ahornweg"}
+{"text": "eZit aus, wie lange war ich dran?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: hab ich noch was offen?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Kurz: wat kost dat Parken in de Stadt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, welche offenen Aufgaben sind schon zu spät bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Wo finde ich die Kundenliste, ne?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin für Rückruf mit Malerei Farbklecks an.", "intent": "create_appointment", "timeframe": null, "entity": "Malerei Farbklecks"}
+{"text": "Was is morgen so los?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Ähm, wo stelle ich im Programm die Zeiterfassung ein, gell?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag mojen Beratung bei Elektro Blitz KG ein.", "intent": "create_appointment", "timeframe": "tomorrow", "entity": "Elektro Blitz KG"}
+{"text": "Sag mal, leg ma bitte a Aufgab Gerüst abbauen o bitte.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Mach ma de Zeit o fürs Sanierung Süd, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: trag morgen Beratung bei Nordstern Bau GmbH ein.", "intent": "create_appointment", "timeframe": "tomorrow", "entity": "Nordstern Bau GmbH"}
+{"text": "Hey, wos brennt scho, wos hob i vaschlampt, oder?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Du, die Aufgabe Gerüst abbauen ist doppelt angelegt, bitte entfernen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, welche Aufgaben sind noch nicht abgehakt – schnell bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Kurz: aufgabe Fliesen abholen bis hück anlegen.", "intent": "create_task", "timeframe": "today", "entity": null}
+{"text": "Hey, wie voll ist mein Tag heute insgesamt – schnell bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Welche Aufgaben habe ich noch, egal wann sie fällig sind, ne?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Was fehlt im Dachsanierung West noch?", "intent": "tasks_open", "timeframe": null, "entity": "Dachsanierung West"}
+{"text": "Mal ehrlich, was ist noch zu tun, die Frist läuft aber noch, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Wos steht heut o?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Schreib eine neue Mail an Holzbau Eiche AG wegen das Aufmaß.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, erfassung beenden.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, schreib ma als Ziel auf: ein neuer Transporter bis Sommer, ne.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, erledigt: Aufmaß nehmen – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann hat der Baustoffhandel in Esslingen auf, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Merk dir als Aufgabe: Gerüst abbauen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Stopp die Zeit, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, leg einen Termin für Aufmaß mit Nordstern Bau GmbH an.", "intent": "create_appointment", "timeframe": null, "entity": "Nordstern Bau GmbH"}
+{"text": "Kurz: wos brennt am meistn, wei's z'spät is, oder?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Hey, wia geht in dera App die Benachrichtigungen, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Schieb Aufmaß nehmen auf Freitag.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Nur die Termine heute, sonst nichts.", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Welche Besprechungen sind heute?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Ähm, hat Herr Exempel morgen Zeit für mich?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: welche Termine hab ich mojen, gell?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Trag mir Abnahme mit Elektro Blitz KG ein.", "intent": "create_appointment", "timeframe": null, "entity": "Elektro Blitz KG"}
+{"text": "Guck mal: was ligt no uf mim Stapel, gell?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Ähm, schreib dem Fliesen Mosaik OHG a neue Mail wegen die Mängel bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, wann muss ich heute wo sein – schnell bitte?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Was mache ich, wenn der Kunde die Abnahme verweigert?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, entwirf eine Antwort an Sägewerk Ahorn zu die Abnahme, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: welche Termine hab ich am heutigen Tag – schnell bitte?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Guck mal: was ist hetue alles, Termine wie Aufgaben?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Mal ehrlich, neues Ziel: bis Jahresende zehn Bäder fertig, ne.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: ist neue Post da – schnell bitte?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Kurz: markier das Ziel weniger Überstunden als erledigt, gell.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was hätte schon gestern fertig sein müssen – schnell bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Termin morgn mit Frau Birkenfeld anlegen.", "intent": "create_appointment", "timeframe": "tomorrow", "entity": "Frau Birkenfeld"}
+{"text": "Trag mir Rückruf mit Dachdeckerei Ziegelrot ein.", "intent": "create_appointment", "timeframe": null, "entity": "Dachdeckerei Ziegelrot"}
+{"text": "Mal ehrlich, was habe ich vergessen, das längst dran war bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Ähm, brauche ich heute einen Schirm?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann geht es morgen mit dem ersten Termin los?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Wos is no auf da Listn – schnell bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Kannst du mir erklären, wie die Rechnungsvorlage hier geht, ne?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: was steht auf meiner Liste, das onch nicht erledigt ist, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Sag mal, wos is no auf da Listn?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Sag mal, was ist im Posteingang neu, oder?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Kurz: wie lang muss i Rechnungen aufheben, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, lässt sich der Kalender aufs Handy holen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: nur die Termine heute, sonst nichts – schnell bitte.", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Du, hab ich heid noch einen Termin mit Malerei Farbklecks, ne?", "intent": "appointments_today", "timeframe": "today", "entity": "Malerei Farbklecks"}
+{"text": "Mail an Frau Sonnberg: das Angebot, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wos muass no gmacht wern, gell?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Sag mal, welche Kudnentermine stehen heute im Kalender?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Welche Aufgaben habe ich noch, egal wann sie fällig sind?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Ähm, was isch liege blibe und scho drüber?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Sag mal, was ist über das Fälligkeitsdatum hinaus bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Wie viel Farbe brauche ich für 80 Quadratmeter Wand?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: was ist noch zu tun, die Frist läuft aber noch, gell?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Sag mal, was steht auf meiner Liste, das noch nicht erledigt ist?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Ähm, ist auf der A8 gerade Stau, oder?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, wat steiht hüt för Afsprooken an, oder?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Neues Ziel: jeden Monat zwei neue Kunden.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, wie lange darf eine Probezeit dauern, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, des Ziel bis Jahresende zehn Bäder fertig hamma gschafft.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was hätt i no z'erledige – schnell bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Wie warm wird es heute Nachmittag bitte?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin für Beratung mit Fliesen Mosaik OHG an.", "intent": "create_appointment", "timeframe": null, "entity": "Fliesen Mosaik OHG"}
+{"text": "Sag mal, wofür steht DIN eigentlich, gell?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hau rein, i bin weg.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: zeiterfassugn beenden, Feierabend.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was ist beim Umbau Werkhalle 7 noch zu tun?", "intent": "tasks_open", "timeframe": null, "entity": "Umbau Werkhalle 7"}
+{"text": "Wie viel ist im Dachsanierung West noch offen?", "intent": "tasks_open", "timeframe": null, "entity": "Dachsanierung West"}
+{"text": "Sag mal, termin heid mit Frau Wiesental anlegen.", "intent": "create_appointment", "timeframe": "today", "entity": "Frau Wiesental"}
+{"text": "Hey, wos is no ned obghakt, oder?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Lösch die Aufgabe Rechnung prüfen, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, wo sitzt die Sägewerk Ahorn eigentlich?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wos brennt am meistn, wei's z'säpt is, oder?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Na, wie isses?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie richte ich am Handy das WLAN ein, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sind Mails von Sanitär Tropfen GmbH da?", "intent": "emails_unread", "timeframe": null, "entity": "Sanitär Tropfen GmbH"}
+{"text": "Mal ehrlich, verschieb Bauleiter anrufen auf nächste Woche.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, welche offenen Aufgaben sind schon zu spät?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Trag mir Beratung mit Sanitär Tropfen GmbH ein, oder.", "intent": "create_appointment", "timeframe": null, "entity": "Sanitär Tropfen GmbH"}
+{"text": "Mal ehrlich, regnet es morgen in Stuttgart, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Neue Aufgabe für Badumbau Lindenhof: Aufmaß nehmen", "intent": "create_task", "timeframe": null, "entity": "Badumbau Lindenhof"}
+{"text": "Kann ich mit dir auch Rechnungen machen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was hend mir no vor uns, oder?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Was ist im Neubau Ahornweg noch offen?", "intent": "tasks_open", "timeframe": null, "entity": "Neubau Ahornweg"}
+{"text": "To-do für Sanierung Süd: Rechnung prüfen", "intent": "create_task", "timeframe": null, "entity": "Sanierung Süd"}
+{"text": "To-do für Neubau Ahornweg: Material bestellen", "intent": "create_task", "timeframe": null, "entity": "Neubau Ahornweg"}
+{"text": "Kurz: was steht heute an – schnell bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Mal ehrlich, wos muass i heid no ois erledign, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Kurz: hamma heit an Kundntermin, oder?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Hey, wat is morgen anjesetzt?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Guck mal: wat steiht hüt allens an?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Du, was steht muan bei mir an?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Mal ehrlich, was steht heute so an?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Kurz: wie lange hat die Post in der Hauptstraße offen, ne?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Neue Aufgabe für Badumbau Lindenhof: Fliesen abholen", "intent": "create_task", "timeframe": null, "entity": "Badumbau Lindenhof"}
+{"text": "Ähm, was hätt i no z'erledige, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Hey, welche Aufgabn san no offn, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Starte die Zeit für Dachsanierung West – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, mein Plan für heute bitte, oder.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Was läuft heute Abend im Fernsehen, gell?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist neue Post da?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Die Tastatur schreibt doppelte Buchstaben.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, zeig mir den Kalender von heute bitte.", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Du, aufgabe Gerüst abbauen bis hück anlegen bitte.", "intent": "create_task", "timeframe": "today", "entity": null}
+{"text": "Wie richte ich am Handy das WLAN ein, gell?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, termin morge mit Herrn Talheim anlegen bitte.", "intent": "create_appointment", "timeframe": "tomorrow", "entity": "Herrn Talheim"}
+{"text": "Guck mal: welche Aufgaben stehen noch auf der Liste, danke?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Plan einen Termin mit Dachdeckerei Ziegelrot ein.", "intent": "create_appointment", "timeframe": null, "entity": "Dachdeckerei Ziegelrot"}
+{"text": "Schreib mir eine Bewertung für den Lieferanten.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was ist im Projekt Nordlicht noch offen?", "intent": "tasks_open", "timeframe": null, "entity": "Projekt Nordlicht"}
+{"text": "Sag mal, wo bin ich hnitendran, ne?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Ähm, is a Mail kemma bitte?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Du, was kommt heute alles auf mich zu, ne?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Ähm, schreib dem Sanitär Tropfen GmbH a Antwort wegen das Aufmaß bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wos is scho baglaffa, de Frist?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Buch mir ein Hotel in Leipzig für die Messe.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Setz Besichtigung mit Fliesen Mosaik OHG in den Kalender.", "intent": "create_appointment", "timeframe": null, "entity": "Fliesen Mosaik OHG"}
+{"text": "Ähm, nur den Kalender für heute, ich muss gleich los – schnell bitte.", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Hey, weg mit Aufmaß nehmen, der Kunde hat abgesagt, ne.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: find im Internet raus: den Preis für Dämmwolle, gell.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Das Ziel jeden Monat zwei neue Kunden ist erreicht.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie viel ist ein Zoll in Zentimetern?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welche Fristen habe ich schon gerissen, gell?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Du, trag de Weck Abnahme bei Elektro Blitz KG ein, oder.", "intent": "create_appointment", "timeframe": "week", "entity": "Elektro Blitz KG"}
+{"text": "Sag mal, wos is scho üba da Zeit, ne?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Du, wos is scho abglaffa, de Frits, oder?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Merk dir als Aufgabe: Angebot nachfassen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Sag mal, wos is dringend, wei's scho überzogn is – schnell bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Plan einen Termin mit Elektro Blitz KG ein.", "intent": "create_appointment", "timeframe": null, "entity": "Elektro Blitz KG"}
+{"text": "Hey, womit hänge ich hinterher?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Mail an Herrn Talheim: die offene Rechnung.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wia vui Aufgabn hob i no, ne?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Welche Aufgaben stehen noch auf der Liste, ne?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Sag mal, leg ma bitte a Aufgab Angebot nachfassen o, ne.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Trag mir Rückruf mit Sanitär Tropfen GmbH ein.", "intent": "create_appointment", "timeframe": null, "entity": "Sanitär Tropfen GmbH"}
+{"text": "Du, welche Aufgaben im Projekt Nordlicht sind schon überfällig bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": "Projekt Nordlicht"}
+{"text": "Kurz: wos steht muan o?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Schreib eine neue Mail an Dachdeckerei Ziegelrot wegen die Mängel.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, wie voll ist mein Tag heute insgesamt, oder?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Du, wia geht in dera App den Export, oder?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie voll ist mein Tag heute insgesamt – schnell bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Du, wmoit hänge ich hinterher bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Bin ich heute irgendwo verabredet?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Guck mal: mein Plan für heute bitte bitte.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Ähm, wo stelle ich im Programm den Kalender ein?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was isch scho überfällig gsi, gell?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Du, des Ziel bis Jahresende zehn Bäder fertig hamma gschafft, ne.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie viel ist im Badumbau Lindenhof noch offen?", "intent": "tasks_open", "timeframe": null, "entity": "Badumbau Lindenhof"}
+{"text": "Wos steht muan o, danke?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Mal ehrlich, welche Termine hab ich hüt?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Kurz: mail an Frau Sonnberg: den Liefertermin, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was muss ich heute alles im Blick haben, ne?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Mail an Frau Wiesental: den Liefertermin.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welche Termine hab ich am heutigen Tag, gell?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Kurz: schreib ma für Badumbau Lindenhof auf: Gerüst abbauen", "intent": "create_task", "timeframe": null, "entity": "Badumbau Lindenhof"}
+{"text": "Wo finde ich in diesem Programm die Zeiterfassung – schnell bitte?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg eine Aufgabe Fliesen abholen an.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "uGck mal: was steht hück bei mir an, danke?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Was ist über das Fälligkeitsdatum hinaus, danke?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Sag mal, wia schaut mei Dog aus, ne?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Entwirf eine Antwort an Sägewerk Ahorn zu das Angebot.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wos is mir durchgrutscht?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Guck mal: zaun streichen isch erledigt, mach's zu.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wos liegt no auf mein Tisch, gell?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Guck mal: was isch heit im Kalender, Termin, gell?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Angebot nachfassen ist erledigt.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, aufmaß nehmen ist fertig, bitte abhaken, nicht löschen bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, welche Aufgaben sind schon über der Frist – schnlel bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Sag mal, wo stelle ich im Programm den Export ein, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, wos is no ois ausständig bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Kurz: was steht heid im Kalender bitte?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Hey, wos hamma no ned erledigt, oder?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, mach Material bestellen weg, brauch ma nimma – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wos muass no gmacht wern?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Ähm, guck ma im Netz nach die Öffnungszeiten vom Baustoffhandel, danke.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck mal: trag heit Besichtigung bei Sägewerk Ahorn ein bitte.", "intent": "create_appointment", "timeframe": "today", "entity": "Sägewerk Ahorn"}
+{"text": "Schreib eine neue Mail an Malerei Farbklecks wegen die Mängel, ne.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Antworte Herrn Ostwald auf die letzte Mail, nur als Entwurf.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hey, is heut a Besprechung ogsetzt – schnell bitte?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Ähm, sünd dor Mails, de ick noch nich lest heff bitte?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Habe ich noch Aufgaben, die bald fällig werden, oder?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, aufmaß nehmen kannst du als fertig markieren, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, wos is no auf da Lisnt?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Du, wat jeiht hück alles – schnell bitte?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Mach einen Termin mit Frau Wiesental.", "intent": "create_appointment", "timeframe": null, "entity": "Frau Wiesental"}
+{"text": "Um wie viel Uhr ist huete mein erster Termin?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "To-do für Projekt Nordlicht: Angebot nachfassen", "intent": "create_task", "timeframe": null, "entity": "Projekt Nordlicht"}
+{"text": "Mal ehrlich, was muss ich im Projekt Nordlicht noch machen, ne?", "intent": "tasks_open", "timeframe": null, "entity": "Projekt Nordlicht"}
+{"text": "Sag mal, was regelt die VOB eigentlich?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kurz: mail an Frau Sonnberg: das Angebot, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, hak die Aufgabe Gerüst abbauen ab.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "To-do für Projekt Nordlicht: Rechnung prüfen", "intent": "create_task", "timeframe": null, "entity": "Projekt Nordlicht"}
+{"text": "Ähm, hab ich heute Nachmittag einen Termin, ne?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Hey, neues Ziel: bis Jahresende zehn Bäder fertig.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Neues Projekt: Umbau Werkhalle 7.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wo bin ich hintendran, danke?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Erinnere mich an Aufmaß nehmen.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Mal ehrlich, lässt sich der Kalender aufs Handy holen bitte?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hak ma Angebot nachfassen ab, is fertig.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag mal, briefing für heute, bitte komplett, danke.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Hey, wos war scho gestern fällig?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Was ist im Dachsanierung West noch offen?", "intent": "tasks_open", "timeframe": null, "entity": "Dachsanierung West"}
+{"text": "Verschieb Rechnung prüfen auf nächste Woche.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Verschieb Aufmaß nehmen auf nächste Woche.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie viel ist im Neubau Ahornweg noch offen?", "intent": "tasks_open", "timeframe": null, "entity": "Neubau Ahornweg"}
+{"text": "Kurz: mach a Notiz: Aufmaß nehmen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Kurz: wia geht in dera App die Rechnungsvorlage, danke?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, um wie viel Uhr ist heute mein ertser Termin, oder?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Guck mal: wos is über'm Termin, des wo i ned gmacht hob, gell?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Kurz: wos steht muan o, gell?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Setz Beratung mit Nordstern Bau GmbH in den Kalender.", "intent": "create_appointment", "timeframe": null, "entity": "Nordstern Bau GmbH"}
+{"text": "Ähm, aufmaß nehmen kann weg, bitte entfernen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, wos is ausständig und scho drüber bitte?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Was ist im Rückstand, danke?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Was steht morgn im Kalender – schnell bitte?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Setz Abnahme mit Nordstern Bau GmbH in den Kalender.", "intent": "create_appointment", "timeframe": null, "entity": "Nordstern Bau GmbH"}
+{"text": "Guck mal: wo bin i scho im Rückstand?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Steht heute aws im Kalender, oder?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Sag mal, hab i was liegn lassn, was z'spät is, danke?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Setz Aufmaß mit Sanitär Tropfen GmbH in den Kalender.", "intent": "create_appointment", "timeframe": null, "entity": "Sanitär Tropfen GmbH"}
+{"text": "Mal ehrlich, wie lange darf eine Probezeit dauern bitte?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Du, verschieb Gerüst abbauen auf nächste Woche, oder.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guck ma im Netz nach die neuen Förderregeln – schnell bitte.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Markier Fliesen abholen als fertig.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ähm, was hend mir no vor uns bitte?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin für Abnahme mit Dachdeckerei Ziegelrot an.", "intent": "create_appointment", "timeframe": null, "entity": "Dachdeckerei Ziegelrot"}
