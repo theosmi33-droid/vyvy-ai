@@ -24,6 +24,7 @@ import gc
 import hashlib
 import json
 import math
+import os
 import shutil
 import time
 import sys
@@ -412,7 +413,8 @@ def main(argv: list[str] | None = None) -> int:
     manifest = {
         "name": args.name, "base": args.base, "base_revision": revision, "adapter_dir": adapter_dir.name,
         "adapter_files": {f.name: sha256(f) for f in sorted(adapter_dir.iterdir()) if f.is_file()},
-        "llama_cpp_commit": LLAMA_CPP_COMMIT, "train_files": {x.name: sha256(x) for x in paths},
+        "llama_cpp_commit": LLAMA_CPP_COMMIT, "training_git_commit": os.environ.get("VYVY_COMMIT"),
+        "train_files": {x.name: sha256(x) for x in paths},
         "train_sentences": len(rows), "prompt": prompt_name, "base_weights": quant,
         "attempts": attempts, "validation": history, "validation_sentences": len(eval_rows),
         "prompt_sha256": hashlib.sha256(system.encode("utf-8")).hexdigest(), "epochs": args.epochs, "lr": best["lr"],

@@ -45,7 +45,7 @@ SRC = "/tmp/vyvy"
 
 # One GPU only: with two visible GPUs the trainer wraps the model in DataParallel,
 # which breaks 4-bit layers and gains nothing for a small LoRA run.
-ENV = dict(os.environ, CUDA_VISIBLE_DEVICES="0")
+ENV = dict(os.environ, CUDA_VISIBLE_DEVICES="0", VYVY_COMMIT=COMMIT)
 
 
 def sh(*args):

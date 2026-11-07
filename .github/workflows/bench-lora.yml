@@ -20,7 +20,9 @@ on:
         required: true
 
 permissions:
-  contents: write  # mark the release accepted or rejected
+  contents: write      # mark the release accepted or rejected
+  id-token: write      # sign adapter_manifest.json (build provenance)
+  attestations: write
 
 concurrency:
   group: bench-lora-${{ inputs.adapter }}
@@ -148,6 +150,7 @@ jobs:
       - name: Mark the release
         env:
           ACCEPTED: ${{ steps.decide.outputs.accepted }}
+          MODEL: ${{ steps.adapter.outputs.model }}
         run: |
           set -euo pipefail
           reason=$(python -c "import json; print(json.load(open('verdict.json'))['reason'])")
@@ -159,9 +162,18 @@ jobs:
           else
             gh release edit "$ADAPTER" --repo "$GITHUB_REPOSITORY" --title "$ADAPTER (rejected)" --notes-file notes.md
           fi
-          gh release upload "$ADAPTER" verdict.json base_blind.json lora_blind.json base_v1.json lora_v1.json \
-            base_dev.json lora_dev.json \
+          python tools/release_manifest.py adapter/manifest.json verdict.json \
+            --gguf-key "$MODEL" --run-id "$GITHUB_RUN_ID" --out adapter_manifest.json
+          gh release upload "$ADAPTER" verdict.json adapter_manifest.json base_blind.json lora_blind.json \
+            base_v1.json lora_v1.json base_dev.json lora_dev.json \
             --repo "$GITHUB_REPOSITORY" --clobber
+
+      # Signs which run of this repository measured exactly this adapter file and manifest.
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: |
+            adapter_manifest.json
+            ${{ steps.adapter.outputs.gguf }}
 
       - name: Fail when rejected
         if: steps.decide.outputs.accepted != 'true'

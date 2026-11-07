@@ -1,0 +1,6 @@
+# Only for tools/check_semantic_leak.py on the GitHub runner (CPU).
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.4.1
+sentence-transformers==5.1.2
+transformers==4.57.6
+numpy~=1.26.4
