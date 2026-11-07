@@ -146,7 +146,8 @@ def pick_best(results: list[dict]) -> int:
     return min(range(len(results)), key=key)
 
 
-def validation_accuracy(model, tok, rows: list[dict], system: str, intents: tuple[str, ...]) -> float:
+def validation_accuracy(model, tok, rows: list[dict], system: str, intents: tuple[str, ...],
+                        misses: list | None = None) -> float:
     """Share of validation sentences whose expected intent scores highest after '{"intent": '.
 
     Every intent value is scored by the summed log-probability of its tokens, the
@@ -188,7 +189,10 @@ def validation_accuracy(model, tok, rows: list[dict], system: str, intents: tupl
                     total += logp[j, (q - 1) - (width - keep), ids[j, q]].item()
                 scores.append(total)
             best = max(range(len(cands)), key=lambda j: scores[j])
-            correct += intents[best] == json.loads(r["answer"])["intent"]
+            expected = json.loads(r["answer"])["intent"]
+            correct += intents[best] == expected
+            if misses is not None and intents[best] != expected:
+                misses.append({"text": r["text"], "expected": expected, "got": intents[best]})
     return round(correct / len(rows), 4) if rows else None
 
 
@@ -327,13 +331,14 @@ def main(argv: list[str] | None = None) -> int:
             model.save_pretrained(target)
             history = [{k: round(v, 5) if isinstance(v, float) else v for k, v in e.items()}
                        for e in trainer.state.log_history if "eval_loss" in e]
+            misses: list[dict] = []
             try:
-                accuracy = validation_accuracy(model, tok, eval_rows, system, intents)
+                accuracy = validation_accuracy(model, tok, eval_rows, system, intents, misses)
             except Exception as exc:  # noqa: BLE001  (selection then falls back to the validation loss)
                 print(f"Validation accuracy not available ({type(exc).__name__}: {exc})", flush=True)
                 accuracy = None
             return {"eval_loss": min((h["eval_loss"] for h in history), default=None),
-                    "val_accuracy": accuracy, "history": history}
+                    "val_accuracy": accuracy, "history": history, "val_misses": misses}
         finally:
             del trainer, model
             gc.collect()
@@ -421,6 +426,9 @@ def main(argv: list[str] | None = None) -> int:
         "rank": best["rank"], "alpha": 2 * best["rank"], "batch": batch, "grad_accum": accum,
         "chosen_lr": best["lr"], "val_accuracy": best["val_accuracy"],
         "chosen_seed": best["seed"],
+        # Validation sentences (training data, never a holdout) the chosen config got wrong:
+        # where the intent boundaries are still soft.
+        "val_misses": best.get("val_misses", []),
         "sweep": [{k: r[k] for k in ("rank", "lr", "seed", "phase", "minutes", "val_accuracy", "eval_loss")}
                   for r in results],
         "time_budget_min": args.time_budget,
