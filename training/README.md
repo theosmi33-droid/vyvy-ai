@@ -100,7 +100,7 @@ the other's when it is free (see the sessions' agreement).
 
 | Resource | Free limit | How it is used |
 |---|---|---|
-| Kaggle GPU (T4) | 30 h per week, reset Saturday 00:00 UTC | teacher synthesis (Qwen 14B and Phi-4) up to 4 h per change of `training/synthesize.py` (runs first), 1.5B sweep 4 h, 7B sweep 6 h per change of data, prompt or sweep plan; every sweep uses its whole budget (grid, then seeds and neighbours of the best config); 2 h stay in reserve; other projects on the same account take turns, no run starts while another kernel runs |
+| Kaggle GPU (T4) | 30 h per week, reset Saturday 00:00 UTC | teacher synthesis (Qwen 14B and Phi-4) up to 4 h once per week (runs first), 1.5B sweep 4 h, 7B sweep 6 h per change of data, prompt or sweep plan; every sweep uses its whole budget (grid, then seeds and neighbours of the best config); 2 h stay in reserve; other projects on the same account take turns, no run starts while another kernel runs |
 | GitHub Actions, Linux | unlimited for public repositories | benchmarks, comparisons, GGUF conversion, Collect |
 | GitHub Actions, macOS (Apple Silicon) | unlimited for public repositories | Bench Mac: latency with Metal on the target hardware |
 | Kaggle datasets | over 200 GB private | pinned model mirror |
