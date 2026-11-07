@@ -1,0 +1,64 @@
+name: Colab probe
+
+# Checks that a GitHub runner can drive Colab without a browser: the official
+# Colab CLI (pinned commit) with Application Default Credentials from the
+# secret COLAB_ADC (environment "colab", main only). "auth" only signs in and
+# lists the account's Colab machines; "gpu" also starts a T4, checks CUDA and
+# 4-bit bitsandbytes, and releases the machine again (colab run).
+on:
+  workflow_dispatch:
+    inputs:
+      check:
+        description: What to check
+        type: choice
+        default: auth
+        options: [auth, gpu]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: colab
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: colab
+    env:
+      COLAB_CLI: git+https://github.com/googlecolab/google-colab-cli@d2d97794941723ab806c0f3642416691a951ec7d
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Install the Colab CLI and the credentials
+        env:
+          COLAB_ADC: ${{ secrets.COLAB_ADC }}
+        run: |
+          set -euo pipefail
+          [ -n "$COLAB_ADC" ] || { echo "secret COLAB_ADC is missing" >&2; exit 1; }
+          pip install -q uv
+          uv tool install -q "$COLAB_CLI"
+          umask 077
+          printf '%s' "$COLAB_ADC" > "$RUNNER_TEMP/adc.json"
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$RUNNER_TEMP/adc.json" >> "$GITHUB_ENV"
+
+      - name: Sign in and list Colab machines
+        run: |
+          set -euo pipefail
+          colab --auth adc whoami | grep -E "^(Auth provider|Email|Scopes|  -)" | tee -a "$GITHUB_STEP_SUMMARY"
+          colab --auth adc sessions | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: T4, CUDA and 4-bit on Colab
+        if: inputs.check == 'gpu'
+        run: |
+          set -euo pipefail
+          colab --auth adc run --gpu T4 tools/colab_probe.py | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Remove the credentials file
+        if: always()
+        run: rm -f "$RUNNER_TEMP/adc.json"
