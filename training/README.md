@@ -74,6 +74,16 @@ Secrets in the environment `kaggle`: `KAGGLE_API_TOKEN` and `KAGGLE_USERNAME`.
 The token can do everything in the Kaggle account; if it ever shows up in a log,
 expire it on Kaggle and set a new one.
 
+## Two GPUs (prepared, off)
+
+Kaggle's T4 machine has two GPUs; a run is billed per session, not per GPU.
+With `"gpus": 2` in `tools/plan_train.py`, the kernel runs one sweep shard per
+GPU (`train_lora.py --shard i/2`, every second grid config), starts the second
+process 7 minutes later so two models are not loaded into the ~30 GB of RAM at
+once, gives each shard its own output folder, and joins them with
+`tools/merge_shards.py` (the better shard's adapter wins; the sweep table lists
+both). Both classes stay at `"gpus": 1` until a 7B run has passed on one GPU.
+
 ## Continuous operation
 
 Nothing has to be started by hand:

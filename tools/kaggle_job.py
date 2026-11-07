@@ -40,11 +40,14 @@ SWEEP = {sweep}
 BUDGET = {budget}
 BATCH = {batch}
 ACCUM = {accum}
+GPUS = {gpus}
+STAGGER = {stagger}
 SRC = "/tmp/vyvy"
+OUT = "/kaggle/working"
 
 
-# One GPU only: with two visible GPUs the trainer wraps the model in DataParallel,
-# which breaks 4-bit layers and gains nothing for a small LoRA run.
+# One process per GPU: with two GPUs visible to one process the trainer wraps the
+# model in DataParallel, which breaks 4-bit layers.
 ENV = dict(os.environ, CUDA_VISIBLE_DEVICES="0", VYVY_COMMIT=COMMIT)
 
 
@@ -57,10 +60,31 @@ sh("git", "clone", "--quiet", "https://github.com/" + REPO, SRC)
 sh("git", "-C", SRC, "checkout", "--quiet", COMMIT)
 sh(sys.executable, "-m", "pip", "install", "-q", "-r", SRC + "/training/requirements.txt")
 # GGUF conversion happens on the GitHub runner (tools/convert_adapter.py).
-sh(sys.executable, SRC + "/training/train_lora.py", "--base", BASE, "--name", NAME,
-   "--epochs", EPOCHS, "--out", "/kaggle/working", "--no-gguf", "--sweep", SWEEP, "--time-budget", BUDGET,
-   "--batch", BATCH, "--grad-accum", ACCUM)
+ARGS = [sys.executable, SRC + "/training/train_lora.py", "--base", BASE, "--name", NAME, "--epochs", EPOCHS,
+        "--no-gguf", "--sweep", SWEEP, "--time-budget", BUDGET, "--batch", BATCH, "--grad-accum", ACCUM]
+if GPUS == 1:
+    sh(*ARGS, "--out", OUT)
+else:
+    # One sweep shard per GPU. The second process starts later so the two models are
+    # not loaded into the machine's ~30 GB of RAM at the same time; each shard has its
+    # own output folder, and tools/merge_shards.py keeps the better shard's adapter.
+    import shutil
+    import time
+    procs = []
+    for i in range(GPUS):
+        if i:
+            time.sleep(STAGGER)
+        cmd = ARGS + ["--out", f"{{OUT}}/shard{{i}}", "--shard", f"{{i}}/{{GPUS}}"]
+        print("+", " ".join(cmd), flush=True)
+        procs.append(subprocess.Popen(cmd, env=dict(ENV, CUDA_VISIBLE_DEVICES=str(i))))
+    codes = [proc.wait() for proc in procs]
+    print("shard exit codes:", codes, flush=True)
+    shards = [f"{{OUT}}/shard{{i}}" for i in range(GPUS)]
+    sh(sys.executable, SRC + "/tools/merge_shards.py", *shards, "--out", OUT)
+    for d in shards:
+        shutil.rmtree(d, ignore_errors=True)
 '''
+STAGGER_SECONDS = 420
 
 
 SYNTH_SLUG = "vyvy-synth-teacher"
@@ -133,9 +157,12 @@ def kernel_slug(base: str) -> str:
 
 
 def write_job(folder: Path, owner: str, repo: str, commit: str, base: str, name: str, epochs: float,
-              sweep: str = "", budget: float = 0, batch: int = 8, accum: int = 2) -> str:
+              sweep: str = "", budget: float = 0, batch: int = 8, accum: int = 2, gpus: int = 1,
+              stagger: int = STAGGER_SECONDS) -> str:
     if base not in BASES:
         raise SystemExit(f"base must be one of {BASES}")
+    if gpus not in (1, 2):
+        raise SystemExit("gpus must be 1 or 2 (Kaggle's T4 machine has two)")
     if not NAME.match(name):
         raise SystemExit("name: lowercase letters, digits, '.' and '-', at most 61 characters")
     if not SHA.match(commit):
@@ -159,6 +186,7 @@ def write_job(folder: Path, owner: str, repo: str, commit: str, base: str, name:
         repo=json.dumps(repo), commit=json.dumps(commit), base=json.dumps(base),
         name=json.dumps(name), epochs=json.dumps(f"{epochs:g}"), sweep=json.dumps(sweep),
         budget=json.dumps(f"{budget:g}"), batch=json.dumps(str(batch)), accum=json.dumps(str(accum)),
+        gpus=gpus, stagger=int(stagger),
     ), encoding="utf-8")
     write_metadata(folder, f"{owner}/{slug}", slug, "train.py")
     return f"{owner}/{slug}"
@@ -179,6 +207,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--budget", type=float, default=0, help="minutes for the whole sweep")
     p.add_argument("--batch", type=int, default=8)
     p.add_argument("--grad-accum", type=int, default=2)
+    p.add_argument("--gpus", type=int, default=1, help="1, or 2 for one sweep shard per T4")
     args = p.parse_args(argv)
     if args.synth:
         print(write_synth_job(args.dir, args.owner, args.repo, args.commit, args.round))
@@ -186,7 +215,7 @@ def main(argv: list[str] | None = None) -> int:
     if not (args.base and args.name):
         p.error("--base and --name are required for a training kernel")
     print(write_job(args.dir, args.owner, args.repo, args.commit, args.base, args.name, args.epochs,
-                    args.sweep, args.budget, args.batch, args.grad_accum))
+                    args.sweep, args.budget, args.batch, args.grad_accum, args.gpus))
     return 0
 
 

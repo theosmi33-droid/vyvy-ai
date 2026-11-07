@@ -67,6 +67,7 @@ jobs:
           plan=$(python tools/plan_train.py "$BASE" --epochs "$EPOCHS" --repo "$GITHUB_REPOSITORY")
           get() { echo "$plan" | python -c "import json,sys; v=json.load(sys.stdin).get('$1'); print('' if v is None else v)"; }
           budget=$(get budget); sweep=$(get sweep); batch=$(get batch); accum=$(get grad_accum); trained=$(get trained)
+          gpus=$(get gpus)
           name=${NAME_INPUT:-$(get name)}
           [[ "$name" =~ ^[a-z0-9][a-z0-9.-]{0,60}$ ]] || { echo "invalid name" >&2; exit 1; }
           if gh release view "$name" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
@@ -82,7 +83,7 @@ jobs:
             echo "Already trained on this data and prompt: $trained." >> "$GITHUB_STEP_SUMMARY"
           fi
           ls data/train/*.jsonl >/dev/null 2>&1 || { echo "no training data in data/train/" >&2; exit 1; }
-          { echo "NAME=$name"; echo "SWEEP=$sweep"; echo "BUDGET=$budget"; echo "BATCH=$batch"; echo "ACCUM=$accum"; } >> "$GITHUB_ENV"
+          { echo "NAME=$name"; echo "SWEEP=$sweep"; echo "BUDGET=$budget"; echo "BATCH=$batch"; echo "ACCUM=$accum"; echo "GPUS=${gpus:-1}"; } >> "$GITHUB_ENV"
           echo "Adapter: $name · sweep $sweep · budget $budget min · batch $batch x $accum" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Holdout lock
@@ -119,7 +120,7 @@ jobs:
           set -euo pipefail
           kid=$(python tools/kaggle_job.py --dir job --owner "$KAGGLE_USERNAME" \
                   --repo "$GITHUB_REPOSITORY" --commit "$GITHUB_SHA" --base "$BASE" --name "$NAME" \
-                  --epochs "$EPOCHS" --sweep "$SWEEP" --budget "$BUDGET" --batch "$BATCH" --grad-accum "$ACCUM")
+                  --epochs "$EPOCHS" --sweep "$SWEEP" --budget "$BUDGET" --batch "$BATCH" --grad-accum "$ACCUM" --gpus "$GPUS")
           # Kernel limit: budget plus 1 h for setup and export, below Kaggle's 12 h.
           kaggle kernels push -p job --accelerator NvidiaTeslaT4 --timeout "$(( (BUDGET + 60) * 60 ))"
           echo "Started $kid for $NAME; Collect publishes the result when it is done." >> "$GITHUB_STEP_SUMMARY"

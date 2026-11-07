@@ -248,6 +248,8 @@ def main(argv: list[str] | None = None) -> int:
                    "the first values are tried first; empty = only --rank and --lr")
     p.add_argument("--time-budget", type=float, default=0, help="minutes for the whole sweep; no new config "
                    "starts when it would likely not finish in time (0 = no limit)")
+    p.add_argument("--shard", default="0/1", help="i/n: train only every n-th grid config starting at i "
+                   "(one process per GPU; tools/merge_shards.py joins the results)")
     p.add_argument("--batch", type=int, default=8)
     p.add_argument("--grad-accum", type=int, default=2)
     args = p.parse_args(argv)
@@ -367,7 +369,10 @@ def main(argv: list[str] | None = None) -> int:
 
     # Grid first; then, while the budget allows, refine around the best config so
     # that no paid GPU time is left unused (see refine_configs).
-    queue = [(r, x, 0, "grid") for r, x in sweep_configs(args.sweep, args.rank, args.lr)]
+    shard, shards = (int(x) for x in args.shard.split("/"))
+    if not 0 <= shard < shards:
+        raise SystemExit("--shard must be i/n with 0 <= i < n")
+    queue = [(r, x, 0, "grid") for r, x in sweep_configs(args.sweep, args.rank, args.lr)][shard::shards]
     tried: set[tuple[int, float, int]] = set()
     started = time.monotonic()
     results: list[dict] = []
@@ -431,7 +436,7 @@ def main(argv: list[str] | None = None) -> int:
         "val_misses": best.get("val_misses", []),
         "sweep": [{k: r[k] for k in ("rank", "lr", "seed", "phase", "minutes", "val_accuracy", "eval_loss")}
                   for r in results],
-        "time_budget_min": args.time_budget,
+        "time_budget_min": args.time_budget, "shard": args.shard,
         "target_confidence": TARGET_CONFIDENCE, "holdout_lock": "passed",
     }
     (args.out / "manifest.json").write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8")

@@ -26,9 +26,9 @@ import bench  # noqa: E402
 # model, activations and optimizer fit a 16 GB T4.
 PLANS = {
     "Qwen/Qwen2.5-1.5B-Instruct": {"size": "1.5b", "budget": 360, "sweep": "rank=16,8,32,64;lr=2e-4,1e-4,5e-4",
-                                   "batch": 8, "grad_accum": 2},
+                                   "batch": 8, "grad_accum": 2, "gpus": 1},
     "Qwen/Qwen2.5-7B-Instruct": {"size": "7b", "budget": 600, "sweep": "rank=16,32;lr=2e-4,1e-4,3e-4",
-                                 "batch": 2, "grad_accum": 8},
+                                 "batch": 2, "grad_accum": 8, "gpus": 1},
 }
 ORDER = list(PLANS)
 
