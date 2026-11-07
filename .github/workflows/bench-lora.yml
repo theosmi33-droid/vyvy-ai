@@ -35,6 +35,7 @@ concurrency:
 jobs:
   measure:
     runs-on: ubuntu-latest
+    environment: kaggle  # model mirror fallback; Kaggle secrets only exist here (main only)
     timeout-minutes: 120
     strategy:
       fail-fast: true
