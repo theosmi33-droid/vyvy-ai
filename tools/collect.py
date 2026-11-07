@@ -126,7 +126,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--sha", default=os.environ.get("GITHUB_SHA", "main"))
     args = p.parse_args(argv)
 
-    failed = False
+    failed = not collect_synth(args.repo, args.owner)
     for base, info in BASES.items():
         kid = f"{args.owner}/{kaggle_job.kernel_slug(base)}"
         status = run("kaggle", "kernels", "status", kid, check=False)
@@ -164,6 +164,61 @@ def main(argv: list[str] | None = None) -> int:
     return 1 if failed else 0
 
 
+def synth_id() -> str:
+    return hashlib.sha256((ROOT / "training" / "synthesize.py").read_bytes()).hexdigest()[:9]
+
+
+def synth_file() -> Path:
+    return ROOT / "data" / "train" / f"vyvy_synth_{synth_id()}.jsonl"
+
+
+def collect_synth(repo: str, owner: str) -> bool:
+    """Take a finished teacher run into data/train/ and push it to main. False if that failed."""
+    kid = f"{owner}/{kaggle_job.SYNTH_SLUG}"
+    status = run("kaggle", "kernels", "status", kid, check=False)
+    if "404" in status or "not found" in status.lower():
+        return True
+    state = kaggle_watchdog.state_of(status)
+    if state == "running":
+        summary(f"{kid}: still running.")
+        return True
+    out = Path("collect") / "synth"
+    shutil.rmtree(out, ignore_errors=True)
+    if state != "complete":
+        logdir = out / "log"
+        run("kaggle", "kernels", "output", kid, "-p", str(logdir), "--file-pattern", r"\.log$", check=False)
+        log = "\n".join(f.read_text(encoding="utf-8", errors="replace") for f in sorted(logdir.glob("*.log")))
+        causes, tail = kaggle_watchdog.diagnose(log) if log else (["no log available"], [status])
+        m = re.search(r"run (vyvy-synth-[0-9a-f]{9})", log)
+        report_failure(repo, kid, causes, tail, m.group(1) if m else None)
+        return True
+    run("kaggle", "kernels", "output", kid, "-p", str(out), "--file-pattern",
+        r"(^|/)synth(_manifest\.json|\.jsonl|_dropped\.jsonl)$", check=False)
+    if not (out / "synth_manifest.json").exists():
+        return True
+    done = subprocess.run([sys.executable, str(ROOT / "tools" / "import_synth.py"), str(out)],
+                          capture_output=True, text=True)
+    if done.returncode == 3:
+        return True
+    if done.returncode != 0:
+        report_failure(repo, kid, ["importing the teacher sentences failed"], done.stderr.splitlines()[-40:],
+                       f"vyvy-synth-{synth_id()}")
+        return False
+    path = Path(done.stdout.strip().splitlines()[-1])
+    try:
+        run("git", "-C", str(ROOT), "add", str(path), str(path.with_suffix(".json")))
+        run("git", "-C", str(ROOT), "-c", "user.name=github-actions[bot]",
+            "-c", "user.email=41898282+github-actions[bot]@users.noreply.github.com",
+            "commit", "-m", f"Teacher sentences {path.name} (training/synthesize.py)")
+        run("git", "-C", str(ROOT), "pull", "--rebase", "origin", "main")
+        run("git", "-C", str(ROOT), "push", "origin", "HEAD:main")
+    except Exception as exc:  # noqa: BLE001  (reported; the next Collect run retries)
+        report_failure(repo, kid, ["pushing the teacher sentences failed"], [str(exc)], f"vyvy-synth-{synth_id()}")
+        return False
+    summary(f"{kid}: took {path.name} into data/train/.\n\n```\n{done.stderr[-1500:]}\n```")
+    return True
+
+
 def any_kernel_running() -> bool:
     return bool(run(sys.executable, str(ROOT / "tools" / "kaggle_busy.py"), check=False).strip())
 
@@ -180,6 +235,14 @@ def schedule(repo: str, owner: str) -> None:
     if any_kernel_running():
         summary("Scheduler: a kernel of the account is running; nothing new started.")
         return
+    # Teacher sentences first: training on data that is about to grow wastes a run.
+    if not synth_file().exists():
+        if open_failure(repo, f"{owner}/{kaggle_job.SYNTH_SLUG}", f"vyvy-synth-{synth_id()}"):
+            summary("Scheduler: synthesis waits for a fix (open failure issue); training goes ahead.")
+        else:
+            run("gh", "workflow", "run", "synth.yml", "--repo", repo, "--ref", "main")
+            summary(f"Scheduler: started the teacher run vyvy-synth-{synth_id()}.")
+            return
     for base in plan_train.ORDER:
         p = plan_train.plan(base)
         kid = f"{owner}/{kaggle_job.kernel_slug(base)}"

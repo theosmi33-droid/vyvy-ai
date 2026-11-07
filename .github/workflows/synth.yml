@@ -1,0 +1,69 @@
+name: Synthesize
+
+# Starts the teacher run on a Kaggle GPU: training/synthesize.py lets an open
+# Apache-2.0 model (Qwen2.5-14B-Instruct) write and then re-check training
+# sentences. Collect takes the result into data/train/ (tools/import_synth.py,
+# filtered against every holdout) and then starts training. Collect starts this
+# workflow itself whenever training/synthesize.py changed and its output is not
+# in data/train/ yet; it can also be started by hand.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write  # start the Collect chain
+
+concurrency:
+  group: train
+  cancel-in-progress: false
+
+jobs:
+  synth:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: kaggle
+    env:
+      GH_TOKEN: ${{ github.token }}
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+      KAGGLE_EXTERNAL_GPU_MIN: ${{ vars.KAGGLE_EXTERNAL_GPU_MIN }}
+      BUDGET: "150"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Already taken in?
+        run: |
+          set -euo pipefail
+          id=$(sha256sum training/synthesize.py | cut -c1-9)
+          if [ -f "data/train/vyvy_synth_$id.jsonl" ]; then
+            echo "SKIP=true" >> "$GITHUB_ENV"
+            echo "Synthesis $id is already in data/train/." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Kaggle quota and free GPU
+        if: env.SKIP != 'true'
+        run: |
+          set -euo pipefail
+          # kaggle 2.2.5 imports six without declaring it as a dependency
+          pip install -q kaggle==2.2.5 six==1.17.0
+          python tools/quota_guard.py --repo "$GITHUB_REPOSITORY" --need "$BUDGET" | tee guard.txt
+          if grep -q "Quota paused" guard.txt; then echo "SKIP=true" >> "$GITHUB_ENV"; exit 0; fi
+          running=$(python tools/kaggle_busy.py | tr '\n' ' ')
+          if [ -n "$running" ]; then
+            echo "SKIP=true" >> "$GITHUB_ENV"
+            echo "GPU busy ($running); Collect starts this run later." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Push the teacher job to Kaggle
+        if: env.SKIP != 'true'
+        run: |
+          set -euo pipefail
+          kid=$(python tools/kaggle_job.py --synth --dir job --owner "$KAGGLE_USERNAME" \
+                  --repo "$GITHUB_REPOSITORY" --commit "$GITHUB_SHA")
+          kaggle kernels push -p job --accelerator NvidiaTeslaT4 --timeout "$(( BUDGET * 60 ))"
+          echo "Started $kid; Collect takes the sentences in when it is done." >> "$GITHUB_STEP_SUMMARY"
+          gh workflow run collect.yml --repo "$GITHUB_REPOSITORY" --ref main
