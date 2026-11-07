@@ -151,6 +151,8 @@ def unload(model, name: str) -> None:
     torch.cuda.empty_cache()
     hub = Path(os.environ.get("HF_HOME", Path.home() / ".cache" / "huggingface")) / "hub"
     shutil.rmtree(hub / ("models--" + name.replace("/", "--")), ignore_errors=True)
+    print(f"unloaded {name}: GPU memory allocated {torch.cuda.memory_allocated() / 2**30:.2f} GiB, "
+          f"reserved {torch.cuda.memory_reserved() / 2**30:.2f} GiB", flush=True)
 
 
 def chat(tok, text: str) -> str:
