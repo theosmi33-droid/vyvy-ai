@@ -30,6 +30,7 @@ import re
 import shutil
 import subprocess
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -168,6 +169,14 @@ def synth_id() -> str:
     return hashlib.sha256((ROOT / "training" / "synthesize.py").read_bytes()).hexdigest()[:9]
 
 
+def pending_since(marker: Path) -> datetime:
+    """Start time written in a .pending marker ("<where> <ISO time>"); long ago if absent or unreadable."""
+    try:
+        return datetime.fromisoformat(marker.read_text(encoding="utf-8").split()[-1].replace("Z", "+00:00"))
+    except (OSError, ValueError, IndexError):
+        return datetime.min.replace(tzinfo=timezone.utc)
+
+
 def synth_file() -> Path:
     return ROOT / "data" / "train" / f"vyvy_synth_{synth_id()}.jsonl"
 
@@ -236,6 +245,12 @@ def schedule(repo: str, owner: str) -> None:
         summary("Scheduler: a kernel of the account is running; nothing new started.")
         return
     # Teacher sentences first: training on data that is about to grow wastes a run.
+    pending = synth_file().with_suffix(".pending")
+    if not synth_file().exists() and pending_since(pending) > datetime.now(timezone.utc) - timedelta(hours=4):
+        # The same synthesis runs elsewhere (Colab); its result is pushed to data/train/,
+        # which starts Train. Waiting keeps one GPU run from being done twice.
+        summary(f"Scheduler: synthesis {synth_id()} runs elsewhere ({pending.read_text().strip()}); waiting.")
+        return
     if not synth_file().exists():
         if open_failure(repo, f"{owner}/{kaggle_job.SYNTH_SLUG}", f"vyvy-synth-{synth_id()}"):
             summary("Scheduler: synthesis waits for a fix (open failure issue); training goes ahead.")
