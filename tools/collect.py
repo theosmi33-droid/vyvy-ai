@@ -169,9 +169,20 @@ def main(argv: list[str] | None = None) -> int:
     return 1 if failed else 0
 
 
-def synth_round() -> str:
-    """One teacher synthesis per ISO week; a new week brings new sentences (and a new training run)."""
-    return datetime.now(timezone.utc).strftime("%G-W%V")
+# Rounds taken in before rounds followed the Kaggle week: same week, old label.
+LEGACY_ROUNDS = {"2026-11-07": "2026-W45"}
+
+
+def synth_round(now: datetime | None = None) -> str:
+    """One teacher synthesis per Kaggle quota week (Saturday 00:00 UTC to Saturday).
+
+    Kaggle resets the weekly GPU quota on Saturday 00:00 UTC. Rounds named after
+    the ISO week (Monday) put two rounds into one quota week, and the second could
+    not finish. The label is the date of the week's Saturday, e.g. 2026-11-14.
+    """
+    now = now or datetime.now(timezone.utc)
+    saturday = now.date() - timedelta(days=(now.weekday() - 5) % 7)
+    return saturday.isoformat()
 
 
 def synth_name() -> str:
@@ -186,14 +197,15 @@ def pending_since(marker: Path) -> datetime:
         return datetime.min.replace(tzinfo=timezone.utc)
 
 
-def synth_waiting() -> bool:
+def synth_waiting(now: datetime | None = None) -> bool:
     """This week's synthesis runs elsewhere (a .pending marker younger than 4 h) and is not in yet."""
-    pending = ROOT / "data" / "train" / f"vyvy_synth_{synth_round()}.pending"
-    return not synth_done() and pending_since(pending) > datetime.now(timezone.utc) - timedelta(hours=4)
+    pending = ROOT / "data" / "train" / f"vyvy_synth_{synth_round(now)}.pending"
+    return not synth_done(now) and pending_since(pending) > datetime.now(timezone.utc) - timedelta(hours=4)
 
 
-def synth_done() -> bool:
-    return any((ROOT / "data" / "train").glob(f"vyvy_synth_*_{synth_round()}.jsonl"))
+def synth_done(now: datetime | None = None) -> bool:
+    rounds = {synth_round(now), LEGACY_ROUNDS.get(synth_round(now), "")} - {""}
+    return any(any((ROOT / "data" / "train").glob(f"vyvy_synth_*_{r}.jsonl")) for r in rounds)
 
 
 def collect_synth(repo: str, owner: str) -> bool:

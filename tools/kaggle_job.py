@@ -97,8 +97,8 @@ def write_synth_job(folder: Path, owner: str, repo: str, commit: str, round_: st
         raise SystemExit("repo must be OWNER/NAME")
     if not re.match(r"^[A-Za-z0-9_-]+$", owner):
         raise SystemExit("owner must be a Kaggle user name")
-    if not re.match(r"^[0-9]{4}-W[0-9]{2}$", round_):
-        raise SystemExit("round must look like 2026-W45")
+    if not re.match(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$", round_):
+        raise SystemExit("round must be the date of the quota week's Saturday, e.g. 2026-11-14")
     folder.mkdir(parents=True, exist_ok=True)
     (folder / "synth.py").write_text(SYNTH_ENTRY.format(repo=json.dumps(repo), commit=json.dumps(commit),
                                                        round=json.dumps(round_)),
@@ -173,7 +173,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--base", choices=BASES)
     p.add_argument("--name", help="adapter name, also the release tag")
     p.add_argument("--synth", action="store_true", help="write the teacher synthesis kernel instead")
-    p.add_argument("--round", default="", help="synthesis round (ISO week), with --synth")
+    p.add_argument("--round", default="", help="synthesis round (Saturday of the Kaggle week), with --synth")
     p.add_argument("--epochs", type=float, default=3)
     p.add_argument("--sweep", default="", help='e.g. "rank=16,8,32;lr=2e-4,1e-4,5e-4"')
     p.add_argument("--budget", type=float, default=0, help="minutes for the whole sweep")

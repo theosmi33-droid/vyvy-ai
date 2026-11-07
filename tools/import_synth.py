@@ -10,7 +10,7 @@ data, then checks the output contract. Writes
     data/train/vyvy_synth_<script hash>_<round>.json    teacher, counts, what was dropped
 
 and prints the path of the .jsonl. An existing file for the same script is
-left alone (exit code 3): one synthesis per round (ISO week) is taken in.
+left alone (exit code 3): one synthesis per round (Kaggle quota week) is taken in.
 
     python tools/import_synth.py collect/synth
 """

@@ -85,9 +85,9 @@ Nothing has to be started by hand:
    synthesis, then 1.5B, then 7B. A failed run gets an issue and one automatic
    retry; only a second failure waits for a fix. The issue closes itself once
    the kernel trains an adapter.
-3. **Synthesis rounds**: one per ISO week (`training/synthesize.py`, seed from
-   the week). New sentences mean new training data, so every week brings a new
-   training run of both classes.
+3. **Synthesis rounds**: one per Kaggle quota week, Saturday 00:00 UTC to
+   Saturday (`training/synthesize.py`, seed from the week). New sentences mean
+   new training data, so every week brings a new training run of both classes.
 4. **Acceptance**: blind holdout v2 decides; blind holdout v3 (shadow) can only
    veto an adapter that is significantly worse there. After 8 decisions on v2,
    bench-lora opens an issue: v3 becomes the active set, a newly written blind

@@ -3,9 +3,9 @@ name: Synthesize
 # Starts the teacher run on a Kaggle GPU: training/synthesize.py lets an open
 # Apache-2.0 model (Qwen2.5-14B-Instruct) and Phi-4 (MIT) write and Qwen re-checks training
 # sentences. Collect takes the result into data/train/ (tools/import_synth.py,
-# filtered against every holdout) and then starts training. One round per ISO
-# week: Collect starts this workflow when the current week's sentences are not in
-# data/train/ yet; each round samples with its own seed. It can also be started by hand.
+# filtered against every holdout) and then starts training. One round per Kaggle
+# quota week (Saturday 00:00 UTC): Collect starts this workflow when the week's
+# sentences are not in data/train/ yet; each round samples with its own seed. It can also be started by hand.
 on:
   workflow_dispatch:
 
@@ -38,9 +38,9 @@ jobs:
       - name: Already taken in?
         run: |
           set -euo pipefail
-          round=$(date -u +%G-W%V)
+          round=$(python -c "import sys; sys.path.insert(0, 'tools'); import collect; print(collect.synth_round())")
           echo "ROUND=$round" >> "$GITHUB_ENV"
-          if ls data/train/vyvy_synth_*_"$round".jsonl >/dev/null 2>&1; then
+          if python -c "import sys; sys.path.insert(0, 'tools'); import collect; sys.exit(0 if collect.synth_done() else 1)"; then
             echo "SKIP=true" >> "$GITHUB_ENV"
             echo "Synthesis round $round is already in data/train/." >> "$GITHUB_STEP_SUMMARY"
           fi
