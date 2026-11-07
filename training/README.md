@@ -74,6 +74,28 @@ Secrets in the environment `kaggle`: `KAGGLE_API_TOKEN` and `KAGGLE_USERNAME`.
 The token can do everything in the Kaggle account; if it ever shows up in a log,
 expire it on Kaggle and set a new one.
 
+## Continuous operation
+
+Nothing has to be started by hand:
+
+1. **Heartbeat** (`heartbeat.yml`) starts Collect every three hours and then
+   itself again; there is always one chain, and no outside service is needed.
+2. **Collect** picks up finished Kaggle runs and starts the next one when no
+   kernel of the account runs and quota is left: first the week's teacher
+   synthesis, then 1.5B, then 7B.
+3. **Synthesis rounds**: one per ISO week (`training/synthesize.py`, seed from
+   the week). New sentences mean new training data, so every week brings a new
+   training run of both classes.
+4. **Acceptance**: blind holdout v2 decides; blind holdout v3 (shadow) can only
+   veto an adapter that is significantly worse there. After 8 decisions on v2,
+   bench-lora opens an issue: v3 becomes the active set, a newly written blind
+   set becomes the shadow, and v2 may move into the training data. New blind
+   sets are written by independent writers who know only the intent
+   definitions; that step is not automated.
+
+Kaggle is Vyvy's GPU; Colab is used by the Kukanilea project, and either takes
+the other's when it is free (see the sessions' agreement).
+
 ## Weekly budget
 
 | Resource | Free limit | How it is used |

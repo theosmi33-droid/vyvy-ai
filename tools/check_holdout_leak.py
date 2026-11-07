@@ -30,7 +30,8 @@ ROOT = Path(__file__).resolve().parent.parent
 HOLDOUT = ROOT / "data" / "holdout_benchmarks.json"
 BLIND = ROOT / "data" / "holdout_blind_v1.json"
 BLIND_V2 = ROOT / "data" / "holdout_blind_v2.json"
-HOLDOUTS = [HOLDOUT, BLIND, BLIND_V2]
+BLIND_V3 = ROOT / "data" / "holdout_blind_v3.json"
+HOLDOUTS = [HOLDOUT, BLIND, BLIND_V2, BLIND_V3]
 TRAIN_DIR = ROOT / "data" / "train"
 
 

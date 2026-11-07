@@ -1,0 +1,1416 @@
+{
+ "name": "German office intent blind holdout v3 (shadow)",
+ "description": "235 synthetic German questions, 23 to 30 per intent, written on 07.11.2026 in one pass by three independent agents that knew only the intent definitions (Saxon, Hessian, Kölsch, Austrian; Franconian, Palatine, Westphalian, Thuringian and dictation; Alemannic, Saarland, Hamburg, Tyrolean and polite or hurried wording). Near copies of earlier holdouts and of each other were removed. Shadow set: bench-lora checks that an adapter accepted on blind v2 is not significantly worse here.",
+ "items": [
+  {
+   "id": "blind3-001",
+   "set": "blind_v3",
+   "text": "Gugge mo, was hab'sch'n heude noch so für Dermine?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-002",
+   "set": "blind_v3",
+   "text": "Ei gude, was steht dann heut bei mir noch an Termine an?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-003",
+   "set": "blind_v3",
+   "text": "Hob i heit nu an Termin mit dem Huber vom Bauamt?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-004",
+   "set": "blind_v3",
+   "text": "termine heute",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-005",
+   "set": "blind_v3",
+   "text": "Wann ist heute mein nächster Termin?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-006",
+   "set": "blind_v3",
+   "text": "Um wie viel Uhr bin ich heute bei Familie Krause zur Badsanierung eingeplant?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-007",
+   "set": "blind_v3",
+   "text": "zeig mir meine termien für heite",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-008",
+   "set": "blind_v3",
+   "text": "Bevor ich ins Lager fahre: Hab ich heute zwischen zwei und fünf noch irgendwelche Termine im Kalender stehen?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-009",
+   "set": "blind_v3",
+   "text": "Was hab ich heute noch für Termine?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-010",
+   "set": "blind_v3",
+   "text": "Wos hob i'n heit nachmiddooch nu fer Termine, wassd du des?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-011",
+   "set": "blind_v3",
+   "text": "Ei, sach mol, hab ich heit noch en Kunnetermin in de Werkstatt?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-012",
+   "set": "blind_v3",
+   "text": "äh ja, kurz … was steht heute bei mir noch an, so termintechnisch, ich bin grad bei Frau Kowalski in der Pflege und",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-013",
+   "set": "blind_v3",
+   "text": "terimne heute bitte",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-014",
+   "set": "blind_v3",
+   "text": "Hab ich heute noch nen call oder ein meeting im Kalender?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-015",
+   "set": "blind_v3",
+   "text": "Ich will keinen neuen Termin anlegen, ich will nur wissen, wann heute mein Termin mit der Spedition Hollmann ist.",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-016",
+   "set": "blind_v3",
+   "text": "Sach ma, wat hab ich heute noch so an Terminen, getz nach der Mittagspause?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-017",
+   "set": "blind_v3",
+   "text": "Nu, wann muss ich'n heute bei dor Elternsprechstunde sein, steht das bei mir drin?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-018",
+   "set": "blind_v3",
+   "text": "Bin ich heute Nachmittag noch verplant oder kann ich früher raus auf den Hof?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-019",
+   "set": "blind_v3",
+   "text": "Was hän i hit no fir Termin im Kalender?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-020",
+   "set": "blind_v3",
+   "text": "Hann ich heit noch Termine, odder?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-021",
+   "set": "blind_v3",
+   "text": "Moin, wat hab ich heute noch so an Terminen?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-022",
+   "set": "blind_v3",
+   "text": "Hon i heit no an Termin?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-023",
+   "set": "blind_v3",
+   "text": "Könnten Sie mir bitte freundlicherweise sagen, welche Termine ich heute im Salon noch habe?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-024",
+   "set": "blind_v3",
+   "text": "welhce termne hab ich heute nachmitag",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-025",
+   "set": "blind_v3",
+   "text": "Ist die Baubesprechung mit Architekt Krämer heute um 15 Uhr bei mir eingetragen?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-026",
+   "set": "blind_v3",
+   "text": "Bevor ich Feierabend mache: Steht heute in der Apotheke noch ein Kundentermin bei mir an?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind3-027",
+   "set": "blind_v3",
+   "text": "Was steht morgen an Terminen an?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-028",
+   "set": "blind_v3",
+   "text": "Was hammer'n morschen fier Dermine?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-029",
+   "set": "blind_v3",
+   "text": "Wat steiht morje bei mir em Kalender?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-030",
+   "set": "blind_v3",
+   "text": "Hob i morgn in da Fruah scho wos ausgmocht?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-031",
+   "set": "blind_v3",
+   "text": "welhce termine hab ich morgn",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-032",
+   "set": "blind_v3",
+   "text": "Muss ich morgen früh schon zur Baustellenbegehung bei Kessler Hochbau oder erst am Nachmittag?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-033",
+   "set": "blind_v3",
+   "text": "Welche Mandantengespräche hab ich morgen?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-034",
+   "set": "blind_v3",
+   "text": "Ich will heute Abend schon planen, wann ich morgen losfahren muss – zeig mir bitte alle Außendiensttermine für morgen.",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-035",
+   "set": "blind_v3",
+   "text": "Wos is'n morgn bei mir alles im Kalender drin?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-036",
+   "set": "blind_v3",
+   "text": "Muss ich morche frieh schun um siwwe beim Mandant Gerber sei?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-037",
+   "set": "blind_v3",
+   "text": "äh, morgen … hab ich da, also vormittags, irgendwas mit der Hausverwaltung oder",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-038",
+   "set": "blind_v3",
+   "text": "Wann ist morgen mein call mit Brandt IT-Service?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-039",
+   "set": "blind_v3",
+   "text": "Nicht heute, sondern morgen – was hab ich da für Termine?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-040",
+   "set": "blind_v3",
+   "text": "Wat is morgen bei mir so los, hab ich da wat mit'm Tierarzt aufm Hof?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-041",
+   "set": "blind_v3",
+   "text": "Isch hab doch morschen irgendwas mit dor Fahrzeuginspektion, wann war'n das nochmal?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-042",
+   "set": "blind_v3",
+   "text": "Muss ich morgen früh schon in die Werkstatt oder geht mein Kalender erst nachmittags los?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-043",
+   "set": "blind_v3",
+   "text": "Was hani morge fir Termin?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-044",
+   "set": "blind_v3",
+   "text": "Was is dann morje bei mir los? Termine mään ich.",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-045",
+   "set": "blind_v3",
+   "text": "Hab ich morgen früh schon wat beim Kunden in Altona?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-046",
+   "set": "blind_v3",
+   "text": "Dürfte ich Sie bitten, mir meine Termine für morgen aufzulisten?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-047",
+   "set": "blind_v3",
+   "text": "morgen termine schnell",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-048",
+   "set": "blind_v3",
+   "text": "terimne morgn?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-049",
+   "set": "blind_v3",
+   "text": "Heute ist eh gelaufen – sag mir lieber, wer morgen alles zum Haareschneiden bei mir eingetragen ist.",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-050",
+   "set": "blind_v3",
+   "text": "Muss ich morgen um 8 schon auf der Baustelle Lindenstraße sein, steht das in meinem Kalender?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind3-051",
+   "set": "blind_v3",
+   "text": "Was hab'sch'n noch so uff meiner Liste?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-052",
+   "set": "blind_v3",
+   "text": "Was is'n bei mir noch alles offe an Uffgabe?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-053",
+   "set": "blind_v3",
+   "text": "Wat litt bei mir noch an Arbeit erüm, wat nit fäädisch es?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-054",
+   "set": "blind_v3",
+   "text": "Wos hob i no ois zum tuan?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-055",
+   "set": "blind_v3",
+   "text": "offene aufgaben",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-056",
+   "set": "blind_v3",
+   "text": "zeig mir meine offenen aufgabn bitte",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-057",
+   "set": "blind_v3",
+   "text": "Welche Aufgaben hab ich noch nicht abgehakt?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-058",
+   "set": "blind_v3",
+   "text": "Ich hab grad ne Stunde Luft zwischen zwei Patienten, was liegt bei mir an To-dos noch alles rum, egal ob die diese oder nächste Woche fällig sind?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-059",
+   "set": "blind_v3",
+   "text": "Hab ich noch unerledigte Aufgaben zur Inventur im Lager?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-060",
+   "set": "blind_v3",
+   "text": "Wos muss i'n allerweil nu erledichn, zeich mer mei Aufgabn.",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-061",
+   "set": "blind_v3",
+   "text": "Was hab ich dann noch all for Sache uff meiner To-do-Lischt?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-062",
+   "set": "blind_v3",
+   "text": "ähm, kannst du mir mal … die offenen Aufgaben, also alles, was noch nicht abgehakt ist, egal wann",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-063",
+   "set": "blind_v3",
+   "text": "offne aufgabn anzeigen",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-064",
+   "set": "blind_v3",
+   "text": "Zeig mir meine open tasks, egal welche Deadline.",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-065",
+   "set": "blind_v3",
+   "text": "Ich will nichts abhaken, nur sehen, was noch auf meiner Liste steht.",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-066",
+   "set": "blind_v3",
+   "text": "Was hab'sch'n noch so an Aufgaben offen, die Lohnabrechnungen und so?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-067",
+   "set": "blind_v3",
+   "text": "Welche Sachen sind bei mir noch unerledigt, auch die für nächste Woche?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-068",
+   "set": "blind_v3",
+   "text": "Was hani no alles uf minere To-do-Lischt?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-069",
+   "set": "blind_v3",
+   "text": "Was hann ich noch alles se erledische?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-070",
+   "set": "blind_v3",
+   "text": "Wären Sie so freundlich, mir alle meine noch nicht erledigten Aufgaben zu zeigen?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-071",
+   "set": "blind_v3",
+   "text": "offene todos",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-072",
+   "set": "blind_v3",
+   "text": "Nicht nur die überfälligen – zeig mir alles, was bei mir noch unerledigt ist, egal wann fällig.",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-073",
+   "set": "blind_v3",
+   "text": "Wie viele Aufgaben hab ich in der Tischlerei noch auf dem Zettel stehen?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind3-074",
+   "set": "blind_v3",
+   "text": "Hab'sch irchendwas vergessn, was schon längst fällsch war?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-075",
+   "set": "blind_v3",
+   "text": "Was hätt isch eigentlich schon lang mache müsse?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-076",
+   "set": "blind_v3",
+   "text": "Wat han ich verschwitz?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-077",
+   "set": "blind_v3",
+   "text": "Wos is bei mia scho übafällig?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-078",
+   "set": "blind_v3",
+   "text": "überfällig",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-079",
+   "set": "blind_v3",
+   "text": "welche aufgabn sind abgelaufn",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-080",
+   "set": "blind_v3",
+   "text": "Hab ich irgendeine Frist verpasst, z. B. bei der Stellungnahme für Mandant Bergmann?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-081",
+   "set": "blind_v3",
+   "text": "Der Chef fragt, ob bei mir noch was hinterherhängt – welche meiner Aufgaben hätten eigentlich schon bis letzte Woche erledigt sein müssen?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-082",
+   "set": "blind_v3",
+   "text": "Wo bin ich im Verzug?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-083",
+   "set": "blind_v3",
+   "text": "Hob i irgendwos vergessn, wos scho längst fällig gwesn wär?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-084",
+   "set": "blind_v3",
+   "text": "Ei, was hab ich dann all verschlampt, wo schun rum is mit de Frischt?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-085",
+   "set": "blind_v3",
+   "text": "äh, sag mal, hab ich was liegen lassen? So Sachen, wo die Frist schon … also abgelaufen",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-086",
+   "set": "blind_v3",
+   "text": "Was ist bei mir alles overdue?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-087",
+   "set": "blind_v3",
+   "text": "Nicht alle offenen Aufgaben, nur die, deren Deadline schon rum ist.",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-088",
+   "set": "blind_v3",
+   "text": "Hab ich getz wat verbummelt, wat schon letzte Woche fertig sein sollte?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-089",
+   "set": "blind_v3",
+   "text": "Isch gloob, ich hab was verbaselt – was war'n schon fällig?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-090",
+   "set": "blind_v3",
+   "text": "Bei welchen Aufgaben hab ich die Frist gerissen, zum Beispiel bei der Umsatzsteuervoranmeldung?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-091",
+   "set": "blind_v3",
+   "text": "Hani ebbis vergesse, wo scho lang hätt fertig sei müesse?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-092",
+   "set": "blind_v3",
+   "text": "Was hann ich verbummelt, wo schunn längschd fällisch war?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-093",
+   "set": "blind_v3",
+   "text": "Wat hab ich verschnarcht? Is irgendwas schon über die Frist?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-094",
+   "set": "blind_v3",
+   "text": "Wos hätt i schon längst erledigt hobn solln?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-095",
+   "set": "blind_v3",
+   "text": "Könnten Sie bitte prüfen, ob bei mir Aufgaben mit abgelaufener Frist liegen?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-096",
+   "set": "blind_v3",
+   "text": "was ist überfällig??",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-097",
+   "set": "blind_v3",
+   "text": "üebrfällige aufgabn zeigen",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-098",
+   "set": "blind_v3",
+   "text": "Hab ich irgendwas vergessen, was letzte Woche für die Laborproben fällig war?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-099",
+   "set": "blind_v3",
+   "text": "Gibt's Aufgaben, bei denen ich die Deadline schon gerissen hab?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind3-100",
+   "set": "blind_v3",
+   "text": "Is'n bei mir ne neue E-Mail gomm?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-101",
+   "set": "blind_v3",
+   "text": "Hot mer heut schon aaner geschriwwe? Isch mein E-Mails.",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-102",
+   "set": "blind_v3",
+   "text": "Sin noch Mails do, die ich nit jelese han?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-103",
+   "set": "blind_v3",
+   "text": "Hob i wos Neichs im Postfoch?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-104",
+   "set": "blind_v3",
+   "text": "ungelesene mails",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-105",
+   "set": "blind_v3",
+   "text": "Ich hab gestern nicht mehr reingeschaut – was ist seitdem an ungelesener Post im Mailfach?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-106",
+   "set": "blind_v3",
+   "text": "Bevor ich zum Kunden rausfahre, sag mir kurz, ob in meinem Posteingang noch ungelesene Nachrichten liegen, vor allem von Lieferanten.",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-107",
+   "set": "blind_v3",
+   "text": "Wie viele ungelesene E-Mails hab ich?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-108",
+   "set": "blind_v3",
+   "text": "Is fei a neie Mail kumma?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-109",
+   "set": "blind_v3",
+   "text": "Hot mer jemand gschriwwe, sin neie Mails do?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-110",
+   "set": "blind_v3",
+   "text": "äh, ist eigentlich irgendwas reingekommen, Mails mein ich, ungelesen, seit heute früh",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-111",
+   "set": "blind_v3",
+   "text": "Check mal meine inbox, was ist noch unread?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-112",
+   "set": "blind_v3",
+   "text": "Ich will keine Mail schreiben, nur wissen, ob was Neues im Posteingang ist.",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-113",
+   "set": "blind_v3",
+   "text": "Is da wat Neues im Postfach, hat die Spedition Wienker sich gemeldet?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-114",
+   "set": "blind_v3",
+   "text": "Hab'sch neue Mails, oder is da nischt gekommen?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-115",
+   "set": "blind_v3",
+   "text": "Isch e neii Mail kumme?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-116",
+   "set": "blind_v3",
+   "text": "Is ebbes Neies im Poschtfach?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-117",
+   "set": "blind_v3",
+   "text": "Moin, is da wat Neues anne Mails reingekomm'?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-118",
+   "set": "blind_v3",
+   "text": "Hon i neie Mails kriagt?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-119",
+   "set": "blind_v3",
+   "text": "Würden Sie mir bitte sagen, ob ungelesene E-Mails in meinem Postfach liegen?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-120",
+   "set": "blind_v3",
+   "text": "ungelesene mails jetzt",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-121",
+   "set": "blind_v3",
+   "text": "neu emials?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-122",
+   "set": "blind_v3",
+   "text": "Ist von Brandt Events schon eine Antwort gekommen, die ich noch nicht gelesen hab?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-123",
+   "set": "blind_v3",
+   "text": "Wie viele ungelesene Nachrichten sind seit 9 Uhr in meinem Posteingang?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind3-124",
+   "set": "blind_v3",
+   "text": "Gib mir einen Überblick über meinen Tag.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-125",
+   "set": "blind_v3",
+   "text": "Was is'n heude so alles los – Dermine, Uffgaben un Mails, alles zusamm?",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-126",
+   "set": "blind_v3",
+   "text": "Mach mer ma en Tagesüberblick, alles uff aamal.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-127",
+   "set": "blind_v3",
+   "text": "Wie süht minge Daach us, alles zesamme?",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-128",
+   "set": "blind_v3",
+   "text": "Wos steht heit ois an – Termine, Aufgobn und Mails?",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-129",
+   "set": "blind_v3",
+   "text": "tagesübersicht",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-130",
+   "set": "blind_v3",
+   "text": "briefing für heute bitte, alles zusamen",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-131",
+   "set": "blind_v3",
+   "text": "Fass mir den Tag zusammen: welche Termine, was ist zu tun und welche Mails sind neu.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-132",
+   "set": "blind_v3",
+   "text": "Guten Morgen, ich steh gleich in der Küche und hab keine Zeit für Einzelabfragen – gib mir bitte meinen kompletten Tagesplan mit Terminen, Aufgaben und Posteingang.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-133",
+   "set": "blind_v3",
+   "text": "Starte mein Morgenbriefing.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-134",
+   "set": "blind_v3",
+   "text": "Moch mer amol an Tagesüberblick, alles zam: Termine, Aufgabn und Mails.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-135",
+   "set": "blind_v3",
+   "text": "Ei, wie sieht mein ganzer Daach heit aus, mit Terminen, Uffgabe und Mails, alles Drum und Dran?",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-136",
+   "set": "blind_v3",
+   "text": "äh guten Morgen, kannst du mir einmal so das Briefing für heute … also alles, Termine, Aufgaben, Mails, komplett",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-137",
+   "set": "blind_v3",
+   "text": "tagesüberblik alles zusammen bitte termine aufgaben mails",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-138",
+   "set": "blind_v3",
+   "text": "Mach mir ein daily briefing mit allem, was heute ansteht – Kalender, To-dos und Inbox.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-139",
+   "set": "blind_v3",
+   "text": "Nicht nur die Termine – ich will den kompletten Tagesplan inklusive Aufgaben und Posteingang.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-140",
+   "set": "blind_v3",
+   "text": "Gib ma getz den ganzen Tach auf einen Blick: Termine, Kram zum Erledigen und Mails.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-141",
+   "set": "blind_v3",
+   "text": "Nu sach mer ma alles für heute zusamm, Termine, Aufgaben, Mails, des ganze Paket.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-142",
+   "set": "blind_v3",
+   "text": "Fass mir den heutigen Tag komplett zusammen: was im Kalender steht, was zu tun ist und was an Mails da ist.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-143",
+   "set": "blind_v3",
+   "text": "Verzell mer mol alles fir hit: Termin, Ufgabe, Mails.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-144",
+   "set": "blind_v3",
+   "text": "Wie siehd mei Daach aus? Alles zesamme, bitte.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-145",
+   "set": "blind_v3",
+   "text": "Moin, mach mal 'n Tagesüberblick, alles auf einmal.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-146",
+   "set": "blind_v3",
+   "text": "Gib ma an Überblick über'n gonzn Tog, olls zsomm.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-147",
+   "set": "blind_v3",
+   "text": "Könnten Sie mir bitte eine Zusammenfassung meines heutigen Tages geben, mit Terminen, offenen Aufgaben und neuen E-Mails?",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-148",
+   "set": "blind_v3",
+   "text": "tagesbriefing",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-149",
+   "set": "blind_v3",
+   "text": "tagesübrsicht bitte alles",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-150",
+   "set": "blind_v3",
+   "text": "Nicht nur die Termine – ich will den kompletten Tagesplan mit allem drum und dran.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-151",
+   "set": "blind_v3",
+   "text": "Morgenbriefing für die Reinigungstour: Was liegt heute alles an, Kalender, To-dos und Posteingang?",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind3-152",
+   "set": "blind_v3",
+   "text": "Kannst du für morgen 10 Uhr ein Treffen mit Herrn Yilmaz eintragen?",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-153",
+   "set": "blind_v3",
+   "text": "Mach mir ma'n Dermin fier Dienschdach um zwee beim Zahnarzt.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-154",
+   "set": "blind_v3",
+   "text": "Leg mer ma en Termin am Freitach um neun mit de Firma Schäfer Sanitär an.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-155",
+   "set": "blind_v3",
+   "text": "Schriev mer ene Termin för Mettwoch, Besprechung met dem Jupp vum Brauhaus.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-156",
+   "set": "blind_v3",
+   "text": "Trog ma fürn Montog um hoiba ochte an Termin mit da Frau Gruber ein.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-157",
+   "set": "blind_v3",
+   "text": "neuer termin do 14 uhr",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-158",
+   "set": "blind_v3",
+   "text": "termin anlgen für nächste woch mitwoch baustelle kessler",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-159",
+   "set": "blind_v3",
+   "text": "Ich hab heute um drei noch Zeit – setz da bitte das Gespräch mit Mandantin Petersen rein.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-160",
+   "set": "blind_v3",
+   "text": "Bitte einen neuen Kalendereintrag erstellen: Begehung der Lagerhalle in Gießen am 14.11. von 8 bis 10 Uhr mit dem Brandschutzbeauftragten.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-161",
+   "set": "blind_v3",
+   "text": "Blockier mir Donnerstagnachmittag im Kalender für die Inventur.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-162",
+   "set": "blind_v3",
+   "text": "Trag mir morgen um 10 Uhr einen Termin mit Herrn Albers ein.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-163",
+   "set": "blind_v3",
+   "text": "Mach mer an Termin am Dienstooch um zwaa mit'm Bauer Hofmann aus.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-164",
+   "set": "blind_v3",
+   "text": "Schreib mer fer Freitach en Termin uff, Ölwechsel beim Herr Becker, halwer elfe.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-165",
+   "set": "blind_v3",
+   "text": "äh ja, neuer Termin bitte, äh, Donnerstag, Elterngespräch mit Familie Yilmaz, so 15 Uhr, nee warte, halb vier",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-166",
+   "set": "blind_v3",
+   "text": "termn anlegen montag 9uhr steuerberatung fa. lindner",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-167",
+   "set": "blind_v3",
+   "text": "Plan mir ein meeting mit dem Team von Netzwerk Kraus nächsten Mittwoch um 14 Uhr ein.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-168",
+   "set": "blind_v3",
+   "text": "Ich will nicht wissen, was morgen ansteht, sondern morgen um 8 einen neuen Termin für die Wohnungsübergabe Gartenstraße eintragen.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-169",
+   "set": "blind_v3",
+   "text": "Mach ma'n Termin für übermorgen, Hausbesuch bei Oma Brinkmann, so gegen neun.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-170",
+   "set": "blind_v3",
+   "text": "Trach mer ma 'n Termin ein, nächste Woche Montag, Lkw-Abnahme beim TÜV in Erfurt.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-171",
+   "set": "blind_v3",
+   "text": "Blockier mir im Kalender den 14.11. von 13 bis 15 Uhr für die Begehung in der Lindenallee.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-172",
+   "set": "blind_v3",
+   "text": "Mach mer am Fritig um drei e Termin mit em Schreiner Hug.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-173",
+   "set": "blind_v3",
+   "text": "Leesch ma e Termin aan, Mondaach halb neun beim Kunde Schmitt.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-174",
+   "set": "blind_v3",
+   "text": "Kannst mir für Dienstag 14 Uhr 'n Termin mit Hansen Logistik reinknallen?",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-175",
+   "set": "blind_v3",
+   "text": "Trog ma an Termin ein, am Mittwoch um zwoa mit'm Hofer.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-176",
+   "set": "blind_v3",
+   "text": "Würden Sie bitte für den 14.11. um 9:30 Uhr eine Besprechung mit Lichtwerk Events in meinen Kalender eintragen?",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-177",
+   "set": "blind_v3",
+   "text": "termin anlegen do 16h zahnarzt",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-178",
+   "set": "blind_v3",
+   "text": "neuen termn erstelen fr übermorgen 11 uhr",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-179",
+   "set": "blind_v3",
+   "text": "Heute um 17 Uhr kommt Herr Becker zur Farbberatung, bitte als Termin festhalten.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-180",
+   "set": "blind_v3",
+   "text": "Blockier mir nächsten Montag von 8 bis 12 für die Inventur in der Apotheke.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind3-181",
+   "set": "blind_v3",
+   "text": "Neue Aufgabe: Angebot für Familie Meier schreiben.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-182",
+   "set": "blind_v3",
+   "text": "Schreib mer uff: Gerüst bei Schulze abbaun.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-183",
+   "set": "blind_v3",
+   "text": "Isch brauch e neu Uffgab: Ebbelwoi beim Großhändler nachbestelle.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-184",
+   "set": "blind_v3",
+   "text": "Pack op ming Liss: Kölsch-Fässer för Samsdaach bestelle.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-185",
+   "set": "blind_v3",
+   "text": "Leg ma a Aufgab an: Befunde vom Herrn Pichler einscannen.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-186",
+   "set": "blind_v3",
+   "text": "aufgabe erstellen rechnung 4711 prüfen",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-187",
+   "set": "blind_v3",
+   "text": "erinner mich drann, die handwerkerrechnung zu bezahlen",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-188",
+   "set": "blind_v3",
+   "text": "Ich darf nicht vergessen, bis Freitag den Mietvertrag für Kanzlei Hoffmann zu prüfen – nimm das bitte als Aufgabe auf.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-189",
+   "set": "blind_v3",
+   "text": "Setz mir bitte ein To-do auf die Liste: Paletten im Lager B bis Ende der Woche umlagern und danach dem Schichtleiter Bescheid geben.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-190",
+   "set": "blind_v3",
+   "text": "Merk dir als Aufgabe: Kühlhaus-Temperaturprotokoll ausfüllen.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-191",
+   "set": "blind_v3",
+   "text": "Leg mir eine Aufgabe an: Rechnung an Firma Krüger schicken.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-192",
+   "set": "blind_v3",
+   "text": "Schreib mer auf, dass i nu des Ersatzteil fer'n Golf bstelln muss.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-193",
+   "set": "blind_v3",
+   "text": "Mach mer e Uffgab: Heizungsableser fer die Kerschestroß bestelle, bis Mittwoch.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-194",
+   "set": "blind_v3",
+   "text": "äh, neue Aufgabe, also … Medikamentenplan von Herrn Vogt aktualisieren, bis Freitag, ja",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-195",
+   "set": "blind_v3",
+   "text": "aufgbe erstellen: zeugnisse 7b korigieren",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-196",
+   "set": "blind_v3",
+   "text": "Mach mir ein to-do: Backup-Server bei Kanzlei Seitz checken, deadline Ende der Woche.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-197",
+   "set": "blind_v3",
+   "text": "Kein Termin, sondern eine Aufgabe: bis Montag die Nebenkostenabrechnung für Haus 3 fertig machen.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-198",
+   "set": "blind_v3",
+   "text": "Schreib ma als Aufgabe auf, dat ich noch Futter bei der Raiffeisen bestellen muss.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-199",
+   "set": "blind_v3",
+   "text": "Merk mer ma als Aufgabe vor: Frachtpapiere für die Tour nach Gotha fertsch machen.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-200",
+   "set": "blind_v3",
+   "text": "Neue Aufgabe für mich: Belege von Mandantin Özdemir anfordern.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-201",
+   "set": "blind_v3",
+   "text": "Neue Aufgabe: Rechnung an Bäckerei Frey schicken.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-202",
+   "set": "blind_v3",
+   "text": "Schrieb mer uf: bis Fritig d'Offert fir de Huber mache.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-203",
+   "set": "blind_v3",
+   "text": "Mach ma e Uffgab: Lieferschein vum Globus nochgucke.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-204",
+   "set": "blind_v3",
+   "text": "Pack mal auf meine Liste: Leiter vonne Baustelle in Barmbek abholen.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-205",
+   "set": "blind_v3",
+   "text": "Leg ma a Aufgob on: Holz beim Sägewerk Kofler bstelln.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-206",
+   "set": "blind_v3",
+   "text": "Würden Sie mir bitte eine Aufgabe anlegen, dass ich bis Monatsende die Kühlschranktemperaturen dokumentiere?",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-207",
+   "set": "blind_v3",
+   "text": "todo: färbemittel nachbestellen",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-208",
+   "set": "blind_v3",
+   "text": "aufgbe erstellen angbot für müller gmbh bis 20.11",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-209",
+   "set": "blind_v3",
+   "text": "Nicht als Termin, sondern als Aufgabe: Probenröhrchen für Labor Dr. Weiß bestellen.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-210",
+   "set": "blind_v3",
+   "text": "Notier als To-do, dass ich bei der überfälligen Rechnung von Kunde Ott nachfassen muss.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind3-211",
+   "set": "blind_v3",
+   "text": "Wie wird das Wetter morgen in Leipzig?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-212",
+   "set": "blind_v3",
+   "text": "Der Drucker gehd schon wieder ni, was mach'sch'n da?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-213",
+   "set": "blind_v3",
+   "text": "Verleg mer ma den Termin vom Donnerstach uff Freitach.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-214",
+   "set": "blind_v3",
+   "text": "Wann spillt dr FC am Wochenend?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-215",
+   "set": "blind_v3",
+   "text": "Lösch ma bitte den Termin mit'm Steuerberater.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-216",
+   "set": "blind_v3",
+   "text": "Schick dem Herrn Wagner eine Mail, dass ich später komme.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-217",
+   "set": "blind_v3",
+   "text": "Aufgabe Angebot Meier ist erledigt, hak die ab.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-218",
+   "set": "blind_v3",
+   "text": "Welche Termine hat Frau Dr. Lorenz morgen?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-219",
+   "set": "blind_v3",
+   "text": "wie viel mwst kommt auf handwerkerleistungen",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-220",
+   "set": "blind_v3",
+   "text": "Erzähl mir mal nen Witz, der Tag war lang.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-221",
+   "set": "blind_v3",
+   "text": "Verschieb meinen Termin von heute 14 Uhr auf morgen früh.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-222",
+   "set": "blind_v3",
+   "text": "Lösch den Termin mit Herrn Schäfer am Freitag.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-223",
+   "set": "blind_v3",
+   "text": "Schick eine Mail an die Hausverwaltung Klee, dass die Heizung im Büro kaputt ist.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-224",
+   "set": "blind_v3",
+   "text": "Hak die Aufgabe Reifenwechsel Passat als erledigt ab.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-225",
+   "set": "blind_v3",
+   "text": "Mei Drucker gehd scho widder ned, wos mach i do?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-226",
+   "set": "blind_v3",
+   "text": "Welche Termine hat meine Kollegin Frau Brandt heute?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-227",
+   "set": "blind_v3",
+   "text": "Wer is'n eichentlich de Chef vun de Firma Hoffmann Logistik?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-228",
+   "set": "blind_v3",
+   "text": "Wie hoch is getz der Mehrwertsteuersatz auf Futtermittel?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-229",
+   "set": "blind_v3",
+   "text": "Lösch meinen Termin morgen um 10 mit Frau Yilmaz.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-230",
+   "set": "blind_v3",
+   "text": "Verschieb die Baubesprechung auf Donnerstag.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-231",
+   "set": "blind_v3",
+   "text": "Schick em Huber e Mail, dass mer später kumme.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-232",
+   "set": "blind_v3",
+   "text": "Wie wird dat Wetter morgen in Hamburg?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-233",
+   "set": "blind_v3",
+   "text": "Hak die Uffgab mit em Lieferschein ab, die is erledischt.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-234",
+   "set": "blind_v3",
+   "text": "Na, wie läuft's denn so bei dir?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind3-235",
+   "set": "blind_v3",
+   "text": "Hat die Firma Kessler Bau eigentlich schon Insolvenz angemeldet?",
+   "expected_intent": "unknown"
+  }
+ ]
+}

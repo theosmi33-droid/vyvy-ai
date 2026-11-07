@@ -8,7 +8,8 @@ One JSON object per line in `*.jsonl` files:
 
 `timeframe` and `entity` are optional and default to `null`.
 
-The holdout set in `data/holdout_benchmarks.json` is never used for training.
+The holdout sets (`data/holdout_benchmarks.json`, blind v1, blind v2 and the
+shadow set blind v3) are never used for training.
 `tools/check_holdout_leak.py` rejects any training sentence that is identical
 or close to a holdout sentence (character or word similarity of 0.85 or more);
 the Data check workflow runs it on every change below `data/`.
