@@ -1,0 +1,42 @@
+{
+ "teacher": "Qwen/Qwen2.5-14B-Instruct",
+ "teacher_revision": "cf98f3b3bbb457ad9e2bb7baf9a0125b6b88caa8",
+ "license": "Apache-2.0",
+ "script_sha256": "9c0fcc50077f14816af94619896c3d6b6df5f27c45da8b45dbdf6d35d1d74f80",
+ "seed": 7,
+ "requests": 228,
+ "generated": 2324,
+ "unique": 2314,
+ "kept": 1329,
+ "dropped_by_verification": 985,
+ "min_agree": 0.6,
+ "per_intent": {
+  "appointments_today": 218,
+  "appointments_tomorrow": 207,
+  "tasks_open": 28,
+  "tasks_overdue": 139,
+  "emails_unread": 225,
+  "daily_agenda": 13,
+  "create_appointment": 253,
+  "create_task": 17,
+  "unknown": 229
+ },
+ "minutes": 108.1,
+ "round": "2026-W45",
+ "imported": 1316,
+ "dropped_near_holdout": 12,
+ "dropped_duplicate": 1,
+ "dropped_invalid": 0,
+ "max_similarity": 0.8,
+ "per_intent_imported": {
+  "appointments_today": 211,
+  "appointments_tomorrow": 203,
+  "tasks_open": 28,
+  "tasks_overdue": 139,
+  "emails_unread": 224,
+  "daily_agenda": 13,
+  "create_appointment": 253,
+  "create_task": 17,
+  "unknown": 228
+ }
+}
