@@ -181,7 +181,8 @@ def validation_accuracy(model, tok, rows: list[dict], system: str, intents: tupl
 def failure_kind(exc: BaseException) -> str:
     """Classify a training failure: out of GPU memory, a CUDA/4-bit kernel error, or other."""
     text = f"{type(exc).__name__}: {exc}"
-    if "OutOfMemoryError" in text or "out of memory" in text.lower():
+    # cuBLAS failing to allocate its workspace is the GPU running out of memory too.
+    if "OutOfMemoryError" in text or "out of memory" in text.lower() or "ALLOC_FAILED" in text:
         return "oom"
     if any(k in text for k in ("CUBLAS", "CUDA error", "cuDNN", "bitsandbytes")):
         return "kernel"

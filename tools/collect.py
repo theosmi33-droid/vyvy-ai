@@ -183,7 +183,7 @@ def schedule(repo: str, owner: str) -> None:
     for base in plan_train.ORDER:
         p = plan_train.plan(base)
         kid = f"{owner}/{kaggle_job.kernel_slug(base)}"
-        if release_exists(repo, p["name"]):
+        if plan_train.trained_release(repo, base):
             continue
         if open_failure(repo, kid, p["name"]):
             summary(f"Scheduler: {base} waits for a fix (open failure issue for {kid}).")

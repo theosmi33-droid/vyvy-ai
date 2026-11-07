@@ -63,19 +63,22 @@ jobs:
       - name: Plan (size, sweep, budget, name)
         run: |
           set -euo pipefail
-          plan=$(python tools/plan_train.py "$BASE" --epochs "$EPOCHS")
-          size=$(echo "$plan" | python -c "import json,sys; print(json.load(sys.stdin)['size'])")
-          budget=$(echo "$plan" | python -c "import json,sys; print(json.load(sys.stdin)['budget'])")
-          sweep=$(echo "$plan" | python -c "import json,sys; print(json.load(sys.stdin)['sweep'])")
-          name=${NAME_INPUT:-$(echo "$plan" | python -c "import json,sys; print(json.load(sys.stdin)['name'])")}
+          plan=$(python tools/plan_train.py "$BASE" --epochs "$EPOCHS" --repo "$GITHUB_REPOSITORY")
+          get() { echo "$plan" | python -c "import json,sys; v=json.load(sys.stdin).get('$1'); print('' if v is None else v)"; }
+          budget=$(get budget); sweep=$(get sweep); batch=$(get batch); accum=$(get grad_accum); trained=$(get trained)
+          name=${NAME_INPUT:-$(get name)}
           [[ "$name" =~ ^[a-z0-9][a-z0-9.-]{0,60}$ ]] || { echo "invalid name" >&2; exit 1; }
           if gh release view "$name" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             echo "SKIP=true" >> "$GITHUB_ENV"
             echo "Adapter $name already exists; nothing to train." >> "$GITHUB_STEP_SUMMARY"
+          elif [ -z "$NAME_INPUT" ] && [ -n "$trained" ]; then
+            # Same training data and prompt as an existing release: trainer fixes alone do not retrain.
+            echo "SKIP=true" >> "$GITHUB_ENV"
+            echo "Already trained on this data and prompt: $trained." >> "$GITHUB_STEP_SUMMARY"
           fi
           ls data/train/*.jsonl >/dev/null 2>&1 || { echo "no training data in data/train/" >&2; exit 1; }
-          { echo "NAME=$name"; echo "SWEEP=$sweep"; echo "BUDGET=$budget"; } >> "$GITHUB_ENV"
-          echo "Adapter: $name · sweep $sweep · budget $budget min" >> "$GITHUB_STEP_SUMMARY"
+          { echo "NAME=$name"; echo "SWEEP=$sweep"; echo "BUDGET=$budget"; echo "BATCH=$batch"; echo "ACCUM=$accum"; } >> "$GITHUB_ENV"
+          echo "Adapter: $name · sweep $sweep · budget $budget min · batch $batch x $accum" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Holdout lock
         if: env.SKIP != 'true'
@@ -111,7 +114,7 @@ jobs:
           set -euo pipefail
           kid=$(python tools/kaggle_job.py --dir job --owner "$KAGGLE_USERNAME" \
                   --repo "$GITHUB_REPOSITORY" --commit "$GITHUB_SHA" --base "$BASE" --name "$NAME" \
-                  --epochs "$EPOCHS" --sweep "$SWEEP" --budget "$BUDGET")
+                  --epochs "$EPOCHS" --sweep "$SWEEP" --budget "$BUDGET" --batch "$BATCH" --grad-accum "$ACCUM")
           # Kernel limit: budget plus 1 h for setup and export, below Kaggle's 12 h.
           kaggle kernels push -p job --accelerator NvidiaTeslaT4 --timeout "$(( (BUDGET + 60) * 60 ))"
           echo "Started $kid for $NAME; Collect publishes the result when it is done." >> "$GITHUB_STEP_SUMMARY"

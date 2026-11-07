@@ -22,9 +22,13 @@ sys.path.insert(0, str(ROOT / "runner"))
 
 import bench  # noqa: E402
 
+# Same effective batch (16) for both; 7B uses small device batches so the 4-bit
+# model, activations and optimizer fit a 16 GB T4.
 PLANS = {
-    "Qwen/Qwen2.5-1.5B-Instruct": {"size": "1.5b", "budget": 240, "sweep": "rank=16,8,32;lr=2e-4,1e-4,5e-4"},
-    "Qwen/Qwen2.5-7B-Instruct": {"size": "7b", "budget": 360, "sweep": "rank=16,32;lr=2e-4,1e-4"},
+    "Qwen/Qwen2.5-1.5B-Instruct": {"size": "1.5b", "budget": 240, "sweep": "rank=16,8,32;lr=2e-4,1e-4,5e-4",
+                                   "batch": 8, "grad_accum": 2},
+    "Qwen/Qwen2.5-7B-Instruct": {"size": "7b", "budget": 360, "sweep": "rank=16,32;lr=2e-4,1e-4",
+                                 "batch": 2, "grad_accum": 8},
 }
 ORDER = list(PLANS)
 
@@ -43,12 +47,50 @@ def plan(base: str, epochs: float = 4) -> dict:
     return p
 
 
+def inputs(base: str) -> tuple[dict, str]:
+    """What decides whether a base model needs training: training files and prompt."""
+    files = {f.name: hashlib.sha256(f.read_bytes()).hexdigest()
+             for f in sorted((ROOT / "data" / "train").glob("*.jsonl"))}
+    prompt = hashlib.sha256(bench.PROMPTS[bench.prompt_for(base)].encode("utf-8")).hexdigest()
+    return files, prompt
+
+
+def trained_release(repo: str, base: str) -> str | None:
+    """Tag of a release (accepted or candidate) trained the way this plan trains today.
+
+    Decided by the release manifest, not the name: same base, same training files,
+    same prompt and the same sweep budget. Trainer bug fixes therefore do not
+    retrain a model, while new data, a new prompt or a new sweep plan do.
+    """
+    import subprocess
+
+    files, prompt = inputs(base)
+    budget = PLANS[base]["budget"]
+    out = subprocess.run(["gh", "release", "list", "--repo", repo, "--limit", "100", "--json", "tagName"],
+                         capture_output=True, text=True)
+    for tag in [r["tagName"] for r in json.loads(out.stdout or "[]")]:
+        got = subprocess.run(["gh", "release", "download", tag, "--repo", repo, "--pattern", "manifest.json",
+                              "--output", "-"], capture_output=True, text=True)
+        try:
+            m = json.loads(got.stdout)
+        except json.JSONDecodeError:
+            continue
+        if (m.get("base") == base and m.get("train_files") == files and m.get("prompt_sha256") == prompt
+                and m.get("time_budget_min") == budget):
+            return tag
+    return None
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Plan a training run")
     ap.add_argument("base")
     ap.add_argument("--epochs", type=float, default=4)
+    ap.add_argument("--repo", help="also report a release already trained on today's data and prompt")
     args = ap.parse_args(argv)
-    print(json.dumps(plan(args.base, args.epochs)))
+    p = plan(args.base, args.epochs)
+    if args.repo:
+        p["trained"] = trained_release(args.repo, args.base)
+    print(json.dumps(p))
     return 0
 
 
