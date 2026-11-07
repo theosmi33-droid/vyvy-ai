@@ -1,0 +1,80 @@
+name: Watch
+
+# Reports a failed pipeline run the moment it ends, without anyone watching:
+# GitHub starts this workflow when one of the workflows below completes. A
+# failure opens one issue per run (title "Workflow failed: <name> …") with the
+# failing jobs and their last log lines; GitHub notifies the repository owner.
+# When the same workflow later succeeds, its open failure issues are closed.
+# A rejected adapter (bench-lora's deliberate failure) gets the title "Adapter
+# rejected: …" instead and stays open. Kaggle kernel failures are reported by
+# Collect ("Kaggle training failed: …").
+on:
+  workflow_run:
+    workflows: [Bench LoRA, Train, Synthesize, Collect, Data check, Bench Mac, Benchmark, Compare, Heartbeat, Mirror]
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: read
+  issues: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      NAME: ${{ github.event.workflow_run.name }}
+      RUN_ID: ${{ github.event.workflow_run.id }}
+      RUN_URL: ${{ github.event.workflow_run.html_url }}
+      CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+      TITLE_OF_RUN: ${{ github.event.workflow_run.display_title }}
+    steps:
+      - name: Open an issue for a failed run
+        if: contains(fromJSON('["failure", "timed_out", "startup_failure"]'), github.event.workflow_run.conclusion)
+        run: |
+          set -uo pipefail
+          title="Workflow failed: $NAME (run $RUN_ID)"
+          # bench-lora fails on purpose when it rejects an adapter: that is a result, not a fault.
+          steps=$(gh api "repos/$REPO/actions/runs/$RUN_ID/jobs" \
+                    --jq '[.jobs[].steps[] | select(.conclusion == "failure") | .name] | unique | join(",")')
+          if [ "$steps" = "Fail when rejected" ]; then
+            title="Adapter rejected: $TITLE_OF_RUN (run $RUN_ID)"
+          fi
+          if gh issue list --repo "$REPO" --state all --search "\"$title\" in:title" --json title --jq '.[].title' | grep -qxF "$title"; then
+            echo "already reported"; exit 0
+          fi
+          jobs=$(gh api "repos/$REPO/actions/runs/$RUN_ID/jobs" \
+                   --jq '.jobs[] | select(.conclusion == "failure" or .conclusion == "timed_out") | "- \(.name): \(.conclusion)"')
+          log=$(gh run view "$RUN_ID" --repo "$REPO" --log-failed 2>/dev/null \
+                  | cut -f3- | sed 's/^[0-9T:.-]*Z //' | grep -v '\[36;1m' | tail -n 60)
+          {
+            echo "**$NAME** ended with \`$CONCLUSION\`: $RUN_URL"
+            echo
+            echo "Run: $TITLE_OF_RUN"
+            echo
+            echo "Failed jobs:"
+            echo "${jobs:-- (none listed)}"
+            echo
+            echo "Last log lines:"
+            echo
+            echo '```'
+            echo "$log"
+            echo '```'
+            echo
+            echo "Opened by the Watch workflow; it closes this issue when $NAME next succeeds."
+          } > body.md
+          gh issue create --repo "$REPO" --title "$title" --body-file body.md
+
+      - name: Close failure issues of this workflow after a success
+        if: github.event.workflow_run.conclusion == 'success'
+        run: |
+          set -uo pipefail
+          prefix="Workflow failed: $NAME (run "
+          # Rejection notices stay open: each is a decision to read, not a fault to fix.
+          gh issue list --repo "$REPO" --state open --search "\"Workflow failed: $NAME\" in:title" \
+            --json number,title --jq ".[] | select(.title | startswith(\"$prefix\")) | .number" |
+          while read -r n; do
+            gh issue close "$n" --repo "$REPO" --comment "Closed by Watch: $NAME succeeded in run $RUN_ID ($RUN_URL)."
+          done
