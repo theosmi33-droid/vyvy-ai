@@ -264,7 +264,7 @@ def open_failure(repo: str, kid: str, name: str) -> bool:
         return False
     # Only Collect's own notes count: anyone can comment on a public issue.
     comments = run("gh", "issue", "view", number, "--repo", repo, "--json", "comments", "--jq",
-                   '.comments[] | select(.author.login == "github-actions") | .body', check=False)
+                   '.comments[] | select(.author.login == "github-actions" or .author.login == "app/github-actions") | .body', check=False)
     if RETRY_NOTE in comments:
         return True
     run("gh", "issue", "comment", number, "--repo", repo, "--body",
