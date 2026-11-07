@@ -1,13 +1,21 @@
 name: Collect
 
-# Every 20 minutes: picks up finished Kaggle training runs (convert to GGUF,
-# license files, candidate release, bench-lora), reports failures as one issue
-# each, and starts the next missing training run when no kernel of the account
-# is running. See tools/collect.py. Costs a few CPU seconds when nothing changed.
-# GitHub may skip or delay scheduled runs; a run by hand (Actions -> Collect) does the same.
+# Picks up finished Kaggle training runs (convert to GGUF, license files,
+# candidate release, bench-lora), reports failures as one issue each, and starts
+# the next missing training run when no kernel of the account is running.
+# See tools/collect.py.
+#
+# How it keeps running: GitHub did not execute the schedule below reliably, so
+# Collect chains itself. While a kernel of the account is running, it waits 15
+# minutes and starts the next Collect run; when nothing runs, the chain ends.
+# Train starts Collect right after it starts a kernel, and a push to Collect
+# itself starts it too. The schedule stays as a backup.
 on:
   schedule:
     - cron: "7,27,47 * * * *"
+  push:
+    branches: [main]
+    paths: [".github/workflows/collect.yml", "tools/collect.py"]
   workflow_dispatch:
 
 permissions:
@@ -41,3 +49,16 @@ jobs:
           # kaggle 2.2.5 imports six without declaring it as a dependency
           pip install -q kaggle==2.2.5 six==1.17.0 huggingface_hub==0.36.2
           python tools/collect.py
+
+      - name: Keep watching while a kernel runs
+        if: always()
+        run: |
+          set -uo pipefail
+          busy=$(python tools/kaggle_busy.py | tr '\n' ' ')
+          if [ -n "${busy// /}" ]; then
+            echo "Still running: $busy; next Collect run in 15 minutes." >> "$GITHUB_STEP_SUMMARY"
+            sleep 900
+            gh workflow run collect.yml --repo "$GITHUB_REPOSITORY" --ref main
+          else
+            echo "No kernel running; the chain ends here until Train starts a new run." >> "$GITHUB_STEP_SUMMARY"
+          fi

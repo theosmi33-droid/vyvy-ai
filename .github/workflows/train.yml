@@ -38,6 +38,7 @@ on:
 
 permissions:
   contents: read
+  actions: write  # start the Collect chain after a kernel was started
 
 concurrency:
   group: train
@@ -118,3 +119,5 @@ jobs:
           # Kernel limit: budget plus 1 h for setup and export, below Kaggle's 12 h.
           kaggle kernels push -p job --accelerator NvidiaTeslaT4 --timeout "$(( (BUDGET + 60) * 60 ))"
           echo "Started $kid for $NAME; Collect publishes the result when it is done." >> "$GITHUB_STEP_SUMMARY"
+          # Start the Collect chain; it re-runs itself every 15 minutes while the kernel runs.
+          gh workflow run collect.yml --repo "$GITHUB_REPOSITORY" --ref main

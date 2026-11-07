@@ -50,12 +50,16 @@ runners. Nothing needs manual approval or checking.
    benchmark's route mode makes. No new config starts if it would likely not
    finish within the budget. The best config's PEFT adapter is kept; fallbacks
    handle out-of-memory and 4-bit kernel errors.
-3. **Collect** (`collect.yml`, every 20 minutes) picks up finished runs:
+3. **Collect** (`collect.yml`) picks up finished runs. Train starts it right
+   after a kernel starts, and it re-runs itself every 15 minutes while any
+   kernel of the account runs (a schedule every 20 minutes is only a backup,
+   because GitHub did not execute it reliably). It
    converts the adapter to GGUF on the runner, adds the base model's Apache 2.0
    license and a NOTICE, publishes a candidate (pre-release) with the sweep
    table and starts **Bench LoRA**. A failed run becomes one GitHub issue with
    the likely cause and the last 100 log lines; the same inputs are not retried
-   until that issue is closed, while changed data or code start anew. When no
+   until that issue is closed, while new data, a new prompt or a new sweep plan
+   start anew. When no
    kernel is running, Collect starts the next missing run (1.5B before 7B).
 4. **Bench LoRA** measures the current default and the candidate in one job,
    on blind holdout v2 (decides) and on blind holdout v1 and the development
