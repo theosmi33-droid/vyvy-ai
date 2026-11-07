@@ -82,7 +82,7 @@ expire it on Kaggle and set a new one.
 | GitHub Actions, Linux | unlimited for public repositories | benchmarks, comparisons, GGUF conversion, Collect |
 | GitHub Actions, macOS (Apple Silicon) | unlimited for public repositories | Bench Mac: latency with Metal on the target hardware |
 | Kaggle datasets | over 200 GB private | pinned model mirror |
-| Google Colab | GPU when available, needs an open browser | not used: it cannot run unattended |
+| Google Colab | free T4 when available, one machine at a time | the official Colab CLI starts and drives it without a browser; used for the teacher synthesis and for runs that would otherwise wait for Kaggle |
 
 ## Measuring the adapter
 
