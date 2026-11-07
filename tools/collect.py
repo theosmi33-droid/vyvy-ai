@@ -188,6 +188,8 @@ def collect_synth(repo: str, owner: str) -> bool:
     if "404" in status or "not found" in status.lower():
         return True
     state = kaggle_watchdog.state_of(status)
+    if state == "running" and not re.search(r"running|queued", status, re.I):
+        return True  # no such kernel yet (the CLI answers with an access error, not 404)
     if state == "running":
         summary(f"{kid}: still running.")
         return True
