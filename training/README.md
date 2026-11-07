@@ -44,7 +44,9 @@ runners. Nothing needs manual approval or checking.
    data or code starts it for 1.5B.
 2. **On Kaggle** the trainer runs a sweep within its budget (1.5B: 4 h over
    ranks 16/8/32 × learning rates 2e-4/1e-4/5e-4; 7B: 6 h over ranks 16/32 ×
-   2e-4/1e-4). The proven default runs first. Every config holds out 10 % per
+   2e-4/1e-4). The proven default runs first. Time left after the grid goes to
+   refinement around the best config: two more seeds, then double and half
+   rank, half and 1.5× learning rate. Every config holds out 10 % per
    intent for validation, stops early when the validation loss no longer
    improves, and is scored by validation accuracy with the same decision the
    benchmark's route mode makes. No new config starts if it would likely not
@@ -71,6 +73,16 @@ runners. Nothing needs manual approval or checking.
 Secrets in the environment `kaggle`: `KAGGLE_API_TOKEN` and `KAGGLE_USERNAME`.
 The token can do everything in the Kaggle account; if it ever shows up in a log,
 expire it on Kaggle and set a new one.
+
+## Weekly budget
+
+| Resource | Free limit | How it is used |
+|---|---|---|
+| Kaggle GPU (T4) | 30 h per week, reset Saturday 00:00 UTC | 1.5B sweep 4 h, 7B sweep 6 h per change of data, prompt or sweep plan; every sweep uses its whole budget (grid, then seeds and neighbours of the best config); 2 h stay in reserve; other projects on the same account take turns, no run starts while another kernel runs |
+| GitHub Actions, Linux | unlimited for public repositories | benchmarks, comparisons, GGUF conversion, Collect |
+| GitHub Actions, macOS (Apple Silicon) | unlimited for public repositories | Bench Mac: latency with Metal on the target hardware |
+| Kaggle datasets | over 200 GB private | pinned model mirror |
+| Google Colab | GPU when available, needs an open browser | not used: it cannot run unattended |
 
 ## Measuring the adapter
 

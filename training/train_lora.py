@@ -115,6 +115,19 @@ def sweep_configs(spec: str, rank: int, lr: float) -> list[tuple[int, float]]:
     return sorted(pairs, key=lambda p: (p != (values["rank"][0], values["lr"][0])))
 
 
+def refine_configs(rank: int, lr: float, tried: set) -> list[tuple[int, float, int]]:
+    """Configs around the best one, most informative first: other seeds (is the gain
+    stable?), then neighbouring ranks and learning rates. Skips anything tried."""
+    cands = [(rank, lr, 1), (rank, lr, 2), (rank * 2, lr, 0), (max(4, rank // 2), lr, 0),
+             (rank, lr * 0.5, 0), (rank, lr * 1.5, 0)]
+    out = []
+    for c in cands:
+        c = (c[0], float(f"{c[1]:.3g}"), c[2])
+        if c not in tried and c not in out:
+            out.append(c)
+    return out
+
+
 def time_left_for_next(elapsed: float, durations: list[float], budget: float, margin: float = 15) -> bool:
     """Start another config only if the slowest one so far would still fit, plus a margin for export."""
     if budget <= 0:
@@ -262,8 +275,9 @@ def main(argv: list[str] | None = None) -> int:
     args.out.mkdir(parents=True, exist_ok=True)
     adapter_dir = args.out / "adapter"
 
-    def train_once(quant: str, batch: int, accum: int, rank: int, lr: float, target: Path) -> dict:
-        print(f"Config: rank {rank} · lr {lr:g} · weights {quant} · batch {batch} · accumulation {accum}",
+    def train_once(quant: str, batch: int, accum: int, rank: int, lr: float, seed: int, target: Path) -> dict:
+        print(f"Config: rank {rank} · lr {lr:g} · seed {seed} · weights {quant} · batch {batch} · "
+              f"accumulation {accum}",
               flush=True)
         if quant == "4bit":
             # QLoRA: only needed where fp16 weights would not fit next to the training state (7B).
@@ -304,7 +318,7 @@ def main(argv: list[str] | None = None) -> int:
                 greater_is_better=False, per_device_eval_batch_size=batch,
                 optim="paged_adamw_8bit" if quant == "4bit" else "adamw_torch",
                 gradient_checkpointing=True, remove_unused_columns=False,
-                report_to=[], seed=0,
+                report_to=[], seed=seed,
             ),
         )
         try:
@@ -325,13 +339,13 @@ def main(argv: list[str] | None = None) -> int:
             torch.cuda.empty_cache()
             shutil.rmtree(args.out / "checkpoints", ignore_errors=True)
 
-    def train_with_fallback(rank: int, lr: float, target: Path) -> dict:
+    def train_with_fallback(rank: int, lr: float, seed: int, target: Path) -> dict:
         quant = args.quant if args.quant != "auto" else ("4bit" if "7b" in args.base.lower() else "none")
         batch, accum = args.batch, args.grad_accum
         attempts: list[dict] = []
         while True:
             try:
-                metrics = train_once(quant, batch, accum, rank, lr, target)
+                metrics = train_once(quant, batch, accum, rank, lr, seed, target)
                 attempts.append({"weights": quant, "batch": batch, "grad_accum": accum, "result": "ok"})
                 return {**metrics, "attempts": attempts, "weights": quant, "batch": batch, "grad_accum": accum}
             except Exception as exc:  # noqa: BLE001  (classified below, re-raised if no fallback is left)
@@ -345,30 +359,49 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"Training failed ({kind}); retrying with {nxt}", flush=True)
                 quant, batch, accum = nxt
 
-    configs = sweep_configs(args.sweep, args.rank, args.lr)
+    # Grid first; then, while the budget allows, refine around the best config so
+    # that no paid GPU time is left unused (see refine_configs).
+    queue = [(r, x, 0, "grid") for r, x in sweep_configs(args.sweep, args.rank, args.lr)]
+    tried: set[tuple[int, float, int]] = set()
     started = time.monotonic()
     results: list[dict] = []
-    for i, (rank, lr) in enumerate(configs):
+    while True:
         elapsed = (time.monotonic() - started) / 60
         if results and not time_left_for_next(elapsed, [r["minutes"] for r in results], args.time_budget):
-            print(f"Time budget: stopping after {len(results)} of {len(configs)} configs", flush=True)
+            print(f"Time budget: stopping after {len(results)} configs ({elapsed:.0f} min)", flush=True)
             break
+        if not queue:
+            if not results or args.time_budget <= 0:
+                break
+            b0 = results[pick_best(results)]
+            queue = [(*c, "refine") for c in refine_configs(b0["rank"], b0["lr"], tried)]
+            if not queue:
+                break
+        rank, lr, seed, phase = queue.pop(0)
+        if (rank, lr, seed) in tried:
+            continue
+        tried.add((rank, lr, seed))
         t0 = time.monotonic()
-        target = args.out / "sweep" / f"{i:02d}-r{rank}-lr{lr:g}"
+        target = args.out / "sweep" / f"{len(tried):02d}-r{rank}-lr{lr:g}-s{seed}"
         try:
-            metrics = train_with_fallback(rank, lr, target)
+            metrics = train_with_fallback(rank, lr, seed, target)
         except Exception as exc:  # noqa: BLE001  (one bad config must not lose the others)
             if not results:
                 raise
-            print(f"Config rank {rank} lr {lr:g} failed: {type(exc).__name__}: {exc}", flush=True)
+            print(f"Config rank {rank} lr {lr:g} seed {seed} failed: {type(exc).__name__}: {exc}", flush=True)
             continue
-        results.append({"rank": rank, "lr": lr, "dir": target.name,
+        results.append({"rank": rank, "lr": lr, "seed": seed, "phase": phase, "dir": target.name,
                         "minutes": round((time.monotonic() - t0) / 60, 1), **metrics})
+        # Keep only the best adapter on disk; the others are no longer needed.
+        keep = results[pick_best(results)]["dir"]
+        for r in results:
+            if r["dir"] != keep:
+                shutil.rmtree(args.out / "sweep" / r["dir"], ignore_errors=True)
         (args.out / "sweep.json").write_text(json.dumps(results, indent=1) + "\n", encoding="utf-8")
-        print(f"Result: rank {rank} lr {lr:g} -> val accuracy {metrics['val_accuracy']} "
+        print(f"Result ({phase}): rank {rank} lr {lr:g} seed {seed} -> val accuracy {metrics['val_accuracy']} "
               f"eval loss {metrics['eval_loss']}", flush=True)
     best = results[pick_best(results)]
-    print(f"Chosen: rank {best['rank']} lr {best['lr']:g}", flush=True)
+    print(f"Chosen: rank {best['rank']} lr {best['lr']:g} seed {best['seed']}", flush=True)
     if adapter_dir.exists():
         shutil.rmtree(adapter_dir)
     shutil.copytree(args.out / "sweep" / best["dir"], adapter_dir)
@@ -385,7 +418,9 @@ def main(argv: list[str] | None = None) -> int:
         "prompt_sha256": hashlib.sha256(system.encode("utf-8")).hexdigest(), "epochs": args.epochs, "lr": best["lr"],
         "rank": best["rank"], "alpha": 2 * best["rank"], "batch": batch, "grad_accum": accum,
         "chosen_lr": best["lr"], "val_accuracy": best["val_accuracy"],
-        "sweep": [{k: r[k] for k in ("rank", "lr", "minutes", "val_accuracy", "eval_loss")} for r in results],
+        "chosen_seed": best["seed"],
+        "sweep": [{k: r[k] for k in ("rank", "lr", "seed", "phase", "minutes", "val_accuracy", "eval_loss")}
+                  for r in results],
         "time_budget_min": args.time_budget,
         "target_confidence": TARGET_CONFIDENCE, "holdout_lock": "passed",
     }

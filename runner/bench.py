@@ -257,8 +257,12 @@ def outcome(parsed: dict | None, min_confidence: float) -> str:
 # ── Models ─────────────────────────────────────────────────────────────────
 
 
+GPU_LAYERS = 0  # set from --gpu-layers; -1 offloads every layer (Metal on Apple Silicon)
+
+
 def thread_info(llm) -> str:
-    return f"n_threads {llm.n_threads} · n_threads_batch {llm.n_threads_batch} · n_batch {llm.n_batch}"
+    return (f"n_threads {llm.n_threads} · n_threads_batch {llm.n_threads_batch} · n_batch {llm.n_batch}"
+            f" · gpu layers {GPU_LAYERS}")
 
 
 def cpu_model() -> str:
@@ -267,6 +271,14 @@ def cpu_model() -> str:
         for line in Path("/proc/cpuinfo").read_text().splitlines():
             if line.startswith("model name"):
                 return line.split(":", 1)[1].strip()
+    except OSError:
+        pass
+    try:  # macOS
+        import subprocess
+
+        brand = subprocess.run(["sysctl", "-n", "machdep.cpu.brand_string"], capture_output=True, text=True)
+        if brand.returncode == 0 and brand.stdout.strip():
+            return brand.stdout.strip()
     except OSError:
         pass
     return platform.processor() or "unknown CPU"
@@ -301,7 +313,7 @@ def llama_model(path: Path, threads: int, ctx: int, lora: Path | None = None) ->
     from llama_cpp import Llama, LlamaGrammar
 
     llm = Llama(model_path=str(path), n_ctx=ctx, n_threads=threads, seed=0, verbose=False,
-                lora_path=str(lora) if lora else None)
+                lora_path=str(lora) if lora else None, n_gpu_layers=GPU_LAYERS)
     cache: dict[str, object] = {}
 
     def run(system: str, question: str, grammar: str) -> tuple[str, dict]:
@@ -331,7 +343,7 @@ def _chat_llm(path: Path, threads: int, ctx: int, mode: str, lora: Path | None =
     from llama_cpp.llama_chat_format import Jinja2ChatFormatter
 
     llm = Llama(model_path=str(path), n_ctx=ctx, n_threads=threads, seed=0, verbose=False,
-                lora_path=str(lora) if lora else None)
+                lora_path=str(lora) if lora else None, n_gpu_layers=GPU_LAYERS)
     template = llm.metadata.get("tokenizer.chat_template")
     if not template:
         raise SystemExit(f"Model has no chat template; --mode {mode} needs one.")
@@ -672,6 +684,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--timeout", type=float, default=_env_float("VYVY_SLOT_TIMEOUT_S", 4.0),
                    help="seconds per question before it counts as a miss (default: $VYVY_SLOT_TIMEOUT_S or 4)")
     p.add_argument("--threads", type=int, default=os.cpu_count() or 2)
+    p.add_argument("--gpu-layers", type=int, default=0,
+                   help="layers offloaded to the GPU (-1 = all; Metal on Apple Silicon); 0 = CPU only")
     p.add_argument("--ctx", type=int, default=1024)
     p.add_argument("--label", default="", help="model label for the report header")
     p.add_argument("--summary", type=Path, help="append the Markdown report to this file")
@@ -700,6 +714,8 @@ def main(argv: list[str] | None = None) -> int:
     total = len(items)
     items = sample_items(items, args.sample)
 
+    global GPU_LAYERS
+    GPU_LAYERS = args.gpu_layers
     model_name = args.label or (args.model.name if args.model else "")
     prompt_name = prompt_for(model_name) if args.prompt == "auto" else args.prompt
 
@@ -736,6 +752,7 @@ def main(argv: list[str] | None = None) -> int:
     result["mode"] = args.mode
     result["prompt"] = prompt_name
     result["cpu"] = None if args.dry_run else cpu_model()
+    result["gpu_layers"] = args.gpu_layers
     result["label"] = args.label or (args.model.name if args.model else "dry-run")
     result["adapter"] = args.lora.name if args.lora else None
     text = report(result, header)

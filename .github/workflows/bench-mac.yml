@@ -1,0 +1,92 @@
+name: Bench Mac
+
+# The benchmark on Apple Silicon with Metal: the hardware Vyvy AI targets, free on
+# GitHub's macOS runners for public repositories. Shared Linux runners vary by a
+# factor of three in milliseconds; this measures what a Mac user would see.
+# Both classes in route mode, each with and without its current default adapter
+# (newest accepted release), one job on one machine.
+on:
+  push:
+    branches: [main]
+    paths: ["runner/**", "models.json", "requirements.txt", ".github/workflows/bench-mac.yml"]
+  workflow_run:
+    workflows: ["Bench LoRA"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bench-mac
+  cancel-in-progress: false
+
+jobs:
+  bench-mac:
+    runs-on: macos-latest
+    timeout-minutes: 120
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies (Metal build)
+        env:
+          CMAKE_ARGS: -DGGML_METAL=on
+        run: |
+          pip install -r requirements.txt
+          sysctl -n machdep.cpu.brand_string hw.memsize
+          python -c "import llama_cpp; print(llama_cpp.llama_print_system_info().decode())"
+
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: models
+          key: mac-models-qwen2.5-1.5b-q8_0-7b-q4_k_m
+
+      - name: Download the pinned models
+        run: |
+          set -euo pipefail
+          python tools/fetch_model.py qwen2.5-1.5b-instruct-q8_0 --dir models
+          python tools/fetch_model.py qwen2.5-7b-instruct-q4_k_m --dir models
+
+      - name: Default adapters (newest accepted release per class)
+        run: |
+          set -euo pipefail
+          for base in Qwen/Qwen2.5-1.5B-Instruct Qwen/Qwen2.5-7B-Instruct; do
+            sha=$(python -c "import hashlib,sys; sys.path.insert(0,'runner'); import bench; print(hashlib.sha256(bench.PROMPTS[bench.prompt_for(sys.argv[1])].encode()).hexdigest())" "$base")
+            tag=$(python tools/previous_adapter.py --repo "$GITHUB_REPOSITORY" --base "$base" --prompt-sha256 "$sha")
+            if [ -n "$tag" ]; then
+              gh release download "$tag" --repo "$GITHUB_REPOSITORY" --pattern "$tag.gguf" --dir adapters
+              echo "${base##*/}=adapters/$tag.gguf" >> adapters.env
+            fi
+          done
+          touch adapters.env; cat adapters.env
+
+      - name: Measure on Apple Silicon
+        run: |
+          set -uo pipefail
+          run() {  # $1 model file, $2 label, $3 output, $4 adapter or empty
+            VYVY_LORA_PATH="$4" python runner/bench.py --model "$1" --label "$2" --mode route \
+              --gpu-layers -1 --data data/holdout_blind_v2.json \
+              --summary "$GITHUB_STEP_SUMMARY" --json "$3.json" || echo "$2 failed" >> "$GITHUB_STEP_SUMMARY"
+          }
+          a15=$(grep '^Qwen2.5-1.5B-Instruct=' adapters.env | cut -d= -f2- || true)
+          a7=$(grep '^Qwen2.5-7B-Instruct=' adapters.env | cut -d= -f2- || true)
+          run models/qwen2.5-1.5b-instruct-q8_0.gguf qwen2.5-1.5b-instruct-q8_0 mac-1-small ""
+          [ -n "$a15" ] && run models/qwen2.5-1.5b-instruct-q8_0.gguf "qwen2.5-1.5b-instruct-q8_0+adapter" mac-2-small-adapter "$a15"
+          # 7B Q4 needs about 5 GB; the runner has 7 GB, so it may not fit. A failure is reported, not fatal.
+          run models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf qwen2.5-7b-instruct-q4_k_m mac-3-large ""
+          [ -n "$a7" ] && run models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf "qwen2.5-7b-instruct-q4_k_m+adapter" mac-4-large-adapter "$a7"
+          ls mac-*.json >/dev/null 2>&1 && python tools/compare_results.py mac-*.json | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: bench-mac-results
+          path: mac-*.json
+          retention-days: 30
