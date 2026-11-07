@@ -1,7 +1,7 @@
 name: Synthesize
 
 # Starts the teacher run on a Kaggle GPU: training/synthesize.py lets an open
-# Apache-2.0 model (Qwen2.5-14B-Instruct) write and then re-check training
+# Apache-2.0 model (Qwen2.5-14B-Instruct) and Phi-4 (MIT) write and Qwen re-checks training
 # sentences. Collect takes the result into data/train/ (tools/import_synth.py,
 # filtered against every holdout) and then starts training. One round per ISO
 # week: Collect starts this workflow when the current week's sentences are not in
@@ -27,7 +27,7 @@ jobs:
       KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
       KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
       KAGGLE_EXTERNAL_GPU_MIN: ${{ vars.KAGGLE_EXTERNAL_GPU_MIN }}
-      BUDGET: "150"
+      BUDGET: "240"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 

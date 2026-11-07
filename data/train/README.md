@@ -27,10 +27,11 @@ arithmetic, small talk, everyday questions, writing help and regional speech.
 The generator adds each of them once as `unknown`, without generated variants.
 
 `vyvy_synth_<id>.jsonl` comes from a teacher model: `training/synthesize.py`
-runs Qwen2.5-14B-Instruct (Apache License 2.0) on a Kaggle GPU, lets it write
-sentences per intent, speaking style and job, plus near misses between intents
-that are easy to confuse, and keeps only those it labels the same way again in
-a blind second pass. The teacher never sees a holdout sentence;
+runs Qwen2.5-14B-Instruct (Apache License 2.0) and Phi-4 (MIT) on a Kaggle GPU.
+Qwen writes sentences per intent, speaking style and job; Phi-4, a different
+model family, writes the hard cases (near misses between intents that are easy
+to confuse, and "unknown" requests). Qwen labels every sentence again in a blind
+second pass, and only sentences on which both agree are kept. The teacher never sees a holdout sentence;
 `tools/import_synth.py` drops near copies of holdout sentences (0.8) and
 duplicates before the file is committed. `<id>` is the start of the script's
 SHA-256, and `vyvy_synth_<id>.json` records teacher, counts and drops.
