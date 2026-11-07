@@ -262,8 +262,9 @@ def open_failure(repo: str, kid: str, name: str) -> bool:
     number = found.strip().splitlines()[0] if found.strip() else ""
     if not number:
         return False
-    comments = run("gh", "issue", "view", number, "--repo", repo, "--json", "comments",
-                   "--jq", ".comments[].body", check=False)
+    # Only Collect's own notes count: anyone can comment on a public issue.
+    comments = run("gh", "issue", "view", number, "--repo", repo, "--json", "comments", "--jq",
+                   '.comments[] | select(.author.login == "github-actions") | .body', check=False)
     if RETRY_NOTE in comments:
         return True
     run("gh", "issue", "comment", number, "--repo", repo, "--body",
