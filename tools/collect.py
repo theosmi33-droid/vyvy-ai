@@ -182,6 +182,12 @@ def pending_since(marker: Path) -> datetime:
         return datetime.min.replace(tzinfo=timezone.utc)
 
 
+def synth_waiting() -> bool:
+    """This week's synthesis runs elsewhere (a .pending marker younger than 4 h) and is not in yet."""
+    pending = ROOT / "data" / "train" / f"vyvy_synth_{synth_round()}.pending"
+    return not synth_done() and pending_since(pending) > datetime.now(timezone.utc) - timedelta(hours=4)
+
+
 def synth_done() -> bool:
     return any((ROOT / "data" / "train").glob(f"vyvy_synth_*_{synth_round()}.jsonl"))
 
@@ -253,7 +259,7 @@ def schedule(repo: str, owner: str) -> None:
         return
     # Teacher sentences first: training on data that is about to grow wastes a run.
     pending = ROOT / "data" / "train" / f"vyvy_synth_{synth_round()}.pending"
-    if not synth_done() and pending_since(pending) > datetime.now(timezone.utc) - timedelta(hours=4):
+    if synth_waiting():
         # The same synthesis runs elsewhere (Colab); its result is pushed to data/train/,
         # which starts Train. Waiting keeps one GPU run from being done twice.
         summary(f"Scheduler: synthesis {synth_round()} runs elsewhere ({pending.read_text().strip()}); waiting.")

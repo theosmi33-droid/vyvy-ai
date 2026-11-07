@@ -25,9 +25,9 @@ import bench  # noqa: E402
 # Same effective batch (16) for both; 7B uses small device batches so the 4-bit
 # model, activations and optimizer fit a 16 GB T4.
 PLANS = {
-    "Qwen/Qwen2.5-1.5B-Instruct": {"size": "1.5b", "budget": 240, "sweep": "rank=16,8,32;lr=2e-4,1e-4,5e-4",
+    "Qwen/Qwen2.5-1.5B-Instruct": {"size": "1.5b", "budget": 360, "sweep": "rank=16,8,32,64;lr=2e-4,1e-4,5e-4",
                                    "batch": 8, "grad_accum": 2},
-    "Qwen/Qwen2.5-7B-Instruct": {"size": "7b", "budget": 360, "sweep": "rank=16,32;lr=2e-4,1e-4",
+    "Qwen/Qwen2.5-7B-Instruct": {"size": "7b", "budget": 600, "sweep": "rank=16,32;lr=2e-4,1e-4,3e-4",
                                  "batch": 2, "grad_accum": 8},
 }
 ORDER = list(PLANS)

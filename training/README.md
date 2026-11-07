@@ -42,9 +42,9 @@ runners. Nothing needs manual approval or checking.
    running (`tools/kaggle_busy.py`, also other projects' kernels). Then it starts
    a private Kaggle kernel and ends. A push to `main` that changes the training
    data or code starts it for 1.5B.
-2. **On Kaggle** the trainer runs a sweep within its budget (1.5B: 4 h over
-   ranks 16/8/32 × learning rates 2e-4/1e-4/5e-4; 7B: 6 h over ranks 16/32 ×
-   2e-4/1e-4). The proven default runs first. Time left after the grid goes to
+2. **On Kaggle** the trainer runs a sweep within its budget (1.5B: 6 h over
+   ranks 16/8/32/64 × learning rates 2e-4/1e-4/5e-4; 7B: 10 h over ranks 16/32 ×
+   2e-4/1e-4/3e-4). The proven default runs first. Time left after the grid goes to
    refinement around the best config: two more seeds, then double and half
    rank, half and 1.5× learning rate. Every config holds out 10 % per
    intent for validation, stops early when the validation loss no longer
@@ -100,7 +100,7 @@ the other's when it is free (see the sessions' agreement).
 
 | Resource | Free limit | How it is used |
 |---|---|---|
-| Kaggle GPU (T4) | 30 h per week, reset Saturday 00:00 UTC | teacher synthesis (Qwen 14B and Phi-4) up to 4 h once per week (runs first), 1.5B sweep 4 h, 7B sweep 6 h per change of data, prompt or sweep plan; every sweep uses its whole budget (grid, then seeds and neighbours of the best config); 2 h stay in reserve; other projects on the same account take turns, no run starts while another kernel runs |
+| Kaggle GPU (T4) | 30 h per week, reset Saturday 00:00 UTC | teacher synthesis (Qwen 14B and Phi-4) up to 4 h once per week (runs first), 1.5B sweep 6 h, 7B sweep 10 h per change of data, prompt or sweep plan; every sweep uses its whole budget (grid, then seeds and neighbours of the best config); 2 h stay in reserve; other projects on the same account take turns, no run starts while another kernel runs |
 | GitHub Actions, Linux | unlimited for public repositories | benchmarks, comparisons, GGUF conversion, Collect |
 | GitHub Actions, macOS (Apple Silicon) | unlimited for public repositories | Bench Mac: latency with Metal on the target hardware |
 | Kaggle datasets | over 200 GB private | pinned model mirror |

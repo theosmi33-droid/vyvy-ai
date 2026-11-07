@@ -5,7 +5,7 @@ name: Train
 # because a sweep can run far longer than a GitHub job may wait.
 #
 # Each run is a sweep: several LoRA ranks and learning rates are trained one
-# after the other within a time budget (1.5B: 4 h, 7B: 6 h); the config with the
+# after the other within a time budget (1.5B: 6 h, 7B: 10 h); the config with the
 # best validation accuracy is exported. The blind holdout is not touched here.
 #
 # Runs without manual approval: a push to main that changes the training data,
@@ -72,6 +72,10 @@ jobs:
           if gh release view "$name" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             echo "SKIP=true" >> "$GITHUB_ENV"
             echo "Adapter $name already exists; nothing to train." >> "$GITHUB_STEP_SUMMARY"
+          elif [ -z "$NAME_INPUT" ] && python -c "import sys; sys.path.insert(0, 'tools'); import collect; sys.exit(0 if collect.synth_waiting() else 1)"; then
+            # This week's teacher sentences are about to arrive; their push starts training.
+            echo "SKIP=true" >> "$GITHUB_ENV"
+            echo "Waiting for this week's synthesis (runs elsewhere); its push starts training." >> "$GITHUB_STEP_SUMMARY"
           elif [ -z "$NAME_INPUT" ] && [ -n "$trained" ]; then
             # Same training data and prompt as an existing release: trainer fixes alone do not retrain.
             echo "SKIP=true" >> "$GITHUB_ENV"

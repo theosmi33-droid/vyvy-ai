@@ -1,7 +1,8 @@
 name: Bench LoRA
 
-# Measures a trained adapter against the current default in one job on the same
-# runner (same CPU, same prompt, route mode). Acceptance is decided only on
+# Measures a trained adapter against the current default; each holdout set runs
+# on its own runner at the same time (matrix), baseline and candidate always on
+# the same runner (same CPU, same prompt, route mode). Acceptance is decided only on
 # blind holdout v2 (data/holdout_blind_v2.json, 30 questions per intent, written
 # without knowledge of any errors) by a statistical rule (tools/compare_adapter.py:
 # exact McNemar p < 0.05, b >= 2c, per-intent tolerance, no loss on "unknown");
@@ -32,9 +33,16 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  bench-lora:
+  measure:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
+    strategy:
+      fail-fast: true
+      matrix:
+        set: [blind, shadow, info]
+    outputs:
+      model: ${{ steps.adapter.outputs.model }}
+      baseline: ${{ steps.baseline.outputs.name }}
     env:
       ADAPTER: ${{ inputs.adapter }}
       GH_TOKEN: ${{ github.token }}
@@ -111,35 +119,75 @@ jobs:
           MODEL: ${{ steps.adapter.outputs.model }}
         run: python tools/fetch_model.py "$MODEL" --dir models
 
-      - name: Baseline and candidate on blind holdout v2 (decides), v1 and the development holdout (information)
+      - name: Baseline and candidate on this holdout set
         env:
           MODEL: ${{ steps.adapter.outputs.model }}
           GGUF: ${{ steps.adapter.outputs.gguf }}
           BASELINE_GGUF: ${{ steps.baseline.outputs.gguf }}
+          SET: ${{ matrix.set }}
         run: |
           set -euo pipefail
           file=$(ls models/"$MODEL"*.gguf | sort | head -n 1)
           run() {  # $1 = data set, $2 = output prefix, $3 = adapter or empty
             VYVY_LORA_PATH="$3" python runner/bench.py --model "$file" --label "$MODEL" --mode route \
-              --data "$1" --threads "$(nproc)" --summary "$GITHUB_STEP_SUMMARY" --json "$2.json"
+              --data "$1" --threads "$(nproc)" --summary "$GITHUB_STEP_SUMMARY" --json "results/$2.json"
           }
-          echo "## Blind holdout v2, 30 per intent (decides acceptance)" >> "$GITHUB_STEP_SUMMARY"
-          run data/holdout_blind_v2.json base_blind "$BASELINE_GGUF"
-          run data/holdout_blind_v2.json lora_blind "$GGUF"
-          echo "## Blind holdout v1 (information only)" >> "$GITHUB_STEP_SUMMARY"
-          run data/holdout_blind_v1.json base_v1 "$BASELINE_GGUF"
-          run data/holdout_blind_v1.json lora_v1 "$GGUF"
-          echo "## Development holdout (information only)" >> "$GITHUB_STEP_SUMMARY"
-          run data/holdout_benchmarks.json base_dev "$BASELINE_GGUF"
-          run data/holdout_benchmarks.json lora_dev "$GGUF"
-          echo "## Shadow holdout v3 (can only veto)" >> "$GITHUB_STEP_SUMMARY"
-          run data/holdout_blind_v3.json base_shadow "$BASELINE_GGUF"
-          run data/holdout_blind_v3.json lora_shadow "$GGUF"
+          mkdir -p results
+          case "$SET" in
+            blind)
+              echo "## Blind holdout v2, 30 per intent (decides acceptance)" >> "$GITHUB_STEP_SUMMARY"
+              run data/holdout_blind_v2.json base_blind "$BASELINE_GGUF"
+              run data/holdout_blind_v2.json lora_blind "$GGUF" ;;
+            shadow)
+              echo "## Shadow holdout v3 (can only veto)" >> "$GITHUB_STEP_SUMMARY"
+              run data/holdout_blind_v3.json base_shadow "$BASELINE_GGUF"
+              run data/holdout_blind_v3.json lora_shadow "$GGUF" ;;
+            info)
+              echo "## Blind holdout v1 (information only)" >> "$GITHUB_STEP_SUMMARY"
+              run data/holdout_blind_v1.json base_v1 "$BASELINE_GGUF"
+              run data/holdout_blind_v1.json lora_v1 "$GGUF"
+              echo "## Development holdout (information only)" >> "$GITHUB_STEP_SUMMARY"
+              run data/holdout_benchmarks.json base_dev "$BASELINE_GGUF"
+              run data/holdout_benchmarks.json lora_dev "$GGUF" ;;
+          esac
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: results-${{ matrix.set }}
+          path: results/*.json
+          retention-days: 30
+
+  decide:
+    needs: measure
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      ADAPTER: ${{ inputs.adapter }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: results-*
+          merge-multiple: true
+
+      - name: Fetch the adapter again (signed with the manifest)
+        id: adapter
+        run: |
+          set -euo pipefail
+          gh release download "$ADAPTER" --repo "$GITHUB_REPOSITORY" --pattern "$ADAPTER.gguf" --pattern manifest.json --dir adapter
+          echo "gguf=adapter/$ADAPTER.gguf" >> "$GITHUB_OUTPUT"
+          echo "model=${{ needs.measure.outputs.model }}" >> "$GITHUB_OUTPUT"
 
       - name: Decide
         id: decide
         env:
-          BASELINE_NAME: ${{ steps.baseline.outputs.name }}
+          BASELINE_NAME: ${{ needs.measure.outputs.baseline }}
         run: |
           set -uo pipefail
           python tools/compare_adapter.py base_dev.json lora_dev.json --name "$ADAPTER (development holdout)" \
