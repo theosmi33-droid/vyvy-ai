@@ -242,7 +242,8 @@ def main(argv: list[str] | None = None) -> int:
         chunk = unique[start:start + 16]
         enc = tok([chat(tok, classify_prompt(c["text"])) for c in chunk], return_tensors="pt", padding=True).to(0)
         with torch.no_grad():
-            logits = model(**enc).logits[:, -1, :][:, letter_ids].float()
+            # Only the last position is needed; full logits for 16 prompts need ~1.7 GB.
+            logits = model(**enc, logits_to_keep=1).logits[:, -1, :][:, letter_ids].float()
         probs = torch.softmax(logits, dim=-1)
         for c, pr in zip(chunk, probs):
             k = int(pr.argmax())
