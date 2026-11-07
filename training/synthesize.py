@@ -124,14 +124,17 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--batch", type=int, default=12)
     p.add_argument("--min-agree", type=float, default=0.6)
     p.add_argument("--seed", type=int, default=7)
+    p.add_argument("--round", default="", help="synthesis round, e.g. 2026-W45; also sets the seed")
     p.add_argument("--limit", type=int, default=0, help="only this many requests (smoke test)")
     args = p.parse_args(argv)
 
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
-    # Collect names failures after this id (the first 9 hex digits of this file's SHA-256).
-    print("run vyvy-synth-" + hashlib.sha256(Path(__file__).read_bytes()).hexdigest()[:9], flush=True)
+    # Collect names failures after the round; each weekly round samples with its own seed.
+    print(f"run vyvy-synth-{args.round or 'manual'}", flush=True)
+    if args.round:
+        args.seed = int(hashlib.sha256(args.round.encode()).hexdigest()[:8], 16)
     rng = random.Random(args.seed)
     torch.manual_seed(args.seed)
     started = time.time()
@@ -206,7 +209,7 @@ def main(argv: list[str] | None = None) -> int:
     counts = {i: sum(r["intent"] == i for r in kept) for i in INTENTS}
     manifest = {"teacher": TEACHER, "teacher_revision": REVISION, "license": "Apache-2.0",
                 "script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-                "seed": args.seed, "requests": len(requests), "generated": len(candidates),
+                "round": args.round, "seed": args.seed, "requests": len(requests), "generated": len(candidates),
                 "unique": len(unique), "kept": len(kept), "dropped_by_verification": len(dropped),
                 "min_agree": args.min_agree, "per_intent": counts, "minutes": round((time.time() - started) / 60, 1)}
     (args.out / "synth_manifest.json").write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8")

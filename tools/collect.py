@@ -165,8 +165,13 @@ def main(argv: list[str] | None = None) -> int:
     return 1 if failed else 0
 
 
-def synth_id() -> str:
-    return hashlib.sha256((ROOT / "training" / "synthesize.py").read_bytes()).hexdigest()[:9]
+def synth_round() -> str:
+    """One teacher synthesis per ISO week; a new week brings new sentences (and a new training run)."""
+    return datetime.now(timezone.utc).strftime("%G-W%V")
+
+
+def synth_name() -> str:
+    return f"vyvy-synth-{synth_round()}"
 
 
 def pending_since(marker: Path) -> datetime:
@@ -177,8 +182,8 @@ def pending_since(marker: Path) -> datetime:
         return datetime.min.replace(tzinfo=timezone.utc)
 
 
-def synth_file() -> Path:
-    return ROOT / "data" / "train" / f"vyvy_synth_{synth_id()}.jsonl"
+def synth_done() -> bool:
+    return any((ROOT / "data" / "train").glob(f"vyvy_synth_*_{synth_round()}.jsonl"))
 
 
 def collect_synth(repo: str, owner: str) -> bool:
@@ -200,7 +205,7 @@ def collect_synth(repo: str, owner: str) -> bool:
         run("kaggle", "kernels", "output", kid, "-p", str(logdir), "--file-pattern", r"\.log$", check=False)
         log = "\n".join(f.read_text(encoding="utf-8", errors="replace") for f in sorted(logdir.glob("*.log")))
         causes, tail = kaggle_watchdog.diagnose(log) if log else (["no log available"], [status])
-        m = re.search(r"run (vyvy-synth-[0-9a-f]{9})", log)
+        m = re.search(r"run (vyvy-synth-[0-9A-Za-z-]+)", log)
         report_failure(repo, kid, causes, tail, m.group(1) if m else None)
         return True
     run("kaggle", "kernels", "output", kid, "-p", str(out), "--file-pattern",
@@ -213,7 +218,7 @@ def collect_synth(repo: str, owner: str) -> bool:
         return True
     if done.returncode != 0:
         report_failure(repo, kid, ["importing the teacher sentences failed"], done.stderr.splitlines()[-40:],
-                       f"vyvy-synth-{synth_id()}")
+                       synth_name())
         return False
     path = Path(done.stdout.strip().splitlines()[-1])
     try:
@@ -224,7 +229,7 @@ def collect_synth(repo: str, owner: str) -> bool:
         run("git", "-C", str(ROOT), "pull", "--rebase", "origin", "main")
         run("git", "-C", str(ROOT), "push", "origin", "HEAD:main")
     except Exception as exc:  # noqa: BLE001  (reported; the next Collect run retries)
-        report_failure(repo, kid, ["pushing the teacher sentences failed"], [str(exc)], f"vyvy-synth-{synth_id()}")
+        report_failure(repo, kid, ["pushing the teacher sentences failed"], [str(exc)], synth_name())
         return False
     summary(f"{kid}: took {path.name} into data/train/.\n\n```\n{done.stderr[-1500:]}\n```")
     return True
@@ -247,18 +252,18 @@ def schedule(repo: str, owner: str) -> None:
         summary("Scheduler: a kernel of the account is running; nothing new started.")
         return
     # Teacher sentences first: training on data that is about to grow wastes a run.
-    pending = synth_file().with_suffix(".pending")
-    if not synth_file().exists() and pending_since(pending) > datetime.now(timezone.utc) - timedelta(hours=4):
+    pending = ROOT / "data" / "train" / f"vyvy_synth_{synth_round()}.pending"
+    if not synth_done() and pending_since(pending) > datetime.now(timezone.utc) - timedelta(hours=4):
         # The same synthesis runs elsewhere (Colab); its result is pushed to data/train/,
         # which starts Train. Waiting keeps one GPU run from being done twice.
-        summary(f"Scheduler: synthesis {synth_id()} runs elsewhere ({pending.read_text().strip()}); waiting.")
+        summary(f"Scheduler: synthesis {synth_round()} runs elsewhere ({pending.read_text().strip()}); waiting.")
         return
-    if not synth_file().exists():
-        if open_failure(repo, f"{owner}/{kaggle_job.SYNTH_SLUG}", f"vyvy-synth-{synth_id()}"):
+    if not synth_done():
+        if open_failure(repo, f"{owner}/{kaggle_job.SYNTH_SLUG}", synth_name()):
             summary("Scheduler: synthesis waits for a fix (open failure issue); training goes ahead.")
         else:
             run("gh", "workflow", "run", "synth.yml", "--repo", repo, "--ref", "main")
-            summary(f"Scheduler: started the teacher run vyvy-synth-{synth_id()}.")
+            summary(f"Scheduler: started the teacher run {synth_name()}.")
             return
     for base in plan_train.ORDER:
         p = plan_train.plan(base)

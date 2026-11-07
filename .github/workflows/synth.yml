@@ -3,9 +3,9 @@ name: Synthesize
 # Starts the teacher run on a Kaggle GPU: training/synthesize.py lets an open
 # Apache-2.0 model (Qwen2.5-14B-Instruct) write and then re-check training
 # sentences. Collect takes the result into data/train/ (tools/import_synth.py,
-# filtered against every holdout) and then starts training. Collect starts this
-# workflow itself whenever training/synthesize.py changed and its output is not
-# in data/train/ yet; it can also be started by hand.
+# filtered against every holdout) and then starts training. One round per ISO
+# week: Collect starts this workflow when the current week's sentences are not in
+# data/train/ yet; each round samples with its own seed. It can also be started by hand.
 on:
   workflow_dispatch:
 
@@ -38,10 +38,11 @@ jobs:
       - name: Already taken in?
         run: |
           set -euo pipefail
-          id=$(sha256sum training/synthesize.py | cut -c1-9)
-          if [ -f "data/train/vyvy_synth_$id.jsonl" ]; then
+          round=$(date -u +%G-W%V)
+          echo "ROUND=$round" >> "$GITHUB_ENV"
+          if ls data/train/vyvy_synth_*_"$round".jsonl >/dev/null 2>&1; then
             echo "SKIP=true" >> "$GITHUB_ENV"
-            echo "Synthesis $id is already in data/train/." >> "$GITHUB_STEP_SUMMARY"
+            echo "Synthesis round $round is already in data/train/." >> "$GITHUB_STEP_SUMMARY"
           fi
 
       - name: Kaggle quota and free GPU
@@ -63,7 +64,7 @@ jobs:
         run: |
           set -euo pipefail
           kid=$(python tools/kaggle_job.py --synth --dir job --owner "$KAGGLE_USERNAME" \
-                  --repo "$GITHUB_REPOSITORY" --commit "$GITHUB_SHA")
+                  --repo "$GITHUB_REPOSITORY" --commit "$GITHUB_SHA" --round "$ROUND")
           kaggle kernels push -p job --accelerator NvidiaTeslaT4 --timeout "$(( BUDGET * 60 ))"
           echo "Started $kid; Collect takes the sentences in when it is done." >> "$GITHUB_STEP_SUMMARY"
           gh workflow run collect.yml --repo "$GITHUB_REPOSITORY" --ref main

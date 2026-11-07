@@ -72,6 +72,7 @@ import sys
 
 REPO = {repo}
 COMMIT = {commit}
+ROUND = {round}
 SRC = "/tmp/vyvy"
 ENV = dict(os.environ, CUDA_VISIBLE_DEVICES="0", HF_HOME="/tmp/hf", VYVY_COMMIT=COMMIT)
 
@@ -84,11 +85,11 @@ def sh(*args):
 sh("git", "clone", "--quiet", "https://github.com/" + REPO, SRC)
 sh("git", "-C", SRC, "checkout", "--quiet", COMMIT)
 sh(sys.executable, "-m", "pip", "install", "-q", "-r", SRC + "/training/requirements.txt")
-sh(sys.executable, SRC + "/training/synthesize.py", "--out", "/kaggle/working")
+sh(sys.executable, SRC + "/training/synthesize.py", "--out", "/kaggle/working", "--round", ROUND)
 '''
 
 
-def write_synth_job(folder: Path, owner: str, repo: str, commit: str) -> str:
+def write_synth_job(folder: Path, owner: str, repo: str, commit: str, round_: str) -> str:
     """Kernel that runs training/synthesize.py (teacher model) at a fixed commit."""
     if not SHA.match(commit):
         raise SystemExit("commit must be a full 40-character SHA")
@@ -96,8 +97,11 @@ def write_synth_job(folder: Path, owner: str, repo: str, commit: str) -> str:
         raise SystemExit("repo must be OWNER/NAME")
     if not re.match(r"^[A-Za-z0-9_-]+$", owner):
         raise SystemExit("owner must be a Kaggle user name")
+    if not re.match(r"^[0-9]{4}-W[0-9]{2}$", round_):
+        raise SystemExit("round must look like 2026-W45")
     folder.mkdir(parents=True, exist_ok=True)
-    (folder / "synth.py").write_text(SYNTH_ENTRY.format(repo=json.dumps(repo), commit=json.dumps(commit)),
+    (folder / "synth.py").write_text(SYNTH_ENTRY.format(repo=json.dumps(repo), commit=json.dumps(commit),
+                                                       round=json.dumps(round_)),
                                      encoding="utf-8")
     write_metadata(folder, f"{owner}/{SYNTH_SLUG}", SYNTH_SLUG, "synth.py")
     return f"{owner}/{SYNTH_SLUG}"
@@ -169,6 +173,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--base", choices=BASES)
     p.add_argument("--name", help="adapter name, also the release tag")
     p.add_argument("--synth", action="store_true", help="write the teacher synthesis kernel instead")
+    p.add_argument("--round", default="", help="synthesis round (ISO week), with --synth")
     p.add_argument("--epochs", type=float, default=3)
     p.add_argument("--sweep", default="", help='e.g. "rank=16,8,32;lr=2e-4,1e-4,5e-4"')
     p.add_argument("--budget", type=float, default=0, help="minutes for the whole sweep")
@@ -176,7 +181,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--grad-accum", type=int, default=2)
     args = p.parse_args(argv)
     if args.synth:
-        print(write_synth_job(args.dir, args.owner, args.repo, args.commit))
+        print(write_synth_job(args.dir, args.owner, args.repo, args.commit, args.round))
         return 0
     if not (args.base and args.name):
         p.error("--base and --name are required for a training kernel")

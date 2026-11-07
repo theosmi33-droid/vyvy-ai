@@ -6,11 +6,11 @@ sentence at or above --max-similarity (default 0.8, as the generator; the lock
 is 0.85) to any holdout sentence, and every sentence already in the training
 data, then checks the output contract. Writes
 
-    data/train/vyvy_synth_<script hash>.jsonl   the sentences
-    data/train/vyvy_synth_<script hash>.json    teacher, counts, what was dropped
+    data/train/vyvy_synth_<script hash>_<round>.jsonl   the sentences
+    data/train/vyvy_synth_<script hash>_<round>.json    teacher, counts, what was dropped
 
 and prints the path of the .jsonl. An existing file for the same script is
-left alone (exit code 3), so a finished synthesis is taken in once.
+left alone (exit code 3): one synthesis per round (ISO week) is taken in.
 
     python tools/import_synth.py collect/synth
 """
@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -30,8 +31,11 @@ import bench  # noqa: E402
 import check_holdout_leak as lock  # noqa: E402
 
 
-def target(manifest: dict, train_dir: Path) -> Path:
-    return train_dir / f"vyvy_synth_{manifest['script_sha256'][:9]}.jsonl"
+def target(manifest: dict, train_dir: Path, round_: str = "") -> Path:
+    round_ = round_ or manifest.get("round") or "manual"
+    if not re.match(r"^[0-9A-Za-z-]{1,20}$", round_):
+        raise SystemExit(f"invalid round {round_!r}")
+    return train_dir / f"vyvy_synth_{manifest['script_sha256'][:9]}_{round_}.jsonl"
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -39,11 +43,13 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("folder", type=Path, help="kernel output with synth.jsonl and synth_manifest.json")
     p.add_argument("--train-dir", type=Path, default=lock.TRAIN_DIR)
     p.add_argument("--max-similarity", type=float, default=0.8)
+    p.add_argument("--round", default="", help="round name if the run did not record one")
     args = p.parse_args(argv)
 
     manifest = json.loads((args.folder / "synth_manifest.json").read_text(encoding="utf-8"))
-    out = target(manifest, args.train_dir)
-    if out.exists():
+    out = target(manifest, args.train_dir, args.round)
+    manifest["round"] = out.stem.rsplit("_", 1)[-1]
+    if list(args.train_dir.glob(f"vyvy_synth_*_{manifest['round']}.jsonl")):
         print(f"{out} exists; nothing to import", file=sys.stderr)
         return 3
     intents = bench.grammar_intents(bench.DEFAULT_GRAMMAR.read_text(encoding="utf-8"))

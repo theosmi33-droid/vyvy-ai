@@ -1,0 +1,47 @@
+name: Heartbeat
+
+# Keeps the pipeline awake without any outside service. GitHub did not run the
+# schedules of this repository, so the heartbeat chains itself: each run waits
+# three hours, starts Collect (which collects finished runs and starts the next
+# synthesis or training run when the GPU is free and quota is left) and then
+# starts the next heartbeat. A new heartbeat cancels a waiting one, so there is
+# only ever one chain. A push to this file, or a start by hand, revives a chain
+# that broke. Waiting costs nothing: Actions minutes are free for public repos.
+on:
+  schedule:
+    - cron: "17 */6 * * *"  # backup only; never ran so far
+  push:
+    branches: [main]
+    paths: [".github/workflows/heartbeat.yml"]
+  workflow_dispatch:
+    inputs:
+      wait:
+        description: Minutes to wait before the beat
+        type: number
+        default: 180
+
+permissions:
+  contents: read
+  actions: write  # start Collect and the next heartbeat
+
+concurrency:
+  group: heartbeat
+  cancel-in-progress: true
+
+jobs:
+  beat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    env:
+      GH_TOKEN: ${{ github.token }}
+      WAIT: ${{ inputs.wait || 180 }}
+    steps:
+      - name: Wait
+        run: sleep "$(( WAIT * 60 ))"
+
+      - name: Start Collect and the next heartbeat
+        run: |
+          set -euo pipefail
+          gh workflow run collect.yml --repo "$GITHUB_REPOSITORY" --ref main
+          gh workflow run heartbeat.yml --repo "$GITHUB_REPOSITORY" --ref main
+          echo "Collect started at $(date -u +%H:%M) UTC; next beat in 3 hours." >> "$GITHUB_STEP_SUMMARY"
