@@ -4,9 +4,9 @@ name: Data check
 # compares characters and words; the semantic check lists paraphrases.
 on:
   push:
-    paths: ["data/**", "tools/check_holdout_leak.py", "tools/check_semantic_leak.py", "tools/semantic-requirements.txt", "tools/import_partner.py"]
+    paths: ["data/**", "training/synthesize.py", "tools/check_holdout_leak.py", "tools/check_semantic_leak.py", "tools/semantic-requirements.txt", "tools/import_partner.py"]
   pull_request:
-    paths: ["data/**", "tools/check_holdout_leak.py", "tools/check_semantic_leak.py", "tools/semantic-requirements.txt", "tools/import_partner.py"]
+    paths: ["data/**", "training/synthesize.py", "tools/check_holdout_leak.py", "tools/check_semantic_leak.py", "tools/semantic-requirements.txt", "tools/import_partner.py"]
   workflow_dispatch:
 
 permissions:

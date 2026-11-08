@@ -11,7 +11,9 @@ normalisation (case, punctuation, whitespace) by two measures:
 
 If either reaches --threshold (default 0.85), the pair is reported and the
 script exits with code 1. Training data: data/train/*.jsonl, one JSON object per
-line with "text" and "intent".
+line with "text" and "intent", plus the example sentences of RULES in
+training/synthesize.py (the teacher would copy a holdout sentence from there
+into many training sentences).
 
     python tools/check_holdout_leak.py
     python tools/check_holdout_leak.py --train path/to/file.jsonl
@@ -20,6 +22,7 @@ line with "text" and "intent".
 from __future__ import annotations
 
 import argparse
+import ast
 import difflib
 import json
 import re
@@ -33,6 +36,9 @@ BLIND_V2 = ROOT / "data" / "holdout_blind_v2.json"
 BLIND_V3 = ROOT / "data" / "holdout_blind_v3.json"
 HOLDOUTS = [HOLDOUT, BLIND, BLIND_V2, BLIND_V3]
 TRAIN_DIR = ROOT / "data" / "train"
+# The teacher prompt carries example sentences (RULES); a holdout sentence there
+# would be copied into training data in many variants, so they are checked too.
+SYNTH = ROOT / "training" / "synthesize.py"
 
 
 def normalise(text: str) -> str:
@@ -56,6 +62,17 @@ def load_train(paths: list[Path]) -> list[tuple[str, str]]:
     return rows
 
 
+def load_prompt_examples(path: Path) -> list[tuple[str, str]]:
+    """Example sentences of RULES in the synthesis script, read without importing it."""
+    tree = ast.parse(path.read_text(encoding="utf-8"))
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == "RULES" for t in node.targets):
+            rules = ast.literal_eval(node.value)
+            return [(f"{path.name}:RULES[{intent}][{i}]", text)
+                    for intent, (_rule, examples) in rules.items() for i, text in enumerate(examples)]
+    raise SystemExit(f"{path}: no RULES found; the prompt examples cannot be checked")
+
+
 def find_leaks(train: list[tuple[str, str]], holdout: list[dict], threshold: float) -> list[dict]:
     hold = [(h["id"], h["text"], normalise(h["text"])) for h in holdout]
     leaks = []
@@ -75,14 +92,18 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--holdout", type=Path, nargs="*", default=HOLDOUTS,
                    help="holdout sets to protect (default: development holdout and blind holdout)")
     p.add_argument("--threshold", type=float, default=0.85)
+    p.add_argument("--prompts", type=Path, nargs="*",
+                   help="synthesis scripts whose RULES examples are checked (default: training/synthesize.py; "
+                        "with --train only when given)")
     args = p.parse_args(argv)
 
     paths = args.train if args.train else sorted(TRAIN_DIR.glob("*.jsonl"))
-    if not paths:
+    prompts = args.prompts if args.prompts is not None else ([] if args.train else [SYNTH])
+    if not paths and not prompts:
         print("No training data found; nothing to check.")
         return 0
     holdout = [i for h in args.holdout if h.exists() for i in json.loads(h.read_text(encoding="utf-8"))["items"]]
-    train = load_train(paths)
+    train = load_train(paths) + [row for path in prompts for row in load_prompt_examples(path)]
     leaks = find_leaks(train, holdout, args.threshold)
     if leaks:
         print(f"Holdout leak: {len(leaks)} training sentence(s) at or above {args.threshold}:", file=sys.stderr)
