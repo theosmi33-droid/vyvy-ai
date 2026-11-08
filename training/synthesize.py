@@ -62,9 +62,23 @@ RULES = {
     "create_task": (
         "Es geht um etwas, das die Person selbst erledigen muss und als Aufgabe oder To-do notiert haben will. "
         "Kein Treffen mit anderen, kein Kalendereintrag, keine Uhrzeit für ein Gespräch: das wäre ein Termin. "
-        "Typisch: Aufgabe, To-do, notier, merk dir, schreib auf, setz auf die Liste.",
+        "Typisch: Aufgabe, To-do, notier, merk dir, schreib auf, setz auf die Liste. "
+        "Kein Auftrag ist: eine Frage, wie man Aufgaben oder Listen führt, ein Bericht über schon Erledigtes "
+        "oder ein Gedanke ohne Bitte, ihn festzuhalten: das wäre unbekannt.",
         ["Setz auf meine Liste, dass ich die Materialrechnung vom Großhandel prüfen muss.",
          "Notier mir als To-do: Bohrmaschine zur Reparatur bringen."]),
+    "tasks_overdue": (
+        "Die Person fragt nur nach dem, was schon hätte fertig sein sollen: verpasste Fristen, Liegengebliebenes, "
+        "Vergessenes. Fragt sie nach allem, was noch offen ist, ohne auf Verspätung abzuzielen, ist es offen, "
+        "nicht überfällig.",
+        ["Wo hänge ich mit meinen Erledigungen schon hinterher?",
+         "Bei welchen Erledigungen bin ich inzwischen in Verzug geraten?"]),
+    "unknown": (
+        "Der Satz klingt nach Büroarbeit, verlangt aber nichts, was der Assistent kann: Wissen erklären, "
+        "fremde Kalender oder Postfächer, Erledigtes erzählen, eine Aufgabe abhaken oder löschen, einen Termin "
+        "verschieben, eine Mail senden. Er darf Wörter wie Aufgabe, Termin oder Mail enthalten.",
+        ["Was ist eigentlich der Unterschied zwischen einer Aufgabe und einem Projekt?",
+         "Die Angebotsmappe für den Neubau hab ich vorhin schon fertig gemacht."]),
     "tasks_open": (
         "Die Person will wissen, was insgesamt noch zu erledigen ist, unabhängig von Fristen. "
         "Nicht nach Verpasstem, Überfälligem oder Vergessenem fragen: das wäre überfällig. "
@@ -78,8 +92,12 @@ RULES = {
         ["Gib mir den kompletten Überblick für heute mit Kalender, offenen Aufgaben und neuer Post.",
          "Fass mir alles zusammen, was heute ansteht, Termine wie To-dos wie Mails."]),
 }
-# These intents get twice as many requests per style.
-WEAK = set(RULES)
+# These intents get twice as many requests per style. 2026-W46: the adapters of
+# 07./08.11. were rejected for create_task, tasks_overdue and regressions on
+# unknown (per-intent counts only, no holdout sentence); tasks_open and
+# daily_agenda keep their rules but no longer double, so the round stays well
+# inside the 240-minute kernel limit (W45: 228 requests in 108 min).
+WEAK = {"create_task", "tasks_overdue", "unknown"}
 
 STYLES = [
     "kurzes, sauberes Hochdeutsch",
@@ -103,7 +121,7 @@ NEAR = [
     ("create_task", "create_appointment"), ("create_appointment", "create_task"),
     ("unknown", "appointments_today"), ("unknown", "emails_unread"), ("unknown", "tasks_open"),
     ("unknown", "create_appointment"), ("appointments_tomorrow", "appointments_today"),
-    ("emails_unread", "unknown"),
+    ("emails_unread", "unknown"), ("unknown", "create_task"), ("unknown", "tasks_overdue"),
 ]
 TIMEFRAMES = ("today", "tomorrow", "week", None)
 LETTERS = "ABCDEFGHI"
