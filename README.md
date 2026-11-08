@@ -72,6 +72,7 @@ measures accuracy and latency on GitHub Actions.
 | `tools/collect.py` | Collect logic: publish candidates, report failures, schedule |
 | `tools/plan_train.py` | Sweep, time budget and adapter name of a training run |
 | `tools/kaggle_busy.py` | Lists running kernels of the Kaggle account |
+| `tools/kaggle_status.py` | Read-only table of recent kernels and their status (workflow "Kaggle status") |
 | `tools/kaggle_job.py` | Writes the training job for the hosted GPU from a fixed commit |
 
 ### Output contract

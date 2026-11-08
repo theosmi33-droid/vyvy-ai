@@ -1,0 +1,42 @@
+name: Kaggle status
+
+# Shows the Kaggle side on demand: the latest kernels with their run status and
+# the GPU quota left this week. Read-only: it starts, cancels and pushes nothing,
+# so it is safe to run at any time (Collect, by contrast, may start new runs).
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: Number of kernels to show
+        type: number
+        default: 10
+
+permissions:
+  contents: read
+  actions: read  # quota fallback counts this pipeline's Kaggle steps
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: kaggle  # Kaggle secrets only exist in this environment (main only)
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+      KAGGLE_EXTERNAL_GPU_MIN: ${{ vars.KAGGLE_EXTERNAL_GPU_MIN }}
+      GH_TOKEN: ${{ github.token }}
+      LIMIT: ${{ inputs.limit || 10 }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Kernels and quota
+        run: |
+          set -euo pipefail
+          # kaggle 2.2.5 imports six without declaring it as a dependency
+          pip install -q kaggle==2.2.5 six==1.17.0
+          python tools/kaggle_status.py --limit "$LIMIT"
+          python tools/quota_guard.py
