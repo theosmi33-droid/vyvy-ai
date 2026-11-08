@@ -24,14 +24,23 @@ import bench  # noqa: E402
 
 # Same effective batch (16) for both; 7B uses small device batches so the 4-bit
 # model, activations and optimizer fit a 16 GB T4.
+#
+# "where" decides the GPU: 1.5B runs on one free Colab T4 (train-colab.yml), so
+# the weekly Kaggle quota stays with 7B and the teacher synthesis. On Colab it
+# trains one config only — rank 16, lr 2e-4 won every 1.5B sweep so far — within
+# 60 minutes, because a free Colab session is not held for long.
 PLANS = {
-    "Qwen/Qwen2.5-1.5B-Instruct": {"size": "1.5b", "budget": 90, "sweep": "rank=16,8;lr=2e-4",
-                                   "batch": 8, "grad_accum": 2, "gpus": 1, "gpus_after_7b": True},
+    "Qwen/Qwen2.5-1.5B-Instruct": {"size": "1.5b", "budget": 60, "sweep": "rank=16;lr=2e-4",
+                                   "batch": 8, "grad_accum": 2, "gpus": 1, "gpus_after_7b": False,
+                                   "where": "colab"},
     "Qwen/Qwen2.5-7B-Instruct": {"size": "7b", "budget": 600, "sweep": "rank=16,32;lr=2e-4,1e-4,3e-4",
-                                 "batch": 2, "grad_accum": 8, "gpus": 1, "gpus_after_7b": True},
+                                 "batch": 2, "grad_accum": 8, "gpus": 1, "gpus_after_7b": True,
+                                 "where": "kaggle"},
 }
+#: Workflow that trains a plan, by where it runs.
+WORKFLOW = {"kaggle": "train.yml", "colab": "train-colab.yml"}
 # 7B first: it needs the longer budget and decides whether two GPUs are safe
-# (see seven_b_passed); 1.5B follows in the same quota week.
+# (see seven_b_passed); 1.5B runs on Colab and does not wait for it.
 ORDER = ["Qwen/Qwen2.5-7B-Instruct", "Qwen/Qwen2.5-1.5B-Instruct"]
 
 

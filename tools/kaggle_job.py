@@ -156,46 +156,81 @@ def kernel_slug(base: str) -> str:
     return "vyvy-train-" + re.sub(r"[^a-z0-9]+", "-", base.split("/")[-1].lower()).strip("-")
 
 
-def write_job(folder: Path, owner: str, repo: str, commit: str, base: str, name: str, epochs: float,
-              sweep: str = "", budget: float = 0, batch: int = 8, accum: int = 2, gpus: int = 1,
-              stagger: int = STAGGER_SECONDS) -> str:
+def _check_run(repo: str, commit: str, base: str, name: str, epochs: float, sweep: str,
+               batch: int, accum: int) -> None:
     if base not in BASES:
         raise SystemExit(f"base must be one of {BASES}")
-    if gpus not in (1, 2):
-        raise SystemExit("gpus must be 1 or 2 (Kaggle's T4 machine has two)")
     if not NAME.match(name):
         raise SystemExit("name: lowercase letters, digits, '.' and '-', at most 61 characters")
     if not SHA.match(commit):
         raise SystemExit("commit must be a full 40-character SHA")
     if not REPO.match(repo):
         raise SystemExit("repo must be OWNER/NAME")
-    if not re.match(r"^[A-Za-z0-9_-]+$", owner):
-        raise SystemExit("owner must be a Kaggle user name")
     if not 0 < epochs <= 10:
         raise SystemExit("epochs must be between 0 and 10")
     if not re.match(r"^[a-z0-9=.,;e+-]*$", sweep):
         raise SystemExit("sweep may only contain keys, numbers and = , ;")
     if not (1 <= batch <= 64 and 1 <= accum <= 64):
         raise SystemExit("batch and grad accumulation must be between 1 and 64")
+
+
+def _entry(repo: str, commit: str, base: str, name: str, epochs: float, sweep: str, budget: float,
+           batch: int, accum: int, gpus: int, stagger: int) -> str:
+    return ENTRY.format(
+        repo=json.dumps(repo), commit=json.dumps(commit), base=json.dumps(base),
+        name=json.dumps(name), epochs=json.dumps(f"{epochs:g}"), sweep=json.dumps(sweep),
+        budget=json.dumps(f"{budget:g}"), batch=json.dumps(str(batch)), accum=json.dumps(str(accum)),
+        gpus=gpus, stagger=int(stagger),
+    )
+
+
+def write_job(folder: Path, owner: str, repo: str, commit: str, base: str, name: str, epochs: float,
+              sweep: str = "", budget: float = 0, batch: int = 8, accum: int = 2, gpus: int = 1,
+              stagger: int = STAGGER_SECONDS) -> str:
+    _check_run(repo, commit, base, name, epochs, sweep, batch, accum)
+    if gpus not in (1, 2):
+        raise SystemExit("gpus must be 1 or 2 (Kaggle's T4 machine has two)")
+    if not re.match(r"^[A-Za-z0-9_-]+$", owner):
+        raise SystemExit("owner must be a Kaggle user name")
     if not 0 <= budget <= 660:
         raise SystemExit("budget must be between 0 and 660 minutes (Kaggle sessions end after 12 h)")
 
     slug = kernel_slug(base)
     folder.mkdir(parents=True, exist_ok=True)
-    (folder / "train.py").write_text(ENTRY.format(
-        repo=json.dumps(repo), commit=json.dumps(commit), base=json.dumps(base),
-        name=json.dumps(name), epochs=json.dumps(f"{epochs:g}"), sweep=json.dumps(sweep),
-        budget=json.dumps(f"{budget:g}"), batch=json.dumps(str(batch)), accum=json.dumps(str(accum)),
-        gpus=gpus, stagger=int(stagger),
-    ), encoding="utf-8")
+    (folder / "train.py").write_text(_entry(repo, commit, base, name, epochs, sweep, budget, batch, accum,
+                                            gpus, stagger), encoding="utf-8")
     write_metadata(folder, f"{owner}/{slug}", slug, "train.py")
     return f"{owner}/{slug}"
 
 
+#: Where the Colab run writes its result, and the one archive the runner downloads.
+COLAB_OUT = "/content/out"
+COLAB_ARCHIVE = "/content/out.tgz"
+#: A free Colab T4 is not held for long; the whole run must stay well inside it.
+COLAB_BUDGET_MAX = 120
+
+
+def write_colab_job(path: Path, repo: str, commit: str, base: str, name: str, epochs: float,
+                    sweep: str = "", budget: float = 0, batch: int = 8, accum: int = 2) -> Path:
+    """The same training entry as on Kaggle, for one Colab T4; packs the result into one archive.
+
+    Run with ``colab exec -f`` in a session the caller stops again; the archive
+    holds adapter/, manifest.json and sweep.json for tools/collect.py publish().
+    """
+    _check_run(repo, commit, base, name, epochs, sweep, batch, accum)
+    if not 0 < budget <= COLAB_BUDGET_MAX:
+        raise SystemExit(f"budget must be between 1 and {COLAB_BUDGET_MAX} minutes on Colab")
+    script = _entry(repo, commit, base, name, epochs, sweep, budget, batch, accum, 1, 0)
+    script = script.replace('OUT = "/kaggle/working"', f'OUT = "{COLAB_OUT}"')
+    script += f'sh("tar", "-czf", "{COLAB_ARCHIVE}", "-C", OUT, ".")\n'
+    path.write_text(script, encoding="utf-8")
+    return path
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Write a Kaggle kernel that trains one Vyvy AI adapter")
-    p.add_argument("--dir", type=Path, required=True)
-    p.add_argument("--owner", required=True, help="Kaggle user name")
+    p.add_argument("--dir", type=Path, help="kernel folder (Kaggle)")
+    p.add_argument("--owner", help="Kaggle user name")
     p.add_argument("--repo", required=True, help="GitHub OWNER/NAME of this repository")
     p.add_argument("--commit", required=True, help="full commit SHA to train from")
     p.add_argument("--base", choices=BASES)
@@ -208,7 +243,16 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--batch", type=int, default=8)
     p.add_argument("--grad-accum", type=int, default=2)
     p.add_argument("--gpus", type=int, default=1, help="1, or 2 for one sweep shard per T4")
+    p.add_argument("--colab", type=Path, help="write a script for one Colab T4 to this file instead")
     args = p.parse_args(argv)
+    if args.colab:
+        if not (args.base and args.name):
+            p.error("--base and --name are required for a training run")
+        print(write_colab_job(args.colab, args.repo, args.commit, args.base, args.name, args.epochs,
+                              args.sweep, args.budget, args.batch, args.grad_accum))
+        return 0
+    if not (args.dir and args.owner):
+        p.error("--dir and --owner are required for a Kaggle kernel")
     if args.synth:
         print(write_synth_job(args.dir, args.owner, args.repo, args.commit, args.round))
         return 0

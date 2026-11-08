@@ -76,7 +76,8 @@ def run_name(log: str) -> str | None:
 
 def failure_title(kid: str, name: str | None, tail: list[str]) -> str:
     key = name or hashlib.sha256("\n".join(tail[-30:]).encode("utf-8")).hexdigest()[:8]
-    return f"Kaggle training failed: {kid} {key}"
+    platform = "Colab" if kid.startswith("colab/") else "Kaggle"
+    return f"{platform} training failed: {kid} {key}"
 
 
 def report_failure(repo: str, kid: str, causes: list[str], tail: list[str], name: str | None = None) -> None:
@@ -294,9 +295,9 @@ def close_failures(repo: str, kid: str, name: str) -> None:
 
 
 def schedule(repo: str, owner: str) -> None:
-    if any_kernel_running():
-        summary("Scheduler: a kernel of the account is running; nothing new started.")
-        return
+    # One Kaggle run at a time (any kernel of the account holds the GPU); a Colab
+    # run does not hold it, so Colab plans are started independently of Kaggle.
+    kaggle_free = not any_kernel_running()
     # Teacher sentences first: training on data that is about to grow wastes a run.
     pending = ROOT / "data" / "train" / f"vyvy_synth_{synth_round()}.pending"
     if synth_waiting():
@@ -307,22 +308,35 @@ def schedule(repo: str, owner: str) -> None:
     if not synth_done():
         if open_failure(repo, f"{owner}/{kaggle_job.SYNTH_SLUG}", synth_name()):
             summary("Scheduler: synthesis waits for a fix (open failure issue); training goes ahead.")
+        elif not kaggle_free:
+            summary("Scheduler: a kernel of the account is running; the synthesis starts after it.")
+            return
         else:
             run("gh", "workflow", "run", "synth.yml", "--repo", repo, "--ref", "main")
             summary(f"Scheduler: started the teacher run {synth_name()}.")
             return
+    if not kaggle_free:
+        summary("Scheduler: a kernel of the account is running; no new Kaggle run.")
+    started = False
     for base in plan_train.ORDER:
         p = plan_train.plan(base)
-        kid = f"{owner}/{kaggle_job.kernel_slug(base)}"
-        if plan_train.trained_release(repo, base):
+        where = p.get("where", "kaggle")
+        if (where == "kaggle" and not kaggle_free) or plan_train.trained_release(repo, base):
             continue
+        kid = f"{owner}/{kaggle_job.kernel_slug(base)}" if where == "kaggle" else f"colab/{p['size']}"
         if open_failure(repo, kid, p["name"]):
             summary(f"Scheduler: {base} waits for a fix (open failure issue for {kid}).")
-            return
-        run("gh", "workflow", "run", "train.yml", "--repo", repo, "--ref", "main", "-f", f"base={base}")
-        summary(f"Scheduler: started training {p['name']} ({base}).")
-        return
-    summary("Scheduler: every planned adapter exists; nothing to train.")
+            if where == "kaggle":
+                kaggle_free = False
+            continue
+        run("gh", "workflow", "run", plan_train.WORKFLOW[where], "--repo", repo, "--ref", "main",
+            "-f", f"base={base}")
+        summary(f"Scheduler: started training {p['name']} ({base}) on {where}.")
+        started = True
+        if where == "kaggle":
+            kaggle_free = False
+    if not started and kaggle_free:
+        summary("Scheduler: every planned adapter exists; nothing to train.")
 
 
 if __name__ == "__main__":

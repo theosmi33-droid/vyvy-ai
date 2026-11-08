@@ -1,0 +1,143 @@
+name: Train on Colab
+
+# Trains the plans that run on Colab (tools/plan_train.py, "where": "colab";
+# today 1.5B) on one free Colab T4, then publishes the candidate the same way
+# Collect does for Kaggle runs (convert, license files, release, bench-lora).
+# The weekly Kaggle quota stays with 7B and the teacher synthesis.
+#
+# The Colab machine clones this public repository at the pushed commit and runs
+# the same training entry as on Kaggle (tools/kaggle_job.py --colab); no
+# credentials reach it. The session is stopped in every case (trap), so a failed
+# or cancelled run does not keep a GPU. A failure is reported as an issue
+# ("Colab training failed: …"); Collect retries it once.
+# Runs in the environment "colab" (main only); needs COLAB_ADC.
+on:
+  push:
+    branches: [main]
+    paths: ["data/train/**", "training/**", "tools/kaggle_job.py", "tools/plan_train.py",
+            ".github/workflows/train-colab.yml"]
+  workflow_dispatch:
+    inputs:
+      base:
+        description: Base model (must be planned for Colab)
+        type: choice
+        default: Qwen/Qwen2.5-1.5B-Instruct
+        options:
+          - Qwen/Qwen2.5-1.5B-Instruct
+      epochs:
+        description: Upper limit of epochs (early stopping usually ends sooner)
+        type: number
+        default: 4
+
+permissions:
+  contents: write  # candidate release
+  actions: write   # start bench-lora
+  issues: write    # report a failed run
+
+concurrency:
+  group: colab
+  cancel-in-progress: false
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    # 60 min training budget, model download and install, export and GGUF conversion.
+    timeout-minutes: 150
+    environment: colab
+    env:
+      BASE: ${{ inputs.base || 'Qwen/Qwen2.5-1.5B-Instruct' }}
+      EPOCHS: ${{ inputs.epochs || 4 }}
+      GH_TOKEN: ${{ github.token }}
+      COLAB_CLI: git+https://github.com/googlecolab/google-colab-cli@d2d97794941723ab806c0f3642416691a951ec7d
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Plan (Colab only, budget, name)
+        run: |
+          set -euo pipefail
+          plan=$(python tools/plan_train.py "$BASE" --epochs "$EPOCHS" --repo "$GITHUB_REPOSITORY")
+          get() { echo "$plan" | python -c "import json,sys; v=json.load(sys.stdin).get('$1'); print('' if v is None else v)"; }
+          name=$(get name); budget=$(get budget); sweep=$(get sweep); batch=$(get batch); accum=$(get grad_accum)
+          trained=$(get trained); size=$(get size)
+          if [ "$(get where)" != "colab" ]; then
+            echo "SKIP=true" >> "$GITHUB_ENV"
+            echo "$BASE is not planned for Colab; train.yml runs it." >> "$GITHUB_STEP_SUMMARY"
+          elif gh release view "$name" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "SKIP=true" >> "$GITHUB_ENV"
+            echo "Adapter $name already exists; nothing to train." >> "$GITHUB_STEP_SUMMARY"
+          elif python -c "import sys; sys.path.insert(0, 'tools'); import collect; sys.exit(0 if collect.synth_waiting() else 1)"; then
+            echo "SKIP=true" >> "$GITHUB_ENV"
+            echo "Waiting for this week's synthesis; its push starts training." >> "$GITHUB_STEP_SUMMARY"
+          elif [ -n "$trained" ]; then
+            echo "SKIP=true" >> "$GITHUB_ENV"
+            echo "Already trained on this data and prompt: $trained." >> "$GITHUB_STEP_SUMMARY"
+          fi
+          { echo "NAME=$name"; echo "SWEEP=$sweep"; echo "BUDGET=$budget"; echo "BATCH=$batch"; echo "ACCUM=$accum";
+            echo "KID=colab/$size"; } >> "$GITHUB_ENV"
+          echo "Adapter: $name · sweep $sweep · budget $budget min · Colab T4" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Holdout lock
+        if: env.SKIP != 'true'
+        run: python tools/check_holdout_leak.py
+
+      - name: Install the Colab CLI and the credentials
+        if: env.SKIP != 'true'
+        env:
+          COLAB_ADC: ${{ secrets.COLAB_ADC }}
+        run: |
+          set -euo pipefail
+          [ -n "$COLAB_ADC" ] || { echo "secret COLAB_ADC is missing" >&2; exit 1; }
+          pip install -q uv
+          uv tool install -q "$COLAB_CLI"
+          umask 077
+          printf '%s' "$COLAB_ADC" > "$RUNNER_TEMP/adc.json"
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$RUNNER_TEMP/adc.json" >> "$GITHUB_ENV"
+
+      - name: Train on a Colab T4
+        if: env.SKIP != 'true'
+        run: |
+          set -euo pipefail
+          python tools/kaggle_job.py --colab colab_train.py --repo "$GITHUB_REPOSITORY" --commit "$GITHUB_SHA" \
+            --base "$BASE" --name "$NAME" --epochs "$EPOCHS" --sweep "$SWEEP" --budget "$BUDGET" \
+            --batch "$BATCH" --grad-accum "$ACCUM"
+          session="train-$GITHUB_RUN_ID"
+          colab --auth adc new -s "$session" --gpu T4
+          # The GPU is released whatever happens below.
+          trap 'colab --auth adc stop -s "$session" || true' EXIT
+          # No output timeout: an epoch can run for minutes without a line.
+          colab --auth adc exec -s "$session" -f colab_train.py --timeout 0 2>&1 | tee colab.log
+          colab --auth adc download -s "$session" /content/out.tgz out.tgz
+          mkdir -p out && tar -xzf out.tgz -C out
+          test -f out/manifest.json
+
+      - name: Publish the candidate
+        if: env.SKIP != 'true'
+        run: |
+          set -euo pipefail
+          python - <<'EOF'
+          import os, sys
+          from pathlib import Path
+          sys.path.insert(0, "tools")
+          import collect
+          name = collect.publish(os.environ["GITHUB_REPOSITORY"], Path("out"), os.environ["BASE"], os.environ["GITHUB_SHA"])
+          collect.summary(f"{os.environ['KID']}: published candidate `{name}`, bench-lora started." if name
+                          else f"{os.environ['KID']}: {os.environ['NAME']} already published.")
+          EOF
+
+      - name: Report a failed run
+        if: failure() && env.SKIP != 'true'
+        run: |
+          python - <<'EOF'
+          import os, sys
+          from pathlib import Path
+          sys.path.insert(0, "tools")
+          import collect
+          log = Path("colab.log").read_text(encoding="utf-8", errors="replace") if Path("colab.log").exists() else ""
+          tail = log.splitlines()[-30:] or ["no log available"]
+          collect.report_failure(os.environ["GITHUB_REPOSITORY"], os.environ["KID"], ["Colab run failed"], tail,
+                                 os.environ.get("NAME") or None)
+          EOF
