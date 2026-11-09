@@ -4,7 +4,11 @@
 Runs on the GitHub runner after the synthesis kernel finished. Drops every
 sentence at or above --max-similarity (default 0.8, as the generator; the lock
 is 0.85) to any holdout sentence, and every sentence already in the training
-data, then checks the output contract. Writes
+data, then checks the output contract. Last, the semantic guard drops every
+sentence whose meaning is at or above --max-cosine (default 0.85) to a holdout
+sentence, with the sentence model of the semantic check; the lexical lock does
+not see paraphrases. The stratum of a sentence (training/synthesize.py) is kept.
+Writes
 
     data/train/vyvy_synth_<script hash>_<round>.jsonl   the sentences
     data/train/vyvy_synth_<script hash>_<round>.json    teacher, counts, what was dropped
@@ -21,6 +25,7 @@ import argparse
 import json
 import re
 import sys
+from collections.abc import Callable
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -38,11 +43,25 @@ def target(manifest: dict, train_dir: Path, round_: str = "") -> Path:
     return train_dir / f"vyvy_synth_{manifest['script_sha256'][:9]}_{round_}.jsonl"
 
 
-def main(argv: list[str] | None = None) -> int:
+def closest_holdout(texts: list[str], holdout: list[str]) -> list[float]:
+    """Cosine of each text to its closest holdout sentence (GitHub runner: torch, sentence-transformers)."""
+    from sentence_transformers import SentenceTransformer
+
+    import check_semantic_leak as semantic
+
+    model = SentenceTransformer(semantic.MODEL, revision=semantic.REVISION, device="cpu")
+    t = model.encode(texts, batch_size=64, normalize_embeddings=True, convert_to_numpy=True)
+    h = model.encode(holdout, batch_size=64, normalize_embeddings=True, convert_to_numpy=True)
+    return [float(x) for x in (t @ h.T).max(axis=1)]
+
+
+def main(argv: list[str] | None = None,
+         cosine: Callable[[list[str], list[str]], list[float]] = closest_holdout) -> int:
     p = argparse.ArgumentParser(description="Import teacher sentences into data/train/")
     p.add_argument("folder", type=Path, help="kernel output with synth.jsonl and synth_manifest.json")
     p.add_argument("--train-dir", type=Path, default=lock.TRAIN_DIR)
     p.add_argument("--max-similarity", type=float, default=0.8)
+    p.add_argument("--max-cosine", type=float, default=0.85, help="semantic guard against holdout paraphrases")
     p.add_argument("--round", default="", help="round name if the run did not record one")
     args = p.parse_args(argv)
 
@@ -63,6 +82,8 @@ def main(argv: list[str] | None = None) -> int:
             continue
         r = json.loads(line)
         row = {"text": r["text"], "intent": r["intent"], "timeframe": r.get("timeframe"), "entity": r.get("entity")}
+        if r.get("stratum") in (1, 2, 3, 4):
+            row["stratum"] = r["stratum"]
         answer = json.dumps({**{k: row[k] for k in ("intent", "timeframe", "entity")}, "confidence": 0.9})
         if bench.parse_output(answer, intents) is None:
             invalid += 1
@@ -77,9 +98,15 @@ def main(argv: list[str] | None = None) -> int:
         seen.add(key)
         rows.append(row)
 
+    scores = cosine([r["text"] for r in rows], [h["text"] for h in holdout]) if rows else []
+    paraphrases = sum(s >= args.max_cosine for s in scores)
+    rows = [r for r, s in zip(rows, scores) if s < args.max_cosine]
+
     out.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows), encoding="utf-8")
     record = {**manifest, "imported": len(rows), "dropped_near_holdout": near_holdout,
+              "dropped_semantic": paraphrases, "max_cosine": args.max_cosine,
               "dropped_duplicate": duplicates, "dropped_invalid": invalid, "max_similarity": args.max_similarity,
+              "per_stratum_imported": {str(s): sum(r.get("stratum") == s for r in rows) for s in (1, 2, 3, 4)},
               "per_intent_imported": {i: sum(r["intent"] == i for r in rows) for i in intents}}
     out.with_suffix(".json").write_text(json.dumps(record, indent=1) + "\n", encoding="utf-8")
     print(out)

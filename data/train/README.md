@@ -58,9 +58,13 @@ Qwen writes sentences per intent, speaking style and job; Phi-4, a different
 model family, writes the hard cases (near misses between intents that are easy
 to confuse, and "unknown" requests). Qwen labels every sentence again in a blind
 second pass, and only sentences on which both agree are kept. The teacher never sees a holdout sentence;
-`tools/import_synth.py` drops near copies of holdout sentences (0.8) and
-duplicates before the file is committed. `<id>` is the start of the script's
-SHA-256, and `vyvy_synth_<id>.json` records teacher, counts and drops.
+`tools/import_synth.py` drops near copies of holdout sentences (0.8),
+duplicates and, with the sentence model of the semantic check, every sentence
+whose meaning is at 0.85 or more to a holdout sentence, before the file is
+committed. From the round of 14.11. on, each sentence also carries its
+`stratum`: 1 clean standard German, 2 everyday office German, 3 dialect, 4 hard
+cases (near misses and `unknown`). `<id>` is the start of the script's
+SHA-256, and `vyvy_synth_<id>.json` records teacher, counts per stratum and drops.
 
 `vyvy_partner_<id>.jsonl` holds partner data: synthetic, anonymised sentences
 handed over for Vyvy's intents, checked on import by `tools/import_partner.py`

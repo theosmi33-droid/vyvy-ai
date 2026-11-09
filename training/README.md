@@ -117,6 +117,40 @@ Kaggle and Colab are used by Vyvy only.
 | Kaggle datasets | over 200 GB private | pinned model mirror |
 | Google Colab | free T4 when available, one machine at a time | the official Colab CLI starts and drives it without a browser; used for the teacher synthesis and for runs that would otherwise wait for Kaggle |
 
+## Goal and method
+
+A small model does not have to know everything; it has to decide one narrow
+thing reliably: which of nine intents a German request means, in standard German,
+everyday office German and regional dialect, and "unknown" when none fits. Within
+that corridor the aim is the reliability of a much larger model, reached through
+dense, checked data rather than parameters.
+
+The data is built in four strata, from the foundation to the hard cases:
+
+| Stratum | Content | Where it comes from |
+|---|---|---|
+| 1 Foundation | clean standard German, every intent and timeframe | `vyvy_train_v1.jsonl`, synthesis |
+| 2 Everyday | loose, terse, typed office German | synthesis |
+| 3 Dialect | Bavarian, Swabian, Berlin, northern German, Swiss German, in common spellings | synthesis, `vyvy_train_v1.jsonl`, group 5 of `vyvy_unknown_hard_v1.jsonl` |
+| 4 Hard cases | near misses between intents, `unknown` with a time word or a person | synthesis, `vyvy_unknown_hard_v1.jsonl` |
+
+Done: the teacher rounds are split and counted by stratum, dialect is asked for
+in common spellings (an invented phonetic spelling splits into rare tokens), and
+every teacher sentence passes a blind second label and a semantic guard against
+the holdouts (cosine below 0.85) before it is trained on.
+
+Next, measured one step at a time by Bench LoRA: training in the order of the
+strata, and preference training on near misses (the sentence with its intent
+against the intent it was written to resemble).
+
+What stays fixed:
+
+- Holdout sentences and errors on them never become training data, also not as
+  preference pairs; a rejected adapter is a measurement, not a source.
+- Teachers are open models whose licences allow training on their output
+  (Qwen2.5 under Apache 2.0, Phi-4 under MIT), no closed services.
+- Each class is judged against its own baseline on the blind holdout.
+
 ## Measuring the adapter
 
 Publish `out/<name>.gguf` as the only `.gguf` asset of a release in this

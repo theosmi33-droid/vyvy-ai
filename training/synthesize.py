@@ -18,6 +18,10 @@ trained with its output. 32B needs 65 GB of downloads for 4-bit loading.)
    matches the requested intent with probability >= --min-agree are kept;
    disagreements are recorded in synth_dropped.jsonl and never trained on.
 
+Requests come in four strata (STRATA): clean standard German, everyday office
+German, dialect, and the hard cases (near misses, "unknown"). Each kept sentence
+names its stratum, and the manifest counts generated and kept sentences per stratum.
+
 The teacher never sees a holdout sentence. The GitHub runner filters the result
 against all holdouts (tools/import_synth.py) before it enters data/train/.
 
@@ -125,13 +129,30 @@ NEAR = [
     # 2026-W46: the rejected 1.5B adapter of 08.11. turned "unknown" into these two.
     ("unknown", "appointments_tomorrow"), ("unknown", "daily_agenda"),
 ]
+# Every request belongs to one of four strata, from the foundation to the hard cases;
+# each kept sentence carries its stratum and the manifest counts them per stratum.
+# 1 clean standard German, 2 everyday office German (loose, terse, typed), 3 dialect,
+# 4 near misses and "unknown" in any style.
+STRATA = {1: "foundation", 2: "everyday", 3: "dialect", 4: "hard cases"}
+STYLE_STRATUM = {STYLES[0]: 1, STYLES[1]: 2, STYLES[7]: 2, STYLES[8]: 2, STYLES[9]: 2,
+                 STYLES[2]: 3, STYLES[3]: 3, STYLES[4]: 3, STYLES[5]: 3, STYLES[6]: 3}
+# Dialect as people type it: a phonetic spelling invented for one sentence splits into
+# many rare tokens and teaches the small model spellings nobody uses.
+DIALECT_SPELLING = (" Schreibe den Dialekt so, wie Leute ihn in Nachrichten tippen, mit gängigen Schreibweisen; "
+                    "keine Lautschrift und keine für einen Satz erfundenen Schreibungen.")
 TIMEFRAMES = ("today", "tomorrow", "week", None)
 LETTERS = "ABCDEFGHI"
+
+
+def stratum(intent: str, style: str, near: str | None) -> int:
+    return 4 if near or intent == "unknown" else STYLE_STRATUM[style]
 
 
 def gen_prompt(intent: str, style: str, role: str, n: int, near: str | None) -> str:
     task = (f"Schreibe {n} verschiedene Sätze, die eine Person aus dem Beruf {role} zu ihrem digitalen Büro-Assistenten sagt. "
             f"Jeder Satz {INTENTS[intent]}. Sprachstil: {style}.")
+    if STYLE_STRATUM[style] == 3:
+        task += DIALECT_SPELLING
     if intent in RULES:
         rule, examples = RULES[intent]
         task += f" Regel: {rule} Beispiele für die Art (nicht wiederholen): " + " | ".join(examples)
@@ -222,9 +243,9 @@ def generate(model, tok, requests: list[tuple], teacher: str, per_request: int, 
         with torch.no_grad():
             gen = model.generate(**enc, max_new_tokens=60 * per_request, do_sample=True, temperature=0.9,
                                  top_p=0.95, pad_token_id=tok.pad_token_id)
-        for (intent, near, _), ids in zip(chunk, gen[:, enc["input_ids"].shape[1]:]):
+        for (intent, near, _, layer), ids in zip(chunk, gen[:, enc["input_ids"].shape[1]:]):
             for it in parse_items(tok.decode(ids, skip_special_tokens=True)):
-                out.append({**it, "intent": intent, "near": near, "teacher": teacher})
+                out.append({**it, "intent": intent, "near": near, "stratum": layer, "teacher": teacher})
         print(f"{teacher}: {start + len(chunk)}/{len(requests)} requests, {len(out)} sentences, "
               f"{time.time() - started:.0f} s", flush=True)
     return out
@@ -254,16 +275,18 @@ def main(argv: list[str] | None = None) -> int:
     torch.manual_seed(args.seed)
     started = time.time()
 
-    qwen_requests = [(intent, None, gen_prompt(intent, style, rng.choice(ROLES), args.per_request, None))
-                     for intent in INTENTS for style in STYLES
+    def request(intent: str, style: str, near: str | None) -> tuple:
+        return (intent, near, gen_prompt(intent, style, rng.choice(ROLES), args.per_request, near),
+                stratum(intent, style, near))
+
+    qwen_requests = [request(intent, style, None) for intent in INTENTS for style in STYLES
                      for _ in range(args.rounds * (2 if intent in WEAK else 1))]
-    qwen_requests += [(intent, near, gen_prompt(intent, style, rng.choice(ROLES), args.per_request, near))
+    qwen_requests += [request(intent, style, near)
                       for intent, near in NEAR for style in rng.sample(STYLES, args.near_styles)]
     # Phi-4 only writes the hard cases: near misses and "unknown" in every style.
-    phi_requests = [(intent, near, gen_prompt(intent, style, rng.choice(ROLES), args.per_request, near))
+    phi_requests = [request(intent, style, near)
                     for intent, near in NEAR for style in rng.sample(STYLES, args.near_styles)]
-    phi_requests += [("unknown", None, gen_prompt("unknown", style, rng.choice(ROLES), args.per_request, None))
-                     for style in STYLES]
+    phi_requests += [request("unknown", style, None) for style in STYLES]
     rng.shuffle(qwen_requests)
     rng.shuffle(phi_requests)
     if args.limit:
@@ -305,7 +328,8 @@ def main(argv: list[str] | None = None) -> int:
         for c, pr in zip(chunk, probs):
             k = int(pr.argmax())
             agree = float(pr[names.index(c["intent"])])
-            row = {"text": c["text"], "intent": c["intent"], "timeframe": c["timeframe"], "entity": c["entity"]}
+            row = {"text": c["text"], "intent": c["intent"], "timeframe": c["timeframe"], "entity": c["entity"],
+                   "stratum": c["stratum"]}
             if names[k] == c["intent"] and agree >= args.min_agree:
                 kept.append({**row, "teacher": c["teacher"]})
             else:
@@ -330,6 +354,9 @@ def main(argv: list[str] | None = None) -> int:
                 "generated": len(candidates), "unique": len(unique), "kept": len(kept),
                 "dropped_by_verification": len(dropped), "by_teacher": by_teacher, "min_agree": args.min_agree,
                 "per_intent": {i: sum(r["intent"] == i for r in kept) for i in INTENTS},
+                "per_stratum": {f"{s} {name}": {"generated": sum(c["stratum"] == s for c in candidates),
+                                                "kept": sum(r["stratum"] == s for r in kept)}
+                                for s, name in STRATA.items()},
                 "minutes": round((time.time() - started) / 60, 1)}
     (args.out / "synth_manifest.json").write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8")
     print(json.dumps(manifest, indent=1))

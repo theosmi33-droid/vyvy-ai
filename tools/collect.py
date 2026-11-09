@@ -235,6 +235,9 @@ def collect_synth(repo: str, owner: str) -> bool:
         r"(^|/)synth(_manifest\.json|\.jsonl|_dropped\.jsonl)$", check=False)
     if not (out / "synth_manifest.json").exists():
         return True
+    # The semantic guard of the import needs the sentence model; installed only when a round comes in.
+    run(sys.executable, "-m", "pip", "install", "-q", "-r", str(ROOT / "tools" / "semantic-requirements.txt"),
+        check=False)
     done = subprocess.run([sys.executable, str(ROOT / "tools" / "import_synth.py"), str(out)],
                           capture_output=True, text=True)
     if done.returncode == 3:
