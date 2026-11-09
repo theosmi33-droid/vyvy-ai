@@ -71,6 +71,9 @@ PARAPHRASES = {
     # run 42586166857; since then "der Chef" is no longer one of PERSONS (Chef plus Termin
     # always lands next to a holdout sentence)
     "wann ist heute mein termin mit dem chef", "habe ich morgen einen termin mit dem chef",
+    # run 42587201953 (the embedding reads Vorarbeiter like Chef); the other two as with Chef
+    "wann ist morgen mein termin mit dem vorarbeiter", "wann ist heute mein termin mit dem vorarbeiter",
+    "habe ich morgen einen termin mit dem vorarbeiter",
 }
 
 TIMES = ["heute", "morgen", "heute Abend", "morgen früh", "am Wochenende", "übermorgen",
