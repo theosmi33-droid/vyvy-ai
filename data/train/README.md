@@ -42,7 +42,7 @@ close to a training sentence on the other side of the `unknown` boundary (0.85).
 generator: read questions about the user's own calendar that name the same
 persons (`appointments_today`, `appointments_tomorrow`, `daily_agenda`), with
 `entity` as written in the sentence and the matching `timeframe`. "Ist Herr
-Yilmaz morgen im Büro?" is `unknown`, "Habe ich morgen was mit Herrn Yilmaz?" is
+Sommerfeld morgen im Büro?" is `unknown`, "Habe ich morgen was mit Herrn Sommerfeld?" is
 `appointments_tomorrow`; without these the model could learn that a person plus
 a time word means `unknown`. `--check` compares both committed files with the
 generator; `tests/test_unknown_hard.py` runs it.

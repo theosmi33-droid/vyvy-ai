@@ -26,8 +26,8 @@ The same persons appear in data/train/vyvy_person_calendar_v1.jsonl: 80 read
 questions about the user's own calendar that name them (appointments_today,
 appointments_tomorrow, daily_agenda), entity as written in the sentence. Without
 them the model could learn "person plus time word means unknown". A pair
-differs only in whose calendar it is: "Ist Herr Yilmaz morgen im Büro?" is
-unknown, "Habe ich morgen was mit Herrn Yilmaz?" is appointments_tomorrow.
+differs only in whose calendar it is: "Ist Herr Sommerfeld morgen im Büro?" is
+unknown, "Habe ich morgen was mit Herrn Sommerfeld?" is appointments_tomorrow.
 
 Deterministic for a given --seed.
 
@@ -65,6 +65,9 @@ CONFLICT_SIMILARITY = 0.85
 # cosine >= 0.90) finds; the lexical lock above does not see them. Normalised text.
 PARAPHRASES = {
     "passt danke dir", "geht klar super danke", "ist angekommen danke dir",  # run 42582121327
+    # run 42585109153
+    "wann ist morgen mein termin mit dem chef", "wann hat der chef übermorgen feierabend",
+    "wann treffe ich morgen den chef", "danke passt mach s gut", "nachher mal",
 }
 
 TIMES = ["heute", "morgen", "heute Abend", "morgen früh", "am Wochenende", "übermorgen",
@@ -207,8 +210,8 @@ def private() -> dict[str, list[str]]:
 
 # The same persons on both sides: their own calendar is unknown, the user's
 # calendar with them is a read intent. (nominative, dative, accusative)
-PERSONS = [("Frau Brandtner", "Frau Brandtner", "Frau Brandtner"), ("Herr Yilmaz", "Herrn Yilmaz", "Herrn Yilmaz"),
-           ("Frau Kowalczyk", "Frau Kowalczyk", "Frau Kowalczyk"), ("Herr Pfeiffer", "Herrn Pfeiffer", "Herrn Pfeiffer"),
+PERSONS = [("Frau Lehnert", "Frau Lehnert", "Frau Lehnert"), ("Herr Sommerfeld", "Herrn Sommerfeld", "Herrn Sommerfeld"),
+           ("Frau Wegener", "Frau Wegener", "Frau Wegener"), ("Herr Pfeiffer", "Herrn Pfeiffer", "Herrn Pfeiffer"),
            ("Frau Dr. Seidl", "Frau Dr. Seidl", "Frau Dr. Seidl"), ("Herr Haberl", "Herrn Haberl", "Herrn Haberl"),
            ("meine Kollegin", "meiner Kollegin", "meine Kollegin"), ("der Chef", "dem Chef", "den Chef"),
            ("mein Azubi", "meinem Azubi", "meinen Azubi"), ("die Buchhaltung", "der Buchhaltung", "die Buchhaltung"),
@@ -233,10 +236,10 @@ def others() -> dict[str, list[str]]:
                  ("unser Lieferant", "unserem Lieferanten"), ("die Kanzlei Obermaier", "der Kanzlei Obermaier")]
     company = ["Was hat {n} {t} geplant?", "Hat {n} {t} geöffnet?", "Ist bei {d} {t} jemand erreichbar?",
                "Wann liefert {n} {t}?", "Hat {n} {t} Betriebsferien?"]
-    dialect = ["Hod da Chef morgn Zeit?", "Isch d'Frau Brandtner hit im Gschäft?", "Is der Meister morgen uff da Baustell?",
+    dialect = ["Hod da Chef morgn Zeit?", "Isch d'Frau Lehnert hit im Gschäft?", "Is der Meister morgen uff da Baustell?",
                "Hät dr Chef hück vill ze dun?", "Hett de Chef morgen Tied?", "Is de Buchhaltung hüt besett?",
                "Wann hat'n die Kollegin heut Schluss?", "Is der Herr Pfeiffer heid do?",
-               "Hot da Azubi heit Berufsschul?", "Isch dr Herr Yilmaz morn im Büro?"]
+               "Hot da Azubi heit Berufsschul?", "Isch dr Herr Sommerfeld morn im Büro?"]
 
     return {
         "persons": [cap(s.format(n=n, d=d, t=t)) for s in timed for n, d, _ in PERSONS for t in DAYS],

@@ -1,500 +1,500 @@
-{"text": "Das Angebot hab ich heute früh rausgeschickt.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Nach der Mittagspause", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann kommt Frau Brandtner übermorgen ins Büro", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "wie spät ist es gerade?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was gibt's übermorgen zum Abendessen", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Nicht jetzt", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Läuft, schönes Wochenende.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "wann geht heute die sonne auf?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Später vielleicht", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist das Postfach von Herrn Haberl voll?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Heute ist wieder viel los", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Läuft, na, auch schon da?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat die neue Kollegin meine Mail schon gelesen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie voll ist am Sonntag die Autobahn?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ich glaub, das war …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie wird das Wetter übermorgen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wird es übermorgen warm?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie viele Schritte sollte man am Tag gehen", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann hat'n die Kollegin heut Schluss", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was koche ich am Wochenende?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wia lang braucht a Schweinsbratn?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist Frau Brandtner am Samstag erreichbar?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Tach auch, ich bin mal kurz in der Pause!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Montag halt!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann geht übermorgen die Sonne auf?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "wann kommt der chef am sonntag ins büro?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hot a Azubi heit Berufsschul?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist unser Miester am Sonntag im Büro?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Guten Abed, gutes neues Jahr!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist Frau Kowalczyk übermorgen ausgebucht?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ach, die Präsentation von letzter Woche", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ach, das Foto von vorhin", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie mache ich Kartoffesalat?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wos kocht ma heit z'Mittag?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "wegen dem schlüssel vom chef …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie kalt wird es am Wochenende?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Servus, herzlichen Glückwunsch!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hallo zusammen, gutes neues Jahr!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ich meld mich, bis heute Nachmittag!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Moment, ich such noch …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "In Ordnung, Feierabend", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "was ist ein schnelles vegetarisches gericht?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "wem hat meine kollegin heute geschrieben?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was backe ich morgen für die Familie?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie war das noch mit …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat das Freibad übermorgen offen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie lange muss ein Schnitzel in die Pfanne", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "morgen wird's ruhiger!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "In Ordnung, Kaffee ist fertig", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Kaffee ist fertig!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat das Freibad am Wochenende offen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie windig wird es heute Nachmittag?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Guten Morgen zusammen, gute Besserung.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "danke für die info, bis nachher!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wo gibt's heit an Christkindlmarkt?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was koche ich übermorgen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "gibt es am wochenende irgendwo einen flohmarkt?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "danke für die info, erhol dich gut.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat das Autohaus Brückl am Wochenende geöffnet?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Schiint hüt d'Sunne?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "jo, passt scho, schönes wochenende.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Guten Abend, gute Besserung.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wer spielt am Sonntag in der Bundesliga", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat die Firma Holzbau Reisinger morgen geöffnet?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "wegen dem angebot von letzter woche …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann liefert die Kanzlei Obermaier heute?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was ist mit der Präsentation mit den Zahlen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was hat die Firma Holzbau Reisinger morgen geplant", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Passt, Montag halt.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Rengt's heit no?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "ist unser meister am sonntag ausgebucht?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "servus, kaffee ist fertig.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was gibt's am Sonntag zum Abendessen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hab ich gesehen, ich geh dann mal.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann hat Herr Pfeiffer heute Feierabend?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wi voll ist morgen die Autobahn?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie sieht der Kalender von unserem Meister am Wochenende aus?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Logisch, mach's gut!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Regnet es am Samstag", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hallo, da bin ich wieder, gute Besserung.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Danke fürs Bescheidgeben, adieu zäme!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was hat Frau Dr. Seidl heute schon erleditg?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Die Kollegin ist heute krank.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Schick das bitte an …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie kalt wird es übermorgen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Die Mail an den Steuerberater ist raus.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Scheint heute die Sonne?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Besten Dank für die schnelle Antwort, schönen Urlaub!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Prima, ade, bis morn.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Das Meeting heute war unnötig.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "In Ordnung, bis Montag!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Dat Dokument vun jestern", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Fhärt am Wochenende die S-Bahn?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Geht klar, ade, bis morn", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Soll es heute gewittern?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was kann man am Sonntag mit Kindern unternehmen", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "weil ich doch …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Moin, endlich Freitag!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "hat herr pfeiffer übermorgen urlaub?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat unser Lieferant am Wochenende Betriebsferien?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist die neue Kollegin am Samstag im Büro?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hta die Spedition Wendler am Samstag Betriebsferien?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "hat frau dr. seidl morgen urlaub?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ach, das Dokument von Montag", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Welcher Film läuft heute im Kino?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was hat meine Kollegin heute schon erledigt?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann liefert die Firma Holzbau Reisinger am Sonntag?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was ziehe ich zur Hchzeit an?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was koche ich am Sonntag?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was hat Herr Yilmaz heute schon erledigt?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Und dann?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Na, wart mal", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist mein Azubi am Wochenende im Büro?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Rezept für Kaiserschmarrn", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hallo zusammen, wie die Zeit vergeht", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Rezept für einen einfachen Apfelkuchen", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Soll es am Samstag gewittern?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was koch i hit z'Nacht", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hallo zusammen, bin ab morgen im Urlaub.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Die Datei von heute früh", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Alles klar, mach's gut.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat Frau Dr. Seidl die Rechnung schon verschickt?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Brauche ich übermorgen einen Schirm?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "der zettel von letzter woche, du weißt schon", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie viel Reis rechnet man pro Person?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat das Freibad am Sonntag offen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Na dann, bis nachher.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist das Postfach von dem Chef voll?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wenn's passt", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wo war jetzt noch mal …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie windig wird es übermorgen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Und die Präsentation vom Chef?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Welche Zmmerpflanze braucht wenig Licht?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Später vlt", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie voll ist am Samstag die Autobahn?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Soll es übermorgen gewittern?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Feierabend!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann hat mein Azubi heute Feierabend?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat die Firma Holzbau Reisinger übermorgen Betriebsferien?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat unser Lieferant übermorgen geöffnet", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Na dann, frohe Weihnachten!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist das Postfach von Herrn Pfeiffer voll?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Vergelt's Gott, adieu zäme.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Jo, passt scho, ich bin mal kurz in der Pause", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wia werd's Weda morgn?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "morge vielleicht", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was kommt übermorgen im Fernsehen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Welcher Film läuft am Wochenende im Kino?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie windig wird es am Samstag?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Frohe Weihnachten.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Besten Dank für die schnelle Antwort, bis Montag!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist das Postfach von Frau Brandtner voll?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann hat Frau Brandtner übermorgen Feierabend?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Sing mir was vor.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Gutes neues Jahr", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann macht der Supermarkt heute zu?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ach, die Unterlagen aus der Besprechung", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was hat die Firma Holzbau Reisinger am Wochenende geplant?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Heute oder morgen, egal", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie wird das Wetter heute?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Klingt gut, bis nachher!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hod da Chef morgn Zeit?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Danke, passt, bis Montag", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Gleich, Mment", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat die Spedition Wendler morgen Betriebsferien?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ach, die Rechnung aus der Besprechung", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Bin ab morgen im Urlaub!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie die Zeit vergeht.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Mal sehen", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie lange sollte man schlafen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Kannst du mal …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann liefert das Autohaus Brückl am Sonntag?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "hat die kanzlei obermaier heute betriebsferien?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "regnet es übermorgen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist bei der Firma Holzbau Reisinger am Sonntag jemand erreichbar", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Das Din gvon letzter Woche", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann liefert unser Lieferant am Samstag?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Das mit dem …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Danke, passt, ciao, bis morgen.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "ach, das angebot von montag", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "was hat der chef heute schon erledigt?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Welcher Film läuft am Sonntag im Kino?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist bei unserem Lieferanten morgen jemand erreichbar?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann hat der Chef übermorgen Feierabend?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Servus, frohe Weihnachten", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Vielen Dank, schönen Urlaub.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Fährt am Samstag die S-Bahn?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was ist mit dem Plan von vorhin?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wegen dem Dokument von der Kollegin", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was backe ich am Sonntag für die Familie", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was hat Frau Kowalczyk heute schon erledigt?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Danke fürs Bescheidgeben, erhol dich gut.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie wird dat Wedder morgen an de Küst?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat Herr Pfeiffer am Wochenende noch Luft?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "und der brief mit den zahlen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Joa, schau ma moi", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wi ekalt wird es am Samstag?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Geht klar, morgen wird's ruhiger!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "wann liefert die spedition wendler am samstag?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wo gibt et hier lecker Döner", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat das Autohaus Brückl am Samstag Betriebsferien?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann liefert die Kanzlei Obermaier am Wochenende?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "welche apotheke hat am wochenende notdienst?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Morgen bin ich esrt ab zehn da.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was kann man morgen mit Kindern unternehmen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Geht klar, na, auch schon da?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was hat Frau Brandtner heute schon erledigt?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was kann man am Samstag mit Kindern unternehmen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Erst mal nicht", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Gibt es am Samstag irgendwo einen Flohmarkt", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was hat die Kanzlei Obermaier am Sonntag geplant", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Is der Meister morgen uff da Baustell", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hallo zusammen, puh, war das ein Tag.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie pflege ich Lederschuhe?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hab ich gesehen, pfit di!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wegen dem Zettel von gestern …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Gut zu wissen, bis heute Nachmittag", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Isch dr Herr Yilmaz morn im Büro?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ach, der Plan von Montag", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ach, das Ding von der Kollegin", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "hab ich gesehen, kaffee ist fertig", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Prima, bin ab morgen im Urlaub", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Muss mool luege", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Morsche, gute Besserung!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Endlich Freitag.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was ist mit der Datei vom Chef?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wird es heute warm?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat die neue Kollegin die Rechnung schon verschickt?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "mahlzeit, herzlichen glückwunsch!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat Frau Dr. Seidl meine Mail schon gelesen", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Soll es morgen früh gewittern?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was backe ich heute für die Familie?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Irgendwann diese Woche", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie lerne ich am schnellsten Spanisch?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Scheint heute Nachmittag die Sonne?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wegen dem Ordner für den Kunden …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wo chan i morn guet z'Mittag ässe?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "herzlichen glückwunsch!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie gseit, später", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "weiß nit", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Joa!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann macht der Supermarkt übermorgen zu?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie wird das Wetter am Samstag?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wer spielt übermorgen in der Bundesliga", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Regnet es am Wochenende?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wat kost dat Kino hück?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Na, auch schon da?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Bin heute im Homeoffice", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Mach mal …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Dat kriejen wa schon", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ich wollte noch …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wer hatte noch mal …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wos is jetz mit dem Zeig", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie windig wird es morgen früh?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was hat Herr Haberl heute schon erledigt?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Brauche ich morgen früh einen Schirm?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "In Ordnung, schönen Feierabend", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wo ist meine Kollegin übermorgen unterwegs?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was koche ich am Samstag?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist die Buchhaltung am Samstag erreichbar?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Des mach'mer später", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was ist mit dem Schlüssel von vorhin?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Heute nicht mehr", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann kommt die neue Kollegin heute ins Büro?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "vielleicht morgen", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Der Ordenr von heute früh, du weißt schon", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "geht klar, bin heute im homeoffice!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat der Chef die Rechnung schon verschickt?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Und das Angebot vom Chef?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "welcher film läuft übermorgen im kino?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wer spielt morgen in der Bundesliga?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Heute noch?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie werde ich Schluckauf los", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was hat die neue Kollegin heute schon erledigt?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie backe ich ein Brot ohne Hefe?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Is de Buchhaltung hüt besett?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Mahlzeit, heute ist wieder viel los.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Der Kunde hat sich gestern nicht mehr gemeldet.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann beginnt heute das Spiel?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "wem hat herr pfeiffer heute geschrieben?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "wie kalt wird es morgen früh?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann macht der Supermarkt am Samstag zu?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Öhm, des do", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Heute zieht sch's", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wem hat mein Azubi heute geschrieben?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "schon wieder montag.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ach, der Brief von vorhin", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Kommt drauf an", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hallihallo, schon wieder Montag!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Morsche, ich geh dann mal", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hab ich gesehen, herzlichen Glückwunsch.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "danke fürs bescheidgeben, schönen abend noch!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wat kommt heute in de Glotze?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "wird es heute nachmittag warm?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was koche ich heute", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was backe ich übermorgen für die Familie?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Rezept für Pasta", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Gut zu wissen, schönen Feierabend!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann liefert die Spedition Wendler übermorgen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wan nkommt mein Azubi am Wochenende ins Büro?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "was hilft gegen erkältung?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "bis wann eigentlich?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "wann geht am wochenende die sonne auf?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was ist mit dem Angebot von gestern?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Vielen Dank, erhol dich gut.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Super, danke, schönen Abend noch", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Klingt gut, bis morgen!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Grüezi mitenand, bin gleich wieder da.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann liefert das Atuohaus Brückl am Wochenende?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "ich meld mich, herzlichen glückwunsch.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Stimmt, morgen wird's ruhiger!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Welche Serie soll ich als Nächstes schuen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie wid das Wetter morgen früh?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was ist mit dem Schlüssel von Montag?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Gut zu wissen, schönen Tag noch", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat die Firma Holzbau Reisinger morgen Betriebsferien?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "hat die firma holzbau reisinger heute geöffnet?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Super, danke, schönen Urlaub!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wird gemacht, endlich Freitag!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was hat das Autohaus Brückl am Sonntag geplant?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Der Shlüssel von heute früh", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Okay, verstandn, adieu zäme.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Welcher Wein passt zu Fisch?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Super, prost Mahlzeit", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie wüürze ich Gulasch richtig?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist Herr Yilmaz morgen im Büro?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wem hat die Buchhaltung heute geschrieben?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann liefert die Kanzlei Obermaier am Sonntag?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "was ist mit dem foto aus der besprechung?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat die Buchhaltung meine Mail schon gelesen", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "morsche, wie die zeit vergeht!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist das Postfach von Frau Dr. Seidl voll?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie kalt wird es heute?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Des Bapier vom Chef", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Viel Erfolg heute", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Nachher mal", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist Frau Dr. Seidl heute erreichbar?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie kalt wird es heute Abend?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Fährt übermorgen die S-Bahn?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Zeig mal das …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was ist mit dem Foto von gestern?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "hett de chef morgen tied?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Merci vielmal, gute Nacht.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Danke, passt, mach's gut.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hät dr Chef hück vill ze dun?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Der Plan fr den Kunden, du weißt schon", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Die Unterlagen für morgen, du weißt sschon", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie lange hält gekochter Reis im Kühlschrank?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wird gemacht, puh, war das ein Tag", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "super, bis morgen früh!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was kommt morgen im Fernsehen", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Gugge mer mal", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "rägnet's morn?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Tach auch, wie die Zeit vergeht!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat Herr Yilmaz am Wochenende noch Luft?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Und dann noch das von …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie windig wird es heute?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hallo, da bin ich wieder, gutes neues Jahr!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann muss ich die Uhr umstellen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie windig wird es am Wochenende?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Läuft, Kaffee ist fertig", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was backe ich am Samstag für die Familie?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Die Rechnung von der Kollegin, du weißt schon", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wo kann man in der Nähe schön wandern", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hallihallo, ich geh dann mal", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Die Sache mit dem Lager hab ich erledigt.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Dankeschön, schönen Tag noch!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Regnet's morge im Ländle?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hab ich gesehen, bis heute Nachmittag!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat mein Azubi die Rechnung schon verschickt", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat die Kanzlei Obermaier heute geöffnet?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wat is denn nu mit dem Kram?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist das Postfach von der neuen Kollegin voll?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "morgen früh, oder?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "gib mir ein rezept für linsensuppe.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Na dann, ciao, bsi morgen!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Morn villicht", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie putze ich Fenster ohne Streifen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie mach ich Spätzle selber?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was schenke ich meiner Mutter zum Geburtstag?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was gibt's morgen zum Abendessen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Isch d'Frau Brandtner hit im Gschäft?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "wenn morgen der …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Heute bin ich echt müde.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ich geh dann mal!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was backe ich am Wochenende für die Familie?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was backe ich übermorgen für die Familie", "intent": "unknown", "timeframe": null, "entity": null}
 {"text": "Übermorgen kommt der Handwerker zu mir nach Hause.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "wie bekomme ich rotwein aus dem teppich?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat Herr Yilmaz heute Urlaub?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was ist mit dem Schlüssel aus der Besprechung?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat meine Kollegin am Wochenende noch Luft?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "ich bin mal kurz in der pause.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "wem hat herr haberl heute geschrieben?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Vergelt's Gott, schönen Tag noch.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was hat die Kanzllei Obermaier heute geplant?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Grüß Gott!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie kalt wird es heute Nachmittag?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Puh, war das ein Tag", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Der Ordner von Montag", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Joa, endlich Freitag.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "welche apotheke hat am sonntag notdienst?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist Herr Yilmaz am Sonntag ausgebucht?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie wird das Wetter heute Nachmittag?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Brauche ich heute Abend einen Schirm?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was backe ich heute für die Familie?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Die Datei von heute früh", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hallihallo, ich geh dann mal", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie war dass noch mit …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Schiint hüt d'Sunne?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wegen dem Schlüssel vom Chef …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hot da Azubi heit Berufsschul?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Heute nicht mehr", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie pflege ich Lederschuhe?", "intent": "unknown", "timeframe": null, "entity": null}
 {"text": "Danke, hat sich erledigt, schönen Tag noch!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hast du schon …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Scheint heute Abend die Sonne?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Dat Dingens von vorhin", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Das Angebot von Montag", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Danke dir, gute Nacht.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Heit nimma", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Vergelt's Gott, ciao, bbis morgen!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "ach so, und …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Läut, bis die Tage", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wem hat Frau Dr. Seidl heute geschrieben?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wat jitt et hück zo esse?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wegen dem Ordner von gestern …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ach, das Formular von ovrhin", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Heute wollte ich eigentlich …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "So gegen drei", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Schneit's übermorge?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Gibt es übermorgen irgendwo einen Flohmarkt?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Läuft, wie die Zeit vergeht.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "bin gleich wieder da", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "gute besserung!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Danke, passt, bis die Tage", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "hod da biergartn heit offa?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ich ruf den Kunden morgen zurück.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Scheint morgen früh die Sonne?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was kann ich mit Zucchini kochen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hat unser Meister die Rechnung schon verschickt?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was gibt's heute zum Abendessen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Danke fürs Bescheidgeen, schönes Wochenende.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Grüß Gott, herzlichen Glückwunsch", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Alles klar, frohe Weihnachten.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Der Plan von Montag, du weißt schon", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was gibt's am Wochenende zum Abendessen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wird es morgen warm?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Brauche ich heute Nachmittag einen Schirm?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Gibt es heute Schene?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Danke, das hilft, schönes Wochenende.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wird gemacht, gute Nacht", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ich hab heute schon drei Kaffee getrunken", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Lieber übermorgen", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Is der Herr Pfeiffer heid do?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Des Ding vo geschtern", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Welche Apotheke hat morgen Notdienst?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist die Buchhaltung übermorgen erreichbar?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Passt, puh, war das ein Tag", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wo ist Herr Pfeiffer am Samstag unterwegs?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Prima, Feierabend", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Jo, pass scho, endlich Freitag.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was gibt's am Samstag zum Abendessen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was kommt am Sonntag im Fernsehen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist die Buchhaltung am Wochenende ausgebucht?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Des vo heit friah", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wird gemacht, schönen Abend noch", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was kann man statt Sahne nehmen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Soll es morgen gewittern?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Morgen fahr ich mit dem Zug.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Guten Tag, bin heute im Homeoffice", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ich glaub, morgen wird's knapp.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Morgen dann", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Logisch, bis morgen", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Prost Mahlzeit", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wie gestern", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann beginnt morgen das Spiel?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Morsche, bin ab morgen im Urlaub!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "wird's hüt warm?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "In Ordnung, Feierabend", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "wie wird das wetter heute?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Super, danke, schönen Abend noch", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Gibt es am Samstag Schnee?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wird gemacht, endlich Freitag!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hallo, da bin ich wieder, gute Besserung.", "intent": "unknown", "timeframe": null, "entity": null}
 {"text": "Stimmt, bis heute Nachmittag", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "wird's hüt warm?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Rezept für Kaiserschmarrn", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was hat meine Kollegin heute schon erledigt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist Frau Wegener übermorgen ausgebucht?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Servus, herzlichen Glückwunsch!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hett de Chef morgen Tied?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Isch dr Herr Sommerfeld morn im Büro?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "na, wart mal", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Prima, ade, bis morn.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat das Freibad am Samstag offen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat die neue Kollegin am Samstag Urlaub?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Brauche ich übermorgen einen Schirm?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann liefert die Firma Holzbau Reisinger morgen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wo war jetzt noch mal …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ach, die Rechnung von der Kollegin", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wem hat Frau Wegener heute geschrieben?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat meine Kollegin meine Mail schon gelesen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was koche ich heute?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat die Firma Holzbau Reisinger am Sonntag Betriebsferien", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ich glaub, morgen wird's knapp.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kaffee ist fertig!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Merci vielmal, gute Nacht.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Montag halt!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Vergelt's Gott, ciao, bbis morgen!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ach, das Foto vom Chef", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mahlzeit, heute ist wieder viel los.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Scheint übermorgen die Sonne?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Die Unterlagen von heute früh, du weißt schon", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Fährt heute die S-Bahn?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "brauche ich morgen früh einen schirm?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist bei der Kanzlei Obermaier am Wochenende jemand erreichbar?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "wem hat herr pfeiffer heute geschrieben?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Regnet es heute?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "So geen drei", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was schenke ich meiner Mutter zum Geburtstag?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie voll ist am Wochenende die Auotbahn?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ach, die Liste von vorhin", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann beginnt übermorgen das Spiel?", "intent": "unknown", "timeframe": null, "entity": null}
 {"text": "Merci, schönes Wochenende!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "wann beginnt übermorgen das spiel?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wird es heute Abend warm?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Der Termin gestern war anstrengend.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist das Postfach von Frau Kowalczyk voll?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Was koche ich morgen?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "eher nicht heute", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Fährt morgen die S-Bahn?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wegen dem Foto für morgen …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist Herr Yilmaz morgen auf der Baustelle?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann spielt der Club heit?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ab wann?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Nächste Woche eventuell", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Also wegen gestern …", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Und der ZZettel von der Kollegin?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Rezept für einen einfachen Apfelkuchen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hallo zusammen, wie die Zeit vergeht", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie mache ich Kartoffelsalat?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Jo, passt scho, ich bin mal kurz in der Pause", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Isch d'Frau Lehnert hit im Gschäft?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Vielen Dank, erhol dich gut.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "morsche, wie die zeit vergeht!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Und dann noch das von …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Scheint am Wochenende die Sonne?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Gibt es morgen Schnee?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Heute noch", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hallo, da bin ich wieder, gutes neues Jahr!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "was backe ich am samstag für die familie?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was kann man heute mit Kindern unternehmen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Morgen dann", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Des Ding vo geschtern", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie kalt wird es übermorgen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wegen dem Angebot für morgen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist bei der Spedition Wendler morgen jemand erreichbar?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wo gibt et hier lecker Döner?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Des mach'mer später", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Jo, pass scho, endlich Freitag.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wos kocht ma heit z'Mittag", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Grüezi mitenand, bin gleich wieder da.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Morsche, gute Besserung!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie die Zeit vergeht.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ach, das Formular für den Kunden", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welcher Wein passt zu Fisch?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Irgendwann diese Woche", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Geht klar, morgen wird's ruhiger!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wenn's passt", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was gibt's am Wochenende zum Abendessen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Vergelt's Gott, adieu zäme.", "intent": "unknown", "timeframe": null, "entity": null}
 {"text": "wer spielt heute in der bundesliga?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann spielt der Club heit?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Stimmt, morgen wird's ruhiger!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "mach mal …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann liefert die Firma Holzbau Reisinger heute?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "ich bin mal kurz in der pause.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wo ist Frau Wegener übermorgen unterwegs?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Vielen Dank, schönen Urlaub.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat mein Azubi meine aMil schon gelesen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "heute bin ich echt müde.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat die Firma Holzbau Reisinger am Samstag Betriebsferien", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Moment, ich such noch", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "danke fürs bescheidgeben, schönen abend noch!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Bin heute im Homeoffice", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "das angebot von montag, du weißt schon", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Läut, bis die Tage", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wird gemacht, schönen Abend noch", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "was hat das autohaus brückl am sonntag geplant?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ach so, und …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Läuft, Kaffee ist fertig", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "wann beginnt am wochenende das spiel?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hab ich gesehen, bis heute Nachmittag!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Fhärt am Sonntag die S-Bahn?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Der Ordner von Montag", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was ist mit dem Ordner von der Kollegin?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hast du schon …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist am Sonntag Markt in der Stadt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wird es heute warm?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was ist ein schnelles vegetarisches Gericht?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "wie viel reis rechnet man pro person?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat Herr Sommerfeld heute noch Luft?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Passt, Montag halt.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Und das Foto von heute früh?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Gut zu wissen, schönen Feierabend!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie sieht der Kalender von der neuen Kollegin übermorgen aus?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Vergelt's Gott, schönen Tag noch.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wird es heute Abend warm?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann beginnt am Samstag das Spiel?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann macht der Supermarkt am Samstag zu?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie spät ist es gerae?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie viele Schritte sollte man am Tag gehen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "danke für die info, erhol dich gut.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Dankeschön, schönen Tag noch!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was kommt am Samstag im Fernsehen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Öhm, des do", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Brauche ich heute Nachmittag einen Schirm?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Gibt es am Sonntag irgendwo einen Flohmarkt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat die Kanzlei Obermaier am Wochenende Betriebsferien?", "intent": "unknown", "timeframe": null, "entity": null}
 {"text": "Hat die Buchhaltung die Rechnung schon verschickt?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "gut zu wissen, bin ab morgen im urlaub!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Wann geht morgen die Sonne auf?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Gestern hab ich die Rechnungen sortiert.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Ist bei der Kanzlei Obermaier am Sonntag jemand erreichbar?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Hta die Spedition Wendler heute Betriebsferien?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "und der ordner von vorhin?", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "ist angekommen, erhol dich gut.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Heute Nachmittag wird's ruhiger.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Lieber übermorgen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat Herr Pfeiffer meine Mail schon gelesen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ach, das Ding für morgen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat Herr Haberl die Rechnung schon verschickt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was ist mit der Rechnung für morgen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "gibt es am wochenende schnee?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat das Freibad übermorgen offen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wan nhat Frau Lehnert übermorgen Feierabend?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "wie lange sollte man schlafen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wegen den Unterlagen mit den Zahlen …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Its das Postfach von dem Chef voll?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wo chan i morn guet z'Mittag ässe?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wia werd's Weda morgn", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Die Kollegin ist heute krank.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "ist bei der kanzlei obermaier übermorgen jemand erreichbar?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wo ist Herr Sommerfeld am Wochenende unterwegs?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Das mit dem …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guten Morgen zusammen, gute Besserung.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guten Tag, bin heute im Homeoffice", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Na, auch schon da?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann hat Frau Dr. Seidl morgen Feierabend?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was gibt's übermorgen zum Abendessen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "schon wieder montag.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "hat die neue kollegin die rechnung schon verschickt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Läuft, schönes Wochenende.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Heute ist wieder viel los", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Rengt's heit no?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was gibt's morgen zum Abendessen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Morgen früh, oder", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist der Chef am Wochenende erreichbar?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Scheint am Samstag die Sonne?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hod da Chef morgn Zeit", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welche Serie soll ich als Nächstes schauen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Morsche, bin ab morgen im Urlaub!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Klingt gut, bis nachher!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie windig wird es am Samstag?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie gseit, später", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat die Firma Holzbau Reisinger am Wochenende Betriebsferien?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Grüß Gott!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann liefert die Spedition Wendler morgen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was ist mit der Liste von der Kollegin?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Passt, puh, war das ein Tag", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Das Ding von letzter Woche", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ich wollte noch …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann hat meine Kollegin am Sonntag Feierabend", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Joa, schau ma moi", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Prima, Feierabend", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist Frau Wegener am Samstag erreichbar?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Alles klar, mach's gut.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Gibt es morgen irgendwo einen Flohmarkt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "hät dr chef hück vill ze dun?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wia lang braucht a Schweinsbratn?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wem hat die Buchhatlung heute geschrieben?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hallo zusammen, bin ab morgen im Urlaub.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Tach auch, wie die Zeit vergeht!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Erst mal nicht", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wat kost dat Kino hück?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "zeig mal das …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Morgen fahr ich mit dem Zug.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Läuft, wie die Zeit vergeht.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist bei der Firma Holzbau Reisinger heute jemand erreichbar?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist das Postfach von meiner Kollegin voll?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Soll es übermorgen gewittern?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann liefert die Kanzlei Obermaier morgen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wo ist Herr Haberl heute unterwegs?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "wann kommt mein azubi am wochenende ins büro?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "schick das bitte an …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Gut zu wissen, schönen Tag noch", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ach, der Zettel für morgen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Rägnet's morn?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Regnet es heute Abend?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist bei dem Autohaus Brückl übermorgen jemand erreichbar?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Besten Dank für die schnelle Antwort, bis Montag!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Danke, das hilft, schönes Wochenende.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Na dann, ciao, bsi morgen!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat die Kanzlei Obermaier am Samstag Betriebsferien?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "wie putze ich fenster ohne streifen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ab wann?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Besten Dank für die schnelle Antwort, schönen Urlaub!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was hilft gegen Erkältung", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was hat mein Azubi heute schon erledigt?", "intent": "unknown", "timeframe": null, "entity": null}
 {"text": "Joa, pfiat di", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Merci vielmal, adieu zäme.", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Guten Abend, prost Mahlzeit!", "intent": "unknown", "timeframe": null, "entity": null}
-{"text": "Welcher Hund passt in eine kleine Wohnung?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was hat unser Meister heute schon erledigt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Der Termin gestern war anstrengend.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ach, der Brief von der Kollegin", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Das Angeebot von Montag", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Dat kriejen wa schon", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Und die Unterlagen für den Kunden?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann macht der Supermarkt morgen zu", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Viel Erfolg heute", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was hat das Autohaus Brückl am Wochenende geplant?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie voll ist am Sonntag die Autobahn?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Bin ab morgen im Urlaub!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist bei unserem Lieferanten morgen jemand erreichbar?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat die neue Kollegin am Samstag noch Luft?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "des bapier vom chef", "intent": "unknown", "timeframe": null, "entity": null}
 {"text": "Is morgen Markt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "sing mir was vor.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Heute zieht sch's", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ich hab heute schon drei Kaffee getrunken.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie voll ist morgen die Autobahn?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mal sehen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "hat das autohaus brückl am wochenende geöffnet?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was koche ich übermorgen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ich geh dann mal!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat meine Kollegin am Samstag Urlaub?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hallo zusammen, puh, war das ein Tag.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "ist bei der spedition wendler am wochenende jemand erreichbar?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Gi mir ein Rezept für Linsensuppe.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wird gemacht, puh, war das ein Tag", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Und dann?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Joa, endlich Freitag.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "ist herr pfeiffer morgen auf der baustelle?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ach, das Dokument von gestern", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Regnet's morge im Ländle?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hod da Biergartn heit offa?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ach, der Plan von der Kollegin", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist bei dem Autohaus Brückl am Sonntag jemand erreichbar?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Gestern hab ich die Rechnungen sortiert.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Heute Nachmittag wird's ruhiger.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Scheint heute die Sonne", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann geht morgen die Sonne auf?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Alles klar, frohe Weihnachten.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wat is denn nu mit dem Kram?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wegen der Datei von heute früh …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "hat frau lehnert morgen urlaub?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann hat'n die Kollegin heut Schluss?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wer hatte noch mal …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat der Chef meine Mail schon gelesen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wat jitt et hück zo esse?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann muss ich die Uhr umstellen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Fährt am Samstag die S-Bahn?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was koche ich morgen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "geht klar, bin heute im homeoffice!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Weiß nit", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat unser Meister die Rechnung schon verschickt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was gibt's am Sonntag zum Abendessen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Merci vielmal, adieu zäme.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Heit nimma", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie wird das Wetter am Samstag", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Vielleicht morgen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Heut wollte ich eigentlich …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie voll ist am Samstag die Autobahn?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was ist mit dem Foto für den Kunden?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Heute oder morgen, egal", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ach, der cShlüssel vom Chef", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hallo zusammen, gutes neues Jahr!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Gibt es heute irgendwo einen Flohmarkt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Die Rechnung von letzter Woche", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was koche ich am Wochenende?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wer spielt morgen in der Bundesliga?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Morn villicht", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was ziehe ich zur Hochzeit an?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat das Freibad am Sonntag offen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Rezept für Pasta", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Its das Postfach von Herrn Sommerfeld voll?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Danke für gestern, schönen Tag noch.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "morgen bin ich erst ab zehn da.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann kommt Frau Wegener am Wochenende ins Büro", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wer spielt am Wochenende in der Bundesliga?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wird es morgen warm?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie kalt wird es morgen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie lange muss ein Schnitzel in die Pfanne?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Der Schlüssel von gestern, du weißt schon", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Grüß Gott, herzlichen Glückwunsch", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "das meeting heute war unnötig.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie backe ich ein Brot ohne Hefe?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Morsche, ich geh dann mal", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "ach, der schlüssel von heute früh", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kannst du mal …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "danke für die info, bis nachher!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Danke, passt, ciao, bis morgen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "herzlichen glückwunsch!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "In Ordnung, bis Montag!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie werde ich Schlckauf los?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Gibt es am Wochenende irgendwo einen Flohmarkt", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Schneit's übermorge?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Soll es heute Abend gewittern?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat Herr Sommerfeld meine Mail schon gelesen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Scheint heute Nachmittag die Sonne?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was kann ich mit Zucchini kochen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "hab ich gesehen, kaffee ist fertig", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "welche apotheke hat heute notdienst?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat die neue Kollegin am Sonntag noch Luft?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat die Spedition Wendler am Samstag geöffnet?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "wann geht heute die sonne auf?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "nicht jetzt", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist mein Azubi morgen im Büro?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wegen dem Plan vom Chef …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Logisch, bis morgen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Geht klar, ade, bis morn", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "ich meld mich, herzlichen glückwunsch.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Danke dir, gute Nacht.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "gut zu wissen, bin ab morgen im urlaub!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "gute besserung!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Endlich Freitag.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie lerne ich am schnellsten Spanisch?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat die Firma Holzbau Reisinger übermorgen geöffnet?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Nächste Woche eventuell", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Prima, bin ab morgen im Urlaub", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Klingt gut, bis morgen!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was hat Frau Lehnert heute schon erledigt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ich meld mich, bis heute Nachmittag!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guten Abend, gute Besserung.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann liefert die Spedition Wendler am Wochenende?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Später vielleicht", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Joa!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was backe ich am Wochenende für die Familie?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Prost Mahlzeit", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Scheint heute Abend die Sonne?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "wann kommt frau dr. seidl heute ins büro?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Regnet es morgen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Is der Herr Pfeiffer heid do?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Soll es morgen gewittern?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Eher nicht heute", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist bei dem Autohaus Brückl heute jemand erreichbar?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Super, danke, schönen Urlaub!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist unser Meister am Sonntag im Büro?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "was gibt's am samstag zum abendessen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Die Unterlagen von heute früh", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guten Abend, prost Mahlzeit!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie gestern", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Is de Buchhaltung hüt besett?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie wird dat Wedder morgen an de Küst?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie würze ich Gulasch richtig?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "welche apotheke hat am sonntag notdienst?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Also wegen gestern …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Gleich, Moment", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was hat Herr Sommerfeld heute schon erledigt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "In Ordnung, schönen Feierabend", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Gut zu wissen, bis heute Nachmittag", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was hat die Kanzlei Obermaier heute geplant?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kommt drauf an", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Das Formular von heute früh", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie lange hält gekochter Reis im Kühlschrank", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie wird das Wetter übermorgen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Frohe Weihnachten.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Super, prost Mahlzeit", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was koche ich am Sonntag?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ach, das Foto aus der Besprechung", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was kommt am Wochenende im Fernsehen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Danke, passt, bis Montag", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann geht am Samstag die Sonne auf?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat Frau Dr. Seidl die Rechnung schon verschickt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ich ruf den Kunden morgen zurück.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat Frau Wegener meine Mail schon gelesen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Danke, passt, bis die Tage", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie sieht der Kalender von der neuen Kollegin am Sonntag aus?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist heute Markt in der Stadt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Regnet es morgen früh?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Feierabend!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Soll es morgen früh gewittern?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welcher Film läuft am Sonntag im Kino?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Nach der Mittagspause", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat das Freibad am Wochenende offen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Danke fürs Bescheidgeben, adieu zäme!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wer spielt am Samstag in dder Bundesliga?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Die Mail an den Steuerberater ist raus.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hab ich gesehen, pfit di!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wo kann man in der Nähe schön wandern?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Geht klar, na, auch schon da?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Fährt übermorgen die S-Bahn?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "wie sieht der kalender von unserem meister morgen aus?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wem hat unser Meister heute geschrieben", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist Frau Dr. eSidl am Sonntag im Büro?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "wegen der liste von der kollegin …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hab ich gesehen, ich geh dann mal.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ich glaub, das war …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie kalt wird es am Wochenende?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hab ich gesehen, herzlichen Glückwunsch.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Dat Dokument vun jestern", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie bkomme ich Rotwein aus dem Teppich?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Brauche ich heute Abend einen Schirm?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist übermorgen Markt in der Stadt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie mach ich Spätzle selber?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat die Buchhaltung am Samstag Urlaub?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Der Kunde hat sich gestern nicht mehr gemeldet.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Gugge mer mal", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Tach auch, ich bin mal kurz in der Pause!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Brauche ich morgen einen Schirm?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "morge vielleicht", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welche Zimmerpflanze braucht wenig Licht?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wem hat meine Kollegin heute geschrieben", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wegen dem Angebot von vorhin …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist mein Azubi am Samstag auf der Baustelle?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Servus, frohe Weihnachten", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat der Chef die Rechnung schon verschickt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "jo, passt scho, schönes wochenende.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Bis wann eigentlich", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Danke fürs Bescheidgeben, erhol dich gut.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was kommt heute im Fernsehen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "servus, kaffee ist fertig.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ach, der Brief von vorhin", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "morgen wird's ruhiger!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie wird das Wetter morgen früh?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wem hat Herr Haberl heute geschrieben?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was koch i hit z'Nacht?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welcher Film läuft am Samstag im Kino?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "ist angekommen, erhol dich gut.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "weil ich doch …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "gibt es übermorgen schnee?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Und der Ordner mit den Zahlen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ach, die Präsenttaion von letzter Woche", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Logisch, mach's gut!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Später lvt", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wird gemacht, gute Nacht", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Das Angebot hab ich heute früh ausgeschickt.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Na dann, frohe Weihnachten!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat unser Lieferant am Samstag Betriebsferien?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "was kann man übermorgen mit kindern unternehmen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ach, die Präsentatio nmit den Zahlen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Der Brief vom Chef, du weißt schon", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Die Sache mit dem Lager hab ich erledigt", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wenn morgen der …", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann liefert unser Lieferant übermorgen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welcher Hund passt in eine kleine Wohnung?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "was koche ich am samstag?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hallihallo, schon wieder Montag!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "mahlzeit, herzlichen glückwunsch!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Guten Abed, gutes neues Jahr!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Okay, verstandn, adieu zäme.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wo gibt's heit an Christkindlmarkt", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Des vo heit friah", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Regnet es amm Wochenende?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "brauche ich am samstag einen schirm?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat Frau Dr. Seidl am Samstag Urlaub?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wem hat mein Azubi heute geschrieben?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was backe ich am Sonntag für die Familie?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wem hat die neue Kollegin heute geschrieben?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Na dann, bis nachher.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist das Postfachh von Herrn Pfeiffer voll?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Danke fürs Bescheidgeen, schönes Wochenende.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Moin, endlich Freitag!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "das angebot von der kollegin, du weißt schon", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Brauche ich am Wochenende einen Schirm?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wat komt heute in de Glotze?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat die Firma Holzbau Reisinger morgen geöffnet?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "wann liefert die spedition wendler am samstag?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was backe ich morgen für die Familie?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was kann man statt Sahne nehmen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "super, bis morgen früh!", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "In Ordnung, Kaffee ist fertig", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wos is jetz mit dem Zeig?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Und das nAgebot von heute früh?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Is der Meister morgen uff da Baustell", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ach, die Datei von Montag", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welcher Film läuft heute im Kino?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat mein Azubi am Sonntag Urlaub", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Gutes neues Jahr", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann hat Frau Dr. Seidl am Samstag Feierabend?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "bin gleich wieder da", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Puh, war das ein Tag", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "was hat die firma holzbau reisinger übermorgen geplant?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wird es übermorgen warm?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was gibt's heute zum Abendessen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "dat dingens von vorhin", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Muss mol luege", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Läuft, na, auch schon da?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Regnet es am Samstag?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist das Postfach von meinem Azubi voll?", "intent": "unknown", "timeframe": null, "entity": null}
