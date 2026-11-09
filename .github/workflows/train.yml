@@ -7,7 +7,8 @@ name: Train
 # Each run is a sweep: several LoRA ranks and learning rates are trained one
 # after the other within a time budget (7B: 10 h); the config with the best
 # validation accuracy is exported. The blind holdout is not touched here.
-# Plans with "where": "colab" (today 1.5B) run in train-colab.yml instead.
+# Plans with "where": "colab" (today 1.5B) run in train-colab.yml instead; started
+# by hand with gpu=kaggle, such a plan trains here once (when Colab assigns no GPU).
 #
 # Runs without manual approval: a push to main that changes the training data,
 # the training code or this workflow starts 7B; Collect starts the next missing
@@ -36,6 +37,11 @@ on:
         description: Upper limit of epochs per config (early stopping usually ends sooner)
         type: number
         default: 4
+      gpu:
+        description: "kaggle = train a Colab plan (1.5B) on Kaggle once, e.g. when Colab assigns no GPU"
+        type: choice
+        default: planned
+        options: [planned, kaggle]
 
 permissions:
   contents: read
@@ -54,6 +60,7 @@ jobs:
       BASE: ${{ inputs.base || 'Qwen/Qwen2.5-7B-Instruct' }}
       NAME_INPUT: ${{ inputs.name }}
       EPOCHS: ${{ inputs.epochs || 4 }}
+      GPU_INPUT: ${{ inputs.gpu || 'planned' }}
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -71,7 +78,7 @@ jobs:
           gpus=$(get gpus)
           name=${NAME_INPUT:-$(get name)}
           [[ "$name" =~ ^[a-z0-9][a-z0-9.-]{0,60}$ ]] || { echo "invalid name" >&2; exit 1; }
-          if [ "$(get where)" = "colab" ]; then
+          if [ "$(get where)" = "colab" ] && [ "$GPU_INPUT" != "kaggle" ]; then
             echo "SKIP=true" >> "$GITHUB_ENV"
             echo "$BASE is planned for Colab; train-colab.yml runs it." >> "$GITHUB_STEP_SUMMARY"
           elif gh release view "$name" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
