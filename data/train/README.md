@@ -26,6 +26,18 @@ send, pay), questions about other people and companies, specialist knowledge,
 arithmetic, small talk, everyday questions, writing help and regional speech.
 The generator adds each of them once as `unknown`, without generated variants.
 
+`vyvy_unknown_hard_v1.jsonl` holds 500 hard negatives for `unknown`, generated
+by `tools/build_unknown_hard.py` from building blocks written for it: office
+and everyday phrases (Mahlzeit, Bis morgen), incomplete or ambiguous fragments
+(das Dokument von gestern, später vielleicht), private requests without a task
+or calendar (weather, recipes, leisure) and other people's or companies'
+calendars and mailboxes. About half carry a time word such as heute or
+morgen, because the adapters of 08.11. read such words as a calendar request.
+Persons and companies are invented. The generator drops near copies of holdout
+sentences (0.8), sentences already in the training data and sentences close to
+a training sentence of another intent (0.85). `--check` compares the committed
+file with the generator; `tests/test_unknown_hard.py` runs it.
+
 `vyvy_synth_<id>.jsonl` comes from a teacher model: `training/synthesize.py`
 runs Qwen2.5-14B-Instruct (Apache License 2.0) and Phi-4 (MIT) on a Kaggle GPU.
 Qwen writes sentences per intent, speaking style and job; Phi-4, a different
