@@ -34,9 +34,18 @@ or calendar (weather, recipes, leisure) and other people's or companies'
 calendars and mailboxes. About half carry a time word such as heute or
 morgen, because the adapters of 08.11. read such words as a calendar request.
 Persons and companies are invented. The generator drops near copies of holdout
-sentences (0.8), sentences already in the training data and sentences close to
-a training sentence of another intent (0.85). `--check` compares the committed
-file with the generator; `tests/test_unknown_hard.py` runs it.
+sentences (0.8), paraphrases of holdout sentences found by the semantic check
+(listed in the generator), sentences already in the training data and sentences
+close to a training sentence on the other side of the `unknown` boundary (0.85).
+
+`vyvy_person_calendar_v1.jsonl` holds the 80 contrast pairs from the same
+generator: read questions about the user's own calendar that name the same
+persons (`appointments_today`, `appointments_tomorrow`, `daily_agenda`), with
+`entity` as written in the sentence and the matching `timeframe`. "Ist Herr
+Yilmaz morgen im Büro?" is `unknown`, "Habe ich morgen was mit Herrn Yilmaz?" is
+`appointments_tomorrow`; without these the model could learn that a person plus
+a time word means `unknown`. `--check` compares both committed files with the
+generator; `tests/test_unknown_hard.py` runs it.
 
 `vyvy_synth_<id>.jsonl` comes from a teacher model: `training/synthesize.py`
 runs Qwen2.5-14B-Instruct (Apache License 2.0) and Phi-4 (MIT) on a Kaggle GPU.

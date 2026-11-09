@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build data/train/vyvy_unknown_hard_v1.jsonl: 500 hard negatives for "unknown".
+"""Build 500 hard negatives for "unknown" and 80 contrast pairs for the read intents.
 
 The 1.5B adapter of 08.11. was rejected because "unknown" got worse: questions
 the model should have declined came back as appointments_tomorrow or
@@ -18,12 +18,21 @@ Every building block was written for this file; persons and companies are
 invented. Blocks are combined, a share gets lowercase, no final punctuation or
 a typo, and the groups of a category are drawn in turn so no template
 dominates. A sentence is dropped if it is at or above --max-similarity (0.8) to
-a holdout sentence, already in the training data, or close to a training
-sentence of another intent (that would teach two labels for one question).
+a holdout sentence, a known paraphrase of one (PARAPHRASES), already in the
+training data, or close to a training sentence on the other side of the
+unknown boundary (that would teach two labels for one question).
+
+The same persons appear in data/train/vyvy_person_calendar_v1.jsonl: 80 read
+questions about the user's own calendar that name them (appointments_today,
+appointments_tomorrow, daily_agenda), entity as written in the sentence. Without
+them the model could learn "person plus time word means unknown". A pair
+differs only in whose calendar it is: "Ist Herr Yilmaz morgen im Büro?" is
+unknown, "Habe ich morgen was mit Herrn Yilmaz?" is appointments_tomorrow.
+
 Deterministic for a given --seed.
 
     python tools/build_unknown_hard.py
-    python tools/build_unknown_hard.py --check   # committed file matches the generator
+    python tools/build_unknown_hard.py --check   # committed files match the generator
 """
 
 from __future__ import annotations
@@ -45,8 +54,18 @@ from build_train_data import load_negatives, typo  # noqa: E402
 
 OUT = ROOT / "data" / "train" / "vyvy_unknown_hard_v1.jsonl"
 QUOTAS = {"phrases": 130, "fragments": 120, "private": 150, "others": 100}
-# Closer than this to a training sentence of another intent counts as a contradiction.
+CONTRAST_OUT = ROOT / "data" / "train" / "vyvy_person_calendar_v1.jsonl"
+CONTRAST_QUOTAS = {"appointments_today": 32, "appointments_tomorrow": 32, "daily_agenda": 16}
+TIMEFRAME = {"appointments_today": "today", "appointments_tomorrow": "tomorrow", "daily_agenda": "today"}
+# Closer than this to a training sentence on the other side of the unknown boundary
+# counts as a contradiction. Between two read intents a close pair is fine: heute or
+# morgen alone decides between appointments_today and appointments_tomorrow.
 CONFLICT_SIMILARITY = 0.85
+# Paraphrases of holdout sentences that only the semantic check (Data check workflow,
+# cosine >= 0.90) finds; the lexical lock above does not see them. Normalised text.
+PARAPHRASES = {
+    "passt danke dir", "geht klar super danke", "ist angekommen danke dir",  # run 42582121327
+}
 
 TIMES = ["heute", "morgen", "heute Abend", "morgen früh", "am Wochenende", "übermorgen",
          "heute Nachmittag", "am Samstag"]
@@ -97,7 +116,8 @@ def phrases() -> dict[str, list[str]]:
         "greet": [mark(i, t) for i, t in enumerate(greet)] + pairs(greet, talk),
         "thanks": [mark(i, t) for i, t in enumerate(thanks)] + pairs(thanks, bye),
         "bye": [mark(i, t) for i, t in enumerate(bye)] + pairs(ack, bye),
-        "ack": [mark(i, t) for i, t in enumerate(ack)] + pairs(ack, thanks),
+        # Not ack + thanks: "passt, danke dir" and the like paraphrase a holdout sentence.
+        "ack": [mark(i, t) for i, t in enumerate(ack)] + pairs(ack, talk),
         "talk": [mark(i, t) for i, t in enumerate(talk)],
     }
 
@@ -185,13 +205,22 @@ def private() -> dict[str, list[str]]:
     }
 
 
+# The same persons on both sides: their own calendar is unknown, the user's
+# calendar with them is a read intent. (nominative, dative, accusative)
+PERSONS = [("Frau Brandtner", "Frau Brandtner", "Frau Brandtner"), ("Herr Yilmaz", "Herrn Yilmaz", "Herrn Yilmaz"),
+           ("Frau Kowalczyk", "Frau Kowalczyk", "Frau Kowalczyk"), ("Herr Pfeiffer", "Herrn Pfeiffer", "Herrn Pfeiffer"),
+           ("Frau Dr. Seidl", "Frau Dr. Seidl", "Frau Dr. Seidl"), ("Herr Haberl", "Herrn Haberl", "Herrn Haberl"),
+           ("meine Kollegin", "meiner Kollegin", "meine Kollegin"), ("der Chef", "dem Chef", "den Chef"),
+           ("mein Azubi", "meinem Azubi", "meinen Azubi"), ("die Buchhaltung", "der Buchhaltung", "die Buchhaltung"),
+           ("unser Meister", "unserem Meister", "unseren Meister"),
+           ("die neue Kollegin", "der neuen Kollegin", "die neue Kollegin")]
+
+
+def cap(text: str) -> str:
+    return text[0].upper() + text[1:]
+
+
 def others() -> dict[str, list[str]]:
-    persons = [("Frau Brandtner", "Frau Brandtner"), ("Herr Yilmaz", "Herrn Yilmaz"),
-               ("Frau Kowalczyk", "Frau Kowalczyk"), ("Herr Pfeiffer", "Herrn Pfeiffer"),
-               ("Frau Dr. Seidl", "Frau Dr. Seidl"), ("Herr Haberl", "Herrn Haberl"),
-               ("meine Kollegin", "meiner Kollegin"), ("der Chef", "dem Chef"), ("mein Azubi", "meinem Azubi"),
-               ("die Buchhaltung", "der Buchhaltung"), ("unser Meister", "unserem Meister"),
-               ("die neue Kollegin", "der neuen Kollegin")]
     timed = ["Ist {n} {t} im Büro?", "Wann hat {n} {t} Feierabend?", "Wie sieht der Kalender von {d} {t} aus?",
              "Ist {n} {t} erreichbar?", "Hat {n} {t} noch Luft?", "Ist {n} {t} ausgebucht?",
              "Hat {n} {t} Urlaub?", "Ist {n} {t} auf der Baustelle?", "Wann kommt {n} {t} ins Büro?",
@@ -209,28 +238,49 @@ def others() -> dict[str, list[str]]:
                "Wann hat'n die Kollegin heut Schluss?", "Is der Herr Pfeiffer heid do?",
                "Hot da Azubi heit Berufsschul?", "Isch dr Herr Yilmaz morn im Büro?"]
 
-    def cap(text: str) -> str:
-        return text[0].upper() + text[1:]
-
     return {
-        "persons": [cap(s.format(n=n, d=d, t=t)) for s in timed for n, d in persons for t in DAYS],
-        "mail": [cap(s.format(n=n, d=d)) for s in mail for n, d in persons],
+        "persons": [cap(s.format(n=n, d=d, t=t)) for s in timed for n, d, _ in PERSONS for t in DAYS],
+        "mail": [cap(s.format(n=n, d=d)) for s in mail for n, d, _ in PERSONS],
         "companies": [cap(s.format(n=n, d=d, t=t)) for s in company for n, d in companies for t in DAYS],
         "dialect": dialect,
     }
 
 
+
+def contrasts() -> dict[str, dict[str, list[tuple[str, str]]]]:
+    """Read questions about the user's own calendar that name a person: (text, entity) per person."""
+    today = ["Habe ich heute einen Termin mit {d}?", "Habe ich heute noch was mit {d}?", "Wann treffe ich heute {a}?",
+             "Sehe ich heute noch {a}?", "Bin ich heute mit {d} verabredet?", "Wann ist heute mein Termin mit {d}?",
+             "Steht heute in meinem Kalender was mit {d}?", "Um wie viel Uhr bin ich heute bei {d}?",
+             "Hab ich heute ein Gespräch mit {d}?", "Hab i heit no an Termin mit {d}?"]
+    tomorrow = ["Habe ich morgen einen Termin mit {d}?", "Habe ich morgen was mit {d}?", "Wann treffe ich morgen {a}?",
+                "Sehe ich morgen {a}?", "Bin ich morgen mit {d} verabredet?", "Wann ist morgen mein Termin mit {d}?",
+                "Steht morgen in meinem Kalender was mit {d}?", "Um wie viel Uhr bin ich morgen bei {d}?",
+                "Hab ich morgen ein Gespräch mit {d}?", "Hob i morgn wos mit {d} ausgmacht?"]
+    agenda = ["Gib mir den Überblick für heute: Termine, Aufgaben und Mails, auch das Treffen mit {d}.",
+              "Fass mir den ganzen Tag zusammen, Kalender, To-dos und neue Mails, ich sehe heute ja auch {a}.",
+              "Alles für heute auf einmal bitte: Termine, offene Aufgaben, Mails und wann ich {a} treffe.",
+              "Was steht heute alles an, Termine wie Aufgaben wie Mails? Ich hab auch was mit {d}.",
+              "Kompletter Tagesüberblick bitte, mit dem Termin bei {d}, meinen Aufgaben und der Post."]
+
+    def by_person(templates: list[str]) -> dict[str, list[tuple[str, str]]]:
+        return {n: [(cap(s.format(d=d, a=a)), d if "{d}" in s else a) for s in templates] for n, d, a in PERSONS}
+
+    return {"appointments_today": by_person(today), "appointments_tomorrow": by_person(tomorrow),
+            "daily_agenda": by_person(agenda)}
+
+
 CATEGORIES = {"phrases": phrases, "fragments": fragments, "private": private, "others": others}
 
 
-def noisy(text: str, rng: random.Random) -> str:
+def noisy(text: str, rng: random.Random, typos: bool = True) -> str:
     """Typed as people type: some lowercase, without final punctuation or with a typo."""
     r = rng.random()
     if r < 0.12:
         return text.lower()
     if r < 0.22:
         return text.rstrip(".!?… ")
-    if r < 0.30:
+    if r < 0.30 and typos:
         return typo(text, rng)
     return text
 
@@ -241,17 +291,16 @@ class Filter:
         holdout = [i for h in lock.HOLDOUTS if h.exists() for i in json.loads(h.read_text(encoding="utf-8"))["items"]]
         self.holdout = [(h["id"], lock.normalise(h["text"])) for h in holdout]
         self.seen = {lock.normalise(t) for t in load_negatives()}
-        self.positive: list[str] = []
+        self.by_intent: dict[str, list[str]] = {}
         for path in sorted((ROOT / "data" / "train").glob("*.jsonl")):
-            if path.resolve() == OUT.resolve():
+            if path.resolve() in (OUT.resolve(), CONTRAST_OUT.resolve()):
                 continue
             for line in path.read_text(encoding="utf-8").splitlines():
                 if line.strip():
                     row = json.loads(line)
                     key = lock.normalise(row["text"])
                     self.seen.add(key)
-                    if row["intent"] != "unknown":
-                        self.positive.append(key)
+                    self.by_intent.setdefault(row["intent"], []).append(key)
         self.dropped: list[tuple[str, str]] = []
 
     def close(self, a: str, b: str, threshold: float) -> bool:
@@ -261,9 +310,12 @@ class Filter:
         m = difflib.SequenceMatcher(None, a, b, autojunk=False)
         return m.real_quick_ratio() >= threshold and m.quick_ratio() >= threshold and m.ratio() >= threshold
 
-    def accept(self, text: str) -> bool:
+    def accept(self, text: str, intent: str) -> bool:
         key = lock.normalise(text)
         if not key or key in self.seen:
+            return False
+        if key in PARAPHRASES:
+            self.dropped.append((text, "paraphrase of a holdout sentence (semantic check)"))
             return False
         words = set(key.split())
         for hid, h in self.holdout:
@@ -271,37 +323,50 @@ class Filter:
             if len(words & hw) / len(words | hw) >= self.max_similarity or self.close(key, h, self.max_similarity):
                 self.dropped.append((text, f"near holdout {hid}"))
                 return False
-        if any(self.close(key, p, CONFLICT_SIMILARITY) for p in self.positive):
-            self.dropped.append((text, "close to a training sentence of another intent"))
+        if any(self.close(key, k, CONFLICT_SIMILARITY) for other, keys in self.by_intent.items()
+               if (other == "unknown") != (intent == "unknown") for k in keys):
+            self.dropped.append((text, "close to a training sentence across the unknown boundary"))
             return False
         self.seen.add(key)
+        self.by_intent.setdefault(intent, []).append(key)
         return True
 
 
-def draw(groups: dict[str, list[str]], quota: int, rng: random.Random, keep: Filter) -> list[str]:
+def draw(groups: dict[str, list[tuple[str, str | None]]], quota: int, rng: random.Random, keep: Filter,
+         intent: str, typos: bool = True) -> list[tuple[str, str | None]]:
     pools = {name: rng.sample(items, len(items)) for name, items in groups.items()}
-    out: list[str] = []
+    out: list[tuple[str, str | None]] = []
     while len(out) < quota and any(pools.values()):
         for name in groups:
             if pools[name] and len(out) < quota:
-                text = noisy(pools[name].pop(), rng)
-                if keep.accept(text):
-                    out.append(text)
+                text, entity = pools[name].pop()
+                text = noisy(text, rng, typos)
+                if keep.accept(text, intent):
+                    out.append((text, entity))
     return out
 
 
-def build(seed: int, max_similarity: float) -> tuple[list[dict], dict[str, int], list[tuple[str, str]]]:
+def build(seed: int, max_similarity: float) -> tuple[list[dict], list[dict], dict[str, int], list[tuple[str, str]]]:
     rng = random.Random(seed)
     keep = Filter(max_similarity)
-    rows, counts = [], {}
+    negatives, contrast, counts = [], [], {}
     for name, make in CATEGORIES.items():
-        texts = draw(make(), QUOTAS[name], rng, keep)
-        if len(texts) < QUOTAS[name]:
-            raise SystemExit(f"{name}: only {len(texts)} of {QUOTAS[name]} sentences left after filtering")
-        counts[name] = len(texts)
-        rows += [{"text": t, "intent": "unknown", "timeframe": None, "entity": None} for t in texts]
-    rng.shuffle(rows)
-    return rows, counts, keep.dropped
+        groups = {g: [(t, None) for t in texts] for g, texts in make().items()}
+        picked = draw(groups, QUOTAS[name], rng, keep, "unknown")
+        if len(picked) < QUOTAS[name]:
+            raise SystemExit(f"{name}: only {len(picked)} of {QUOTAS[name]} sentences left after filtering")
+        counts[name] = len(picked)
+        negatives += [{"text": t, "intent": "unknown", "timeframe": None, "entity": None} for t, _ in picked]
+    for intent, groups in contrasts().items():
+        # No typos here: the entity has to stay as written in the sentence.
+        picked = draw(groups, CONTRAST_QUOTAS[intent], rng, keep, intent, typos=False)
+        if len(picked) < CONTRAST_QUOTAS[intent]:
+            raise SystemExit(f"{intent}: only {len(picked)} of {CONTRAST_QUOTAS[intent]} sentences left after filtering")
+        counts[intent] = len(picked)
+        contrast += [{"text": t, "intent": intent, "timeframe": TIMEFRAME[intent], "entity": e} for t, e in picked]
+    rng.shuffle(negatives)
+    rng.shuffle(contrast)
+    return negatives, contrast, counts, keep.dropped
 
 
 def render(rows: list[dict]) -> str:
@@ -309,29 +374,33 @@ def render(rows: list[dict]) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
-    p = argparse.ArgumentParser(description="Build the hard negatives for intent unknown")
-    p.add_argument("--out", type=Path, default=OUT)
+    p = argparse.ArgumentParser(description="Build the hard negatives for intent unknown and their contrast pairs")
     p.add_argument("--seed", type=int, default=46)
     p.add_argument("--max-similarity", type=float, default=0.8)
-    p.add_argument("--check", action="store_true", help="only compare with the committed file")
+    p.add_argument("--check", action="store_true", help="only compare with the committed files")
     args = p.parse_args(argv)
 
     intents = bench.grammar_intents(bench.DEFAULT_GRAMMAR.read_text(encoding="utf-8"))
-    rows, counts, dropped = build(args.seed, args.max_similarity)
-    for r in rows:
+    negatives, contrast, counts, dropped = build(args.seed, args.max_similarity)
+    for r in negatives + contrast:
         answer = json.dumps({**{k: r[k] for k in ("intent", "timeframe", "entity")}, "confidence": 0.9})
         if bench.parse_output(answer, intents) is None:
             raise SystemExit(f"not in the output contract: {r}")
+    outputs = [(OUT, negatives), (CONTRAST_OUT, contrast)]
     if args.check:
-        if not args.out.exists() or args.out.read_text(encoding="utf-8") != render(rows):
-            print(f"{args.out.relative_to(ROOT)} differs from the generator; run tools/build_unknown_hard.py")
-            return 1
-        print(f"{args.out.relative_to(ROOT)} matches the generator ({len(rows)} sentences)")
-        return 0
-    args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(render(rows), encoding="utf-8")
-    print(f"{len(rows)} sentences -> {args.out.relative_to(ROOT)}; dropped {len(dropped)}")
+        stale = [path for path, rows in outputs
+                 if not path.exists() or path.read_text(encoding="utf-8") != render(rows)]
+        for path in stale:
+            print(f"{path.relative_to(ROOT)} differs from the generator; run tools/build_unknown_hard.py")
+        if not stale:
+            print(f"both files match the generator ({len(negatives)} + {len(contrast)} sentences)")
+        return 1 if stale else 0
+    for path, rows in outputs:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(render(rows), encoding="utf-8")
+        print(f"{len(rows)} sentences -> {path.relative_to(ROOT)}")
     print(json.dumps(counts, indent=1))
+    print(f"dropped {len(dropped)}")
     for text, why in dropped:
         print(f"  dropped ({why}): {text}")
     return 0
