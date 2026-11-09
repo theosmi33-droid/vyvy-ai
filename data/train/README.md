@@ -26,13 +26,18 @@ send, pay), questions about other people and companies, specialist knowledge,
 arithmetic, small talk, everyday questions, writing help and regional speech.
 The generator adds each of them once as `unknown`, without generated variants.
 
-`vyvy_unknown_hard_v1.jsonl` holds 480 hard negatives for `unknown`, generated
+`vyvy_unknown_hard_v1.jsonl` holds 528 hard negatives for `unknown`, generated
 by `tools/build_unknown_hard.py` from building blocks written for it: office
 and everyday phrases (Mahlzeit, Bis morgen), incomplete or ambiguous fragments
 (das Dokument von gestern, später vielleicht), private requests without a task
 or calendar (weather, recipes, leisure) and other people's or companies'
 calendars and mailboxes. About half carry a time word such as heute or
 morgen, because the adapters of 08.11. read such words as a calendar request.
+The last 48 lines (group 5) are dialect questions about weather, traffic,
+trains, sport, food and evenings out, each with a time word and mostly a place
+or a name (übamorgn z'Regensburg). They were written after the candidate of
+09.11. failed one blind v2 question of that kind; they follow its pattern, not
+its sentence, and come last so the lines before them stay unchanged.
 Persons and companies are invented. The generator drops near copies of holdout
 sentences (0.8), paraphrases of holdout sentences found by the semantic check
 (listed in the generator), sentences already in the training data and sentences

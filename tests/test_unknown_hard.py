@@ -40,7 +40,7 @@ def test_file_matches_generator() -> None:
 
 def test_count_and_contract() -> None:
     data = rows()
-    assert len(data) == sum(hard.QUOTAS.values()) == 480
+    assert len(data) == sum(hard.QUOTAS.values()) == 528
     for r in data:
         assert set(r) == {"text", "intent", "timeframe", "entity"}, r
         assert r["intent"] == "unknown" and r["timeframe"] is None and r["entity"] is None, r
@@ -62,8 +62,8 @@ def test_contrast_pairs() -> None:
 
 def test_training_pipeline_reads_every_line() -> None:
     loaded = train_lora.load_rows([hard.OUT, hard.CONTRAST_OUT], intents())
-    assert len(loaded) == 560
-    assert sum(json.loads(r["answer"])["intent"] == "unknown" for r in loaded) == 480
+    assert len(loaded) == 608
+    assert sum(json.loads(r["answer"])["intent"] == "unknown" for r in loaded) == 528
 
 
 def test_holdout_lock() -> None:
@@ -95,6 +95,22 @@ def test_time_words() -> None:
     # The rejected adapter read heute or morgen as a calendar request; the negatives must contain them.
     words = ("heute", "morgen", "gestern", "wochenende")
     assert sum(any(w in r["text"].casefold() for w in words) for r in rows()) >= 150
+
+
+def test_everyday_blocks() -> None:
+    # Group 5: a time word in every sentence, nothing from the office, and never the weather in Munich
+    # (that would paraphrase the blind v2 question the group was written after).
+    times = ("heit", "heut", "hüt", "hück", "hüüt", "morgen", "morgn", "morga", "morje", "morn", "gestern",
+             "gestan", "geschtern", "jestern", "övermorgen", "nächste woch", "nägschte woch", "omds", "obend",
+             "ovend", "avend", "abend", "wochenend", "samstag", "sonndich")
+    office = ("termin", "meeting", "chef", "vorarbeiter", "kunde", "kalender", "büro", "besprechung", "aufgabe",
+              "mail")
+    for text in (t for texts in hard.everyday().values() for t in texts):
+        t = text.casefold()
+        assert any(w in t for w in times), text
+        assert not any(w in t for w in office), text
+        assert not (any(w in t for w in ("weda", "wetter", "wedder", "wätter"))
+                    and any(c in t for c in ("minga", "münchen"))), text
 
 
 if __name__ == "__main__":

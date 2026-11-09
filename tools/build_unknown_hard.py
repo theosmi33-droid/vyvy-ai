@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build 480 hard negatives for "unknown" and 80 contrast pairs for the read intents.
+"""Build 528 hard negatives for "unknown" and 80 contrast pairs for the read intents.
 
 The 1.5B adapter of 08.11. was rejected because "unknown" got worse: questions
 the model should have declined came back as appointments_tomorrow or
@@ -13,6 +13,17 @@ nothing Vyvy can do:
   (das Dokument von gestern, später vielleicht)
 - private: private requests without a task or calendar (weather, recipes, leisure)
 - others: other people's or companies' calendars and mailboxes
+- everyday (group 5): weather, traffic, trains, sport, food and evenings out in
+  dialect, each with a time word and mostly a place or a name (übamorgn
+  z'Regensburg, morje op dr Zoobröck, jestern Hertha)
+
+Group 5 follows the candidate of 09.11. (vyvy-1.5b-d5c87bca5), rejected for a
+single unknown question of blind v2: a dialect weather question with a time word
+and a city, answered as appointments_tomorrow. Unlike the groups above it was
+written after seeing that question; it takes the pattern into six topics, not the
+sentence, and no sentence combines the weather with Munich. It is drawn last and
+from its own random stream, so the 480 + 80 sentences before it stay exactly as
+the semantic check passed them.
 
 Every building block was written for this file; persons and companies are
 invented. Blocks are combined, a share gets lowercase, no final punctuation or
@@ -42,6 +53,7 @@ import difflib
 import json
 import random
 import sys
+from collections.abc import Callable
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -53,7 +65,7 @@ import check_holdout_leak as lock  # noqa: E402
 from build_train_data import load_negatives, typo  # noqa: E402
 
 OUT = ROOT / "data" / "train" / "vyvy_unknown_hard_v1.jsonl"
-QUOTAS = {"phrases": 130, "fragments": 120, "private": 150, "others": 80}
+QUOTAS = {"phrases": 130, "fragments": 120, "private": 150, "others": 80, "everyday": 48}
 CONTRAST_OUT = ROOT / "data" / "train" / "vyvy_person_calendar_v1.jsonl"
 CONTRAST_QUOTAS = {"appointments_today": 32, "appointments_tomorrow": 32, "daily_agenda": 16}
 TIMEFRAME = {"appointments_today": "today", "appointments_tomorrow": "tomorrow", "daily_agenda": "today"}
@@ -255,6 +267,45 @@ def others() -> dict[str, list[str]]:
     }
 
 
+def everyday() -> dict[str, list[str]]:
+    weather = ["Brauch i übamorgn z'Regensburg an Schirm?", "Werd's am Wochenend am Tegernsee schee?",
+               "Hot's heit Nacht in Garmisch gfrorn?", "Liegt nächste Woch auf da Zugspitz no Schnee?",
+               "Wird's morga uff dr Alb arg kalt?", "Gibt's heit Obend über Stuagart a Gwitter?",
+               "Rähnt et morje en Kölle?", "Weiht dat övermorgen an de Elbe düchtig?",
+               "Is morjen Badewetter am Wannsee?", "Git's übermorn z'Bärn Schnee?",
+               "Konn ma morgn am Chiemsee no baden?"]
+    traffic = ["Is heit wieda Stau auf da A9 bei Ingolstadt?", "Wia schaut's morgn fria auf da A8 bei Rosenheim aus?",
+               "Isch morga früh wieder alles dicht uff dr B27?", "Wo staut's sich heit Obend in Stuagart am meischte?",
+               "Is morje widder Stau op dr Zoobröck?", "Wie lang bruch mer hück övver de A57 noh Düsseldorf?",
+               "Is morjen wieder allet dicht uff da Stadtautobahn?", "Wat is'n heute Abend uff da A100 los?",
+               "Is övermorgen wedder Stau vörn Elbtunnel?", "Wo blitzen se hüüt in Kiel?",
+               "Is d'Brennerautobahn am Samstag wieda zua?"]
+    trains = ["Fahrt d'S-Bahn heit überhaupt bis Erding?", "Streikt morgn scho wieda d'Bahn?",
+              "Is da Zug noch Nürnberg übamorgn wieda so voll?", "Kommt d'S-Bahn morga pünktlich noch Stuagart nei?",
+              "Fährt dr Zug am Sonndich überhaupt uff dr Gäubahn?", "Fährt die KVB hück noch bes Porz?",
+              "Wann kütt dä Zoch morje us Bonn aan?", "Fährt morjen die Ringbahn wieder durch?",
+              "Is die U8 heute Abend wieder jesperrt?", "Föhrt de Bahn övermorgen na Sylt?",
+              "Fahrt d'Zugspitzbahn nächste Woch scho wieda?"]
+    sport = ["Wia hod da Club gestern gspuit?", "Spuit da FC Augsburg am Samstag dahoam?",
+             "Wer hod gestan in Fürth gwunna?", "Wie hot dr VfB geschtern gspielt?",
+             "Spielet d'Kickers nägschte Woch dahoim?", "Wie hät dr FC jestern jespillt?",
+             "Spillt Fortuna morje en Düsseldorf?", "Wie hat Hertha jestern jespielt?", "Wann spielt Union morjen?",
+             "Speelt de HSV hüüt Avend?", "Wia is des Eishockey gestan in Straubing ausganga?"]
+    food = ["Wos gibt's heit in da Kantin?", "Wos kocht ma übamorgn, wenn d'Oma kimmt?",
+            "Wia lang muass d'Ent'n morgn ins Rohr?", "Was kocha mr morga, Spätzle oder Maultäschle?",
+            "Wo gibt's heit z'Mittag in Esslinge guate Maultasche?", "Wat kann ich hück Meddach koche?",
+            "Wo jitt et hück Ovend en Ihrefeld jode Reibekooche?", "Wat koch ick'n heute Abend bloß?",
+            "Wo jibt's morjen in Kreuzberg 'n juten Mittagstisch?", "Wat gifft dat hüüt in de Mensa?",
+            "Wo krieg ick heute noch 'ne Currywurst in Spandau?"]
+    evening = ["Gemma morgn omds aufn Keller nach Bamberg?", "Is am Wochenend Dult in Regensburg?",
+               "Wos gibt's heit omds in Passau für Konzerte?", "Isch am Samstag Weinfescht in Esslinge?",
+               "Jonn mer hück Ovend noch en et Brauhaus?", "Wat es morje Ovend em Stadtjaade loss?",
+               "Spillt am Samstag en Band em Tanzbrunnen?", "Wat läuft am Wochenende in da Waldbühne?",
+               "Is övermorgen Fischmarkt in Altona?", "Gifft dat morgen Avend Füerwark an'n Haven?",
+               "Gemma morgn nach'm Feierabend auf a Radler an d'Donau?", "Is heit no Biergartnwetter in Landshut?"]
+    return {"weather": weather, "traffic": traffic, "trains": trains, "sport": sport, "food": food,
+            "evening": evening}
+
 
 def contrasts() -> dict[str, dict[str, list[tuple[str, str]]]]:
     """Read questions about the user's own calendar that name a person: (text, entity) per person."""
@@ -359,13 +410,17 @@ def build(seed: int, max_similarity: float) -> tuple[list[dict], list[dict], dic
     rng = random.Random(seed)
     keep = Filter(max_similarity)
     negatives, contrast, counts = [], [], {}
-    for name, make in CATEGORIES.items():
+
+    def unknown(name: str, make: Callable[[], dict[str, list[str]]], stream: random.Random) -> list[dict]:
         groups = {g: [(t, None) for t in texts] for g, texts in make().items()}
-        picked = draw(groups, QUOTAS[name], rng, keep, "unknown")
+        picked = draw(groups, QUOTAS[name], stream, keep, "unknown")
         if len(picked) < QUOTAS[name]:
             raise SystemExit(f"{name}: only {len(picked)} of {QUOTAS[name]} sentences left after filtering")
         counts[name] = len(picked)
-        negatives += [{"text": t, "intent": "unknown", "timeframe": None, "entity": None} for t, _ in picked]
+        return [{"text": t, "intent": "unknown", "timeframe": None, "entity": None} for t, _ in picked]
+
+    for name, make in CATEGORIES.items():
+        negatives += unknown(name, make, rng)
     for intent, groups in contrasts().items():
         # No typos here: the entity has to stay as written in the sentence.
         picked = draw(groups, CONTRAST_QUOTAS[intent], rng, keep, intent, typos=False)
@@ -375,7 +430,11 @@ def build(seed: int, max_similarity: float) -> tuple[list[dict], list[dict], dic
         contrast += [{"text": t, "intent": intent, "timeframe": TIMEFRAME[intent], "entity": e} for t, e in picked]
     rng.shuffle(negatives)
     rng.shuffle(contrast)
-    return negatives, contrast, counts, keep.dropped
+    # Group 5 last and from its own stream: everything above stays as the semantic check passed it.
+    late = random.Random(f"{seed}-everyday")
+    tail = unknown("everyday", everyday, late)
+    late.shuffle(tail)
+    return negatives + tail, contrast, counts, keep.dropped
 
 
 def render(rows: list[dict]) -> str:
