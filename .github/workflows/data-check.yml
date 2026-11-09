@@ -31,4 +31,4 @@ jobs:
         if: always()
         run: |
           pip install -q -r tools/semantic-requirements.txt
-          python tools/check_semantic_leak.py --summary "$GITHUB_STEP_SUMMARY"
+          python tools/check_semantic_leak.py --show 0 --summary "$GITHUB_STEP_SUMMARY"

@@ -39,6 +39,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--report", type=float, default=0.90)
     p.add_argument("--fail", type=float, default=0.97)
     p.add_argument("--summary", type=Path, help="append the report as Markdown")
+    p.add_argument("--show", type=int, default=60, help="pairs listed in the report (0 = all at or above --report)")
     args = p.parse_args(argv)
 
     from sentence_transformers import SentenceTransformer
@@ -62,8 +63,9 @@ def main(argv: list[str] | None = None) -> int:
              f"90 % {quantiles[0.9]}, 99 % {quantiles[0.99]}.", "",
              f"{len(hits)} at or above {args.report}; {len(failing)} at or above {args.fail} (fails).", ""]
     if hits:
-        lines += ["| Cosine | Training | Holdout |", "|---:|---|---|"]
-        lines += [f"| {s:.3f} | {train[k][1]} | {holdout[j]['id']}: {holdout[j]['text']} |" for s, k, j in hits[:60]]
+        lines += ["| Cosine | Where | Training | Holdout |", "|---:|---|---|---|"]
+        lines += [f"| {s:.3f} | {train[k][0]} | {train[k][1]} | {holdout[j]['id']}: {holdout[j]['text']} |"
+                  for s, k, j in hits[:args.show or None]]
     text = "\n".join(lines) + "\n"
     print(text)
     if args.summary:
