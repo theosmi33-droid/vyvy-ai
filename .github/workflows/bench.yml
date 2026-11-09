@@ -26,10 +26,10 @@ on:
         type: string
         default: ""
       data:
-        description: "Question set: development holdout, or the dialect boundary probe (diagnosis only)"
+        description: "Question set: development holdout, or a probe (dialect boundary, office stress; diagnosis only)"
         type: choice
         default: holdout_benchmarks
-        options: [holdout_benchmarks, probe_dialect_boundary]
+        options: [holdout_benchmarks, probe_dialect_boundary, probe_office_stress]
 
 permissions:
   contents: read

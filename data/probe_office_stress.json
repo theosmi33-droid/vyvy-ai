@@ -1,0 +1,246 @@
+{
+ "name": "Office stress probe",
+ "description": "40 synthetic German office requests written on 09.11.2026 in three groups: 15 requests to create a task or an appointment in dialect (write), 10 read questions about the user's own calendar, tasks and mail (read), and 15 office sentences that must stay unknown: complaints, plans and past events with a time word, other people's mail, and actions Vyvy has no function for such as deleting, moving, sending, ticking off or paying (negative). Every sentence is below 0.8 character or word similarity to every holdout, training and probe sentence. For diagnosis only: it never accepts or rejects an adapter and never becomes training data. No real persons, companies or customer data.",
+ "items": [
+  {
+   "id": "stress-w01",
+   "set": "office_stress_write",
+   "text": "Schreib mr uff: Bei dr Firma Hägele s'Angebot nochfassa, bis Donnerschdich.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "stress-w02",
+   "set": "office_stress_write",
+   "text": "Chasch mer e Pendenz ufschriibe: Offerte für Gerber zruggschicke bis morn.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "stress-w03",
+   "set": "office_stress_write",
+   "text": "Schriev mi dat as Opgaav up: Reeknung an Jansen fardig maken bit Fredag.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "stress-w04",
+   "set": "office_stress_write",
+   "text": "Mach ma a To-do draus: Prüfbericht vom Kran bis Mittwoch obheftn.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "stress-w05",
+   "set": "office_stress_write",
+   "text": "Merk mer des als Uffgab: die Lieferung vom Großhandel kontrolliern, heit noch.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "stress-w06",
+   "set": "office_stress_write",
+   "text": "Schreif mer op: Bes morje de Unterlare för de Versicherung zesammestelle.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "stress-w07",
+   "set": "office_stress_write",
+   "text": "Kannste ma 'ne Uffjabe anlejen: Bauzeichnung an Herrn Lehmann schicken, bis Freitach.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "stress-w08",
+   "set": "office_stress_write",
+   "text": "Neie Aufgob: Schlüsselübergob mit da Hausverwoitung kläan, bis Wochnend.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "stress-w09",
+   "set": "office_stress_write",
+   "text": "Trog ma für nächstn Diensdog an Termin beim Notar ei, um ellfe.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "stress-w10",
+   "set": "office_stress_write",
+   "text": "Drück mer ma en Termin nei: Besprechung mim Bauleiter am Middwoch um nein.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "stress-w11",
+   "set": "office_stress_write",
+   "text": "Mach mer am Fritig am drü e Sitzig mit de Frau Brunner ab, i de Agenda.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "stress-w12",
+   "set": "office_stress_write",
+   "text": "Leg mr en Termin a: Dunnschdich fünfe, Kundagschpräch beim Kächele.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "stress-w13",
+   "set": "office_stress_write",
+   "text": "Termin för Montaach fröh: Baubesprechung en Ihrefeld, dräch dat ens en.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "stress-w14",
+   "set": "office_stress_write",
+   "text": "Mok mi'n Termin för övermorgen Klock dree mit Herrn Thiessen.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "stress-w15",
+   "set": "office_stress_write",
+   "text": "Ick brauch 'n Termin am Donnerstach um zwee mit der Hausverwaltung, trag den mal in.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "stress-r16",
+   "set": "office_stress_read",
+   "text": "Wia vui Aufgabn san bei mia no offn im System?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "stress-r17",
+   "set": "office_stress_read",
+   "text": "Wo bin i mit meine Sachan scho übern Termin drüber, de liegnbliebn san?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "stress-r18",
+   "set": "office_stress_read",
+   "text": "Weli Pendenze vo mir sind sit geschter überfällig?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "stress-r19",
+   "set": "office_stress_read",
+   "text": "Was han i heit no für Termin, d'Nommidag?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "stress-r20",
+   "set": "office_stress_read",
+   "text": "Steiht morgen wat för mi an, Termine meen ick?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "stress-r21",
+   "set": "office_stress_read",
+   "text": "Sin bei mir neue Mails ahkumme seit heit früh?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "stress-r22",
+   "set": "office_stress_read",
+   "text": "Is mir seit heute Mittag 'ne Mail rinjekommen, die ick nich kenne?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "stress-r23",
+   "set": "office_stress_read",
+   "text": "Welli Ufgabe han ich no offe, egal bis wänn?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "stress-r24",
+   "set": "office_stress_read",
+   "text": "Zeich mer ma alles für heut: Termine, Uffgabe un Mails zesamme.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "stress-r25",
+   "set": "office_stress_read",
+   "text": "Was is bei mia morgn so alles eitragn?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "stress-n26",
+   "set": "office_stress_negative",
+   "text": "Der Termin mit dem Gutachter gestern war echt furchtbar.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "stress-n27",
+   "set": "office_stress_negative",
+   "text": "Morgen will ich endlich mal pünktlich Feierabend machen.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "stress-n28",
+   "set": "office_stress_negative",
+   "text": "Der Kaffee in der Teeküche ist schon wieder seit zwei Tagen leer.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "stress-n29",
+   "set": "office_stress_negative",
+   "text": "Morgen soll's in Stuttgart den ganzen Tag regnen.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "stress-n30",
+   "set": "office_stress_negative",
+   "text": "Hast du die Telefonnummer vom Kaminfeger zur Hand?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "stress-n31",
+   "set": "office_stress_negative",
+   "text": "Boah, morgen hab ich echt keinen Bock auf die Prüfung vom Finanzamt.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "stress-n32",
+   "set": "office_stress_negative",
+   "text": "Wos is'n heit mit'm Drucker los, der spinnt scho wieda.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "stress-n33",
+   "set": "office_stress_negative",
+   "text": "Hod da Chef heit scho sei Post durchgschaut?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "stress-n34",
+   "set": "office_stress_negative",
+   "text": "Den Gutachter morgn, den kannst ausm Kalender streichn.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "stress-n35",
+   "set": "office_stress_negative",
+   "text": "Verschieb des Treffen mit Frau Haas auf Donnerschtig.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "stress-n36",
+   "set": "office_stress_negative",
+   "text": "Schick am Meier a Mail, dass ma später kemman.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "stress-n37",
+   "set": "office_stress_negative",
+   "text": "Hak die Aufgab mit da Heizung ab, is erledigt.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "stress-n38",
+   "set": "office_stress_negative",
+   "text": "Bis wann is d'Sabine morgn im Gschäft?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "stress-n39",
+   "set": "office_stress_negative",
+   "text": "Wie vui Urlaubstag hob i heier no übrig?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "stress-n40",
+   "set": "office_stress_negative",
+   "text": "Überweis dem Spengler die Rechnung vo letzter Woch.",
+   "expected_intent": "unknown"
+  }
+ ]
+}
