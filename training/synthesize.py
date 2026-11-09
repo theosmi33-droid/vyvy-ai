@@ -122,6 +122,8 @@ NEAR = [
     ("unknown", "appointments_today"), ("unknown", "emails_unread"), ("unknown", "tasks_open"),
     ("unknown", "create_appointment"), ("appointments_tomorrow", "appointments_today"),
     ("emails_unread", "unknown"), ("unknown", "create_task"), ("unknown", "tasks_overdue"),
+    # 2026-W46: the rejected 1.5B adapter of 08.11. turned "unknown" into these two.
+    ("unknown", "appointments_tomorrow"), ("unknown", "daily_agenda"),
 ]
 TIMEFRAMES = ("today", "tomorrow", "week", None)
 LETTERS = "ABCDEFGHI"
