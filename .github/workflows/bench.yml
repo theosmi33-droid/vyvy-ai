@@ -25,12 +25,17 @@ on:
         description: "Optional: release tag of this repository with one LoRA adapter (*.gguf); empty = base model only"
         type: string
         default: ""
+      data:
+        description: "Question set: development holdout, or the dialect boundary probe (diagnosis only)"
+        type: choice
+        default: holdout_benchmarks
+        options: [holdout_benchmarks, probe_dialect_boundary]
 
 permissions:
   contents: read
 
 concurrency:
-  group: bench-${{ inputs.model }}-${{ inputs.mode }}-${{ inputs.adapter }}
+  group: bench-${{ inputs.model }}-${{ inputs.mode }}-${{ inputs.adapter }}-${{ inputs.data }}
   cancel-in-progress: false
 
 jobs:
@@ -92,10 +97,12 @@ jobs:
       - name: Benchmark
         env:
           VYVY_LORA_PATH: ${{ steps.adapter.outputs.path }}
+          DATA: data/${{ inputs.data || 'holdout_benchmarks' }}.json
         run: |
           set -euo pipefail
           python runner/bench.py \
             --model "${{ steps.model.outputs.path }}" \
+            --data "$DATA" \
             --label "${{ inputs.model }}" \
             --mode "${{ inputs.mode }}" \
             --threads "$(nproc)" \
@@ -104,6 +111,6 @@ jobs:
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: results-${{ inputs.model }}-${{ inputs.mode }}${{ inputs.adapter && format('-{0}', inputs.adapter) || '' }}
+          name: results-${{ inputs.model }}-${{ inputs.mode }}${{ inputs.adapter && format('-{0}', inputs.adapter) || '' }}-${{ inputs.data }}
           path: results.json
           retention-days: 30

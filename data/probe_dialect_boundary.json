@@ -1,0 +1,366 @@
+{
+ "name": "Dialect boundary probe",
+ "description": "60 synthetic German requests written on 09.11.2026 to see where an adapter puts the unknown boundary in dialect: create_task and create_appointment requests, read questions about the user's own calendar, tasks and mail, and everyday or other-people questions with a time word, in Bavarian, Swabian, Cologne, Berlin, Low German and Swiss German. Every sentence is below 0.8 character or word similarity to every holdout and training sentence. For diagnosis only: it never accepts or rejects an adapter and never becomes training data. No real persons, companies or customer data.",
+ "items": [
+  {
+   "id": "probe-001",
+   "set": "probe_dialect",
+   "text": "Mach ma a Aufgab: Dachrinne beim Huber bis Freitag ausmessn.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "probe-002",
+   "set": "probe_dialect",
+   "text": "Notier mir als Aufgab, dass i morgn d'Rechnung vom Elektriker prüf.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "probe-003",
+   "set": "probe_dialect",
+   "text": "Schreib mer uff: Lieferschei vom Lager bis Dunnschtig abhefte.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "probe-004",
+   "set": "probe_dialect",
+   "text": "Leg mr a Aufgab a: Kundekartei aufräume, bis End vom Monat.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "probe-005",
+   "set": "probe_dialect",
+   "text": "Do mer en Aufjab dren: Steuerunterlage för de Kanzlei zesammesöke.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "probe-006",
+   "set": "probe_dialect",
+   "text": "Schreib ma als Uffjabe uff, dit ick morjen die Schlüssel abhole.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "probe-007",
+   "set": "probe_dialect",
+   "text": "Mok mi'n Opgaav: Heizung bi Peters bit Fredag nakieken.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "probe-008",
+   "set": "probe_dialect",
+   "text": "Merk dir als To-do: Gerüst bim Neubau bis morn abbaue.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "probe-009",
+   "set": "probe_dialect",
+   "text": "Neue Aufgab: Zählerstand im Keller ablesn, heit no.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "probe-010",
+   "set": "probe_dialect",
+   "text": "Erinner mi als Aufgab dran, d'Fliesn fürs Bad z'bstelln.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "probe-011",
+   "set": "probe_dialect",
+   "text": "Schreib mer des als Uffgab nei: Urlaubsantrag abgebe bis Montich.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "probe-012",
+   "set": "probe_dialect",
+   "text": "Pack mir als Aufgabe rein: Reifenwechsel fürn Transporter klärn.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "probe-013",
+   "set": "probe_dialect",
+   "text": "Mach ma fürn Steuerberater an Termin aus, morgn Vormittag, zehne.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "probe-014",
+   "set": "probe_dialect",
+   "text": "Mach mer en Termin am Dunnschtig um drei mit em Architekt.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "probe-015",
+   "set": "probe_dialect",
+   "text": "Donnersdach öm zehn Uhr hann ich Zahnarzt, dräch dat en.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "probe-016",
+   "set": "probe_dialect",
+   "text": "Trach ma für Freitach zwölwe 'n Termin mit Herrn Krüger in.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "probe-017",
+   "set": "probe_dialect",
+   "text": "Schriev mi för morgen Klock negen 'n Termin bi'n Dokter in.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "probe-018",
+   "set": "probe_dialect",
+   "text": "Trag mer übermorn am zwei es Treffe mit de Frau Gerber ii.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "probe-019",
+   "set": "probe_dialect",
+   "text": "Neuer Termin: Montag fria Baustellenbegehung in Landshut.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "probe-020",
+   "set": "probe_dialect",
+   "text": "Plan mr nägschte Woch Dienschtich a Gspräch mit em Azubi ei.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "probe-021",
+   "set": "probe_dialect",
+   "text": "Is bei mir heit nach da Brotzeit no wos eitragn?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "probe-022",
+   "set": "probe_dialect",
+   "text": "Han ich hück noch jet em Kalender?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "probe-023",
+   "set": "probe_dialect",
+   "text": "Hab ick heute nachmittag noch wat druff?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "probe-024",
+   "set": "probe_dialect",
+   "text": "Bin i morga irgendwo eiplant, i moin bei mir selber?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "probe-025",
+   "set": "probe_dialect",
+   "text": "Steht für mi morgn vor neine scho wos fest?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "probe-026",
+   "set": "probe_dialect",
+   "text": "Wo mutt ik morgen överall hen, wat steiht in mien Kalenner?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "probe-027",
+   "set": "probe_dialect",
+   "text": "Was isch bei mir an To-dos no liegablieba, egal wann fällig?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "probe-028",
+   "set": "probe_dialect",
+   "text": "Wat litt bei mir för Arbeit noch unjedonn eröm?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "probe-029",
+   "set": "probe_dialect",
+   "text": "Wat steht bei mir noch an Uffjaben uff?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "probe-030",
+   "set": "probe_dialect",
+   "text": "Welche Aufgab hätt i scho längst fertig ham miassn?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "probe-031",
+   "set": "probe_dialect",
+   "text": "Was isch bei mir scho über de Frischt?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "probe-032",
+   "set": "probe_dialect",
+   "text": "Wat hätt ich längs fäädich maache solle?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "probe-033",
+   "set": "probe_dialect",
+   "text": "Is in meim Postfach seit da Früh wos Neis eiganga?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "probe-034",
+   "set": "probe_dialect",
+   "text": "Hät mer einer jet jeschrevve, wat ich noch nit jelese han?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "probe-035",
+   "set": "probe_dialect",
+   "text": "Zoag ma ois für heit zam, Termine, To-dos und Post, in oam.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "probe-036",
+   "set": "probe_dialect",
+   "text": "Fass mer de ganze Dach zesamme: Termine, Aufjabe un Mails.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "probe-037",
+   "set": "probe_dialect",
+   "text": "Regnet's heit Nammidag in Augschburg?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-038",
+   "set": "probe_dialect",
+   "text": "Wer hod gestan des Spui in Bremen gwunna?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-039",
+   "set": "probe_dialect",
+   "text": "Wann fährt hück de letzte Bahn noh Bergisch Gladbach?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-040",
+   "set": "probe_dialect",
+   "text": "Wie wird dat morgen mit 'm Stau op dr A1?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-041",
+   "set": "probe_dialect",
+   "text": "Wat koch ick morjen für die Kinder?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-042",
+   "set": "probe_dialect",
+   "text": "Hat der Bäcker am Sonntag offen?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-043",
+   "set": "probe_dialect",
+   "text": "Wia vui Grad hats heit Nacht in Passau ghabt?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-044",
+   "set": "probe_dialect",
+   "text": "Schneit's übamorgn im Allgäu?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-045",
+   "set": "probe_dialect",
+   "text": "Gibt's morga en Stuagart en Flohmarkt?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-046",
+   "set": "probe_dialect",
+   "text": "Wo kann ma heit omds guat Schnitzl essn?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-047",
+   "set": "probe_dialect",
+   "text": "Speelt de Werder Sünndag in Bremen?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-048",
+   "set": "probe_dialect",
+   "text": "Is dat Schwimmbad hüüt open?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-049",
+   "set": "probe_dialect",
+   "text": "Wie dunkel is et morjen früh um sechse noch draußen?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-050",
+   "set": "probe_dialect",
+   "text": "Läuft am Samschdich a gscheiter Krimi im Fernseh?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-051",
+   "set": "probe_dialect",
+   "text": "Wia wird's Wetter morgn in Nürnberg?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-052",
+   "set": "probe_dialect",
+   "text": "Wia lang hod d'Apothekn am Samstag offa?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-053",
+   "set": "probe_dialect",
+   "text": "Is da Herr Wimmer heit im Haus?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-054",
+   "set": "probe_dialect",
+   "text": "Hat d'Frau Kübler morga Zeit für a Gspräch?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-055",
+   "set": "probe_dialect",
+   "text": "Wann hät dr Schmitz hück Feierovend?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-056",
+   "set": "probe_dialect",
+   "text": "Is de Kolleje Wagner morjen im Lager?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-057",
+   "set": "probe_dialect",
+   "text": "Hett de Meister hüüt al sien Post leest?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-058",
+   "set": "probe_dialect",
+   "text": "Wann hot d'Firma Ruckdeschl übermorgn offn?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-059",
+   "set": "probe_dialect",
+   "text": "Hat dr Meischter nägschte Woch Urlaub?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "probe-060",
+   "set": "probe_dialect",
+   "text": "Was hat de Lagerist heute schon jemacht?",
+   "expected_intent": "unknown"
+  }
+ ]
+}
