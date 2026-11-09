@@ -8,6 +8,11 @@ on:
   pull_request:
     paths: ["data/**", "training/synthesize.py", "tools/check_holdout_leak.py", "tools/check_semantic_leak.py", "tools/semantic-requirements.txt", "tools/import_partner.py"]
   workflow_dispatch:
+    inputs:
+      report:
+        description: Semantic check lists pairs at or above this cosine (push runs use 0.90)
+        type: string
+        default: "0.90"
 
 permissions:
   contents: read
@@ -29,6 +34,8 @@ jobs:
         run: python tools/import_partner.py --check
       - name: Semantic check (paraphrases of holdout sentences)
         if: always()
+        env:
+          REPORT: ${{ inputs.report || '0.90' }}
         run: |
           pip install -q -r tools/semantic-requirements.txt
-          python tools/check_semantic_leak.py --show 0 --summary "$GITHUB_STEP_SUMMARY"
+          python tools/check_semantic_leak.py --show 0 --report "$REPORT" --summary "$GITHUB_STEP_SUMMARY"
