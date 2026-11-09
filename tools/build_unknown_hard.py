@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build 500 hard negatives for "unknown" and 80 contrast pairs for the read intents.
+"""Build 480 hard negatives for "unknown" and 80 contrast pairs for the read intents.
 
 The 1.5B adapter of 08.11. was rejected because "unknown" got worse: questions
 the model should have declined came back as appointments_tomorrow or
@@ -53,7 +53,7 @@ import check_holdout_leak as lock  # noqa: E402
 from build_train_data import load_negatives, typo  # noqa: E402
 
 OUT = ROOT / "data" / "train" / "vyvy_unknown_hard_v1.jsonl"
-QUOTAS = {"phrases": 130, "fragments": 120, "private": 150, "others": 100}
+QUOTAS = {"phrases": 130, "fragments": 120, "private": 150, "others": 80}
 CONTRAST_OUT = ROOT / "data" / "train" / "vyvy_person_calendar_v1.jsonl"
 CONTRAST_QUOTAS = {"appointments_today": 32, "appointments_tomorrow": 32, "daily_agenda": 16}
 TIMEFRAME = {"appointments_today": "today", "appointments_tomorrow": "tomorrow", "daily_agenda": "today"}
@@ -68,6 +68,9 @@ PARAPHRASES = {
     # run 42585109153
     "wann ist morgen mein termin mit dem chef", "wann hat der chef übermorgen feierabend",
     "wann treffe ich morgen den chef", "danke passt mach s gut", "nachher mal",
+    # run 42586166857; since then "der Chef" is no longer one of PERSONS (Chef plus Termin
+    # always lands next to a holdout sentence)
+    "wann ist heute mein termin mit dem chef", "habe ich morgen einen termin mit dem chef",
 }
 
 TIMES = ["heute", "morgen", "heute Abend", "morgen früh", "am Wochenende", "übermorgen",
@@ -213,7 +216,7 @@ def private() -> dict[str, list[str]]:
 PERSONS = [("Frau Lehnert", "Frau Lehnert", "Frau Lehnert"), ("Herr Sommerfeld", "Herrn Sommerfeld", "Herrn Sommerfeld"),
            ("Frau Wegener", "Frau Wegener", "Frau Wegener"), ("Herr Pfeiffer", "Herrn Pfeiffer", "Herrn Pfeiffer"),
            ("Frau Dr. Seidl", "Frau Dr. Seidl", "Frau Dr. Seidl"), ("Herr Haberl", "Herrn Haberl", "Herrn Haberl"),
-           ("meine Kollegin", "meiner Kollegin", "meine Kollegin"), ("der Chef", "dem Chef", "den Chef"),
+           ("meine Kollegin", "meiner Kollegin", "meine Kollegin"), ("der Vorarbeiter", "dem Vorarbeiter", "den Vorarbeiter"),
            ("mein Azubi", "meinem Azubi", "meinen Azubi"), ("die Buchhaltung", "der Buchhaltung", "die Buchhaltung"),
            ("unser Meister", "unserem Meister", "unseren Meister"),
            ("die neue Kollegin", "der neuen Kollegin", "die neue Kollegin")]

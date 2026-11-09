@@ -40,7 +40,7 @@ def test_file_matches_generator() -> None:
 
 def test_count_and_contract() -> None:
     data = rows()
-    assert len(data) == sum(hard.QUOTAS.values()) == 500
+    assert len(data) == sum(hard.QUOTAS.values()) == 480
     for r in data:
         assert set(r) == {"text", "intent", "timeframe", "entity"}, r
         assert r["intent"] == "unknown" and r["timeframe"] is None and r["entity"] is None, r
@@ -62,8 +62,8 @@ def test_contrast_pairs() -> None:
 
 def test_training_pipeline_reads_every_line() -> None:
     loaded = train_lora.load_rows([hard.OUT, hard.CONTRAST_OUT], intents())
-    assert len(loaded) == 580
-    assert sum(json.loads(r["answer"])["intent"] == "unknown" for r in loaded) == 500
+    assert len(loaded) == 560
+    assert sum(json.loads(r["answer"])["intent"] == "unknown" for r in loaded) == 480
 
 
 def test_holdout_lock() -> None:

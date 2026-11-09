@@ -1,80 +1,80 @@
-{"text": "Steht morgen in meinem Kalender was mit dem Chef", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "dem Chef"}
-{"text": "Kompletter Tagesüberblick bitte, mit dem Termin bei Frau Wegener, meinen Aufgaben und der Post.", "intent": "daily_agenda", "timeframe": "today", "entity": "Frau Wegener"}
-{"text": "Kompletter Tagesüberblick bitte, mit dem Termin bei Frau Lehnert, meinen Aufgaben und der Post.", "intent": "daily_agenda", "timeframe": "today", "entity": "Frau Lehnert"}
-{"text": "Alles für heute auf einmal bitte: Termine, offene Aufgaben, Mails und wann ich Frau Wegener treffe.", "intent": "daily_agenda", "timeframe": "today", "entity": "Frau Wegener"}
-{"text": "Habe ich morgen was mit meinem Azubi?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "meinem Azubi"}
-{"text": "Kompletter Tagesüberblick bitte, mit dem Termin bei der Buchhaltung, meinen Aufgaben und der Post.", "intent": "daily_agenda", "timeframe": "today", "entity": "der Buchhaltung"}
-{"text": "Habe ich heute einen Termin mit meiner Kollegin?", "intent": "appointments_today", "timeframe": "today", "entity": "meiner Kollegin"}
-{"text": "Habe ich heute einen Termin mit Frau Lehnert", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Lehnert"}
-{"text": "Fass mir den ganzen Tag zusammen, Kalender, To-dos und neue Mails, ich sehe heute ja auch den Chef.", "intent": "daily_agenda", "timeframe": "today", "entity": "den Chef"}
-{"text": "Steht morgen in meinem Kalender was mit Frau Lehnert?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Lehnert"}
-{"text": "Wann treffe ich heute meinen Azubi?", "intent": "appointments_today", "timeframe": "today", "entity": "meinen Azubi"}
-{"text": "Wann treffe ich heute Herrn Haberl?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Haberl"}
-{"text": "Hab ich heute ein Gespräch mit der Buchhaltung?", "intent": "appointments_today", "timeframe": "today", "entity": "der Buchhaltung"}
-{"text": "Alles für heute auf einmal bitte: Termine, offene Aufgaben, Mails und wann ich Herrn Sommerfeld treffe", "intent": "daily_agenda", "timeframe": "today", "entity": "Herrn Sommerfeld"}
-{"text": "Steht morgen in meinem Kalender was mit Herrn Pfeiffer?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Pfeiffer"}
-{"text": "Bin ich heute mit dem Chef verabredet?", "intent": "appointments_today", "timeframe": "today", "entity": "dem Chef"}
-{"text": "Sehe ich heute noch Frau Dr. Seidl?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Dr. Seidl"}
-{"text": "Wann treffe ich heute die Buchhaltung", "intent": "appointments_today", "timeframe": "today", "entity": "die Buchhaltung"}
-{"text": "Um wie viel Uhr bin ich heute bei dem Chef?", "intent": "appointments_today", "timeframe": "today", "entity": "dem Chef"}
-{"text": "Steht morgen in meinem Kalender was mit Frau Wegener?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Wegener"}
-{"text": "Gib mir den Überblick für heute: Termine, Aufgaben und Mails, auch das Treffen mit Frau Dr. Seidl.", "intent": "daily_agenda", "timeframe": "today", "entity": "Frau Dr. Seidl"}
-{"text": "Wann ist morgen mein Termin mit Herrn Haberl?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Haberl"}
-{"text": "Sehe ich morgen Herrn Sommerfeld?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Sommerfeld"}
-{"text": "Fass mir den ganzen Tag zusammen, Kalender, To-dos und neue Mails, ich sehe heute ja auch Herrn Pfeiffer.", "intent": "daily_agenda", "timeframe": "today", "entity": "Herrn Pfeiffer"}
-{"text": "Hab i heit no an Termin mit meiner Kollegin?", "intent": "appointments_today", "timeframe": "today", "entity": "meiner Kollegin"}
-{"text": "Bin ich heute mit meinem Azubi verabredet?", "intent": "appointments_today", "timeframe": "today", "entity": "meinem Azubi"}
-{"text": "Hab i heit no an Termin mit unserem Meister?", "intent": "appointments_today", "timeframe": "today", "entity": "unserem Meister"}
-{"text": "bin ich morgen mit herrn sommerfeld verabredet?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Sommerfeld"}
-{"text": "Sehe ich heute noch Herrn Sommerfeld", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Sommerfeld"}
-{"text": "Steht morgen in meinem Kalender was mit meinem Azubi?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "meinem Azubi"}
-{"text": "Wann ist morgen mein Termin mit Frau Lehnert", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Lehnert"}
-{"text": "Steht heute in meinem Kalender was mit Herrn Pfeiffer?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Pfeiffer"}
-{"text": "Um wie viel Uhr bin ich heute bei Frau Wegener?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Wegener"}
-{"text": "Bin ich heute mit Herrn Haberl verabredet?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Haberl"}
-{"text": "Sehe ich heute noch Frau Wegener?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Wegener"}
-{"text": "Kompletter Tagesüberblick bitte, mit dem Termin bei meinem Azubi, meinen Aufgaben und der Post.", "intent": "daily_agenda", "timeframe": "today", "entity": "meinem Azubi"}
-{"text": "Habe ich morgen einen Termin mit dem Chef?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "dem Chef"}
-{"text": "Wann treffe ich morgen die Buchhaltung?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "die Buchhaltung"}
-{"text": "Steht heute in meinem Kalender was mit Frau Wegener?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Wegener"}
-{"text": "Bin ich morgen mit Frau Wegener verabredet?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Wegener"}
+{"text": "Wann ist heute mein Termin mit meinem Azubi?", "intent": "appointments_today", "timeframe": "today", "entity": "meinem Azubi"}
 {"text": "Bin ich heute mit der neuen Kollegin verabredet?", "intent": "appointments_today", "timeframe": "today", "entity": "der neuen Kollegin"}
-{"text": "Hob i morgn wos mit unserem Meister ausgmacht", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "unserem Meister"}
-{"text": "Um wie viel Uhr bin ich morgen bei Frau Wegener?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Wegener"}
-{"text": "kompletter tagesüberblick bitte, mit dem termin bei unserem meister, meinen aufgaben und der post.", "intent": "daily_agenda", "timeframe": "today", "entity": "unserem Meister"}
-{"text": "Wann ist heute mein Termin mit meiner Kollegin?", "intent": "appointments_today", "timeframe": "today", "entity": "meiner Kollegin"}
-{"text": "habe ich heute noch was mit frau lehnert?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Lehnert"}
-{"text": "Habe ich heute noch was mit Frau Dr. Seidl?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Dr. Seidl"}
+{"text": "Fass mir den ganzen Tag zusammen, Kalender, To-dos und neue Mails, ich sehe heute ja auch Herrn Haberl", "intent": "daily_agenda", "timeframe": "today", "entity": "Herrn Haberl"}
+{"text": "Sehe ich heute noch den Vorarbeiter?", "intent": "appointments_today", "timeframe": "today", "entity": "den Vorarbeiter"}
+{"text": "Hab i heit no an Termin mit Herrn Pfeiffer?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Pfeiffer"}
+{"text": "Sehe ich morgen Herrn Pfeiffer?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Pfeiffer"}
+{"text": "Hob i morgn wos mit Herrn Haberl ausgmacht", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Haberl"}
+{"text": "Bin ich morgen mit meinem Azubi verabredet?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "meinem Azubi"}
+{"text": "Hab i heit no an Termin mit Frau Dr. Seidl?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Dr. Seidl"}
+{"text": "Habe ich morgen einen Termin mit unserem Meister?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "unserem Meister"}
+{"text": "wann ist morgen mein termin mit frau lehnert?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Lehnert"}
+{"text": "Sehe ich morgen die neue Kollegin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "die neue Kollegin"}
+{"text": "Alles für heute auf einmal bitte: Termine, offene Aufgaben, Mails und wann ich Herrn Sommerfeld treffe.", "intent": "daily_agenda", "timeframe": "today", "entity": "Herrn Sommerfeld"}
+{"text": "hab ich heute ein gespräch mit unserem meister?", "intent": "appointments_today", "timeframe": "today", "entity": "unserem Meister"}
+{"text": "um wie viel uhr bin ich morgen bei meiner kollegin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "meiner Kollegin"}
+{"text": "wann treffe ich morgen meinen azubi?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "meinen Azubi"}
+{"text": "Wann treffe ich morgen meine Kollegin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "meine Kollegin"}
+{"text": "Gib mir den Überblick für heute: Termine, Aufgaben und Mails, auch das Treffen mit Herrn Pfeiffer.", "intent": "daily_agenda", "timeframe": "today", "entity": "Herrn Pfeiffer"}
+{"text": "steht morgen in meinem kalender was mit frau lehnert?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Lehnert"}
+{"text": "Habe ich heute einen Termin mit Herrn Pfeiffer?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Pfeiffer"}
+{"text": "Steht morgen in meinem Kalender was mit Frau Wegener?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Wegener"}
+{"text": "sehe ich morgen herrn sommerfeld?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Sommerfeld"}
+{"text": "Wann ist heute mein Termin mit Frau Wegener?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Wegener"}
+{"text": "Was steht heute alles an, Termine wie Aufgaben wie Mails? Ich hab auch was mit Frau Wegener.", "intent": "daily_agenda", "timeframe": "today", "entity": "Frau Wegener"}
+{"text": "Bin ich heute mit Frau Lehnert verabredet?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Lehnert"}
 {"text": "Habe ich heute einen Termin mit Herrn Haberl?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Haberl"}
-{"text": "Habe ich morgen einen Termin mit der Buchhaltung?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "der Buchhaltung"}
-{"text": "hab i heit no an termin mit frau lehnert?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Lehnert"}
-{"text": "Habe ich morgen was mit der neuen Kollegin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "der neuen Kollegin"}
-{"text": "Wann ist morgen mein Termin mit Frau Dr. Seidl?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Dr. Seidl"}
-{"text": "Was steht heute alles an, Termine wie Aufgaben wie Mails? Ich hab auch was mit Herrn Sommerfeld.", "intent": "daily_agenda", "timeframe": "today", "entity": "Herrn Sommerfeld"}
-{"text": "Hob i morgn wos mit der neuen Kollegin ausgmacht?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "der neuen Kollegin"}
-{"text": "Hab ich morgen ein Gespräch mit meiner Kollegin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "meiner Kollegin"}
-{"text": "Habe ich morgen einen Termin mit Herrn Sommerfeld?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Sommerfeld"}
-{"text": "Hob i morgn wos mit dem Chef ausgmacht?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "dem Chef"}
-{"text": "Hob i morgn wos mit Frau Dr. Seidl ausgmacht", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Dr. Seidl"}
-{"text": "Bin ich morgen mit meiner Kollegin verabredet?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "meiner Kollegin"}
-{"text": "Wann ist morgen mein Termin mit Herrn Pfeiffer", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Pfeiffer"}
-{"text": "Was steht heute alles an, Termine wie Aufgaben wie Mails? Ich hab auch was mit Herrn Haberl.", "intent": "daily_agenda", "timeframe": "today", "entity": "Herrn Haberl"}
-{"text": "Sehe ich heute noch Herrn Pfeiffer?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Pfeiffer"}
-{"text": "Kompletter Tagesüberblick bitte, mit dem Termin bei Herrn Pfeiffer, meinen Aufgaben und der Post.", "intent": "daily_agenda", "timeframe": "today", "entity": "Herrn Pfeiffer"}
+{"text": "Habe ich heute einen Termin mit der neuen Kollegin?", "intent": "appointments_today", "timeframe": "today", "entity": "der neuen Kollegin"}
+{"text": "Steht morgen in meinem Kalender was mit Herrn Sommerfeld?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Sommerfeld"}
+{"text": "Wann ist heute mein Termin mit dem Vorarbeiter?", "intent": "appointments_today", "timeframe": "today", "entity": "dem Vorarbeiter"}
+{"text": "Hab ich morgen ein Gespräch mit Herrn Haberl?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Haberl"}
+{"text": "Was steht heute alles an, Termine wie Aufgaben wie Mails? Ich hab auch was mit meiner Kollegin.", "intent": "daily_agenda", "timeframe": "today", "entity": "meiner Kollegin"}
+{"text": "um wie viel uhr bin ich morgen bei unserem meister?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "unserem Meister"}
+{"text": "Steht heute in meinem Kalender was mit meiner Kollegin", "intent": "appointments_today", "timeframe": "today", "entity": "meiner Kollegin"}
+{"text": "wann ist heute mein termin mit der buchhaltung?", "intent": "appointments_today", "timeframe": "today", "entity": "der Buchhaltung"}
+{"text": "Hab ich morgen ein Gespräch mit Frau Lehnert?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Lehnert"}
+{"text": "Alles für heute auf einmal bitte: Termine, offene Aufgaben, Mails und wann ich Frau Dr. Seidl treffe.", "intent": "daily_agenda", "timeframe": "today", "entity": "Frau Dr. Seidl"}
+{"text": "Gib mir den Überblick für heute: Termine, Aufgaben und Mails, auch das Treffen mit Frau Wegener.", "intent": "daily_agenda", "timeframe": "today", "entity": "Frau Wegener"}
+{"text": "Hob i morgn wos mit Herrn Pfeiffer ausgmacht?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Pfeiffer"}
+{"text": "Wann ist heute mein Termin mit meiner Kollegin?", "intent": "appointments_today", "timeframe": "today", "entity": "meiner Kollegin"}
+{"text": "Wann ist heute mein Termin mit Herrn Pfeiffer?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Pfeiffer"}
+{"text": "Wann ist morgen mein Termin mit dem Vorarbeiter?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "dem Vorarbeiter"}
+{"text": "Hab ich morgen ein Gespräch mit Frau Wegener?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Wegener"}
+{"text": "Um wie viel Uhr bin ich morgen bei Herrn Sommerfeld?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Sommerfeld"}
+{"text": "Um wie viel Uhr bin ich heute bei Frau Wegener?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Wegener"}
+{"text": "sehe ich heute noch frau lehnert?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Lehnert"}
+{"text": "Hab ich heute ein Gespräch mit Herrn Haberl", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Haberl"}
+{"text": "Gib mir den Überblick für heute: Termine, Aufgaben und Mails, auch das Treffen mit dem Vorarbeiter.", "intent": "daily_agenda", "timeframe": "today", "entity": "dem Vorarbeiter"}
+{"text": "alles für heute auf einmal bitte: termine, offene aufgaben, mails und wann ich die neue kollegin treffe.", "intent": "daily_agenda", "timeframe": "today", "entity": "die neue Kollegin"}
+{"text": "Fass mir den ganzen Tag zusammen, Kalender, To-dos und neue Mails, ich sehe heute ja auch unseren Meister.", "intent": "daily_agenda", "timeframe": "today", "entity": "unseren Meister"}
+{"text": "Wann ist morgen mein Termin mit Herrn Pfeiffer?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Pfeiffer"}
+{"text": "alles für heute auf einmal bitte: termine, offene aufgaben, mails und wann ich herrn pfeiffer treffe.", "intent": "daily_agenda", "timeframe": "today", "entity": "Herrn Pfeiffer"}
+{"text": "Sehe ich morgen Frau Wegener?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Wegener"}
+{"text": "Hab i heit no an Termin mit meiner Kollegin?", "intent": "appointments_today", "timeframe": "today", "entity": "meiner Kollegin"}
+{"text": "Kompletter Tagesüberblick bitte, mit dem Termin bei der Buchhaltung, meinen Aufgaben und der Post.", "intent": "daily_agenda", "timeframe": "today", "entity": "der Buchhaltung"}
+{"text": "Wann ist morgen mein Termin mit meiner Kollegin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "meiner Kollegin"}
+{"text": "habe ich heute noch was mit unserem meister?", "intent": "appointments_today", "timeframe": "today", "entity": "unserem Meister"}
+{"text": "Steht heute in meinem Kalender was mit Frau Dr. Seidl?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Dr. Seidl"}
+{"text": "Wann treffe ich morgen Frau Dr. Seidl?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Dr. Seidl"}
+{"text": "habe ich heute noch was mit herrn sommerfeld?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Sommerfeld"}
+{"text": "Wann ist morgen mein Termin mit der neuen Kollegin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "der neuen Kollegin"}
+{"text": "Habe ich heute einen Termin mit dem Vorarbeiter?", "intent": "appointments_today", "timeframe": "today", "entity": "dem Vorarbeiter"}
+{"text": "Wann treffe ich heute Frau Wegener?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Wegener"}
 {"text": "Gib mir den Überblick für heute: Termine, Aufgaben und Mails, auch das Treffen mit Frau Lehnert.", "intent": "daily_agenda", "timeframe": "today", "entity": "Frau Lehnert"}
-{"text": "habe ich morgen was mit frau dr. seidl?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Dr. Seidl"}
-{"text": "Wann treffe ich morgen Herrn Haberl?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Haberl"}
-{"text": "Habe ich morgen was mit unserem Meister?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "unserem Meister"}
-{"text": "Habe ich morgen was mit Frau Lehnert?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Lehnert"}
-{"text": "Steht heute in meinem Kalender was mit Herrn Sommerfeld?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Sommerfeld"}
-{"text": "habe ich morgen was mit herrn pfeiffer?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Pfeiffer"}
-{"text": "Gib mir den Überblick für heute: Termine, Aufgaben und Mails, auch das Treffen mit meiner Kollegin.", "intent": "daily_agenda", "timeframe": "today", "entity": "meiner Kollegin"}
-{"text": "hab ich morgen ein gespräch mit herrn haberl?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Haberl"}
-{"text": "Wann ist heute mein Termin mit dem Chef?", "intent": "appointments_today", "timeframe": "today", "entity": "dem Chef"}
-{"text": "Wann treffe ich heute Herrn Pfeiffer?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Pfeiffer"}
-{"text": "Sehe ich heute noch unseren Meister?", "intent": "appointments_today", "timeframe": "today", "entity": "unseren Meister"}
-{"text": "Wann treffe ich heute Frau Dr. Seidl?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Dr. Seidl"}
-{"text": "hab i heit no an termin mit herrn sommerfeld?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Sommerfeld"}
-{"text": "Hab i heit no an Termin mit der neuen Kollegin?", "intent": "appointments_today", "timeframe": "today", "entity": "der neuen Kollegin"}
-{"text": "Habe ich morgen einen Termin mit meiner Kollegin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "meiner Kollegin"}
-{"text": "was steht heute alles an, termine wie aufgaben wie mails? ich hab auch was mit der neuen kollegin.", "intent": "daily_agenda", "timeframe": "today", "entity": "der neuen Kollegin"}
+{"text": "Was steht heute alles an, Termine wie Aufgaben wie Mails? Ich hab auch was mit Frau Lehnert.", "intent": "daily_agenda", "timeframe": "today", "entity": "Frau Lehnert"}
+{"text": "Steht morgen in meinem Kalender was mit Frau Dr. Seidl?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Dr. Seidl"}
+{"text": "habe ich heute einen termin mit frau dr. seidl?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Dr. Seidl"}
+{"text": "Sehe ich heute noch Herrn Haberl?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Haberl"}
+{"text": "Gib mir den Überblick für heute: Termine, Aufgaben und Mails, auch das Treffen mit Herrn Sommerfeld.", "intent": "daily_agenda", "timeframe": "today", "entity": "Herrn Sommerfeld"}
+{"text": "Habe ich heute einen Termin mit Frau Lehnert?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Lehnert"}
+{"text": "Was steht heute alles an, Termine wie Aufgaben wie Mails? Ich hab auch was mit meinem Azubi.", "intent": "daily_agenda", "timeframe": "today", "entity": "meinem Azubi"}
+{"text": "Bin ich heute mit der Buchhaltung verabredet", "intent": "appointments_today", "timeframe": "today", "entity": "der Buchhaltung"}
+{"text": "Um wie viel Uhr bin ich heute bei Herrn Sommerfeld?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Sommerfeld"}
+{"text": "Habe ich morgen einen Termin mit der Buchhaltung?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "der Buchhaltung"}
+{"text": "Habe ich morgen einen Termin mit Frau Dr. Seidl?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Dr. Seidl"}
+{"text": "Habe ich heute noch was mit meinem Azubi?", "intent": "appointments_today", "timeframe": "today", "entity": "meinem Azubi"}
+{"text": "Bin ich morgen mit Herrn Haberl verabredet?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Haberl"}
+{"text": "Wann treffe ich morgen den Vorarbeiter?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "den Vorarbeiter"}
+{"text": "Sehe ich heute noch Herrn Sommerfeld?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Sommerfeld"}
+{"text": "sehe ich morgen die buchhaltung?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "die Buchhaltung"}
+{"text": "Habe ich morgen was mit dem Vorarbeiter?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "dem Vorarbeiter"}

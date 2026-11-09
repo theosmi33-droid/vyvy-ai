@@ -26,7 +26,7 @@ send, pay), questions about other people and companies, specialist knowledge,
 arithmetic, small talk, everyday questions, writing help and regional speech.
 The generator adds each of them once as `unknown`, without generated variants.
 
-`vyvy_unknown_hard_v1.jsonl` holds 500 hard negatives for `unknown`, generated
+`vyvy_unknown_hard_v1.jsonl` holds 480 hard negatives for `unknown`, generated
 by `tools/build_unknown_hard.py` from building blocks written for it: office
 and everyday phrases (Mahlzeit, Bis morgen), incomplete or ambiguous fragments
 (das Dokument von gestern, später vielleicht), private requests without a task
