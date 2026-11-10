@@ -40,6 +40,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 
 import kaggle_job  # noqa: E402
 import kaggle_watchdog  # noqa: E402
+import loop_guard  # noqa: E402
 import plan_train  # noqa: E402
 
 BASES = {
@@ -301,6 +302,14 @@ def schedule(repo: str, owner: str) -> None:
     # One Kaggle run at a time (any kernel of the account holds the GPU); a Colab
     # run does not hold it, so Colab plans are started independently of Kaggle.
     kaggle_free = not any_kernel_running()
+    # Every GPU run needs the user's release of the round (data/loop_state.json); the
+    # synthesis belongs to the round of the first planned base.
+    state, history = loop_guard.load_state(), loop_guard.release_history(repo)
+    now = datetime.now(timezone.utc).isoformat()
+    go, why = loop_guard.gate(state, history, plan_train.ORDER[0], now, loop_guard.fingerprint())
+    if not go:
+        summary(f"Scheduler: {why}.")
+        return
     # Teacher sentences first: training on data that is about to grow wastes a run.
     pending = ROOT / "data" / "train" / f"vyvy_synth_{synth_round()}.pending"
     if synth_waiting():
@@ -325,6 +334,11 @@ def schedule(repo: str, owner: str) -> None:
         p = plan_train.plan(base)
         where = p.get("where", "kaggle")
         if (where == "kaggle" and not kaggle_free) or plan_train.trained_release(repo, base):
+            continue
+        go, why = loop_guard.gate(state, history, base, now, loop_guard.fingerprint(),
+                                  loop_guard.small_verdict_on_same_data(repo) if base == loop_guard.SEVEN_B else None)
+        if not go:
+            summary(f"Scheduler: {base}: {why}.")
             continue
         kid = f"{owner}/{kaggle_job.kernel_slug(base)}" if where == "kaggle" else f"colab/{p['size']}"
         if open_failure(repo, kid, p["name"]):

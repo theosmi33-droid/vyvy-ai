@@ -183,3 +183,32 @@ def test_seven_b_needs_a_promising_small_run() -> None:
     assert loop_guard.seven_b_ready({"p_value": 0.0835, "per_intent": {"unknown": {"broken": 0}}})[0] is True
     assert loop_guard.seven_b_ready({"p_value": 0.0038, "per_intent": {"unknown": {"broken": 1}}})[0] is False
     assert loop_guard.seven_b_ready({"p_value": 0.32, "per_intent": {}})[0] is False
+
+
+def test_gate_blocks_without_release_and_on_changed_rules() -> None:
+    small = "Qwen/Qwen2.5-1.5B-Instruct"
+    now = "2026-11-12T12:00:00Z"
+    paused = json.loads((ROOT / "data" / "loop_state.json").read_text(encoding="utf-8"))
+    assert paused["mode"] == "paused"
+    assert loop_guard.gate(paused, [], small, now, "x")[0] is False
+    once = {"mode": "one_round", "approved_on": "2026-11-11T00:00:00Z", "bases": [small, loop_guard.SEVEN_B],
+            "fingerprint": "x"}
+    assert loop_guard.gate(once, [], small, now, "x")[0] is True
+    assert "rules" in loop_guard.gate(once, [], small, now, "y")[1]
+    assert loop_guard.gate(once, [], loop_guard.SEVEN_B, now, "x")[0] is False
+    good = {"p_value": 0.08, "per_intent": {"unknown": {"broken": 0}}}
+    assert loop_guard.gate(once, [], loop_guard.SEVEN_B, now, "x", good)[0] is True
+
+
+def test_gate_in_weekly_mode_counts_only_decisions_since_the_release() -> None:
+    small = "Qwen/Qwen2.5-1.5B-Instruct"
+    old = [{"adapter": f"vyvy-7b-d{k}", "created": f"2026-11-0{k}T10:00:00Z", "accepted": False} for k in range(3, 7)]
+    weekly = {"mode": "weekly", "approved_on": "2026-11-09T00:00:00Z", "bases": [small], "fingerprint": "x"}
+    assert loop_guard.gate(weekly, old, small, "2026-11-12T12:00:00Z", "x")[0] is True
+    new = [{"adapter": f"vyvy-7b-e{k}", "created": f"2026-11-1{k}T10:00:00Z", "accepted": False} for k in range(0, 3)]
+    assert "plateau" in loop_guard.gate(weekly, old + new, small, "2026-11-16T12:00:00Z", "x")[1]
+
+
+def test_plan_train_runs_small_first() -> None:
+    import plan_train
+    assert plan_train.ORDER[0] == "Qwen/Qwen2.5-1.5B-Instruct"

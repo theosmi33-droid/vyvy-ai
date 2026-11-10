@@ -128,9 +128,64 @@ def seven_b_ready(small: dict | None, max_p: float = 0.2) -> tuple[bool, str]:
     return True, f"1.5B on this data: p={small['p_value']:.4f}, no unknown loss"
 
 
+def load_state(path: Path = STATE) -> dict | None:
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+
+
+def release_history(repo: str) -> list[dict]:
+    """Decisions from the releases: candidates still waiting for bench-lora are left out."""
+    import subprocess
+
+    out = subprocess.run(["gh", "release", "list", "--repo", repo, "--limit", "100", "--json", "tagName,createdAt,name"],
+                         capture_output=True, text=True, check=True)
+    return sorted(({"adapter": r["tagName"], "created": r["createdAt"], "accepted": "(" not in r["name"]}
+                   for r in json.loads(out.stdout or "[]") if "(candidate)" not in r["name"]),
+                  key=lambda d: d["created"])
+
+
+def small_verdict_on_same_data(repo: str) -> dict | None:
+    """verdict.json of the 1.5B release trained on today's training data, if there is one."""
+    import subprocess
+
+    import plan_train
+
+    tag = plan_train.trained_release(repo, "Qwen/Qwen2.5-1.5B-Instruct")
+    if not tag:
+        return None
+    got = subprocess.run(["gh", "release", "download", tag, "--repo", repo, "--pattern", "verdict.json",
+                          "--output", "-"], capture_output=True, text=True)
+    try:
+        return json.loads(got.stdout)
+    except json.JSONDecodeError:
+        return None
+
+
+def gate(state: dict | None, history: list[dict], base: str, now: str, current: str,
+         small: dict | None = None) -> tuple[bool, str]:
+    """The lock every GPU start passes (plan_train.py for Train and Train on Colab, collect.py
+    for the synthesis): the user's release of the round, the approved rules and, in weekly
+    mode, the hold points of check() over the decisions since that release. 7B also needs
+    seven_b_ready(small)."""
+    go, why = round_allowed(state, history, base, now)
+    if not go:
+        return go, why
+    if state.get("fingerprint") != current:
+        return False, "rules or holdouts changed since the user approved them; the user decides"
+    if state["mode"] == "weekly":
+        since = [d for d in history if d["created"] > state["approved_on"]]
+        go, why = check(since, now=now, approved=current, current=current)
+        if not go:
+            return go, why
+    if base == SEVEN_B:
+        return seven_b_ready(small)
+    return True, why
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Decide whether the improvement loop may start another round")
-    p.add_argument("--history", type=Path, required=True, help="JSON list of decisions, oldest first")
+    p.add_argument("--gate", metavar="BASE", help="only the lock for a GPU start of BASE; needs --repo")
+    p.add_argument("--repo", help="OWNER/REPO for --gate (history and verdicts from the releases)")
+    p.add_argument("--history", type=Path, help="JSON list of decisions, oldest first")
     p.add_argument("--sealed", type=Path, help="result on the sealed set and the unknown safety set")
     p.add_argument("--state", type=Path, default=STATE, help="approved fingerprint (written by the user)")
     p.add_argument("--now", default=dt.datetime.now(dt.timezone.utc).isoformat())
@@ -140,6 +195,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--plateau", type=int, default=3)
     p.add_argument("--max-rounds", type=int, default=5)
     args = p.parse_args(argv)
+    if args.gate:
+        go, why = gate(load_state(args.state), release_history(args.repo), args.gate, args.now, fingerprint(),
+                       small_verdict_on_same_data(args.repo) if args.gate == SEVEN_B else None)
+        print(json.dumps({"ok": go, "reason": why}))
+        return 0 if go else 3
     history = json.loads(args.history.read_text(encoding="utf-8"))
     now = dt.datetime.fromisoformat(args.now.replace("Z", "+00:00"))
     history = sorted((d for d in history if dt.datetime.fromisoformat(d["created"].replace("Z", "+00:00")) <= now),
