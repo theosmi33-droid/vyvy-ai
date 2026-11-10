@@ -5,7 +5,7 @@ The loop (synthesis -> training -> bench-lora -> improve_report -> next
 synthesis) runs on its own only while every hold point allows it. In order:
 
 1. Rules: the acceptance rule (tools/compare_adapter.py) and the holdout files
-   must match the fingerprint the user approved in training/loop_state.json.
+   must match the fingerprint the user approved in data/loop_state.json.
    A changed rule or a new holdout needs the user's yes, never the loop's.
 2. Goal: an adapter reached --goal accuracy on a sealed blind set of at least
    --min-sealed questions, looked at exactly once, with no wrong action on the
@@ -32,7 +32,8 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-STATE = ROOT / "training" / "loop_state.json"
+# Outside training/ and data/train/: a push there starts Train; this file must not.
+STATE = ROOT / "data" / "loop_state.json"
 RULE_FILES = ["tools/compare_adapter.py", "tools/shadow_check.py"]
 HOLDOUT_GLOB = "data/holdout_*.json"
 
@@ -79,6 +80,52 @@ def check(history: list[dict], *, now: str, approved: str | None, current: str,
     if done >= max_rounds:
         return False, f"{done} rounds in {week} already (limit {max_rounds}); next week"
     return True, f"next round allowed ({done} of {max_rounds} in {week})"
+
+
+SEVEN_B = "Qwen/Qwen2.5-7B-Instruct"
+SIZE = {"Qwen/Qwen2.5-1.5B-Instruct": "1.5b", SEVEN_B: "7b"}
+
+
+def round_allowed(state: dict | None, history: list[dict], base: str, now: str) -> tuple[bool, str]:
+    """May the scheduler start a GPU run (synthesis or training) for base now?
+
+    The loop stops after every round: a decision (release) for base after the
+    user's release of the round ends it. state is written only by the user:
+    {"schema": 1, "fingerprint", "approved_on" (ISO time), "mode": "paused" | "one_round" | "weekly",
+     "bases": [...]}. "one_round" allows one decision per base after approved_on;
+    "weekly" allows one per base and ISO week, so the next one waits for the following week.
+    The hold points of check() apply on top.
+    """
+    if not state or state.get("mode", "paused") == "paused":
+        return False, "paused: the user releases the next round (data/loop_state.json)"
+    if base not in state.get("bases", []):
+        return False, f"{base} is not released in data/loop_state.json"
+    mine = [d for d in history if d["adapter"].startswith(f"vyvy-{SIZE[base]}-")]
+    if state["mode"] == "one_round":
+        after = [d for d in mine if d["created"] > state["approved_on"]]
+        if after:
+            return False, f"round done ({after[-1]['adapter']}); report first, then the user releases the next"
+        return True, "released for one round"
+    if state["mode"] == "weekly":
+        week = iso_week(now)
+        done = [d for d in mine if iso_week(d["created"]) == week]
+        if done:
+            return False, f"{done[-1]['adapter']} decided in {week}; the next round comes next week"
+        return True, f"weekly round for {week}"
+    return False, f"unknown mode {state['mode']!r}"
+
+
+def seven_b_ready(small: dict | None, max_p: float = 0.2) -> tuple[bool, str]:
+    """7B only after a promising 1.5B run on the same training data.
+
+    small: the verdict of that 1.5B adapter (p_value, per_intent), or None.
+    """
+    if small is None:
+        return False, "no 1.5B decision on this training data yet"
+    lost = small.get("per_intent", {}).get("unknown", {}).get("broken", 0)
+    if small["p_value"] >= max_p or lost:
+        return False, f"1.5B on this data: p={small['p_value']:.4f}, unknown broken {lost}; 7B not worth the quota"
+    return True, f"1.5B on this data: p={small['p_value']:.4f}, no unknown loss"
 
 
 def main(argv: list[str] | None = None) -> int:

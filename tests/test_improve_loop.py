@@ -162,3 +162,24 @@ def test_sealed_set_is_deterministic_labelled_and_clean() -> None:
     assert all(("{" not in x["text"]) for x in a)
     assert {x["expected"] for x in a} == {"appointments_today", "unknown"}
     assert sealed_gen.Near(refs).hit(refs[0]) and not any(x["text"] == refs[0] for x in a)
+
+
+def test_loop_stops_after_every_round() -> None:
+    small = "Qwen/Qwen2.5-1.5B-Instruct"
+    hist = [{"adapter": "vyvy-1.5b-d1", "created": "2026-11-12T10:00:00Z", "accepted": False}]
+    now = "2026-11-12T12:00:00Z"
+    assert loop_guard.round_allowed(None, hist, small, now)[0] is False
+    once = {"mode": "one_round", "approved_on": "2026-11-11T00:00:00Z", "bases": [small]}
+    assert "round done" in loop_guard.round_allowed(once, hist, small, now)[1]
+    assert loop_guard.round_allowed(dict(once, approved_on="2026-11-12T11:00:00Z"), hist, small, now)[0] is True
+    assert loop_guard.round_allowed(once, hist, loop_guard.SEVEN_B, now)[0] is False
+    weekly = dict(once, mode="weekly")
+    assert "next week" in loop_guard.round_allowed(weekly, hist, small, now)[1]
+    assert loop_guard.round_allowed(weekly, hist, small, "2026-11-16T08:00:00Z")[0] is True
+
+
+def test_seven_b_needs_a_promising_small_run() -> None:
+    assert loop_guard.seven_b_ready(None)[0] is False
+    assert loop_guard.seven_b_ready({"p_value": 0.0835, "per_intent": {"unknown": {"broken": 0}}})[0] is True
+    assert loop_guard.seven_b_ready({"p_value": 0.0038, "per_intent": {"unknown": {"broken": 1}}})[0] is False
+    assert loop_guard.seven_b_ready({"p_value": 0.32, "per_intent": {}})[0] is False

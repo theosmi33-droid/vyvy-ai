@@ -40,6 +40,7 @@ KINDS = {
     "overview": "day overview and a single area mixed up",
     "tasks": "open and overdue tasks mixed up",
     "write": "create a task and an appointment mixed up",
+    "area": "appointments and tasks mixed up",
     "read_write": "a read answered with a write or the other way round",
     "other": "other confusions",
 }
@@ -73,6 +74,8 @@ def kind(expected: str, got: str) -> str:
         return "tasks"
     if pair <= WRITES:
         return "write"
+    if pair <= READS and pair & DAY and pair & TASKS:
+        return "area"
     if (expected in READS and got in WRITES) or (expected in WRITES and got in READS):
         return "read_write"
     return "other"
