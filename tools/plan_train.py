@@ -19,6 +19,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "runner"))
+sys.path.insert(0, str(ROOT / "tools"))
 
 import bench  # noqa: E402
 
@@ -39,9 +40,10 @@ PLANS = {
 }
 #: Workflow that trains a plan, by where it runs.
 WORKFLOW = {"kaggle": "train.yml", "colab": "train-colab.yml"}
-# 7B first: it needs the longer budget and decides whether two GPUs are safe
-# (see seven_b_passed); 1.5B runs on Colab and does not wait for it.
-ORDER = ["Qwen/Qwen2.5-7B-Instruct", "Qwen/Qwen2.5-1.5B-Instruct"]
+# 1.5B first (free Colab, every round); 7B only after the 1.5B adapter of the same
+# training data was promising (tools/loop_guard.py seven_b_ready): one 7B run costs
+# about 630 of the 1800 Kaggle minutes of a week.
+ORDER = ["Qwen/Qwen2.5-1.5B-Instruct", "Qwen/Qwen2.5-7B-Instruct"]
 
 
 def plan(base: str, epochs: float = 4) -> dict:
@@ -114,6 +116,18 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     p = plan(args.base, args.epochs)
     if args.repo:
+        # The loop's lock comes first: without the user's release in data/loop_state.json
+        # no run starts, also not one started by a push (tools/loop_guard.py gate).
+        import datetime as dt
+
+        import loop_guard
+        p["gate_ok"], p["gate"] = loop_guard.gate(
+            loop_guard.load_state(), loop_guard.release_history(args.repo), args.base,
+            dt.datetime.now(dt.timezone.utc).isoformat(), loop_guard.fingerprint(),
+            loop_guard.small_verdict_on_same_data(args.repo) if args.base == loop_guard.SEVEN_B else None)
+        if not p["gate_ok"]:
+            print(json.dumps(p))
+            return 0
         p["trained"] = trained_release(args.repo, args.base)
         if p["gpus"] == 1 and PLANS[args.base].get("gpus_after_7b") and seven_b_passed(args.repo):
             p["gpus"] = 2

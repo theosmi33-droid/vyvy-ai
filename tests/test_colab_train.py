@@ -69,6 +69,11 @@ def scheduler(monkeypatch):
     monkeypatch.setattr(collect, "open_failure", lambda repo, kid, name: False)
     monkeypatch.setattr(collect, "summary", lambda text: None)
     monkeypatch.setattr(plan_train, "plan", lambda base, epochs=4: {**plan_train.PLANS[base], "name": "n"})
+    # The loop lock is open here; its own tests are in test_improve_loop.py.
+    monkeypatch.setattr(collect.loop_guard, "load_state", lambda: {"mode": "one_round"})
+    monkeypatch.setattr(collect.loop_guard, "release_history", lambda repo: [])
+    monkeypatch.setattr(collect.loop_guard, "small_verdict_on_same_data", lambda repo: None)
+    monkeypatch.setattr(collect.loop_guard, "gate", lambda *a, **k: (True, "open"))
 
     def run(*args, check=True):
         if args[:3] == ("gh", "workflow", "run"):
@@ -82,7 +87,7 @@ def scheduler(monkeypatch):
 def test_scheduler_starts_kaggle_and_colab_side_by_side(scheduler, monkeypatch):
     monkeypatch.setattr(plan_train, "trained_release", lambda repo, base: None)
     collect.schedule("owner/vyvy-ai", "u")
-    assert scheduler == [f"train.yml base={LARGE}", f"train-colab.yml base={SMALL}"]
+    assert scheduler == [f"train-colab.yml base={SMALL}", f"train.yml base={LARGE}"]
 
 
 def test_a_running_kaggle_kernel_does_not_hold_colab(scheduler, monkeypatch):
@@ -112,3 +117,18 @@ def test_a_running_kernel_delays_the_synthesis_but_not_colab_later(scheduler, mo
     collect.schedule("owner/vyvy-ai", "u")
     # New teacher sentences are coming; training now would be trained again.
     assert scheduler == []
+
+
+def test_a_closed_loop_lock_starts_nothing(scheduler, monkeypatch):
+    monkeypatch.setattr(plan_train, "trained_release", lambda repo, base: None)
+    monkeypatch.setattr(collect, "synth_done", lambda now=None: False)
+    monkeypatch.setattr(collect.loop_guard, "gate", lambda *a, **k: (False, "paused"))
+    collect.schedule("owner/vyvy-ai", "u")
+    assert scheduler == []
+
+
+def test_the_lock_can_hold_7b_alone(scheduler, monkeypatch):
+    monkeypatch.setattr(plan_train, "trained_release", lambda repo, base: None)
+    monkeypatch.setattr(collect.loop_guard, "gate", lambda state, history, base, *a, **k: (base == SMALL, "7B waits"))
+    collect.schedule("owner/vyvy-ai", "u")
+    assert scheduler == [f"train-colab.yml base={SMALL}"]

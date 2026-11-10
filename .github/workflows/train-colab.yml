@@ -63,7 +63,11 @@ jobs:
           get() { echo "$plan" | python -c "import json,sys; v=json.load(sys.stdin).get('$1'); print('' if v is None else v)"; }
           name=$(get name); budget=$(get budget); sweep=$(get sweep); batch=$(get batch); accum=$(get grad_accum)
           trained=$(get trained); size=$(get size)
-          if [ "$(get where)" != "colab" ]; then
+          if [ "$(get gate_ok)" != "True" ]; then
+            # Loop lock (tools/loop_guard.py gate): no GPU without the user's release in data/loop_state.json.
+            echo "SKIP=true" >> "$GITHUB_ENV"
+            echo "Loop lock: $(get gate)." >> "$GITHUB_STEP_SUMMARY"
+          elif [ "$(get where)" != "colab" ]; then
             echo "SKIP=true" >> "$GITHUB_ENV"
             echo "$BASE is not planned for Colab; train.yml runs it." >> "$GITHUB_STEP_SUMMARY"
           elif gh release view "$name" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then

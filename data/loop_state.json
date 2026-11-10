@@ -1,0 +1,8 @@
+{
+ "schema": 1,
+ "mode": "paused",
+ "bases": [],
+ "approved_on": null,
+ "fingerprint": "a57b97f8b630a1aa32d066554916d81aa36b89c3c46bc0e1447bd974208cf758",
+ "note": "Written by the user only. paused: no GPU run starts. one_round or weekly with bases and approved_on releases rounds (tools/loop_guard.py)."
+}
