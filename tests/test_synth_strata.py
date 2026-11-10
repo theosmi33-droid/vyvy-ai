@@ -71,3 +71,28 @@ def test_semantic_guard_drops_close_paraphrases(tmp_path: Path) -> None:
     assert record["dropped_semantic"] == 1 and record["max_cosine"] == 0.85
     assert kept[0]["stratum"] == 3 and "stratum" not in kept[1]  # unknown strata are not carried over
     assert record["per_stratum_imported"] == {"1": 0, "2": 0, "3": 1, "4": 0}
+
+
+def test_pattern_requests_reach_the_teacher() -> None:
+    import random
+
+    import patterns
+    reqs = patterns.pattern_requests(random.Random(1), 40)
+    assert len(reqs) == 40 and reqs == patterns.pattern_requests(random.Random(1), 40)
+    assert {k for k, *_ in reqs} == set(patterns.PATTERNS)
+    for key, intent, region, layer in reqs:
+        assert intent in synthesize.INTENTS and region in patterns.REGIONS and layer in (3, 4)
+        prompt = patterns.pattern_prompt(key, region, "Schreiner", 8, synthesize.INTENTS[intent])
+        assert synthesize.INTENTS[intent] in prompt and '"timeframe"' in prompt and "{" not in prompt.split("JSON")[0]
+    pair = [i for k, i, *_ in reqs if k == "own_vs_others"]
+    assert "unknown" in pair and set(pair) - {"unknown"} <= set(patterns.OWN)
+    # Priority 1 regions come up about three times as often as priority 3.
+    many = patterns.pattern_requests(random.Random(2), 3000)
+    count = lambda r: sum(x[2] == r for x in many)
+    assert count("Schwäbisch") > 2 * count("Norddeutsch/Platt")
+
+
+def test_the_lock_checks_the_pattern_examples() -> None:
+    import check_holdout_leak
+    rows = check_holdout_leak.load_prompt_examples(ROOT / "training" / "patterns.py")
+    assert len(rows) == 12 and all(":PATTERNS[" in where for where, _ in rows)

@@ -16,12 +16,13 @@ User patterns: the user may hand in abstract sentence forms (load_forms), never
 an original request; names, firms and times are placeholders the teacher fills
 with invented ones.
 
-Draft: training/synthesize.py does not read this file yet.
+training/synthesize.py adds pattern_requests() to the Qwen requests of a round (--patterns).
 """
 
 from __future__ import annotations
 
 import json
+import random
 import re
 import sys
 from pathlib import Path
@@ -124,8 +125,12 @@ PATTERNS = {
 }
 
 
-def pattern_prompt(key: str, region: str, role: str, n: int) -> str:
-    """The teacher prompt for one category, region and role."""
+def pattern_prompt(key: str, region: str, role: str, n: int, meaning: str = "") -> str:
+    """The teacher prompt for one category, region and role.
+
+    meaning: what every sentence of this request is (the intent description of the
+    synthesis); patterns with several intents get one request per intent.
+    """
     p = PATTERNS[key]
     rule = p["rule"].format(
         appointment_words=", ".join(APPOINTMENT_WORDS), others=", ".join(OTHERS),
@@ -133,10 +138,37 @@ def pattern_prompt(key: str, region: str, role: str, n: int) -> str:
         today=" oder ".join(TODAY.get(region, ["heute"])), tomorrow=" oder ".join(TOMORROW.get(region, ["morgen"])),
         other=", ".join(REGIONS.get(region, {}).get("other", [])) or "nachher", compounds=", ".join(MORNING_COMPOUNDS))
     return (f"Schreibe {n} verschiedene Sätze, die eine Person aus dem Beruf {role} zu ihrem digitalen "
-            f"Büro-Assistenten sagt, Sprachstil {region}. Regel: {rule} Beispiele für die Art (nicht wiederholen): "
-            + " | ".join(p["examples"]) + " Erfinde Namen von Personen und Firmen frei, keine echten. "
-            "Keine Nummerierung, keine Erklärung. Antworte nur mit einem JSON-Array von Objekten mit den Feldern "
-            "\"text\" und \"intent\".")
+            f"Büro-Assistenten sagt, Sprachstil {region}. Regel: {rule}"
+            + (f" Jeder Satz {meaning}." if meaning else "")
+            + " Beispiele für die Art (nicht wiederholen): " + " | ".join(p["examples"])
+            + " Erfinde Namen von Personen und Firmen frei, keine echten. Keine Nummerierung, keine Erklärung. "
+            "Antworte nur mit einem JSON-Array von Objekten mit den Feldern \"text\" (der Satz), \"timeframe\" "
+            "(\"today\", \"tomorrow\", \"week\" oder null) und \"entity\" (genannte Person oder Firma als Text, "
+            "sonst null).")
+
+
+# Own calendar against someone else's: the two halves of own_vs_others.
+OWN = ("appointments_today", "appointments_tomorrow")
+
+
+def pattern_requests(rng: random.Random, total: int) -> list[tuple[str, str, str, int]]:
+    """total requests (pattern, intent, region, stratum), the patterns in turn, regions by priority.
+
+    Patterns with several intents draw one per request; own_vs_others alternates the
+    own calendar and unknown. Dialect time words are stratum 3, the rest hard cases (4).
+    """
+    regions = [r for r, w in region_weights().items() for _ in range(w)]
+    keys = list(PATTERNS)
+    out = []
+    for k in range(total):
+        key = keys[k % len(keys)]
+        intent = PATTERNS[key]["intent"]
+        if intent == "pair":
+            intent = rng.choice(OWN) if (k // len(keys)) % 2 == 0 else "unknown"
+        elif isinstance(intent, list):
+            intent = rng.choice(intent)
+        out.append((key, intent, rng.choice(regions), 3 if key == "dialect_time" else 4))
+    return out
 
 
 # User sentence forms: abstract shapes only. Every name, firm, day, time or place is a

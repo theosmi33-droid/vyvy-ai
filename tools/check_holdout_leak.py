@@ -39,6 +39,7 @@ TRAIN_DIR = ROOT / "data" / "train"
 # The teacher prompt carries example sentences (RULES); a holdout sentence there
 # would be copied into training data in many variants, so they are checked too.
 SYNTH = ROOT / "training" / "synthesize.py"
+PATTERNS = ROOT / "training" / "patterns.py"
 
 
 def normalise(text: str) -> str:
@@ -63,14 +64,20 @@ def load_train(paths: list[Path]) -> list[tuple[str, str]]:
 
 
 def load_prompt_examples(path: Path) -> list[tuple[str, str]]:
-    """Example sentences of RULES in the synthesis script, read without importing it."""
+    """Example sentences the teacher sees, read without importing the script: RULES of the
+    synthesis, or PATTERNS of the error-category templates (training/patterns.py)."""
     tree = ast.parse(path.read_text(encoding="utf-8"))
     for node in tree.body:
-        if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == "RULES" for t in node.targets):
+        names = {t.id for t in node.targets if isinstance(t, ast.Name)} if isinstance(node, ast.Assign) else set()
+        if "RULES" in names:
             rules = ast.literal_eval(node.value)
             return [(f"{path.name}:RULES[{intent}][{i}]", text)
                     for intent, (_rule, examples) in rules.items() for i, text in enumerate(examples)]
-    raise SystemExit(f"{path}: no RULES found; the prompt examples cannot be checked")
+        if "PATTERNS" in names:
+            pats = ast.literal_eval(node.value)
+            return [(f"{path.name}:PATTERNS[{key}][{i}]", text)
+                    for key, p in pats.items() for i, text in enumerate(p["examples"])]
+    raise SystemExit(f"{path}: no RULES or PATTERNS found; the prompt examples cannot be checked")
 
 
 def find_leaks(train: list[tuple[str, str]], holdout: list[dict], threshold: float) -> list[dict]:
@@ -93,12 +100,13 @@ def main(argv: list[str] | None = None) -> int:
                    help="holdout sets to protect (default: development holdout and blind holdout)")
     p.add_argument("--threshold", type=float, default=0.85)
     p.add_argument("--prompts", type=Path, nargs="*",
-                   help="synthesis scripts whose RULES examples are checked (default: training/synthesize.py; "
+                   help="scripts whose RULES or PATTERNS examples are checked (default: training/synthesize.py and "
+                        "training/patterns.py; "
                         "with --train only when given)")
     args = p.parse_args(argv)
 
     paths = args.train if args.train else sorted(TRAIN_DIR.glob("*.jsonl"))
-    prompts = args.prompts if args.prompts is not None else ([] if args.train else [SYNTH])
+    prompts = args.prompts if args.prompts is not None else ([] if args.train else [SYNTH, PATTERNS])
     if not paths and not prompts:
         print("No training data found; nothing to check.")
         return 0
