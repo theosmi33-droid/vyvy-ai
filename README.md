@@ -235,5 +235,10 @@ repository. Each model keeps its own license (see its Hugging Face page).
 
 ## License
 
-All rights reserved, no license is granted. Use for AI training or data mining
-is prohibited. See [LICENSE](LICENSE).
+Vyvy AI is source-available, not open source in the sense of the Open Source
+Initiative. Under the PolyForm Noncommercial License 1.0.0 in LICENSE you may
+read, use, change and share the code, the data and the adapters free of charge
+for noncommercial purposes, as long as LICENSE and its `Required Notice:` lines
+go with every copy. Commercial use needs a separate written agreement with the
+copyright holder. The base models and packages keep their own licenses, and the
+copyright holder reserves text and data mining for machine learning; see NOTICE.

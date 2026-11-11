@@ -1,0 +1,24 @@
+Vyvy AI
+Copyright (c) 2026 Vyvy AI
+
+This repository is licensed under the license in LICENSE (PolyForm, see
+REQUIRED-NOTICE.txt). The following third-party works are used under their own
+licenses and are not relicensed by it:
+
+- Qwen2.5-1.5B-Instruct and Qwen2.5-7B-Instruct (Qwen team, Alibaba Cloud),
+  Apache License 2.0. Every adapter release carries the base model's license
+  text (LICENSE-base-model.txt) and a NOTICE naming the base model and the
+  modification (tools/license_files.py). Adapters contain no base model weights.
+- Qwen2.5-14B-Instruct (Apache License 2.0) and Phi-4 (Microsoft, MIT License)
+  wrote synthetic training sentences (training/synthesize.py). No model weights
+  of either are distributed.
+- Python packages, pinned in requirements.txt and training/requirements.txt:
+  llama-cpp-python 0.3.16 (MIT), huggingface_hub 0.36.2 (Apache-2.0),
+  transformers 4.57.6 (Apache-2.0), peft 0.17.1 (Apache-2.0), torch 2.4.1
+  (BSD-3-Clause), bitsandbytes 0.50.2 (MIT), numpy 1.26.4 (BSD-3-Clause),
+  sentence-transformers 5.1.2 (Apache-2.0). They are installed, not distributed.
+
+Reservation of rights for text and data mining (Article 4(3) of Directive
+(EU) 2019/790): the copyright holder reserves the use of this repository's
+content for training, fine-tuning or evaluating machine learning models. This
+reservation is a statement under copyright law, not an added license term.
