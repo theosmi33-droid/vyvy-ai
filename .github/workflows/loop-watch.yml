@@ -1,0 +1,119 @@
+name: Loop watch
+
+# Watches the improvement loop from outside its chain: an hourly schedule of its
+# own, so it also notices when Heartbeat and Collect stop (Watch cannot: runs
+# started with GITHUB_TOKEN start no workflow_run, see issue #5, and a stopped
+# chain ends no run at all). Once a week it also signs in to Kaggle and Colab and
+# writes the weekly report. Findings become issues "Loop health: <key>"
+# (tools/loop_health.py), closed again when the check passes. It starts no GPU.
+on:
+  schedule:
+    - cron: "41 * * * *"   # health
+    - cron: "5 6 * * 1"    # Monday: sign-ins and weekly report
+  workflow_dispatch:
+    inputs:
+      weekly:
+        description: Also check the sign-ins and write the weekly report
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  actions: read
+  issues: write
+
+concurrency:
+  group: loop-watch
+  cancel-in-progress: false
+
+jobs:
+  sign-ins:
+    if: github.event.schedule == '5 6 * * 1' || inputs.weekly == true
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: colab
+    outputs:
+      kaggle: ${{ steps.kaggle.outputs.result }}
+      colab: ${{ steps.colab.outputs.result }}
+    env:
+      COLAB_CLI: git+https://github.com/googlecolab/google-colab-cli@d2d97794941723ab806c0f3642416691a951ec7d
+    steps:
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Kaggle sign-in
+        id: kaggle
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+        run: |
+          pip install -q kaggle==2.2.5 six==1.17.0
+          # Only the result goes out; account details stay out of the public log.
+          if kaggle kernels list --mine --page-size 1 >/dev/null 2>&1; then r=ok; else r=fail; fi
+          echo "result=$r" >> "$GITHUB_OUTPUT"; echo "Kaggle sign-in: $r" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Colab sign-in
+        id: colab
+        env:
+          COLAB_ADC: ${{ secrets.COLAB_ADC }}
+        run: |
+          r=fail
+          if [ -n "$COLAB_ADC" ]; then
+            pip install -q uv && uv tool install -q "$COLAB_CLI"
+            umask 077
+            printf '%s' "$COLAB_ADC" > "$RUNNER_TEMP/adc.json"
+            # whoami prints the account's mail address: only its exit code is used.
+            if GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/adc.json" colab --auth adc whoami >/dev/null 2>&1; then r=ok; fi
+            rm -f "$RUNNER_TEMP/adc.json"
+          fi
+          echo "result=$r" >> "$GITHUB_OUTPUT"; echo "Colab sign-in: $r" >> "$GITHUB_STEP_SUMMARY"
+
+  health:
+    needs: sign-ins
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      KAGGLE: ${{ needs.sign-ins.outputs.kaggle }}
+      COLAB: ${{ needs.sign-ins.outputs.colab }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0  # loop_health reads when data/loop_state.json last changed
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Check and open or close issues
+        run: |
+          set -euo pipefail
+          args=()
+          [ -n "$KAGGLE" ] && args+=(--kaggle "$KAGGLE")
+          [ -n "$COLAB" ] && args+=(--colab "$COLAB")
+          python tools/loop_health.py --repo "$GITHUB_REPOSITORY" "${args[@]}" >> "$GITHUB_STEP_SUMMARY"
+
+  report:
+    needs: health
+    if: always() && (github.event.schedule == '5 6 * * 1' || inputs.weekly == true)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Weekly report issue
+        run: |
+          set -euo pipefail
+          pip install -q kaggle==2.2.5 six==1.17.0
+          quota=$(python tools/quota_guard.py --repo "$GITHUB_REPOSITORY" 2>/dev/null | grep -m1 "Kaggle GPU" || true)
+          python tools/weekly_report.py --repo "$GITHUB_REPOSITORY" --quota "$quota" >> "$GITHUB_STEP_SUMMARY"

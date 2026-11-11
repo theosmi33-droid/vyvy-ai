@@ -7,10 +7,13 @@ name: Watch
 # When the same workflow later succeeds, its open failure issues are closed.
 # A rejected adapter (bench-lora's deliberate failure) gets the title "Adapter
 # rejected: …" instead and stays open. Kaggle kernel failures are reported by
-# Collect ("Kaggle training failed: …").
+# Collect ("Kaggle training failed: …"), Colab training failures by Train on
+# Colab itself; Watch adds the failed run. Runs started with GITHUB_TOKEN start no
+# workflow_run (issue #5): loop-watch.yml covers those by its own schedule.
 on:
   workflow_run:
-    workflows: [Bench LoRA, Train, Synthesize, Collect, Data check, Bench Mac, Benchmark, Compare, Heartbeat, Mirror]
+    workflows: [Bench LoRA, Train, Train on Colab, Synthesize, Collect, Data check, Bench Mac, Benchmark, Compare,
+                Heartbeat, Mirror, Loop watch]
     types: [completed]
 
 permissions:

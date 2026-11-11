@@ -212,3 +212,30 @@ def test_gate_in_weekly_mode_counts_only_decisions_since_the_release() -> None:
 def test_plan_train_runs_small_first() -> None:
     import plan_train
     assert plan_train.ORDER[0] == "Qwen/Qwen2.5-1.5B-Instruct"
+
+
+def test_sealed_folder_stays_private_and_only_fingerprints_are_recorded(tmp_path: Path) -> None:
+    import stat
+
+    import sealed_gen
+    folder = tmp_path / "sealed"
+    sealed_gen.init(folder)
+    seed = (folder / "seed.txt").read_text().strip()
+    assert len(seed) >= sealed_gen.MIN_SEED and stat.S_IMODE((folder / "seed.txt").stat().st_mode) == 0o600
+    sealed_gen.init(folder)
+    assert (folder / "seed.txt").read_text().strip() == seed  # never overwritten
+    try:
+        sealed_gen.init(ROOT / "tmp-sealed")
+        raise AssertionError("a private folder inside the repository must be refused")
+    except SystemExit:
+        assert not (ROOT / "tmp-sealed").exists()
+    items = [{"id": "sealed-0001", "text": "x", "expected": "unknown", "frame": 1}]
+    entry = sealed_gen.fingerprint("v9", b"grammar", items)
+    assert entry["frames"] == 1 and "x" not in json.dumps(entry)
+    rec = tmp_path / "sealed_sets.json"
+    sealed_gen.record(entry, rec)
+    try:
+        sealed_gen.record(entry, rec)
+        raise AssertionError("a version is recorded once")
+    except SystemExit:
+        assert len(json.loads(rec.read_text())) == 1

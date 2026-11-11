@@ -142,19 +142,28 @@ def propose(runs: list[dict]) -> dict:
     }
 
 
-def markdown(runs: list[dict], plan: dict) -> str:
-    out = ["## Improvement report", "",
-           "| Adapter | Baseline | right | b | c | p | wrong actions on unknown | action instead of another (baseline) |",
+def table(runs: list[dict]) -> list[str]:
+    """One line per run: right, b, c, p, wrong actions (also used by tools/weekly_report.py)."""
+    out = ["| Adapter | Baseline | right | b | c | p | wrong actions on unknown | action instead of another (baseline) |",
            "|---|---|---|---|---|---|---|---|"]
     for r in runs:
         out.append(f"| {r['adapter']} | {r['baseline']} | {r['adapter_correct']}/{r['n']} | {r['b_fixed']} | "
                    f"{r['c_broken']} | {r['p_value']:.4f} | {r['false_actions']} | {r['wrong_actions']} "
                    f"({r['base_wrong_actions']}{'' if r['wrong_actions_not_up'] else ', more'}) |")
-    out += ["", "### Wrong answers by kind", "", "| Kind | " + " | ".join(r["adapter"] or "?" for r in runs) + " |",
-            "|---|" + "---|" * len(runs)]
+    return out
+
+
+def kinds_table(runs: list[dict]) -> list[str]:
+    out = ["| Kind | " + " | ".join(r["adapter"] or "?" for r in runs) + " |", "|---|" + "---|" * len(runs)]
     for k, label in KINDS.items():
         if any(r["kinds"].get(k) for r in runs):
             out.append(f"| {label} | " + " | ".join(str(r["kinds"].get(k, 0)) for r in runs) + " |")
+    return out
+
+
+def markdown(runs: list[dict], plan: dict) -> str:
+    out = ["## Improvement report", ""] + table(runs)
+    out += ["", "### Wrong answers by kind", ""] + kinds_table(runs)
     for r in runs:
         out += ["", f"### {r['adapter']} against {r['baseline']}", "",
                 "b: " + (", ".join(f"{x['id']} ({x['expected']})" for x in r["fixed"]) or "none"),

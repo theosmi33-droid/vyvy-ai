@@ -39,6 +39,10 @@ import sys
 import time
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import patterns  # noqa: E402
+
 TEACHER = "Qwen/Qwen2.5-14B-Instruct"
 REVISION = "cf98f3b3bbb457ad9e2bb7baf9a0125b6b88caa8"
 SECOND = "microsoft/phi-4"  # MIT
@@ -263,6 +267,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--round", default="", help="synthesis round, e.g. 2026-W45; also sets the seed")
     p.add_argument("--no-phi", action="store_true", help="Qwen only")
     p.add_argument("--limit", type=int, default=0, help="only this many requests per teacher (smoke test)")
+    p.add_argument("--patterns", type=int, default=40,
+                   help="Qwen requests from the error-category templates in training/patterns.py (0 = none)")
     args = p.parse_args(argv)
 
     import torch
@@ -283,6 +289,11 @@ def main(argv: list[str] | None = None) -> int:
                      for _ in range(args.rounds * (2 if intent in WEAK else 1))]
     qwen_requests += [request(intent, style, near)
                       for intent, near in NEAR for style in rng.sample(STYLES, args.near_styles)]
+    # Error categories of rejected adapters (training/patterns.py): other people's calendars,
+    # everyday questions and small talk with a time word, regional time words, "Morgen".
+    qwen_requests += [(intent, None, patterns.pattern_prompt(key, region, rng.choice(ROLES), args.per_request,
+                                                             INTENTS[intent]), layer)
+                      for key, intent, region, layer in patterns.pattern_requests(rng, args.patterns)]
     # Phi-4 only writes the hard cases: near misses and "unknown" in every style.
     phi_requests = [request(intent, style, near)
                     for intent, near in NEAR for style in rng.sample(STYLES, args.near_styles)]
