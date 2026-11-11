@@ -34,7 +34,8 @@ HOLDOUT = ROOT / "data" / "holdout_benchmarks.json"
 BLIND = ROOT / "data" / "holdout_blind_v1.json"
 BLIND_V2 = ROOT / "data" / "holdout_blind_v2.json"
 BLIND_V3 = ROOT / "data" / "holdout_blind_v3.json"
-HOLDOUTS = [HOLDOUT, BLIND, BLIND_V2, BLIND_V3]
+BLIND_V4 = ROOT / "data" / "holdout_blind_v4.json"
+HOLDOUTS = [HOLDOUT, BLIND, BLIND_V2, BLIND_V3, BLIND_V4]
 TRAIN_DIR = ROOT / "data" / "train"
 # The teacher prompt carries example sentences (RULES); a holdout sentence there
 # would be copied into training data in many variants, so they are checked too.

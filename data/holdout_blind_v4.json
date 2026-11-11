@@ -1,0 +1,1626 @@
+{
+ "name": "German office intent blind holdout v4",
+ "description": "270 synthetic German questions, 30 per intent, written on 11.11.2026 by four independent agents that knew only the intent definitions and no code, prompt, training data, holdout or error (Bavarian, Austrian and Franconian with dictation; Swabian, Alemannic and Swiss German, terse; Cologne/Rhineland, Hessian, Palatine and Saarland, long sentences with reasons; Berlin, Saxon, Low German and German as a second language with typos). Sentences at 0.8 or more similarity to any training, holdout, probe, template or sealed sentence and near duplicates were removed; a fifth agent assigned every sentence blind, and only sentences with the same intent and no ambiguity were kept. No real persons, companies or customer data.",
+ "items": [
+  {
+   "id": "blind4-001",
+   "set": "suedwest",
+   "text": "Verschieb mei Bsprechig uf Dunschtig",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-002",
+   "set": "suedwest",
+   "text": "Gang mol mini ungelesene Mails durch",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-003",
+   "set": "nord-ost",
+   "text": "wieviel ungelesen email ich habe?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-004",
+   "set": "sued-ost",
+   "text": "Hob i heit am Nachmittag no wos ausgmacht im Kalender?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-005",
+   "set": "suedwest",
+   "text": "Was isch abgloffe un no nit erledigt uf minere Lischt?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-006",
+   "set": "nord-ost",
+   "text": "guten morgen, mach mir bitte mein tagesbriefing für heute mit kalender, todos und posteingang",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-007",
+   "set": "nord-ost",
+   "text": "kannst du schaun ob ich aufgaben hab wo das fälligkeitsdatum schon vorbei war",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-008",
+   "set": "west",
+   "text": "Bevor isch in de Urlaub fahr, wüsst isch jern, wat för Aufjabe bei mir noch all offe sin.",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-009",
+   "set": "nord-ost",
+   "text": "Mach mer ma'n Dermin am Freidach um zehne mit Frau Pietzschmann",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-010",
+   "set": "suedwest",
+   "text": "Morn – Kalender?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-011",
+   "set": "west",
+   "text": "Ach, un apropos Mittagspaus: Wat han isch hück noch för Termine?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-012",
+   "set": "west",
+   "text": "Trach mer för morje öm drei ne Termin met dem Häbbel vun dr Firma Klüngelbau en.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-013",
+   "set": "nord-ost",
+   "text": "welche termin ich habe morgen in kalender",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-014",
+   "set": "west",
+   "text": "Wat es noch unerledich bei mir, egal ob fällich oder nit?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-015",
+   "set": "suedwest",
+   "text": "Hab i heit no ebbes im Kalender?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-016",
+   "set": "nord-ost",
+   "text": "Gibbs heude bei mir noch ä Meeding odor bin isch frei?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-017",
+   "set": "sued-ost",
+   "text": "Gibts Aufgabn bei mir, de scho überfällig san",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-018",
+   "set": "west",
+   "text": "Kannsche mer fer nächscht Woch Mondaach ä Termin in de Kalenner mache, Besprechung mit Saumagen-Logistik?",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-019",
+   "set": "west",
+   "text": "Wie sieht mein Daach heit aus mit allem drum un dran, Termine, Uffgawe, Mails?",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-020",
+   "set": "sued-ost",
+   "text": "i bin grad im auto unterwegs les ma bitte vor welche termine i heit no hab",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-021",
+   "set": "suedwest",
+   "text": "Mach mr e Zämmefassig vo mim Tag hüt, mit allem drum und dra",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-022",
+   "set": "suedwest",
+   "text": "Zeig mr d'Aufgaba, wo scho z'spät sin",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-023",
+   "set": "west",
+   "text": "Wat han isch alles verschwitz, wo de Frist at röm es?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-024",
+   "set": "west",
+   "text": "Lösch mer de Termin vun morsche.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-025",
+   "set": "sued-ost",
+   "text": "lies ma meine offenen aufgabn vor i bin grad beim kochn",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-026",
+   "set": "nord-ost",
+   "text": "Trach ma 'n Termin ein: Donnerstag 14 Uhr Zahnarzt",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-027",
+   "set": "nord-ost",
+   "text": "Moin! Wat is hüüt allens los? Termine, Opgaven un Mails",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-028",
+   "set": "west",
+   "text": "Gibt's ungelesene Mails, oder kann isch des Postfach zumache?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-029",
+   "set": "sued-ost",
+   "text": "Was muss i no alles machn, egal wann des fällig is",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-030",
+   "set": "suedwest",
+   "text": "Nimm uff mei Lischt: Rückruf bei der Frau Gössele",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-031",
+   "set": "suedwest",
+   "text": "Termin aalege – Samschtig 9 Uhr Coiffeur",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-032",
+   "set": "west",
+   "text": "Han isch morje noch dä Termin met dä Frau Kuckelkorn oder wor dat övvermorje? Zeich ens ming Termine för morje.",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-033",
+   "set": "west",
+   "text": "Is uff de A6 bei Kaiserslautern grad Stau?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-034",
+   "set": "suedwest",
+   "text": "Hab i no ebbes auf meiner Aufgabelischt stande?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-035",
+   "set": "suedwest",
+   "text": "Termine heit, bittschee",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-036",
+   "set": "west",
+   "text": "Kannsche mer ä To-do aanleje: Präsentation fertisch mache bis Freitach.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-037",
+   "set": "nord-ost",
+   "text": "Isch brauch'n Dermin, Mittwoch halb drei, Abschbrache mit Ronny Gätzschmann",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-038",
+   "set": "suedwest",
+   "text": "Isch bi mir e Ufgab überfällig?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-039",
+   "set": "suedwest",
+   "text": "Sag mr schnell, was hüt bi mir alles a Termin aasteht",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-040",
+   "set": "suedwest",
+   "text": "Bin i hüt am Nomittag no verplant im Kalender?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-041",
+   "set": "sued-ost",
+   "text": "Merk da als Aufgab, dass i an Herrn Pichler zruckruafa muass",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-042",
+   "set": "nord-ost",
+   "text": "Giff mi mal allens för hüüt",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-043",
+   "set": "nord-ost",
+   "text": "Wat för Termine sünd morgen för mi?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-044",
+   "set": "nord-ost",
+   "text": "Notier ma als Aufjabe: Frau Kowalczyk zurückrufen",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-045",
+   "set": "suedwest",
+   "text": "Zeig mr mei To-do-Lischt",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-046",
+   "set": "west",
+   "text": "Trag mer bitte en Termin ein, übermorsche halb elf, Kundegespräch.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-047",
+   "set": "sued-ost",
+   "text": "to-do neu vertrag vo da bäckerei hollerbach durchlesn",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-048",
+   "set": "west",
+   "text": "Mach mer mol en Termin am Donnerschdach um zeh mit de Frau Schnorrenberger.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-049",
+   "set": "nord-ost",
+   "text": "Ham mer heude noch irschendwelche Dermine, sach ma",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-050",
+   "set": "nord-ost",
+   "text": "Wie wird'n's Wedder morschen in Dräsdn?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-051",
+   "set": "nord-ost",
+   "text": "Welche Aufjaben sind bei mir noch nich erledigt?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-052",
+   "set": "west",
+   "text": "Was is noch net abgehakt bei mer?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-053",
+   "set": "sued-ost",
+   "text": "Blockier ma am Freitag vo neun bis elf im Kalender fia d'Inventur",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-054",
+   "set": "nord-ost",
+   "text": "Kriegst du dat hen, dat du mi för övermorgen 16 Uhr en Termin inträggst? Drapen mit Fokko Janssen",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-055",
+   "set": "suedwest",
+   "text": "Wo bin i hinterher mit mine To-dos, wo d'Frischt scho vorbei isch?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-056",
+   "set": "sued-ost",
+   "text": "Kurze Frog, weil i ma's nimma merk: um wiavui Uhr war heit nomoi mei Besprechung?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-057",
+   "set": "west",
+   "text": "Wat för Aufjabe sin bei mir över de Zick?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-058",
+   "set": "west",
+   "text": "Wievill neue Mails sinn reikumme, die wo isch noch net gelese hab?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-059",
+   "set": "sued-ost",
+   "text": "termine fia heit",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-060",
+   "set": "west",
+   "text": "Muss isch morje en dr Firma sin oder han isch nix em Kalender?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-061",
+   "set": "west",
+   "text": "Liste vun alle Aufgabe, wo die Fälligkeit at verstriche es, bitte.",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-062",
+   "set": "sued-ost",
+   "text": "Bei welche Aufgabn bin i scho im Verzug?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-063",
+   "set": "nord-ost",
+   "text": "Hab'sch Uffgaben, wo de Frist schon abjeloofen is?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-064",
+   "set": "suedwest",
+   "text": "Was hät de Herr Meier hüt für Termin?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-065",
+   "set": "suedwest",
+   "text": "Wann het de Volg am Samschtig offe?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-066",
+   "set": "suedwest",
+   "text": "Kasch mr bitte für nägschte Mäntig e Termin aalege?",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-067",
+   "set": "sued-ost",
+   "text": "ungelesne mails vorlesn bitte i hab grad koa zeit zum schaun",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-068",
+   "set": "suedwest",
+   "text": "Lösch mr de Termin vo morn mit em Brändli",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-069",
+   "set": "suedwest",
+   "text": "Kasch mr e Ufgab aalege, Druckerpatrone bstelle?",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-070",
+   "set": "sued-ost",
+   "text": "Wos hob i no ois zum Erledign? I wui am Freitag mit am guadn Gwissn ins Wochenend",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-071",
+   "set": "sued-ost",
+   "text": "Hob i a Aufgab verschwitzt, wo d'Frist scho rum is?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-072",
+   "set": "west",
+   "text": "neue aufgabe toner bestelle",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-073",
+   "set": "suedwest",
+   "text": "Zeig mr mini Termin vo morn",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-074",
+   "set": "suedwest",
+   "text": "Gang mol mini Termin für morge dure",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-075",
+   "set": "sued-ost",
+   "text": "I brauch an Kalendereintrag fia Dienstag Nachmittag, Steuerberater Gruber",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-076",
+   "set": "suedwest",
+   "text": "Isch Stau uf de A81?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-077",
+   "set": "west",
+   "text": "morsche frieh was los bei mer? wesche Kinnergaade",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-078",
+   "set": "west",
+   "text": "Han isch noch unjelesene Mails?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-079",
+   "set": "suedwest",
+   "text": "I bräucht en Kalendereintrag für Zischtig, 11 Uhr, Projektbesprechung",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-080",
+   "set": "west",
+   "text": "Wie spät is mei nächster Termin heut, un isch des der mit dem Stoppelkamp?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-081",
+   "set": "sued-ost",
+   "text": "Wia vui Termine hob i des ganze Jahr ghabt",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-082",
+   "set": "nord-ost",
+   "text": "Zeig mir alle Termine vom janzen Jahr",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-083",
+   "set": "nord-ost",
+   "text": "Moin, heff ik hüüt noch Termine?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-084",
+   "set": "sued-ost",
+   "text": "Wos is in meim Posteingang no ned gelesn? I wui des schnell durchgeh vorm Feierabend",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-085",
+   "set": "suedwest",
+   "text": "Was han i no für Ufgabe offe?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-086",
+   "set": "nord-ost",
+   "text": "Heff ik morgen Termine in mien Kalenner?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-087",
+   "set": "suedwest",
+   "text": "Brief mi für hüt, Termin, Ufgabe und Poscht",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-088",
+   "set": "sued-ost",
+   "text": "Schick a Mail an d'Frau Lechner",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-089",
+   "set": "suedwest",
+   "text": "To-dos, offe",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-090",
+   "set": "sued-ost",
+   "text": "Welche Aufgabn san bei mia scho über da Frist drüber?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-091",
+   "set": "west",
+   "text": "Schriev op ming Liss: Rechnung för de Firma Ströppche schrieve.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-092",
+   "set": "sued-ost",
+   "text": "termin eintragn mittwoch neun uhr friseur",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-093",
+   "set": "nord-ost",
+   "text": "Wie geiht di dat, mien Jung?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-094",
+   "set": "sued-ost",
+   "text": "welche todos sin bei mir scho abglaufn",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-095",
+   "set": "suedwest",
+   "text": "Ufgab erfasse: Präsentation bis Fritig vorbereite",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-096",
+   "set": "nord-ost",
+   "text": "wann hat die post heute offen?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-097",
+   "set": "nord-ost",
+   "text": "Wann muss ick heute überall hin? Kalenda von heut bitte",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-098",
+   "set": "nord-ost",
+   "text": "bitte zeigen meine termin für heute",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-099",
+   "set": "west",
+   "text": "Lies mer mol die Betreffzeile vun de ungeleesene Mails vor.",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-100",
+   "set": "suedwest",
+   "text": "Merk mr als Aufgab: Vertrag mit Schmid & Söhne aaluege",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-101",
+   "set": "nord-ost",
+   "text": "Sett mi en Termin in'n Kalenner, Maandag Klock negen, Bespreken mit Hinnerk Wöbbe",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-102",
+   "set": "nord-ost",
+   "text": "Mach mer ma 'ne Uffgabe: Angebot fier Lehmann & Söhne fertsch machen",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-103",
+   "set": "west",
+   "text": "Hück: Termine? Kurz bitte.",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-104",
+   "set": "sued-ost",
+   "text": "Wos is bei mir an Aufgabn scho z'spät dran",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-105",
+   "set": "nord-ost",
+   "text": "kannst du mir sagen was ich heut noch für termiene hab, bevor ich feierabend mach",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-106",
+   "set": "west",
+   "text": "Isch muss wisse, ob isch heit mittag ä Termin hab, weil isch sunscht schnell zum Dokter geh.",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-107",
+   "set": "west",
+   "text": "Un, wie geht's dir dann so?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-108",
+   "set": "sued-ost",
+   "text": "Is Stau aufm Mittleren Ring?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-109",
+   "set": "sued-ost",
+   "text": "Zeig ma de Aufgabn, de i scho längst hätt erledign solln",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-110",
+   "set": "sued-ost",
+   "text": "Bevor i an Handwerker fia morgn bstell: hob i morgn vormittag selber scho an Termin?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-111",
+   "set": "suedwest",
+   "text": "Isch e neis Mail kumme, wo i no net agluegt hab?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-112",
+   "set": "suedwest",
+   "text": "Wieviel Mails sin no ungleese?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-113",
+   "set": "west",
+   "text": "Schick die Mail an die Frau Weckmann vun Saarstahlbau ab.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-114",
+   "set": "suedwest",
+   "text": "Kannsch mir hit um vieri no en Termin mit em Häberle neidua?",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-115",
+   "set": "nord-ost",
+   "text": "Do mi dat op de Todo-List: Slötel för't Kontor afhalen",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-116",
+   "set": "suedwest",
+   "text": "Termin morga, bitte",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-117",
+   "set": "nord-ost",
+   "text": "Heff ik E-Mails kregen, de ik noch nich leest heff?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-118",
+   "set": "sued-ost",
+   "text": "Schreib ma in mein Kalender: morgn um achte Telefonat mit da Firma Holzapfel",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-119",
+   "set": "west",
+   "text": "termine heut bitte, aber flott",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-120",
+   "set": "suedwest",
+   "text": "Neui Ufgab: Steuererklärig abgeh",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-121",
+   "set": "sued-ost",
+   "text": "Mei Kollegin will, dass i ihr helf, aber zerscht: wia vui offene To-dos hob i selber no?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-122",
+   "set": "sued-ost",
+   "text": "I muass no de Folien fia de Schulung machn, schreib ma des als Aufgab auf",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-123",
+   "set": "west",
+   "text": "Is mei Kalenner heit voll oder geht's?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-124",
+   "set": "west",
+   "text": "Weil isch des sonst widder vergess, nimm mer bitte als Uffgab uff, dass isch die Frau Klappergass zurückruf.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-125",
+   "set": "sued-ost",
+   "text": "bevor i ma neie sachn aufhals wos hob i eigentlich no alles an aufgabn offn",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-126",
+   "set": "suedwest",
+   "text": "Was muass i no alles schaffa, Ufgaba-mäßig?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-127",
+   "set": "west",
+   "text": "Ming To-dos, wat es noch op?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-128",
+   "set": "sued-ost",
+   "text": "wos hob i scho überfällig",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-129",
+   "set": "nord-ost",
+   "text": "mein termine morgen bitte sagen",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-130",
+   "set": "suedwest",
+   "text": "Leg mr en Termin a: Mittwoch halber drei, Bsprechig mit der Frau Schäufele",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-131",
+   "set": "sued-ost",
+   "text": "I hob des Gfühl i vergiss wos, wos steht no alles offn auf meina Aufgabnlistn?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-132",
+   "set": "sued-ost",
+   "text": "neier termin nächstn montag teammeeting zehn uhr",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-133",
+   "set": "sued-ost",
+   "text": "Gibts Mails, die i no ned gelesn hab",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-134",
+   "set": "sued-ost",
+   "text": "Hob i heit überhaupt an Termin, oder kann i mi in Ruah ins Büro hocka?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-135",
+   "set": "nord-ost",
+   "text": "Welche Aufjaben hab ick verpennt, wo die Frist schon rum is?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-136",
+   "set": "sued-ost",
+   "text": "meine todos",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-137",
+   "set": "west",
+   "text": "Wat litt hück alles aan, Termine, Aufjabe un Mails?",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-138",
+   "set": "west",
+   "text": "Mei To-do-Lischt, bitte, alles was noch net fertisch is.",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-139",
+   "set": "west",
+   "text": "Post do? Ungelesen mein isch.",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-140",
+   "set": "nord-ost",
+   "text": "meine aufgaben mit frist vorbei, welche?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-141",
+   "set": "sued-ost",
+   "text": "mei handy hat brummt is a neie mail kemma de i no ned glesn hob",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-142",
+   "set": "nord-ost",
+   "text": "Wat is bi mi al över de Tied? Opgaven, de to laat sünd",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-143",
+   "set": "suedwest",
+   "text": "Gib mr de ganz Überblick für heit, alles mitenand",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-144",
+   "set": "nord-ost",
+   "text": "hat mir wer geschriebn? also mails die noch ungeleseen sind",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-145",
+   "set": "sued-ost",
+   "text": "Hob i no wos zum Abarbeitn auf da Listn?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-146",
+   "set": "west",
+   "text": "Wat hät dr Chef, dr Herr Büggel, hück för Termine?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-147",
+   "set": "nord-ost",
+   "text": "Sett op mien Opgaven: Druckerpapier bestellen",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-148",
+   "set": "west",
+   "text": "Hann isch morje middaachs ebbes, wo isch net ins Kantine kann?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-149",
+   "set": "west",
+   "text": "Neuer Termin: Dienstag 9 Uhr Team-Runde.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-150",
+   "set": "sued-ost",
+   "text": "Kannst ma vorlesn, wos i morgn alles fia Besprechungen hab, dann kann i mi heit Abend no vorbereitn",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-151",
+   "set": "west",
+   "text": "Trach ens en Aufjab en: Foto för de Firmezeidung ussöke.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-152",
+   "set": "sued-ost",
+   "text": "Moagn is ja scho Donnerstag, oder? Egal, wos steht morgn bei mir im Kalender",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-153",
+   "set": "nord-ost",
+   "text": "welche aufgabe ist schon zu spät bei mir",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-154",
+   "set": "west",
+   "text": "Wann hat de Baumarkt Hornbecker heit uff?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-155",
+   "set": "nord-ost",
+   "text": "Gugge ma, was ich morchen so für Dermine hab",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-156",
+   "set": "west",
+   "text": "Weil der Zuch morje streikt, will isch wisse, ob isch morje frieh scho Termine hab.",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-157",
+   "set": "suedwest",
+   "text": "Aufgaba überfällig",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-158",
+   "set": "west",
+   "text": "Mei Tag heut im Gesamtüberblick, bitte, mit allem.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-159",
+   "set": "nord-ost",
+   "text": "Hat der Kalle Bräsig morjen Zeit für'n Meeting?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-160",
+   "set": "sued-ost",
+   "text": "Zeig ma mein Kalender fia moang",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-161",
+   "set": "suedwest",
+   "text": "Hüt Termin?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-162",
+   "set": "nord-ost",
+   "text": "Is in mei'm Bosdfach was Neues, was isch noch nich offjemacht hab?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-163",
+   "set": "sued-ost",
+   "text": "Ois fia heit auf oan Blick bitte",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-164",
+   "set": "suedwest",
+   "text": "Mails – no nit gläse?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-165",
+   "set": "west",
+   "text": "Was hatt isch geschdern fer Termine?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-166",
+   "set": "suedwest",
+   "text": "Schick em Kollege Hug e Mail, dass i z'spät kumm",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-167",
+   "set": "sued-ost",
+   "text": "Is morgn bei mir wos im Kalender eitrogn?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-168",
+   "set": "suedwest",
+   "text": "Wie goht's dir eigentlich so?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-169",
+   "set": "sued-ost",
+   "text": "Wos hob i heit ois, Termine und Aufgabn",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-170",
+   "set": "sued-ost",
+   "text": "Hab i morgen früh scho an Termin?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-171",
+   "set": "sued-ost",
+   "text": "Was is heit alles los bei mir, Kalender und To-dos und Post",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-172",
+   "set": "nord-ost",
+   "text": "kansst du meine aufgabenlist zeigen, alles was noch offen is",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-173",
+   "set": "suedwest",
+   "text": "Hüt: Kalender + Ufgabe + Mails",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-174",
+   "set": "west",
+   "text": "Weil mei Chef, de Herr Kribbelmann, gleich frescht, will isch wisse, welsche Aufgabe vun mir schon verspätet sinn.",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-175",
+   "set": "sued-ost",
+   "text": "Setz ma bitte a neie Aufgab, Ordner im Archiv sortiern",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-176",
+   "set": "sued-ost",
+   "text": "wann hod da baumarkt obermüller offn",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-177",
+   "set": "sued-ost",
+   "text": "Aufgabe dazua: Präsentation fertig machn bis Freitag",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-178",
+   "set": "sued-ost",
+   "text": "Kannst ma bitte auf mei To-do-Listn setzn, dass i d'Reisekostn abrechn",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-179",
+   "set": "nord-ost",
+   "text": "Gibbs ungelesne E-Mails bei mir?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-180",
+   "set": "west",
+   "text": "Weil isch die Rechnung vun de Firma Fleischwurscht Kremer noch net bezahlt hab, überweis die mol glei.",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-181",
+   "set": "suedwest",
+   "text": "Was stoht hüt alles a? Termin, Ufgabe, Mails",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-182",
+   "set": "nord-ost",
+   "text": "Gib mor ma ne Zusammfassung vom Dach: Dermine, Uffgaben un Bost",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-183",
+   "set": "suedwest",
+   "text": "Mach mr en Termin am Fritig um zehni, Zahnarzt",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-184",
+   "set": "west",
+   "text": "Meine Termine von heut, uff de Reih, gell?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-185",
+   "set": "west",
+   "text": "Pack mer ne Termin för hück Nommedaach öm fünf en dr Kalender, Fotograf.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-186",
+   "set": "west",
+   "text": "Weil isch grad eesch ins Büro kumm, fass mer mol alles zesamme, wat hück för misch aansteiht: Kalender, To-dos un Post.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-187",
+   "set": "nord-ost",
+   "text": "kannst du zu meine todo liste schreiben vertrag lesen",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-188",
+   "set": "nord-ost",
+   "text": "bitte schicken email an chef das ich krank bin",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-189",
+   "set": "sued-ost",
+   "text": "Is a Post im Postfach fia mi kemma, de i no ned glesn hob?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-190",
+   "set": "sued-ost",
+   "text": "servus wos erwart mi heit ois so termine aufgabn mails",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-191",
+   "set": "west",
+   "text": "Nemm des als Uffgab uff mei Lischt: Urlaubsantrag stelle.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-192",
+   "set": "suedwest",
+   "text": "Gits To-dos, wo d'Frist scho rum isch?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-193",
+   "set": "sued-ost",
+   "text": "Hab i heid an Termin?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-194",
+   "set": "west",
+   "text": "Sinn do Uffgawe, wo die Frischt abgeloff is?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-195",
+   "set": "west",
+   "text": "Lesch mer en Termin an, 20. November, Mittagesse mit de Lyoner-Werke.",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-196",
+   "set": "suedwest",
+   "text": "Muess i morn scho am achti irgendwo si, laut mim Kalender?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-197",
+   "set": "nord-ost",
+   "text": "Was is'n bei mir an Uffgaben schon überfällsch?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-198",
+   "set": "nord-ost",
+   "text": "Was steht'n heude alles an? Alles zusamm bidde",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-199",
+   "set": "nord-ost",
+   "text": "Wat hab ick heute allet uff'm Zettel? Allet, nich nur Termine",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-200",
+   "set": "west",
+   "text": "Wann muss isch morsche spätestens im Büro sinn, also wann is mei erschter Termin?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-201",
+   "set": "nord-ost",
+   "text": "neue todo: urlausantrag stellen bis ende monat",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-202",
+   "set": "suedwest",
+   "text": "Tagesübersicht für hüt: Kalender, To-dos un Mails",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-203",
+   "set": "nord-ost",
+   "text": "Was hab'sch noch alles uff meiner Uffgabnliste offn?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-204",
+   "set": "nord-ost",
+   "text": "Jib ma den janzen Überblick für heute: Termine, Aufjaben, Mails",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-205",
+   "set": "sued-ost",
+   "text": "Briefing fia heit bitte, ois zamm",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-206",
+   "set": "sued-ost",
+   "text": "Fass ma zamm wos heit ansteht, Kalender, To-dos und Mails",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-207",
+   "set": "sued-ost",
+   "text": "Is auf meina Listn no irgendwos ned abghakt? Wurscht ob des heit oder nächste Woch fällig is",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-208",
+   "set": "suedwest",
+   "text": "Was han i geschter für Termin gha?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-209",
+   "set": "sued-ost",
+   "text": "Mach an Termin fia übermorgn um drei, Zahnarzt",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-210",
+   "set": "nord-ost",
+   "text": "Muss ick morjen früh schon irjendwo sein? Zeig ma die Termine",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-211",
+   "set": "nord-ost",
+   "text": "Wat för Opgaven heff ik nich to rechten Tied maakt? Wat is överfällig?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-212",
+   "set": "sued-ost",
+   "text": "hob i moagn nachmittag no a besprechung",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-213",
+   "set": "suedwest",
+   "text": "Isch bi mir morge früeh scho ebbis iitreit?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-214",
+   "set": "west",
+   "text": "Nach'm Urlaub: was is an Mails noch ungelese, bevor isch mich do durchwurschtel?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-215",
+   "set": "west",
+   "text": "Hann ich noch Uffgawe, die wo net erledischt sinn?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-216",
+   "set": "suedwest",
+   "text": "Schreib mr als Ufgab uf, dass i de Bericht für de Herr Rüegg fertig mache muess",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-217",
+   "set": "west",
+   "text": "Gebbt's Aufgabe, die wo isch verbummelt hab und die scho fällisch warn?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-218",
+   "set": "sued-ost",
+   "text": "Wos hot da Herr Wimmer heit fia Termine",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-219",
+   "set": "sued-ost",
+   "text": "Wos hob i gestern fia Termine ghabt",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-220",
+   "set": "sued-ost",
+   "text": "Sag amoi, is morgn mei Kalender voll oder hob i a Lückn zum Durchschnaufn?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-221",
+   "set": "nord-ost",
+   "text": "Wat mutt ik noch allens maken? Mien Opgaven",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-222",
+   "set": "sued-ost",
+   "text": "Mach ma mei komplette Tagesagenda fia heit",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-223",
+   "set": "sued-ost",
+   "text": "Leg ma an Termin an: Freitag 14 Uhr Besprechung Projekt Sonnhof",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-224",
+   "set": "west",
+   "text": "Gebbt's noch Sache uff meiner Lischt, wo isch mache muss?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-225",
+   "set": "nord-ost",
+   "text": "Kannste ma 'n Meetin mit der Firma Kühnelt Bau für nächsten Dienstach in meen Kalender packen?",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-226",
+   "set": "west",
+   "text": "Hab isch heut net noch irgendwas mit de Firma Schmuckelbach am Nachmittag? Zeisch mer ma mei Termine fer heut.",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-227",
+   "set": "nord-ost",
+   "text": "Is de Autobahn na Bremen hüüt dicht?",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-228",
+   "set": "sued-ost",
+   "text": "wos is no ungelesn im posteingang",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-229",
+   "set": "suedwest",
+   "text": "Gib mr mol e Übersicht über mini pendente Ufgabe",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-230",
+   "set": "sued-ost",
+   "text": "Trog ma an Termin ein am Donnerstag um zehne mit da Frau Huber vom Autohaus Brandlmeier",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-231",
+   "set": "sued-ost",
+   "text": "I war drei Tog krank, wia vui ungelesene Mails hob i jetzt im Postfach?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-232",
+   "set": "west",
+   "text": "Was lieht noch so rum bei mer, was isch mache muss?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-233",
+   "set": "nord-ost",
+   "text": "Bevor ick jetz los mach: wie sieht mein Kalender für morjen aus?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-234",
+   "set": "west",
+   "text": "Sach ens alles för hück.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-235",
+   "set": "west",
+   "text": "Was is heut so los bei mer: Termine, Uffgabe, Mails, des ganze Paket?",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-236",
+   "set": "sued-ost",
+   "text": "Schreib ma auf d'Aufgabnlistn: Angebot fia Firma Reisinger schreibn",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-237",
+   "set": "suedwest",
+   "text": "Wie sieht mei ganzer Tag heit aus, mit Aufgaba und Termin?",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-238",
+   "set": "west",
+   "text": "Isch brauch de komplette Tagesplan fer heit, mit Termine und was noch zu tun is und de Mails.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-239",
+   "set": "west",
+   "text": "Ei, was is'n morsche bei mir im Kalenner los?",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-240",
+   "set": "sued-ost",
+   "text": "Nimm in meine Aufgabn auf: Urlaubsantrag eireichn",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-241",
+   "set": "nord-ost",
+   "text": "Verschieb mer ma das Meeding uff nächste Woche",
+   "expected_intent": "unknown"
+  },
+  {
+   "id": "blind4-242",
+   "set": "sued-ost",
+   "text": "Gibts in meine Mails wos Neis, des i no ned aufgmacht hob?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-243",
+   "set": "nord-ost",
+   "text": "aufgabe anlegen: präsentation fertig machen",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-244",
+   "set": "nord-ost",
+   "text": "bitte zeigen email was ich noch nicht lesen",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-245",
+   "set": "west",
+   "text": "Ach so, noch was: hab isch noch ungelesene E-Mails?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-246",
+   "set": "suedwest",
+   "text": "Welli Ufgabe hend d'Frischt scho überschritte?",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-247",
+   "set": "sued-ost",
+   "text": "hob i morgn an termin ausgmacht den i vergessn hob mia kimmt so vor als wär do wos",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-248",
+   "set": "nord-ost",
+   "text": "was ich alles habe heute? komplett",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-249",
+   "set": "suedwest",
+   "text": "Mach mr e Ufgab drus: Lieferschein vo de Firma Bühler ablege",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-250",
+   "set": "suedwest",
+   "text": "Trag mr morn am zwei e Termin mit em Herr Brändli ii",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-251",
+   "set": "west",
+   "text": "Ei gude, was is in meim Postfach noch ungeläse?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-252",
+   "set": "nord-ost",
+   "text": "termin anlegen 20.11. 11 uhr steuerberater",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-253",
+   "set": "sued-ost",
+   "text": "bevor i in d'mittagspause geh is heit nachmittag bei mir no a termin eitrogn oder ned",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-254",
+   "set": "nord-ost",
+   "text": "Heff ik noch Opgaven, de nich af sünd?",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-255",
+   "set": "suedwest",
+   "text": "Posteingang, ungläse",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-256",
+   "set": "west",
+   "text": "Uffgabb dezu: Vertrag vun Dibbe & Söhne unnerschreiwe.",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-257",
+   "set": "west",
+   "text": "Zeisch mer mol, welsche Aufgabe isch schon längst hätt erledische misse.",
+   "expected_intent": "tasks_overdue"
+  },
+  {
+   "id": "blind4-258",
+   "set": "nord-ost",
+   "text": "Isch hab doch noch Uffgaben offen, oder? Zeisch ma",
+   "expected_intent": "tasks_open"
+  },
+  {
+   "id": "blind4-259",
+   "set": "sued-ost",
+   "text": "I muass um fünfe beim Kindergartn sei, drum sag ma schnell ob i heit vorher no an Termin hob",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-260",
+   "set": "nord-ost",
+   "text": "ich habe heute termin? welche uhrzeit?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-261",
+   "set": "nord-ost",
+   "text": "Sünd dor noch E-Mails, de ik nich ankeken heff?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-262",
+   "set": "nord-ost",
+   "text": "Hab ick neue Mails, die ick noch nich jelesen hab?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-263",
+   "set": "nord-ost",
+   "text": "Schreib ma uff meene Liste: Reisekostenabrechnung machen",
+   "expected_intent": "create_task"
+  },
+  {
+   "id": "blind4-264",
+   "set": "sued-ost",
+   "text": "Bin i heit no irgendwo eitrogn oder is mei Kalender frei",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-265",
+   "set": "suedwest",
+   "text": "Was liegt no ungläse in mim Postfach?",
+   "expected_intent": "emails_unread"
+  },
+  {
+   "id": "blind4-266",
+   "set": "nord-ost",
+   "text": "ich möchte termin eintragen, freitag 9 uhr arzt",
+   "expected_intent": "create_appointment"
+  },
+  {
+   "id": "blind4-267",
+   "set": "west",
+   "text": "Is mei Kalenner morje leer? Dann nemm isch Homeoffice.",
+   "expected_intent": "appointments_tomorrow"
+  },
+  {
+   "id": "blind4-268",
+   "set": "west",
+   "text": "Wenn isch heit um vier gehe, verpass isch dann en Termin?",
+   "expected_intent": "appointments_today"
+  },
+  {
+   "id": "blind4-269",
+   "set": "west",
+   "text": "Briefing fer heut: Termine plus Uffgabe plus ungelesene Mails.",
+   "expected_intent": "daily_agenda"
+  },
+  {
+   "id": "blind4-270",
+   "set": "west",
+   "text": "Is die Sach mit dem Angebot fer Krumbach & Co noch uff meiner Lischt? Zeisch mer mol all mei offene Uffgabe.",
+   "expected_intent": "tasks_open"
+  }
+ ]
+}

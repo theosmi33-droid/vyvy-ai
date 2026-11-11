@@ -41,7 +41,7 @@ def build(manifest: dict, verdict: dict, gguf_key: str, run_id: str, models: dic
         "prompt_sha256": manifest["prompt_sha256"],
         "llama_cpp_commit": manifest.get("llama_cpp_commit"),
         "decision": {
-            "holdout": "data/holdout_blind_v2.json",
+            "holdout": "data/holdout_blind_v3.json",
             "rule": "exact McNemar p < 0.05, b >= 2c, per-intent tolerance, no loss on unknown",
             "n": verdict["n"], "b_fixed": verdict["b_fixed"], "c_broken": verdict["c_broken"],
             "p_value": verdict["p_value"], "baseline_correct": verdict["base_correct"],

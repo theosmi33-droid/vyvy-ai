@@ -50,7 +50,9 @@ measures accuracy and latency on GitHub Actions.
 | `grammars/slots.gbnf` | Output contract: `intent`, `timeframe`, `entity`, `confidence` |
 | `runner/bench.py` | Stateless benchmark runner (llama-cpp-python) |
 | `.github/workflows/bench.yml` | Manual GitHub Actions run on `ubuntu-latest` |
-| `data/holdout_blind_v2.json` | Blind holdout v2: 270 questions, 30 per intent, from four independent writers; decides adapter acceptance |
+| `data/holdout_blind_v3.json` | Blind holdout v3: 235 questions, 23 to 30 per intent; decides adapter acceptance since 11.11.2026 |
+| `data/holdout_blind_v4.json` | Blind holdout v4: 270 questions, 30 per intent, four independent writers plus a blind second assignment; shadow set (can only veto) |
+| `data/holdout_blind_v2.json` | Blind holdout v2: 270 questions, decided 8 adapters until 11.11.2026; reported for information |
 | `data/holdout_blind_v1.json` | Blind holdout v1: 90 questions, reported for information |
 | `data/train/` | Training data, one JSON object per line (see its README) |
 | `tools/check_holdout_leak.py` | Holdout lock: rejects training sentences close to a holdout sentence |
@@ -157,8 +159,11 @@ errors. A third set, `holdout_blind_v2.json` (270 questions, 30 per intent), was
 written the same way by four independent agents with different focuses
 (southern German and phone typing, northern and western German and dictation,
 workplace variety and German as a second language, less common phrasings);
-sentences close to training data or the other sets were removed. Only v2
-decides whether a trained adapter is accepted.
+sentences close to training data or the other sets were removed. v2 decided
+eight adapters until 11.11.2026; then the sets rotated: v3 (235 questions,
+written the same way on 07.11.2026) decides from now on, and v4 (270 questions,
+30 per intent, four independent writers, every sentence also assigned blind by a
+fifth one) is the shadow set that can only veto. v2 is reported for information.
 
 ### Accepting an adapter
 

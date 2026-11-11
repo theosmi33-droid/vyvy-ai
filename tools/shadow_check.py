@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Shadow holdout check: an adapter accepted on the active holdout must not be worse here.
 
-Every acceptance decision is measured on the same active holdout (blind v2), so
+Every acceptance decision is measured on the same active holdout (blind v3 since 11.11.2026), so
 over many rounds the pipeline can pick adapters that fit that set by chance.
-The shadow holdout (blind v3) is never used to decide acceptance; it only
+The shadow holdout (blind v4) is never used to decide acceptance; it only
 vetoes: if the adapter is significantly worse than the baseline on it (exact
 one-sided McNemar on broken vs fixed, p < 0.05), or it breaks a safety intent
 ("unknown") net, the adapter is rejected. The result is added to verdict.json.

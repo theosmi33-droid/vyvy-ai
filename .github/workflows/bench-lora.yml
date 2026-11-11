@@ -3,12 +3,12 @@ name: Bench LoRA
 # Measures a trained adapter against the current default; each holdout set runs
 # on its own runner at the same time (matrix), baseline and candidate always on
 # the same runner (same CPU, same prompt, route mode). Acceptance is decided only on
-# blind holdout v2 (data/holdout_blind_v2.json, 30 questions per intent, written
-# without knowledge of any errors) by a statistical rule (tools/compare_adapter.py:
+# blind holdout v3 (data/holdout_blind_v3.json, 23 to 30 questions per intent, written
+# without knowledge of any errors; active since the rotation of 11.11.2026) by a statistical rule (tools/compare_adapter.py:
 # exact McNemar p < 0.05, b >= 2c, per-intent tolerance, no loss on "unknown");
-# blind holdout v1 and the development holdout are reported for information. The
-# shadow holdout v3 can only veto (tools/shadow_check.py): an adapter significantly
-# worse there is rejected, and after 8 decisions on v2 an issue asks for rotation. The default is the newest accepted
+# blind holdouts v1 and v2 and the development holdout are reported for information. The
+# shadow holdout v4 can only veto (tools/shadow_check.py): an adapter significantly
+# worse there is rejected, and after 8 decisions on v3 an issue asks for rotation. The default is the newest accepted
 # adapter for the same base model and prompt, or the base model alone if there is
 # none. The candidate release becomes a regular release (the new default) only
 # with zero regressions and a higher intent accuracy; otherwise it stays a
@@ -136,17 +136,20 @@ jobs:
           mkdir -p results
           case "$SET" in
             blind)
-              echo "## Blind holdout v2, 30 per intent (decides acceptance)" >> "$GITHUB_STEP_SUMMARY"
-              run data/holdout_blind_v2.json base_blind "$BASELINE_GGUF"
-              run data/holdout_blind_v2.json lora_blind "$GGUF" ;;
+              echo "## Blind holdout v3, 23 to 30 per intent (decides acceptance)" >> "$GITHUB_STEP_SUMMARY"
+              run data/holdout_blind_v3.json base_blind "$BASELINE_GGUF"
+              run data/holdout_blind_v3.json lora_blind "$GGUF" ;;
             shadow)
-              echo "## Shadow holdout v3 (can only veto)" >> "$GITHUB_STEP_SUMMARY"
-              run data/holdout_blind_v3.json base_shadow "$BASELINE_GGUF"
-              run data/holdout_blind_v3.json lora_shadow "$GGUF" ;;
+              echo "## Shadow holdout v4 (can only veto)" >> "$GITHUB_STEP_SUMMARY"
+              run data/holdout_blind_v4.json base_shadow "$BASELINE_GGUF"
+              run data/holdout_blind_v4.json lora_shadow "$GGUF" ;;
             info)
               echo "## Blind holdout v1 (information only)" >> "$GITHUB_STEP_SUMMARY"
               run data/holdout_blind_v1.json base_v1 "$BASELINE_GGUF"
               run data/holdout_blind_v1.json lora_v1 "$GGUF"
+              echo "## Blind holdout v2 (information only since the rotation)" >> "$GITHUB_STEP_SUMMARY"
+              run data/holdout_blind_v2.json base_v2 "$BASELINE_GGUF"
+              run data/holdout_blind_v2.json lora_v2 "$GGUF"
               echo "## Development holdout (information only)" >> "$GITHUB_STEP_SUMMARY"
               run data/holdout_benchmarks.json base_dev "$BASELINE_GGUF"
               run data/holdout_benchmarks.json lora_dev "$GGUF" ;;
@@ -165,6 +168,8 @@ jobs:
     env:
       ADAPTER: ${{ inputs.adapter }}
       GH_TOKEN: ${{ github.token }}
+      # Rotation of 11.11.2026: v3 decides from here on, v4 is the shadow, v2 reports.
+      ACTIVE_SINCE: "2026-11-11T18:00:00Z"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -198,25 +203,28 @@ jobs:
             --baseline-name "$BASELINE_NAME" | tee -a "$GITHUB_STEP_SUMMARY" || true
           python tools/compare_adapter.py base_v1.json lora_v1.json --name "$ADAPTER (blind holdout v1)" \
             --baseline-name "$BASELINE_NAME" | tee -a "$GITHUB_STEP_SUMMARY" || true
-          python tools/compare_adapter.py base_blind.json lora_blind.json --name "$ADAPTER (blind holdout v2)" \
+          python tools/compare_adapter.py base_v2.json lora_v2.json --name "$ADAPTER (blind holdout v2, information)" \
+            --baseline-name "$BASELINE_NAME" | tee -a "$GITHUB_STEP_SUMMARY" || true
+          python tools/compare_adapter.py base_blind.json lora_blind.json --name "$ADAPTER (blind holdout v3)" \
             --baseline-name "$BASELINE_NAME" --verdict verdict.json \
             | tee -a "$GITHUB_STEP_SUMMARY"
           code=${PIPESTATUS[0]}
           [ "$code" -le 1 ] || exit "$code"
-          # Decisions already measured on the active holdout: every release that is no longer a candidate.
-          decisions=$(gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --json tagName,name \
-            --jq "[.[] | select(.tagName != \"$ADAPTER\") | select(.name | endswith(\"(candidate)\") | not)] | length")
+          # Decisions already measured on the active holdout (v3 since ACTIVE_SINCE): every release
+          # created after the rotation that is no longer a candidate.
+          decisions=$(gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --json tagName,name,createdAt \
+            --jq "[.[] | select(.tagName != \"$ADAPTER\") | select(.createdAt > \"$ACTIVE_SINCE\") | select(.name | endswith(\"(candidate)\") | not)] | length")
           python tools/shadow_check.py base_shadow.json lora_shadow.json --verdict verdict.json \
             --decisions "$decisions" | tee -a "$GITHUB_STEP_SUMMARY"
           code=${PIPESTATUS[0]}
           [ "$code" -le 1 ] || exit "$code"
           echo "accepted=$([ "$code" -eq 0 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
           if python -c "import json,sys; sys.exit(0 if json.load(open('verdict.json'))['rotation_due'] else 1)"; then
-            title="Holdout rotation due (blind v2 used for $((decisions + 1)) decisions)"
+            title="Holdout rotation due (blind v3 used for $((decisions + 1)) decisions)"
             if ! gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "Holdout rotation due in:title" \
                  --json title --jq '.[].title' | grep -q "Holdout rotation due"; then
               gh issue create --repo "$GITHUB_REPOSITORY" --title "$title" --body \
-                "Blind holdout v2 has decided $((decisions + 1)) adapters. Replace it: v3 (shadow) becomes the active set, a newly written blind set becomes the shadow, and v2 may go into the training data. Opened by bench-lora."
+                "Blind holdout v3 has decided $((decisions + 1)) adapters. Replace it: v4 (shadow) becomes the active set, a newly written blind set becomes the shadow, and v3 may go into the training data. Opened by bench-lora."
             fi
           fi
 
@@ -238,7 +246,7 @@ jobs:
           python tools/release_manifest.py adapter/manifest.json verdict.json \
             --gguf-key "$MODEL" --run-id "$GITHUB_RUN_ID" --out adapter_manifest.json
           gh release upload "$ADAPTER" verdict.json adapter_manifest.json base_blind.json lora_blind.json \
-            base_v1.json lora_v1.json base_dev.json lora_dev.json base_shadow.json lora_shadow.json \
+            base_v1.json lora_v1.json base_v2.json lora_v2.json base_dev.json lora_dev.json base_shadow.json lora_shadow.json \
             --repo "$GITHUB_REPOSITORY" --clobber
 
       # Signs which run of this repository measured exactly this adapter file and manifest.
