@@ -14,7 +14,20 @@ sentence (character similarity and word overlap, as tools/check_holdout_leak.py)
 and the teacher's example sentences; near copies are dropped, and a frame whose
 fillings are often near copies refuses the whole grammar (frame_check).
 
-    python tools/sealed_gen.py GRAMMAR.json --seed "$SEALED_SEED" --n 1000 --out ~/sealed/sealed_v1.json
+Private folder (default ~/.vyvy-sealed, or $VYVY_SEALED_DIR), never in the repository:
+
+    grammar.json         frames and word lists (written by the user, kept private)
+    seed.txt             random seed, created by --init, readable by the user only
+    sealed_<version>.json  the generated set
+
+The repository records only fingerprints in data/sealed_sets.json (version, n,
+frames, sha256 of grammar and of the questions), so a set can be shown unchanged
+later without making it public.
+
+    python tools/sealed_gen.py --init                     # private folder, seed, empty grammar
+    # write frames and words into ~/.vyvy-sealed/grammar.json
+    python tools/sealed_gen.py --version v1 --n 1000      # build, check, write sealed_v1.json
+    python tools/sealed_gen.py --version v1 --n 1000 --record   # also add the fingerprint to the repository
 
 Grammar: {"schema": 1, "words": {"TAG_HEUTE": ["heute", "heid", ...], ...},
           "frames": [{"intent": "appointments_today", "text": "Was hab ich {TAG_HEUTE} an Terminen?"}, ...]}
@@ -24,13 +37,16 @@ from __future__ import annotations
 
 import argparse
 import collections
+import datetime as dt
 import difflib
 import glob
 import hashlib
 import json
 import math
+import os
 import random
 import re
+import secrets
 import sys
 from pathlib import Path
 
@@ -174,23 +190,73 @@ def generate(grammar: dict, seed: str, n: int, references: list[str], frame_limi
     return out
 
 
+PRIVATE = Path(os.environ.get("VYVY_SEALED_DIR", Path.home() / ".vyvy-sealed"))
+RECORD = ROOT / "data" / "sealed_sets.json"
+MIN_SEED = 16
+
+
+def init(folder: Path) -> str:
+    """Create the private folder with a random seed and an empty grammar; never overwrites."""
+    if ROOT == folder.resolve() or ROOT in folder.resolve().parents:
+        raise SystemExit("the private folder stays outside the public repository")
+    folder.mkdir(mode=0o700, parents=True, exist_ok=True)
+    seed = folder / "seed.txt"
+    if not seed.exists():
+        seed.write_text(secrets.token_urlsafe(32) + "\n", encoding="utf-8")
+        seed.chmod(0o600)
+    grammar = folder / "grammar.json"
+    if not grammar.exists():
+        grammar.write_text(json.dumps({"schema": 1, "words": {}, "frames": []}, indent=1) + "\n", encoding="utf-8")
+        grammar.chmod(0o600)
+    return f"private folder {folder}: seed.txt and grammar.json ready"
+
+
+def fingerprint(version: str, grammar_bytes: bytes, items: list[dict]) -> dict:
+    return {"version": version, "n": len(items), "frames": len({x["frame"] for x in items}),
+            "grammar_sha256": hashlib.sha256(grammar_bytes).hexdigest(),
+            "items_sha256": hashlib.sha256(json.dumps(items, ensure_ascii=False, sort_keys=True).encode()).hexdigest()}
+
+
+def record(entry: dict, path: Path = RECORD) -> None:
+    rows = json.loads(path.read_text(encoding="utf-8")) if path.exists() else []
+    if any(r["version"] == entry["version"] for r in rows):
+        raise SystemExit(f"version {entry['version']} is recorded already; a new set gets a new version")
+    path.write_text(json.dumps(rows + [entry], indent=1) + "\n", encoding="utf-8")
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Build a sealed blind set from a private grammar and seed")
-    p.add_argument("grammar", type=Path)
-    p.add_argument("--seed", required=True)
+    p.add_argument("--dir", type=Path, default=PRIVATE, help="private folder outside the repository")
+    p.add_argument("--init", action="store_true", help="create the private folder, seed and an empty grammar")
+    p.add_argument("--version", help="name of the set, e.g. v1")
     p.add_argument("--n", type=int, default=1000)
-    p.add_argument("--out", type=Path, required=True)
     p.add_argument("--frame-limit", type=float, default=0.2, help="share of near fillings that refuses a frame")
+    p.add_argument("--record", action="store_true", help="add the fingerprint to data/sealed_sets.json")
     args = p.parse_args(argv)
-    if ROOT in args.out.resolve().parents or ROOT in args.grammar.resolve().parents:
+    if args.init:
+        print(init(args.dir))
+        return 0
+    if not args.version:
+        raise SystemExit("--version is needed")
+    folder = args.dir.resolve()
+    if ROOT == folder or ROOT in folder.parents:
         raise SystemExit("grammar and sealed set stay outside the public repository")
-    items = generate(json.loads(args.grammar.read_text(encoding="utf-8")), args.seed, args.n,
-                     reference_sentences() + pattern_sentences(), args.frame_limit)
-    args.out.write_text(json.dumps({"name": "sealed blind set", "n": len(items),
-                                    "grammar_sha256": hashlib.sha256(args.grammar.read_bytes()).hexdigest(),
-                                    "items": items}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-    print(f"{len(items)} questions, " + ", ".join(f"{i} {k}" for i, k in
-                                                  sorted(collections.Counter(x['expected'] for x in items).items())))
+    seed = (folder / "seed.txt").read_text(encoding="utf-8").strip()
+    if len(seed) < MIN_SEED:
+        raise SystemExit(f"the seed needs at least {MIN_SEED} characters (python tools/sealed_gen.py --init)")
+    grammar_bytes = (folder / "grammar.json").read_bytes()
+    items = generate(json.loads(grammar_bytes), seed, args.n, reference_sentences() + pattern_sentences(),
+                     args.frame_limit)
+    entry = dict(fingerprint(args.version, grammar_bytes, items),
+                 created=dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d"))
+    out = folder / f"sealed_{args.version}.json"
+    out.write_text(json.dumps({"name": f"sealed blind set {args.version}", **entry, "items": items},
+                              ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    out.chmod(0o600)
+    if args.record:
+        record(entry)
+    print(f"{len(items)} questions from {entry['frames']} frames in {out}: " + ", ".join(
+        f"{i} {k}" for i, k in sorted(collections.Counter(x['expected'] for x in items).items())))
     return 0
 
 
