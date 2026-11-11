@@ -1,0 +1,83 @@
+{
+ "teacher": "Qwen/Qwen2.5-14B-Instruct",
+ "teacher_revision": "cf98f3b3bbb457ad9e2bb7baf9a0125b6b88caa8",
+ "license": "Apache-2.0",
+ "second_teacher": "microsoft/phi-4",
+ "second_teacher_revision": "2db69c1c3e91a05d2c64a3185acfbaf36f744e25",
+ "second_license": "MIT",
+ "script_sha256": "01ba17a8115ef5c42e09273e20b53c626e316e6f6852f05f2f1a6aedebc6e94c",
+ "round": "2026-11-07-b",
+ "seed": 1982355046,
+ "requests": 418,
+ "generated": 4542,
+ "unique": 4538,
+ "kept": 3267,
+ "dropped_by_verification": 1271,
+ "by_teacher": {
+  "qwen2.5-14b": {
+   "generated": 3785,
+   "kept": 2715,
+   "dropped": 1066
+  },
+  "phi-4": {
+   "generated": 757,
+   "kept": 552,
+   "dropped": 205
+  }
+ },
+ "min_agree": 0.6,
+ "per_intent": {
+  "appointments_today": 308,
+  "appointments_tomorrow": 249,
+  "tasks_open": 212,
+  "tasks_overdue": 404,
+  "emails_unread": 269,
+  "daily_agenda": 295,
+  "create_appointment": 269,
+  "create_task": 337,
+  "unknown": 924
+ },
+ "per_stratum": {
+  "1 foundation": {
+   "generated": 240,
+   "kept": 199
+  },
+  "2 everyday": {
+   "generated": 779,
+   "kept": 627
+  },
+  "3 dialect": {
+   "generated": 1320,
+   "kept": 942
+  },
+  "4 hard cases": {
+   "generated": 2203,
+   "kept": 1499
+  }
+ },
+ "minutes": 182.4,
+ "imported": 2892,
+ "dropped_near_holdout": 28,
+ "dropped_semantic": 343,
+ "max_cosine": 0.85,
+ "dropped_duplicate": 4,
+ "dropped_invalid": 0,
+ "max_similarity": 0.8,
+ "per_stratum_imported": {
+  "1": 142,
+  "2": 475,
+  "3": 845,
+  "4": 1430
+ },
+ "per_intent_imported": {
+  "appointments_today": 232,
+  "appointments_tomorrow": 173,
+  "tasks_open": 161,
+  "tasks_overdue": 389,
+  "emails_unread": 251,
+  "daily_agenda": 164,
+  "create_appointment": 263,
+  "create_task": 337,
+  "unknown": 922
+ }
+}
