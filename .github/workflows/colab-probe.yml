@@ -35,6 +35,17 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Loop lock (gpu only)
+        if: inputs.check == 'gpu'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # A T4 needs the user's release in data/loop_state.json, like every GPU start; errors skip too.
+          if python tools/loop_guard.py --gate "Qwen/Qwen2.5-1.5B-Instruct" --repo "$GITHUB_REPOSITORY" > gate.json; then :; else
+            echo "SKIP=true" >> "$GITHUB_ENV"
+          fi
+          echo "Loop lock: $(cat gate.json 2>/dev/null || echo 'check failed')" >> "$GITHUB_STEP_SUMMARY"
+
       - name: Install the Colab CLI and the credentials
         env:
           COLAB_ADC: ${{ secrets.COLAB_ADC }}
@@ -50,11 +61,11 @@ jobs:
       - name: Sign in and list Colab machines
         run: |
           set -euo pipefail
-          colab --auth adc whoami | grep -E "^(Auth provider|Email|Scopes|  -)" | tee -a "$GITHUB_STEP_SUMMARY"
+          colab --auth adc whoami | grep -E "^(Auth provider|Scopes|  -)" | tee -a "$GITHUB_STEP_SUMMARY"
           colab --auth adc sessions | tee -a "$GITHUB_STEP_SUMMARY"
 
       - name: T4, CUDA and 4-bit on Colab
-        if: inputs.check == 'gpu'
+        if: inputs.check == 'gpu' && env.SKIP != 'true'
         run: |
           set -euo pipefail
           colab --auth adc run --gpu T4 tools/colab_probe.py | tee -a "$GITHUB_STEP_SUMMARY"

@@ -27,16 +27,15 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  sign-ins:
+  # Each sign-in runs in the environment that holds its secrets: Kaggle's only in
+  # "kaggle", Colab's only in "colab" (there are no repository-level secrets).
+  sign-in-kaggle:
     if: github.event.schedule == '5 6 * * 1' || inputs.weekly == true
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    environment: colab
+    timeout-minutes: 10
+    environment: kaggle
     outputs:
-      kaggle: ${{ steps.kaggle.outputs.result }}
-      colab: ${{ steps.colab.outputs.result }}
-    env:
-      COLAB_CLI: git+https://github.com/googlecolab/google-colab-cli@d2d97794941723ab806c0f3642416691a951ec7d
+      result: ${{ steps.kaggle.outputs.result }}
     steps:
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
@@ -52,6 +51,20 @@ jobs:
           # Only the result goes out; account details stay out of the public log.
           if kaggle kernels list --mine --page-size 1 >/dev/null 2>&1; then r=ok; else r=fail; fi
           echo "result=$r" >> "$GITHUB_OUTPUT"; echo "Kaggle sign-in: $r" >> "$GITHUB_STEP_SUMMARY"
+
+  sign-in-colab:
+    if: github.event.schedule == '5 6 * * 1' || inputs.weekly == true
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: colab
+    outputs:
+      result: ${{ steps.colab.outputs.result }}
+    env:
+      COLAB_CLI: git+https://github.com/googlecolab/google-colab-cli@d2d97794941723ab806c0f3642416691a951ec7d
+    steps:
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
 
       - name: Colab sign-in
         id: colab
@@ -70,14 +83,14 @@ jobs:
           echo "result=$r" >> "$GITHUB_OUTPUT"; echo "Colab sign-in: $r" >> "$GITHUB_STEP_SUMMARY"
 
   health:
-    needs: sign-ins
+    needs: [sign-in-kaggle, sign-in-colab]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
       GH_TOKEN: ${{ github.token }}
-      KAGGLE: ${{ needs.sign-ins.outputs.kaggle }}
-      COLAB: ${{ needs.sign-ins.outputs.colab }}
+      KAGGLE: ${{ needs.sign-in-kaggle.outputs.result }}
+      COLAB: ${{ needs.sign-in-colab.outputs.result }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -100,10 +113,12 @@ jobs:
     if: always() && (github.event.schedule == '5 6 * * 1' || inputs.weekly == true)
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    environment: kaggle  # the quota line needs Kaggle's own figure, not the step-time fallback
     env:
       GH_TOKEN: ${{ github.token }}
       KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
       KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+      KAGGLE_EXTERNAL_GPU_MIN: ${{ vars.KAGGLE_EXTERNAL_GPU_MIN }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 

@@ -163,7 +163,9 @@ def small_verdict_on_same_data(repo: str) -> dict | None:
 def gate(state: dict | None, history: list[dict], base: str, now: str, current: str,
          small: dict | None = None) -> tuple[bool, str]:
     """The lock every GPU start passes (plan_train.py for Train and Train on Colab, collect.py
-    for the synthesis): the user's release of the round, the approved rules and, in weekly
+    before it starts the synthesis, and its own step in synth.yml and colab-probe.yml for runs
+    started by hand; tests/test_gpu_lock.py keeps that list complete): the user's release of
+    the round, the approved rules and, in weekly
     mode, the hold points of check() over the decisions since that release. 7B also needs
     seven_b_ready(small)."""
     go, why = round_allowed(state, history, base, now)

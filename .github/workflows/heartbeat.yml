@@ -44,4 +44,17 @@ jobs:
           set -euo pipefail
           gh workflow run collect.yml --repo "$GITHUB_REPOSITORY" --ref main
           gh workflow run heartbeat.yml --repo "$GITHUB_REPOSITORY" --ref main
-          echo "Collect started at $(date -u +%H:%M) UTC; next beat in 3 hours." >> "$GITHUB_STEP_SUMMARY"
+          # Loop watch also gets its own schedule; GitHub skips schedules at times, a dispatch it keeps.
+          gh workflow run loop-watch.yml --repo "$GITHUB_REPOSITORY" --ref main
+          echo "Collect and Loop watch started at $(date -u +%H:%M) UTC; next beat in 3 hours." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Tell the outside dead man's switch that the chain is alive
+        env:
+          # Optional repository secret: a ping address of a dead man's switch service (e.g.
+          # healthchecks.io, period 3 h, grace 3 h). The service mails the owner when the pings
+          # stop, which no workflow can do once GitHub runs nothing. Empty: this step does nothing.
+          HEALTHCHECK_URL: ${{ secrets.HEALTHCHECK_URL }}
+        run: |
+          if [ -n "$HEALTHCHECK_URL" ]; then
+            curl -fsS -m 10 --retry 3 -o /dev/null "$HEALTHCHECK_URL" || echo "dead man's switch not reached" >> "$GITHUB_STEP_SUMMARY"
+          fi
