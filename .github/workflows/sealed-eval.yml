@@ -1,0 +1,88 @@
+name: Sealed eval
+
+# Measures ONE accepted adapter on the private sealed blind set, once per set: the
+# goal check of the loop (tools/loop_guard.py) counts a set only if it was looked at
+# once. Runs on a Kaggle CPU kernel (no GPU quota) that reads the private dataset;
+# the result holds ids and intents only and is attached to the adapter's release
+# (sealed_<version>_result.json, sealed_<version>_summary.json). By hand only.
+on:
+  workflow_dispatch:
+    inputs:
+      adapter:
+        description: Release tag of an accepted adapter, e.g. vyvy-1.5b-d1234abcd
+        type: string
+        required: true
+      version:
+        description: Sealed set version (private Kaggle dataset vyvy-sealed-<version>)
+        type: string
+        default: v1
+
+permissions:
+  contents: write  # attach the result to the release
+  actions: read
+
+concurrency:
+  group: sealed
+  cancel-in-progress: false
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    environment: kaggle
+    env:
+      GH_TOKEN: ${{ github.token }}
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+      ADAPTER: ${{ inputs.adapter }}
+      VERSION: ${{ inputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Once per sealed set, accepted adapters only
+        run: |
+          set -euo pipefail
+          [[ "$ADAPTER" =~ ^[a-z0-9][a-z0-9.-]{0,60}$ && "$VERSION" =~ ^v[0-9]+$ ]] || { echo "invalid input" >&2; exit 1; }
+          if gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" --paginate --jq '.[].assets[].name' \
+               | grep -qx "sealed_${VERSION}_result.json"; then
+            echo "Sealed set $VERSION was already looked at; it proves nothing a second time." >&2; exit 1
+          fi
+          title=$(gh release view "$ADAPTER" --repo "$GITHUB_REPOSITORY" --json name --jq .name)
+          [ "$title" = "$ADAPTER" ] || { echo "$ADAPTER is not an accepted release ($title)" >&2; exit 1; }
+
+      - name: Start the CPU kernel on Kaggle
+        run: |
+          set -euo pipefail
+          pip install -q kaggle==2.2.5 six==1.17.0
+          kid=$(python tools/kaggle_job.py --dir job --owner "$KAGGLE_USERNAME" --repo "$GITHUB_REPOSITORY" \
+                  --commit "$GITHUB_SHA" --sealed "$ADAPTER" --dataset "vyvy-sealed-$VERSION" --version "$VERSION")
+          # No accelerator: the kernel runs on CPU and uses no GPU quota.
+          kaggle kernels push -p job
+          echo "KID=$kid" >> "$GITHUB_ENV"
+          echo "Started $kid (CPU) for $ADAPTER on sealed $VERSION." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Wait for the kernel
+        run: |
+          set -uo pipefail
+          for _ in $(seq 1 270); do
+            status=$(kaggle kernels status "$KID" 2>&1 || true)
+            case "$status" in
+              *complete*|*COMPLETE*) exit 0 ;;
+              *error*|*ERROR*|*cancel*|*CANCEL*) echo "$status" >&2; exit 1 ;;
+            esac
+            sleep 60
+          done
+          echo "kernel did not finish in time" >&2; exit 1
+
+      - name: Sum up and attach to the release
+        run: |
+          set -euo pipefail
+          kaggle kernels output "$KID" -p out --file-pattern 'sealed_result\.json$'
+          python tools/sealed_eval.py out/sealed_result.json --out "sealed_${VERSION}_summary.json" >> "$GITHUB_STEP_SUMMARY"
+          cp out/sealed_result.json "sealed_${VERSION}_result.json"
+          gh release upload "$ADAPTER" "sealed_${VERSION}_result.json" "sealed_${VERSION}_summary.json" \
+            --repo "$GITHUB_REPOSITORY"

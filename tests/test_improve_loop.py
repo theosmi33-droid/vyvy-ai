@@ -241,3 +241,24 @@ def test_sealed_folder_stays_private_and_only_fingerprints_are_recorded(tmp_path
         raise AssertionError("a version is recorded once")
     except SystemExit:
         assert len(json.loads(rec.read_text())) == 1
+
+
+def test_sealed_summary_feeds_the_goal_check() -> None:
+    import sealed_eval
+    items = ([{"id": f"s{k}", "expected": "unknown", "got": "unknown"} for k in range(5)]
+             + [{"id": "a1", "expected": "tasks_open", "got": "tasks_open"},
+                {"id": "a2", "expected": "tasks_open", "got": "unknown"},
+                {"id": "a3", "expected": "tasks_open", "got": "tasks_overdue"},
+                {"id": "u1", "expected": "unknown", "got": "appointments_today"}])
+    s = sealed_eval.summarise({"adapter": "x", "sealed_version": "v1", "items_sha256": "h", "items": items})
+    assert (s["n"], s["correct"], s["unknown_n"], s["false_actions"], s["wrong_actions"], s["looks"]) == \
+        (9, 6, 6, 1, 2, 1)
+    go, why = loop_guard.check([], now="2026-11-20T00:00:00Z", approved="f", current="f", sealed=s, goal=0.5,
+                               min_sealed=9)
+    assert go is True  # one wrong action on unknown: the goal is not reached
+    try:
+        sealed_eval.summarise({"adapter": "x", "sealed_version": "v1", "items_sha256": "h",
+                               "items": [dict(items[0], text="SECRET")]})
+        raise AssertionError("texts must be refused")
+    except SystemExit:
+        pass
