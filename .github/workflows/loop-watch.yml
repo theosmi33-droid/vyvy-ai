@@ -94,3 +94,26 @@ jobs:
           [ -n "$KAGGLE" ] && args+=(--kaggle "$KAGGLE")
           [ -n "$COLAB" ] && args+=(--colab "$COLAB")
           python tools/loop_health.py --repo "$GITHUB_REPOSITORY" "${args[@]}" >> "$GITHUB_STEP_SUMMARY"
+
+  report:
+    needs: health
+    if: always() && (github.event.schedule == '5 6 * * 1' || inputs.weekly == true)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Weekly report issue
+        run: |
+          set -euo pipefail
+          pip install -q kaggle==2.2.5 six==1.17.0
+          quota=$(python tools/quota_guard.py --repo "$GITHUB_REPOSITORY" 2>/dev/null | grep -m1 "Kaggle GPU" || true)
+          python tools/weekly_report.py --repo "$GITHUB_REPOSITORY" --quota "$quota" >> "$GITHUB_STEP_SUMMARY"
