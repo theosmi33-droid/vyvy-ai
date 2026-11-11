@@ -242,3 +242,9 @@ for noncommercial purposes, as long as LICENSE and its `Required Notice:` lines
 go with every copy. Commercial use needs a separate written agreement with the
 copyright holder. The base models and packages keep their own licenses, and the
 copyright holder reserves text and data mining for machine learning; see NOTICE.
+
+Adapters released up to and including `vyvy-1.5b-da8577af3` (11.11.2026), the
+current default `vyvy-1.5b-d1e100e8d` among them, were published under the Apache
+License 2.0, as their NOTICE.txt says; that grant stays valid for those files.
+Adapters released after it are licensed under the PolyForm Noncommercial License
+1.0.0, with the base model's Apache license text and notices included.

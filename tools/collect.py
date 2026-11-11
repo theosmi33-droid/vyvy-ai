@@ -110,9 +110,11 @@ def publish(repo: str, out: Path, base: str, sha: str) -> str | None:
     lines = [f"rank {s['rank']}, lr {s['lr']:g}: validation accuracy {s['val_accuracy']}, "
              f"loss {s['eval_loss']}, {s['minutes']} min" for s in sweep]
     notes = "\n".join([
-        f"Candidate. LoRA adapter for {base} (Apache License 2.0), trained on data/train/ with the "
-        f"{manifest.get('prompt')} prompt. Apply it on top of the unchanged base model; see "
-        "training/README.md. The base model's license and notices apply to its use. Accepted only if "
+        f"Candidate. LoRA adapter for {base} (base model: Apache License 2.0), trained on data/train/ "
+        f"with the {manifest.get('prompt')} prompt. Apply it on top of the unchanged base model; see "
+        "training/README.md. The adapter is licensed under the PolyForm Noncommercial License 1.0.0 "
+        "(commercial use needs a separate written agreement, see NOTICE.txt); the base model's license "
+        "and notices apply to its use. Accepted only if "
         "bench-lora finds no regression on the blind holdout and a higher accuracy than the current default.",
         "", f"Chosen: rank {manifest.get('rank')}, lr {manifest.get('chosen_lr')}, validation accuracy "
         f"{manifest.get('val_accuracy')}.", "", "Sweep:", *[f"- {line}" for line in lines]])

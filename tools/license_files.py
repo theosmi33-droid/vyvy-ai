@@ -29,9 +29,14 @@ Modification: the adapter was trained by Vyvy AI with low-rank adaptation (LoRA)
 on synthetic German office questions. It contains no weights of the base model;
 it is applied on top of the unchanged base model at run time.
 
-This adapter is distributed under the terms of the Apache License, Version 2.0,
-as required for modifications of the base model. The license of the Vyvy AI
-repository itself does not apply to this file.
+The adapter itself is licensed under the PolyForm Noncommercial License 1.0.0
+<https://polyformproject.org/licenses/noncommercial/1.0.0>: free for noncommercial
+purposes; commercial use needs a separate written agreement with the copyright
+holder. The Apache License 2.0 allows other terms for modifications as long as the
+base model's license text and notices go with them (section 4), as they do here.
+
+Required Notice: Copyright (c) 2026 Vyvy AI (https://github.com/theosmi33-droid/vyvy-ai)
+Required Notice: Commercial use needs a separate written agreement with the copyright holder.
 """
 
 
