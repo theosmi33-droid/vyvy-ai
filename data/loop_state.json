@@ -1,8 +1,10 @@
 {
  "schema": 1,
- "mode": "paused",
- "bases": [],
- "approved_on": null,
+ "mode": "one_round",
+ "bases": [
+  "Qwen/Qwen2.5-1.5B-Instruct"
+ ],
+ "approved_on": "2026-11-11T08:04:34Z",
  "fingerprint": "a57b97f8b630a1aa32d066554916d81aa36b89c3c46bc0e1447bd974208cf758",
  "note": "Written by the user only. paused: no GPU run starts. one_round or weekly with bases and approved_on releases rounds (tools/loop_guard.py)."
 }
