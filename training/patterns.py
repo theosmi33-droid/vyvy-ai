@@ -56,6 +56,17 @@ TODAY = {r: w["today"] for r, w in REGIONS.items()}
 TOMORROW = {r: w["tomorrow"] for r, w in REGIONS.items()}
 
 
+# No day of the intents: "this year" and "yesterday" have no own-calendar read or write,
+# so a request with them is unknown (everyday_time), never a gap_words sentence.
+NOT_A_DAY = {"heuer", "geschter"}
+
+
+def gap_words(region: str) -> list[str]:
+    """The region's words with fewer than five training sentences (GAPS) that name a day or time of day."""
+    w = REGIONS.get(region, {})
+    return [x for k in ("today", "tomorrow", "other") for x in w.get(k, []) if x in GAPS - NOT_A_DAY]
+
+
 def region_weights() -> dict[str, int]:
     """Requests per region: priority 1 three times, 2 twice, 3 once."""
     return {r: 4 - w["prio"] for r, w in REGIONS.items()}
@@ -85,7 +96,8 @@ PATTERNS = {
         "intent": "unknown",
         "near": "appointments_today",
         "rule": ("Die Person fragt nach etwas aus dem Alltag mit einem Zeitwort ({everyday}), nicht nach "
-                 "eigenen Terminen, Aufgaben oder Mails. Das ist unknown, auch wenn heute oder morgen vorkommt."),
+                 "eigenen Terminen, Aufgaben oder Mails. Das ist unknown, auch wenn heute oder morgen vorkommt. "
+                 "Auch Fragen nach gestern oder dem ganzen Jahr (geschter, heuer) sind unknown."),
         "examples": ["Fährt die S-Bahn übermorgen früh wieder nach Plan?",
                      "Wird's am Samstag warm genug fürs Freibad?"],
     },
@@ -114,6 +126,15 @@ PATTERNS = {
         "examples": ["Was liegt für die Frühbesprechung gleich bei mir an Terminen an?",
                      "Bevor die Morgenschicht losgeht: was hab ich heute im Kalender?"],
     },
+    "gap_words": {
+        "intent": ["appointments_today", "appointments_tomorrow", "tasks_open", "daily_agenda", "create_task",
+                   "create_appointment"],
+        "rule": ("Die Person spricht Standarddeutsch und nutzt in jedem Satz genau eines dieser Wörter aus "
+                 "{region}: {gaps}. Das Wort gibt die Tageszeit oder den Tag an; die Absicht bleibt die eigene "
+                 "Büroarbeit."),
+        "examples": ["Hab ich zabig noch was eingetragen, oder ist der Abend frei?",
+                     "Schreib mir auf, dass ich nohher die Leiter zur Baustelle zurückbring."],
+    },
     "own_vs_others": {
         "intent": "pair",
         "rule": ("Schreibe Satzpaare mit gleichem Aufbau: der erste fragt nach dem EIGENEN Kalender "
@@ -136,7 +157,8 @@ def pattern_prompt(key: str, region: str, role: str, n: int, meaning: str = "") 
         appointment_words=", ".join(APPOINTMENT_WORDS), others=", ".join(OTHERS),
         everyday=", ".join(EVERYDAY), smalltalk=", ".join(SMALLTALK), region=region,
         today=" oder ".join(TODAY.get(region, ["heute"])), tomorrow=" oder ".join(TOMORROW.get(region, ["morgen"])),
-        other=", ".join(REGIONS.get(region, {}).get("other", [])) or "nachher", compounds=", ".join(MORNING_COMPOUNDS))
+        other=", ".join(REGIONS.get(region, {}).get("other", [])) or "nachher", compounds=", ".join(MORNING_COMPOUNDS),
+        gaps=", ".join(gap_words(region)) or "heute")
     return (f"Schreibe {n} verschiedene Sätze, die eine Person aus dem Beruf {role} zu ihrem digitalen "
             f"Büro-Assistenten sagt, Sprachstil {region}. Regel: {rule}"
             + (f" Jeder Satz {meaning}." if meaning else "")
@@ -167,7 +189,10 @@ def pattern_requests(rng: random.Random, total: int) -> list[tuple[str, str, str
             intent = rng.choice(OWN) if (k // len(keys)) % 2 == 0 else "unknown"
         elif isinstance(intent, list):
             intent = rng.choice(intent)
-        out.append((key, intent, rng.choice(regions), 3 if key == "dialect_time" else 4))
+        region = rng.choice(regions)
+        while key == "gap_words" and not gap_words(region):
+            region = rng.choice(regions)
+        out.append((key, intent, region, 3 if key in ("dialect_time", "gap_words") else 4))
     return out
 
 

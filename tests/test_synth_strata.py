@@ -95,4 +95,17 @@ def test_pattern_requests_reach_the_teacher() -> None:
 def test_the_lock_checks_the_pattern_examples() -> None:
     import check_holdout_leak
     rows = check_holdout_leak.load_prompt_examples(ROOT / "training" / "patterns.py")
-    assert len(rows) == 12 and all(":PATTERNS[" in where for where, _ in rows)
+    assert len(rows) == 14 and all(":PATTERNS[" in where for where, _ in rows)
+
+
+def test_gap_words_get_their_own_requests() -> None:
+    import random
+
+    import patterns
+    covered = {w for r in patterns.REGIONS for w in patterns.gap_words(r)}
+    assert covered == patterns.GAPS - patterns.NOT_A_DAY
+    reqs = [r for r in patterns.pattern_requests(random.Random(3), 400) if r[0] == "gap_words"]
+    assert reqs and all(patterns.gap_words(region) and layer == 3 for _, _, region, layer in reqs)
+    _, intent, region, _ = reqs[0]
+    prompt = patterns.pattern_prompt("gap_words", region, "Schreiner", 8, synthesize.INTENTS[intent])
+    assert patterns.gap_words(region)[0] in prompt and "heuer" not in prompt.split("Beispiele")[0]
