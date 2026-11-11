@@ -35,7 +35,17 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Loop lock
+        run: |
+          # No GPU without the user's release in data/loop_state.json (tools/loop_guard.py gate);
+          # the synthesis belongs to the round of the 1.5B plan. An error in the check also skips.
+          if python tools/loop_guard.py --gate "Qwen/Qwen2.5-1.5B-Instruct" --repo "$GITHUB_REPOSITORY" > gate.json; then :; else
+            echo "SKIP=true" >> "$GITHUB_ENV"
+          fi
+          echo "Loop lock: $(cat gate.json 2>/dev/null || echo 'check failed')" >> "$GITHUB_STEP_SUMMARY"
+
       - name: Already taken in?
+        if: env.SKIP != 'true'
         run: |
           set -euo pipefail
           round=$(python -c "import sys; sys.path.insert(0, 'tools'); import collect; print(collect.synth_round())")
