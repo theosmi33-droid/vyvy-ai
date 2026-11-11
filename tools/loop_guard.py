@@ -178,7 +178,9 @@ def gate(state: dict | None, history: list[dict], base: str, now: str, current: 
         go, why = check(since, now=now, approved=current, current=current)
         if not go:
             return go, why
-    if base == SEVEN_B:
+    # "seven_b_after_small": false (the user's choice) lets 7B train next to 1.5B; the
+    # quota guard still decides whether the GPU time is there.
+    if base == SEVEN_B and state.get("seven_b_after_small", True):
         return seven_b_ready(small)
     return True, why
 

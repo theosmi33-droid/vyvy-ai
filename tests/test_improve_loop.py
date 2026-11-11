@@ -262,3 +262,13 @@ def test_sealed_summary_feeds_the_goal_check() -> None:
         raise AssertionError("texts must be refused")
     except SystemExit:
         pass
+
+
+def test_seven_b_may_run_next_to_the_small_model_when_the_user_says_so() -> None:
+    now = "2026-11-12T12:00:00Z"
+    state = {"mode": "one_round", "approved_on": "2026-11-11T00:00:00Z", "fingerprint": "x",
+             "bases": ["Qwen/Qwen2.5-1.5B-Instruct", loop_guard.SEVEN_B]}
+    assert loop_guard.gate(state, [], loop_guard.SEVEN_B, now, "x", None)[0] is False
+    assert loop_guard.gate(dict(state, seven_b_after_small=False), [], loop_guard.SEVEN_B, now, "x", None)[0] is True
+    assert loop_guard.gate(dict(state, seven_b_after_small=False, bases=["Qwen/Qwen2.5-1.5B-Instruct"]), [],
+                           loop_guard.SEVEN_B, now, "x", None)[0] is False
