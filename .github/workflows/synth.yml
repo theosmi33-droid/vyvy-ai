@@ -8,6 +8,13 @@ name: Synthesize
 # sentences are not in data/train/ yet; each round samples with its own seed. It can also be started by hand.
 on:
   workflow_dispatch:
+    inputs:
+      extra:
+        # By hand only: Collect never sets it. The extra round is labelled <Saturday>-b, so
+        # the week's regular round (and synth_done) is not affected.
+        description: One extra round in this quota week (label <Saturday>-b), e.g. to use quota that would lapse
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -46,9 +53,20 @@ jobs:
 
       - name: Already taken in?
         if: env.SKIP != 'true'
+        env:
+          EXTRA: ${{ inputs.extra }}
         run: |
           set -euo pipefail
           round=$(python -c "import sys; sys.path.insert(0, 'tools'); import collect; print(collect.synth_round())")
+          if [ "$EXTRA" = "true" ]; then
+            round="$round-b"
+            if ls data/train/vyvy_synth_*_"$round".jsonl >/dev/null 2>&1; then
+              echo "SKIP=true" >> "$GITHUB_ENV"
+              echo "Extra synthesis round $round is already in data/train/." >> "$GITHUB_STEP_SUMMARY"
+            fi
+            echo "ROUND=$round" >> "$GITHUB_ENV"
+            exit 0
+          fi
           echo "ROUND=$round" >> "$GITHUB_ENV"
           if python -c "import sys; sys.path.insert(0, 'tools'); import collect; sys.exit(0 if collect.synth_done() else 1)"; then
             echo "SKIP=true" >> "$GITHUB_ENV"

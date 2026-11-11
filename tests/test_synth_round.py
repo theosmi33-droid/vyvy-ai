@@ -29,6 +29,27 @@ def test_legacy_round_counts_for_its_week() -> None:
     assert not collect.synth_done(at("2026-11-14T00:00:00"))
 
 
+def test_an_extra_round_keeps_the_regular_one() -> None:
+    import tempfile
+
+    import import_synth
+    import kaggle_job
+    with tempfile.TemporaryDirectory() as tmp:
+        sha = "a" * 40
+        kaggle_job.write_synth_job(Path(tmp), "user", "owner/repo", sha, "2026-11-07-b")
+        for bad in ("2026-11-07-c", "2026-11-07b", "manual"):
+            try:
+                kaggle_job.write_synth_job(Path(tmp), "user", "owner/repo", sha, bad)
+                raise AssertionError(bad)
+            except SystemExit:
+                pass
+    target = import_synth.target({"script_sha256": "f" * 64, "round": "2026-11-07-b"}, Path("data/train"))
+    assert target.name == "vyvy_synth_fffffffff_2026-11-07-b.jsonl"
+    # The extra file does not count as the week's regular round on the next Saturday,
+    # and the regular glob does not match it.
+    assert not target.match("vyvy_synth_*_2026-11-07.jsonl")
+
+
 if __name__ == "__main__":
     test_week_change()
     test_legacy_round_counts_for_its_week()
