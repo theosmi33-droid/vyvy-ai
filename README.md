@@ -170,6 +170,37 @@ accepted only if
 4. no question of `unknown` gets worse (a wrong action instead of "I don't know"
    is never acceptable).
 
+### Before an application uses an adapter
+
+A GGUF file from anywhere else than this repository's releases must not be
+loaded. bench-lora signs, for every adapter it measures, which run of this
+repository measured exactly that file and its manifest (GitHub artifact
+attestation, Sigstore). An application takes an adapter only if all four hold:
+
+1. The release is accepted: its title is the bare tag, not "(candidate)" or
+   "(rejected)", and `adapter_manifest.json` says `"status": "accepted"`.
+2. The file is the measured one: its SHA-256 equals `adapter_sha256` in
+   `adapter_manifest.json`.
+3. The signature holds and comes from bench-lora on `main`:
+
+   ```sh
+   gh attestation verify vyvy-1.5b-dXXXXXXXX.gguf --repo theosmi33-droid/vyvy-ai \
+     --signer-workflow theosmi33-droid/vyvy-ai/.github/workflows/bench-lora.yml \
+     --source-ref refs/heads/main
+   gh attestation verify adapter_manifest.json --repo theosmi33-droid/vyvy-ai \
+     --signer-workflow theosmi33-droid/vyvy-ai/.github/workflows/bench-lora.yml \
+     --source-ref refs/heads/main
+   ```
+
+   Without network, `gh attestation download` stores the bundle beforehand and
+   `gh attestation verify --bundle` checks it later.
+4. The base model matches `measured_with` in `adapter_manifest.json` (file and
+   SHA-256): an adapter is only measured on that base.
+
+Adapters decided before bench-lora signed (up to and including
+`vyvy-1.5b-d1e100e8d`, the default of 07.11.2026) carry no attestation and
+cannot pass step 3; the next accepted adapter replaces them.
+
 ### Run locally
 
 ```bash

@@ -67,8 +67,8 @@ def kaggle_quota() -> tuple[float, float, str] | None:
         q = r.gpu_quota
         return (q.time_used.total_seconds() / 60, q.total_time_allowed.total_seconds() / 60,
                 r.quota_refresh_time.isoformat() if r.quota_refresh_time else "")
-    except Exception as exc:  # noqa: BLE001  (any failure means: use the fallback)
-        print(f"Kaggle quota not available ({type(exc).__name__}: {exc}); counting from GitHub instead.")
+    except Exception as exc:  # noqa: BLE001  (any failure means: fallback count, and no run starts)
+        print(f"Kaggle quota not available ({type(exc).__name__}: {exc}); counting from GitHub for display only.")
         return None
 
 
@@ -105,7 +105,12 @@ def main(argv: list[str] | None = None) -> int:
     paused = left < args.reserve + args.need
     msg = (f"Kaggle GPU this week ({source}): {used:.0f} of {limit:.0f} min used, "
            f"{left:.0f} left; this run needs {args.need:.0f} plus a reserve of {args.reserve:.0f}.")
-    if paused:
+    # The fallback only sees GitHub step times (the kernel runs on its own), so it counts
+    # seconds for hours of GPU: good enough for a status line, never to start a run.
+    if not live and args.need > 0:
+        paused = True
+        msg += " Quota paused: Kaggle's own figure could not be read, so no GPU run starts (fail closed)."
+    elif paused:
         msg += f" Quota paused until {refresh or 'the weekly reset'}."
     print(msg)
     if os.environ.get("GITHUB_STEP_SUMMARY"):

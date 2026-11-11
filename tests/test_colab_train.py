@@ -132,3 +132,19 @@ def test_the_lock_can_hold_7b_alone(scheduler, monkeypatch):
     monkeypatch.setattr(collect.loop_guard, "gate", lambda state, history, base, *a, **k: (base == SMALL, "7B waits"))
     collect.schedule("owner/vyvy-ai", "u")
     assert scheduler == [f"train-colab.yml base={SMALL}"]
+
+
+def test_a_colab_plan_running_on_kaggle_is_not_started_twice(scheduler, monkeypatch):
+    monkeypatch.setattr(collect, "any_kernel_running", lambda: True)
+    monkeypatch.setattr(plan_train, "trained_release", lambda repo, base: None)
+    monkeypatch.setattr(collect, "same_plan_on_kaggle", lambda owner, base: base == SMALL)
+    collect.schedule("owner/vyvy-ai", "u")
+    assert scheduler == []
+
+
+def test_another_kernel_on_kaggle_does_not_hold_the_colab_plan(scheduler, monkeypatch):
+    monkeypatch.setattr(collect, "any_kernel_running", lambda: True)
+    monkeypatch.setattr(plan_train, "trained_release", lambda repo, base: None)
+    monkeypatch.setattr(collect, "same_plan_on_kaggle", lambda owner, base: False)
+    collect.schedule("owner/vyvy-ai", "u")
+    assert scheduler == [f"train-colab.yml base={SMALL}"]

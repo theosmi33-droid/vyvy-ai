@@ -248,6 +248,20 @@ jobs:
             adapter_manifest.json
             ${{ steps.adapter.outputs.gguf }}
 
+      # Watch cannot report this run when the pipeline started it (runs started with
+      # GITHUB_TOKEN start no workflow_run, issue #5), so bench-lora opens the notice itself.
+      # Same title as Watch's, whose duplicate check then skips it for runs started by hand.
+      - name: Open the rejection notice
+        if: steps.decide.outputs.accepted != 'true'
+        run: |
+          set -euo pipefail
+          title="Adapter rejected: Bench LoRA (run $GITHUB_RUN_ID)"
+          if gh issue list --repo "$GITHUB_REPOSITORY" --state all --search "\"$title\" in:title" --json title \
+               --jq '.[].title' | grep -qxF "$title"; then exit 0; fi
+          reason=$(python -c "import json; print(json.load(open('verdict.json'))['reason'])")
+          gh issue create --repo "$GITHUB_REPOSITORY" --title "$title" --body \
+            "\`$ADAPTER\` was rejected: $reason. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID. Opened by bench-lora; it stays open as a decision to read."
+
       - name: Fail when rejected
         if: steps.decide.outputs.accepted != 'true'
         run: |

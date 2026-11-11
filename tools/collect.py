@@ -298,6 +298,12 @@ def close_failures(repo: str, kid: str, name: str) -> None:
             f"Closed by Collect: `{name}` was trained on this kernel afterwards.", check=False)
 
 
+def same_plan_on_kaggle(owner: str, base: str) -> bool:
+    """True while this base's Kaggle kernel runs (its Colab plan was moved to Kaggle by hand)."""
+    status = run("kaggle", "kernels", "status", f"{owner}/{kaggle_job.kernel_slug(base)}", check=False)
+    return kaggle_watchdog.state_of(status) == "running" and bool(re.search(r"running|queued", status, re.I))
+
+
 def schedule(repo: str, owner: str) -> None:
     # One Kaggle run at a time (any kernel of the account holds the GPU); a Colab
     # run does not hold it, so Colab plans are started independently of Kaggle.
@@ -341,6 +347,10 @@ def schedule(repo: str, owner: str) -> None:
             summary(f"Scheduler: {base}: {why}.")
             continue
         kid = f"{owner}/{kaggle_job.kernel_slug(base)}" if where == "kaggle" else f"colab/{p['size']}"
+        if where == "colab" and not kaggle_free and same_plan_on_kaggle(owner, base):
+            # A Colab plan trained on Kaggle by hand (train.yml gpu=kaggle) must not run twice.
+            summary(f"Scheduler: {base} is training on Kaggle right now; no Colab run.")
+            continue
         if open_failure(repo, kid, p["name"]):
             summary(f"Scheduler: {base} waits for a fix (open failure issue for {kid}).")
             if where == "kaggle":
