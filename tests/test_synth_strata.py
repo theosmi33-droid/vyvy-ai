@@ -95,7 +95,9 @@ def test_pattern_requests_reach_the_teacher() -> None:
 def test_the_lock_checks_the_pattern_examples() -> None:
     import check_holdout_leak
     rows = check_holdout_leak.load_prompt_examples(ROOT / "training" / "patterns.py")
-    assert len(rows) == 14 and all(":PATTERNS[" in where for where, _ in rows)
+    import patterns
+    expected = sum(len(p["examples"]) for p in patterns.PATTERNS.values())
+    assert len(rows) == expected and all(":PATTERNS[" in where for where, _ in rows)
 
 
 def test_gap_words_get_their_own_requests() -> None:

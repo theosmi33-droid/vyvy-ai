@@ -1,0 +1,40 @@
+{
+ "schema": 1,
+ "adapter": "vyvy-1.5b-d84f55739.gguf",
+ "adapter_sha256": "7992e8aca6bc76522bb72aea5bb71d15beaf6d40fcc04752f2517159febf0973",
+ "status": "rejected",
+ "base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+ "base_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+ "measured_with": {
+  "gguf": "qwen2.5-1.5b-instruct-q8_0",
+  "repo": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+  "revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+  "files_sha256": {
+   "qwen2.5-1.5b-instruct-q8_0.gguf": "d7efb072e7724d25048a4fda0a3e10b04bdef5d06b1403a1c93bd9f1240a63c8"
+  }
+ },
+ "lora_scale": 1.0,
+ "training_git_commit": "2f49b8a69e72c0a9cab3e9b2f71ea97308f7d11e",
+ "train_files_sha256": {
+  "vyvy_partner_af84f746d.jsonl": "b22a88e4765e319f1568e2d1e8b1edbc5b37b5a7ef30b78c89a46356213dfbad",
+  "vyvy_person_calendar_v1.jsonl": "1b0f5bd3395ba4722f8426495d05f06ae9a7b0b6fdf242d1e821cac377aa67e7",
+  "vyvy_synth_9c0fcc500_2026-W45.jsonl": "ec331d48e90749c083b744bda15bc7b54de33a920675749c8deca4b8e8e0427d",
+  "vyvy_train_v1.jsonl": "b6f892fa074a14650adb349fce8e594d8aece467581b257612ed9c1f485783f4",
+  "vyvy_unknown_hard_v1.jsonl": "ac9c15c64d7e8972ce6e5ba926da061acf88ca19fafc94ab0aeedccea8c931b7"
+ },
+ "prompt": "compact",
+ "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+ "llama_cpp_commit": "4227c9be4268ac844921b90f31595f81236bd317",
+ "decision": {
+  "holdout": "data/holdout_blind_v2.json",
+  "rule": "exact McNemar p < 0.05, b >= 2c, per-intent tolerance, no loss on unknown",
+  "n": 270,
+  "b_fixed": 13,
+  "c_broken": 6,
+  "p_value": 0.083534,
+  "baseline_correct": 251,
+  "adapter_correct": 258,
+  "reason": "not significant (b=13, c=6, p=0.0835 >= 0.05); shadow holdout: b=19, c=11, p(worse)=0.9506; not worse",
+  "bench_lora_run": "42656200936"
+ }
+}

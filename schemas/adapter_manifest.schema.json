@@ -1,0 +1,44 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://github.com/theosmi33-droid/vyvy-ai/schemas/adapter_manifest.schema.json",
+ "title": "Vyvy adapter manifest, schema 1",
+ "description": "adapter_manifest.json attached by bench-lora to every measured adapter release. An application reads it before it loads an adapter (tools/verify_adapter.py). A new field may be added within schema 1; renaming or removing one raises the schema number.",
+ "type": "object",
+ "required": ["schema", "adapter", "adapter_sha256", "status", "base_model", "base_revision", "measured_with",
+              "lora_scale", "train_files_sha256", "prompt", "prompt_sha256", "decision"],
+ "properties": {
+  "schema": {"const": 1},
+  "adapter": {"type": "string", "pattern": "^vyvy-[0-9.]+b-d[0-9a-f]{8,9}\\.gguf$"},
+  "adapter_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+  "status": {"enum": ["accepted", "rejected"]},
+  "base_model": {"type": "string"},
+  "base_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+  "measured_with": {
+   "type": "object",
+   "required": ["gguf", "repo", "revision", "files_sha256"],
+   "properties": {
+    "gguf": {"type": "string"},
+    "repo": {"type": "string"},
+    "revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "files_sha256": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+                     "minProperties": 1}
+   }
+  },
+  "lora_scale": {"type": "number"},
+  "training_git_commit": {"type": ["string", "null"]},
+  "train_files_sha256": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+  "prompt": {"type": "string"},
+  "prompt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+  "llama_cpp_commit": {"type": ["string", "null"]},
+  "decision": {
+   "type": "object",
+   "required": ["holdout", "rule", "n", "b_fixed", "c_broken", "p_value", "reason", "bench_lora_run"],
+   "properties": {
+    "holdout": {"type": "string"}, "rule": {"type": "string"}, "n": {"type": "integer"},
+    "b_fixed": {"type": "integer"}, "c_broken": {"type": "integer"}, "p_value": {"type": "number"},
+    "baseline_correct": {"type": "integer"}, "adapter_correct": {"type": "integer"},
+    "reason": {"type": "string"}, "bench_lora_run": {"type": "string"}
+   }
+  }
+ }
+}

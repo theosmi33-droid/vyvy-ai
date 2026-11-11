@@ -17,10 +17,13 @@ it decides what is being asked and hands that decision over in a fixed format.
 - **One fixed output format.** Every answer is a valid JSON object with
   `intent`, `timeframe`, `entity` and `confidence`. When the request is not
   covered, the answer is `unknown` instead of an invented action.
-- **Fast on ordinary hardware.** A decision within 4 seconds on a CPU.
-- **Voice, text and documents.** Typed requests, dictated voice messages via
-  local speech recognition and, in the larger class, images and scanned
-  documents.
+- **Fast on a CPU.** The benchmark allows 4 seconds per decision. On GitHub's
+  CPU runners the median is 0.6–0.7 s for the 1.5B class and about 2.1 s for
+  the 7B class; ordinary laptops with 2 to 4 cores are not measured yet.
+- **Text today, voice and documents planned.** Vyvy reads typed requests.
+  Dictated voice messages (local speech recognition) and, in the larger class,
+  images and scanned documents are planned; this repository has no code for
+  them yet.
 - **Measured before release.** Every model version is checked against the
   public holdout set in this repository.
 

@@ -85,12 +85,25 @@ PATTERNS = {
     "others_calendar": {
         "intent": "unknown",
         "near": "appointments_tomorrow",
+        "weight": 2,
         "rule": ("Die Person fragt nach Terminen, freier Zeit oder Öffnungszeiten einer ANDEREN Person oder "
                  "Firma, nicht nach dem eigenen Kalender. Der Assistent sieht nur den eigenen Kalender, also ist "
                  "es unknown. Nutze jeweils ein Zeitwort und eines dieser Wörter: {appointment_words}. "
                  "Wer gemeint ist, wechselt: {others}."),
         "examples": ["Ist beim Autohaus Okonkwo übermorgen jemand für die Probefahrt da?",
                      "Weißt du, ob die Hausverwaltung am Freitag eine Sprechstunde hat?"],
+    },
+    "possessive_others": {
+        "intent": "unknown",
+        "near": "appointments_tomorrow",
+        "weight": 2,
+        "rule": ("Die Person fragt nach den Terminen, der freien Zeit oder den Meetings von jemand ANDEREM, "
+                 "den sie mit 'mein', 'meine' oder 'unser' bezeichnet (mein Chef, meine Kollegin, unser "
+                 "Lieferant, mein Team) oder mit einer anderen Person oder Firma in der dritten Person "
+                 "(er, sie, die Firma hat). Nutze ein Tageswort aus {region}: heute = {today}, morgen = "
+                 "{tomorrow}. Das ist unknown: der Assistent sieht nur den eigenen Kalender."),
+        "examples": ["Weißt du, ob meine Teamleiterin übermorgen Vormittag schon verplant ist?",
+                     "Wie voll ist der Kalender von unserem Steuerbüro nächste Woche?"],
     },
     "everyday_time": {
         "intent": "unknown",
@@ -180,7 +193,8 @@ def pattern_requests(rng: random.Random, total: int) -> list[tuple[str, str, str
     own calendar and unknown. Dialect time words are stratum 3, the rest hard cases (4).
     """
     regions = [r for r, w in region_weights().items() for _ in range(w)]
-    keys = list(PATTERNS)
+    # Error categories that keep failing count twice ("weight"): other people's calendars.
+    keys = [k for k, p in PATTERNS.items() for _ in range(p.get("weight", 1))]
     out = []
     for k in range(total):
         key = keys[k % len(keys)]
