@@ -145,6 +145,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--near-styles", type=int, default=3, help="styles per near-miss pair")
     p.add_argument("--weak-styles", type=int, default=4, help="styles per weak intent")
     p.add_argument("--budget-usd", type=float, default=5.0, help="hard stop; the run never spends more")
+    p.add_argument("--verify-fraction", type=float, default=0.3,
+                    help="share of --budget-usd reserved for the blind verification pass, so generation "
+                         "can never spend the whole budget before a single candidate gets verified")
     p.add_argument("--seed", type=int, default=0, help="0 = random (manual runs vary each time)")
     p.add_argument("--round", default="", help="label for this round, e.g. a date; blank = 'manual-<timestamp>'")
     p.add_argument("--model", default=TEACHER)
@@ -164,7 +167,8 @@ def main(argv: list[str] | None = None) -> int:
     round_ = args.round or f"manual-{int(time.time())}"
     rng = random.Random(args.seed or None)
     started = time.time()
-    budget = Budget(args.budget_usd)
+    gen_budget = Budget(args.budget_usd * (1 - args.verify_fraction))
+    verify_budget = Budget(args.budget_usd * args.verify_fraction)
 
     requests = [(intent, style, None) for intent in WEAK | {"daily_agenda"}
                 for style in rng.sample(STYLES, args.weak_styles)]
@@ -173,19 +177,19 @@ def main(argv: list[str] | None = None) -> int:
 
     candidates = []
     for intent, style, near in requests:
-        if budget.exhausted:
-            print(f"budget of ${args.budget_usd:.2f} reached after {len(candidates)} candidates; stopping",
-                  flush=True)
+        if gen_budget.exhausted:
+            print(f"generation budget of ${gen_budget.limit:.2f} reached after {len(candidates)} candidates; "
+                  f"stopping to leave ${verify_budget.limit:.2f} for verification", flush=True)
             break
         role = rng.choice(ROLES)
-        reply = call(client, args.model, gen_prompt(intent, style, role, args.per_request, near), budget)
+        reply = call(client, args.model, gen_prompt(intent, style, role, args.per_request, near), gen_budget)
         if reply is None:
             continue
         s = 4 if near or intent == "unknown" else STYLE_STRATUM.get(style, 2)
         for it in parse_items(reply):
             candidates.append({**it, "intent": intent, "near": near, "stratum": s, "teacher": "claude"})
         print(f"{intent}{'/' + near if near else ''} {style}: {len(candidates)} candidates so far, "
-              f"${budget.spent:.2f} spent, {time.time() - started:.0f} s", flush=True)
+              f"${gen_budget.spent:.2f} spent, {time.time() - started:.0f} s", flush=True)
 
     seen, unique = set(), []
     for c in candidates:
@@ -198,11 +202,11 @@ def main(argv: list[str] | None = None) -> int:
     names = set(INTENTS)
     kept, dropped = [], []
     for c in unique:
-        if budget.exhausted:
+        if verify_budget.exhausted:
             dropped.append({**{k: c[k] for k in ("text", "intent", "timeframe", "entity", "stratum")},
                             "teacher": "claude", "judge": None, "near": c["near"]})
             continue
-        reply = call(client, args.model, classify_prompt(c["text"]), budget, max_tokens=32)
+        reply = call(client, args.model, classify_prompt(c["text"]), verify_budget, max_tokens=32)
         judged = (reply or "").strip().lower()
         judge = next((n for n in names if n in judged), None)
         row = {"text": c["text"], "intent": c["intent"], "timeframe": c["timeframe"], "entity": c["entity"],
@@ -224,8 +228,11 @@ def main(argv: list[str] | None = None) -> int:
                 "dropped_by_verification": len(dropped),
                 "per_intent": {i: sum(r["intent"] == i for r in kept) for i in INTENTS},
                 "per_stratum": {f"{s} {name}": sum(r["stratum"] == s for r in kept) for s, name in STRATA.items()},
-                "budget_usd": args.budget_usd, "spent_usd": round(budget.spent, 4),
-                "input_tokens": budget.in_tokens, "output_tokens": budget.out_tokens,
+                "budget_usd": args.budget_usd, "spent_usd": round(gen_budget.spent + verify_budget.spent, 4),
+                "spent_generation_usd": round(gen_budget.spent, 4),
+                "spent_verification_usd": round(verify_budget.spent, 4),
+                "input_tokens": gen_budget.in_tokens + verify_budget.in_tokens,
+                "output_tokens": gen_budget.out_tokens + verify_budget.out_tokens,
                 "minutes": round((time.time() - started) / 60, 1)}
     (args.out / "synth_manifest.json").write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8")
     print(json.dumps(manifest, indent=1))
