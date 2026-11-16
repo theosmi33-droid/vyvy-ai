@@ -1,0 +1,61 @@
+{
+ "teacher": "anthropic/claude-sonnet-5-5",
+ "license": null,
+ "second_teacher": null,
+ "script_sha256": "2e53bbfc8994f1f72e699646c47bbd0e7f1316d2fd4041a5f67bc860f421f0f5",
+ "round": "test-04",
+ "seed": 0,
+ "requests": 64,
+ "generated": 110,
+ "unique": 110,
+ "kept": 104,
+ "dropped_by_verification": 6,
+ "per_intent": {
+  "appointments_today": 0,
+  "appointments_tomorrow": 0,
+  "tasks_open": 0,
+  "tasks_overdue": 15,
+  "emails_unread": 0,
+  "daily_agenda": 9,
+  "create_appointment": 0,
+  "create_task": 40,
+  "unknown": 40
+ },
+ "per_stratum": {
+  "1 foundation": 10,
+  "2 everyday": 16,
+  "3 dialect": 9,
+  "4 hard cases": 69
+ },
+ "budget_usd": 1.0,
+ "spent_usd": 0.9183,
+ "spent_generation_usd": 0.712,
+ "spent_verification_usd": 0.2062,
+ "input_tokens": 89452,
+ "output_tokens": 43328,
+ "minutes": 8.4,
+ "imported": 99,
+ "dropped_near_holdout": 0,
+ "dropped_semantic": 5,
+ "max_cosine": 0.85,
+ "dropped_duplicate": 0,
+ "dropped_invalid": 0,
+ "max_similarity": 0.8,
+ "per_stratum_imported": {
+  "1": 10,
+  "2": 16,
+  "3": 6,
+  "4": 67
+ },
+ "per_intent_imported": {
+  "appointments_today": 0,
+  "appointments_tomorrow": 0,
+  "tasks_open": 0,
+  "tasks_overdue": 14,
+  "emails_unread": 0,
+  "daily_agenda": 6,
+  "create_appointment": 0,
+  "create_task": 40,
+  "unknown": 39
+ }
+}

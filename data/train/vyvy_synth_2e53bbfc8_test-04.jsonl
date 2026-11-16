@@ -1,0 +1,99 @@
+{"text": "Na, was liegt bei mir noch rum, das eigentlich schon gestern bei der Fischerei Petersen hätte raus sein müssen?", "intent": "tasks_overdue", "timeframe": null, "entity": "Fischerei Petersen", "stratum": 4}
+{"text": "Watt hebb ick denn noch nicht afarbeit't, wat all lang fällig weer? Zeig mal her.", "intent": "tasks_overdue", "timeframe": null, "entity": null, "stratum": 4}
+{"text": "Moin Assistent, welche Umsatzsteuervoranmeldungen hab ich noch nicht abgegeben, obwohl der Termin schon verstrichen ist?", "intent": "tasks_overdue", "timeframe": null, "entity": null, "stratum": 4}
+{"text": "Was ist diese Woche bei mir schon durchgerutscht, weil ich die Abgabefrist verbummelt hab?", "intent": "tasks_overdue", "timeframe": "week", "entity": null, "stratum": 4}
+{"text": "Moin, was ist heute bei mir noch liegengeblieben, das eigentlich schon vorgestern fertig sein sollte?", "intent": "tasks_overdue", "timeframe": "today", "entity": null, "stratum": 4}
+{"text": "Kiek mal na, bei welchen Mandanten bün ick mit de Jahresabschlüsse över de Tied?", "intent": "tasks_overdue", "timeframe": null, "entity": null, "stratum": 4}
+{"text": "Welche Fristen für die Bäckerei Looft GmbH hab ich eigentlich schon reißen lassen, ohne dass es mir aufgefallen ist?", "intent": "tasks_overdue", "timeframe": null, "entity": "Bäckerei Looft GmbH", "stratum": 4}
+{"text": "Na, was hab ich in den letzten Tagen alles verschlafen, was längst beim Finanzamt hätte sein müssen, min Leev?", "intent": "tasks_overdue", "timeframe": "week", "entity": null, "stratum": 4}
+{"text": "Sag mal, was ist eigentlich der Unterschied zwischen Umsatzsteuer und Vorsteuer, ich komm da heute halt immer wieder durcheinander?", "intent": "unknown", "timeframe": "today", "entity": null, "stratum": 4}
+{"text": "Mein Drucker spinnt mal wieder und zieht das Papier halt gar nicht mehr ein, hast du eine Idee, woran das liegen könnte?", "intent": "unknown", "timeframe": null, "entity": null, "stratum": 4}
+{"text": "Kannst du mal eben die Mail an Herrn Brandtner von der Kieselbach Logistik GmbH beantworten und sagen, dass die Unterlagen morgen kommen?", "intent": "unknown", "timeframe": "tomorrow", "entity": null, "stratum": 4}
+{"text": "Eigentlich wollte ich den Termin mit Frau Dahlmann am Donnerstag halt verschieben, kannst du das mal machen?", "intent": "unknown", "timeframe": "week", "entity": "Frau Dahlmann", "stratum": 4}
+{"text": "Was ist denn bei der Firma Lindenwerk Metallbau eigentlich so los, die haben doch letztens halt Insolvenz angemeldet, oder?", "intent": "unknown", "timeframe": null, "entity": "Lindenwerk Metallbau", "stratum": 4}
+{"text": "Die Umsatzsteuervoranmeldung für die Pohlmann Gartenbau KG hab ich heute früh schon abgeschickt, das kannst du halt abhaken.", "intent": "unknown", "timeframe": "today", "entity": "Pohlmann Gartenbau KG", "stratum": 4}
+{"text": "Rechne mir mal eben schnell 19 Prozent auf 2.348 Euro aus, ich hab gerade halt keinen Taschenrechner zur Hand.", "intent": "unknown", "timeframe": null, "entity": null, "stratum": 4}
+{"text": "Überweis doch bitte mal die Rechnung vom Büromaterial-Lieferanten Wegner & Söhne, die ist eigentlich schon seit Montag fällig.", "intent": "unknown", "timeframe": "week", "entity": "Wegner & Söhne", "stratum": 4}
+{"text": "Na, wie war eigentlich dein Wochenende, hast du halt auch mal was Schönes gemacht oder nur Updates installiert?", "intent": "unknown", "timeframe": null, "entity": null, "stratum": 4}
+{"text": "Schau mal in den Kalender von meiner Kollegin Svenja Hartmann, ob die morgen halt überhaupt Zeit für ein kurzes Meeting hat.", "intent": "unknown", "timeframe": "tomorrow", "entity": "Svenja Hartmann", "stratum": 4}
+{"text": "Chasch du mir schnäll erkläre, wie das mit de Bruttogschossfläche bi enere Baueingabe gnau definiert isch?", "intent": "unknown", "timeframe": null, "entity": null, "stratum": 4}
+{"text": "Lösch bitte de Bsprächigstermin mit em Herr Kämpfer vo de Hostettler Holzbau AG vo morn, de bruucht mer nöd meh.", "intent": "unknown", "timeframe": "tomorrow", "entity": null, "stratum": 4}
+{"text": "Was hät eigentlich d'Frau Brunner vo de Zimmerli Gipser GmbH im Kalender für nächschti Wuche, hät die no Platz für e Baustellebegehig?", "intent": "unknown", "timeframe": "week", "entity": null, "stratum": 4}
+{"text": "Rächne mir doch schnäll us, wie viel Kubikmeter Beton mir für e Bodeplatte vo zwölf mal aachtzäh Meter bi zwanzg Zentimeter Dicki bruuched.", "intent": "unknown", "timeframe": null, "entity": null, "stratum": 4}
+{"text": "Mis Laptop hät hüt am Morge wieder de Bluescreen gha, chasch du mir säge, was ich mache söll?", "intent": "unknown", "timeframe": "today", "entity": null, "stratum": 4}
+{"text": "Schick bitte em Architekt Meier d'Mail mit de neue Plän use, ich bin nämlich grad uf de Baustell und chum nöd dezue.", "intent": "unknown", "timeframe": "today", "entity": "Architekt Meier", "stratum": 4}
+{"text": "Hesch geschter am Wuchenänd au so es schööns Wätter gha, ich bi mit de Familie am Zürisee gsi.", "intent": "unknown", "timeframe": null, "entity": null, "stratum": 4}
+{"text": "Setz bitte d'Ufgab 'Bauabnahm vorbereite' uf erledigt, ich han die scho vor drei Täg gmacht.", "intent": "unknown", "timeframe": null, "entity": null, "stratum": 4}
+{"text": "Überwiis bitte die offeni Rächnig vo de Kessler Baumaschine AG, de Betrag isch zwölftusig Franke.", "intent": "unknown", "timeframe": "today", "entity": "Kessler Baumaschine AG", "stratum": 4}
+{"text": "Chasch du die Mail vom Herr Albrecht beantworte und em säge, dass mir d'Lieferig vom Armierigsstahl uf nächschti Wuche verschiebed?", "intent": "unknown", "timeframe": "week", "entity": "Herr Albrecht", "stratum": 4}
+{"text": "Na, dann schieß mal los: Was steht heute an Terminen an, was liegt an Aufgaben auf'm Tisch und welche Mails sind reingekommen?", "intent": "daily_agenda", "timeframe": "today", "entity": null, "stratum": 3}
+{"text": "Mien Leev, fass mir bitte zusammen, wat heute so los is: Baustellentermine, offene Aufgaben und neue Mails von Tiefbau Küstenwind.", "intent": "daily_agenda", "timeframe": "today", "entity": "Tiefbau Küstenwind", "stratum": 3}
+{"text": "Nu mal Butter bei die Fische: Gib mir alles für heute auf einmal, Besprechungen, Aufgabenliste und die Mails vom Morgen.", "intent": "daily_agenda", "timeframe": "today", "entity": null, "stratum": 3}
+{"text": "Lies mir bitte vor, wat heute ansteht, Termine, offene Punkte und eingegangene Mails, damit ich weiß, woran ich bin, bevor ich zu Dachbau Nordlicht rausfahre.", "intent": "daily_agenda", "timeframe": "today", "entity": "Dachbau Nordlicht", "stratum": 3}
+{"text": "Moin Assistent, ich will den ganzen Tag auf einen Blick: Was für Termine, was für Aufgaben und welche Mails sind wichtig, vor allem die von Frau Wiebke Petersen?", "intent": "daily_agenda", "timeframe": "today", "entity": "Wiebke Petersen", "stratum": 3}
+{"text": "Gib mir mal die volle Packung für heute, Kalender, To-do-Liste und Maileingang, dat ich nich nachher noch drei Mal nachfragen muss.", "intent": "daily_agenda", "timeframe": "today", "entity": null, "stratum": 3}
+{"text": "Was liegt seit gestern unerledigt rum?", "intent": "tasks_overdue", "timeframe": null, "entity": null, "stratum": 2}
+{"text": "Rechnung Familie Hollerbach vergessen? Frist vorbei?", "intent": "tasks_overdue", "timeframe": null, "entity": "Familie Hollerbach", "stratum": 2}
+{"text": "Verpasste Fristen diese Woche?", "intent": "tasks_overdue", "timeframe": "week", "entity": null, "stratum": 2}
+{"text": "Aufmaß Küche Herr Tannenberg liegengeblieben?", "intent": "tasks_overdue", "timeframe": null, "entity": "Herr Tannenberg", "stratum": 2}
+{"text": "Welche Rückrufe habe ich vergessen?", "intent": "tasks_overdue", "timeframe": null, "entity": null, "stratum": 2}
+{"text": "Bestellung Beschläge Eisenwaren Kruse, Frist abgelaufen?", "intent": "tasks_overdue", "timeframe": null, "entity": "Eisenwaren Kruse", "stratum": 2}
+{"text": "Sag mal, wat steht eigentlich in der Wärmepumpen-Norm drin, wenn et um die Vorlauftemperatur geht, heute noch mal nachlesen?", "intent": "unknown", "timeframe": "today", "entity": null, "stratum": 4}
+{"text": "Ick hab den Termin bei Familie Kowalczyk heute Morgen schon abjearbeitet, der is erledigt, ne.", "intent": "unknown", "timeframe": "today", "entity": "Familie Kowalczyk", "stratum": 4}
+{"text": "Boah, wat is dat heute für 'n Wetter, ey, da kriegt man ja Rohrbruch im Kopp – wie war dein Wochenende so?", "intent": "unknown", "timeframe": "today", "entity": null, "stratum": 4}
+{"text": "Rechne mir mal schnell aus, wat 38 Meter Kupferrohr mal 7,40 Euro plus Mehrwertsteuer macht, bevor ich heute Abend das Angebot schreib.", "intent": "unknown", "timeframe": "today", "entity": null, "stratum": 4}
+{"text": "Wat hat der Schmitt von der Firma Rohrmeister Schmitt & Söhne morgen eigentlich im Kalender stehen, kannste da mal reingucken?", "intent": "unknown", "timeframe": "tomorrow", "entity": "Rohrmeister Schmitt & Söhne", "stratum": 4}
+{"text": "Kannste den Termin vom Dienstag bei Frau Lehmann auf Donnerstag verschieben, die hat nämlich Besuch anjesagt.", "intent": "unknown", "timeframe": "week", "entity": "Frau Lehmann", "stratum": 4}
+{"text": "Schick mal die Mail an die Firma Sanitär Brandt raus, dat wir die Lieferung morgen früh annehmen, ja?", "intent": "unknown", "timeframe": "tomorrow", "entity": "Sanitär Brandt", "stratum": 4}
+{"text": "Hak die Aufgabe mit dem Heizungscheck bei Müllers heute ab, die hab ich nämlich schon fertich.", "intent": "unknown", "timeframe": "today", "entity": "Müllers", "stratum": 4}
+{"text": "Überweis dem Großhandel Bauer & Lütke mal die 1.250 Euro für die Armaturen, die Rechnung muss heute noch raus.", "intent": "unknown", "timeframe": "today", "entity": "Großhandel Bauer & Lütke", "stratum": 4}
+{"text": "notier mir als to-do die reisekostenabrechnung für herrn brandtner fertig machen bis morgen", "intent": "create_task", "timeframe": "tomorrow", "entity": null, "stratum": 2}
+{"text": "setz auf meine liste bürobedarf bei der firma kollmeyer & söhne nachbestelen", "intent": "create_task", "timeframe": null, "entity": null, "stratum": 2}
+{"text": "merk dir ich muss heute noch die rechnung von elbtal logistik prüfen", "intent": "create_task", "timeframe": "today", "entity": null, "stratum": 2}
+{"text": "schreib auf aufgabe urlaubsliste fürs team aktualisieren diese woche", "intent": "create_task", "timeframe": "week", "entity": null, "stratum": 2}
+{"text": "to-do für mich die verträge von frau wiesenhoff ablegen und scannen", "intent": "create_task", "timeframe": null, "entity": null, "stratum": 2}
+{"text": "bitte notier ich muss morgen den drucker toner wechseln lassen vor dem wochenede", "intent": "create_task", "timeframe": "tomorrow", "entity": null, "stratum": 2}
+{"text": "leg eine aufgabe an angebot von nordlicht medien durchlesen und vergleichen", "intent": "create_task", "timeframe": null, "entity": null, "stratum": 2}
+{"text": "setz auf die liste heute noch die protokole vom montag ins laufwerk hochladen", "intent": "create_task", "timeframe": "today", "entity": null, "stratum": 2}
+{"text": "notier bitte als aufgabe diese woche die schlüsselliste mit herrn thalmann abgleichen", "intent": "create_task", "timeframe": "week", "entity": null, "stratum": 2}
+{"text": "merk dir als to-do mietvertrag fürs lager bei der firma baumhauer immobilien nochmal druchlesen", "intent": "create_task", "timeframe": null, "entity": null, "stratum": 2}
+{"text": "Notier mir als Aufgabe: Bis Freitag den Prüfbericht für die Anlage bei Familie Kranich schreiben.", "intent": "create_task", "timeframe": "week", "entity": "Familie Kranich", "stratum": 4}
+{"text": "Setz auf meine Liste, dass ich morgen früh die Angebotskalkulation für die Firma Lindner Haustechnik fertig machen muss.", "intent": "create_task", "timeframe": "tomorrow", "entity": "Lindner Haustechnik", "stratum": 4}
+{"text": "Merk dir als To-do: Heute noch die Messprotokolle für die Baustelle in der Birkenstraße ausdrucken und abheften.", "intent": "create_task", "timeframe": "today", "entity": null, "stratum": 4}
+{"text": "Schreib auf, dass ich diese Woche bei Voltano Großhandel die Kabelrollen und Sicherungsautomaten nachbestellen muss.", "intent": "create_task", "timeframe": "week", "entity": "Voltano Großhandel", "stratum": 4}
+{"text": "Leg bitte eine Aufgabe an: Den Firmenwagen vor dem Wochenende zum Reifenwechsel bringen.", "intent": "create_task", "timeframe": "week", "entity": null, "stratum": 4}
+{"text": "Setz auf die Liste: Morgen die Rechnung für Herrn Bergmann schreiben und rausschicken.", "intent": "create_task", "timeframe": "tomorrow", "entity": null, "stratum": 4}
+{"text": "Notier als To-do, dass ich heute Abend noch den Spannungsprüfer kalibrieren muss.", "intent": "create_task", "timeframe": "today", "entity": null, "stratum": 4}
+{"text": "Trag mir als Aufgabe ein: Die Prüfplakette der Leiter bis Ende der Woche erneuern lassen.", "intent": "create_task", "timeframe": "week", "entity": null, "stratum": 4}
+{"text": "Merk dir, dass ich die Zählerschrank-Unterlagen für die Wohnbau Seeblick GmbH noch zusammenstellen muss.", "intent": "create_task", "timeframe": null, "entity": "Wohnbau Seeblick GmbH", "stratum": 4}
+{"text": "Schreib als To-do auf: Morgen die Garantieunterlagen für den Verteilerkasten bei Frau Hofmann heraussuchen.", "intent": "create_task", "timeframe": "tomorrow", "entity": "Frau Hofmann", "stratum": 4}
+{"text": "Ich muss mir halt mal merken, wie das eigentlich mit der Nebenkostenabrechnung funktioniert, kannst du mir kurz erklären, wie man die Heizkosten auf die Mieter verteilt?", "intent": "unknown", "timeframe": null, "entity": null, "stratum": 4}
+{"text": "Den Termin mit Herrn Brandtner morgen um zehn muss ich eigentlich mal verschieben, schieb den doch bitte halt auf nächste Woche Donnerstag.", "intent": "unknown", "timeframe": "tomorrow", "entity": null, "stratum": 4}
+{"text": "Schick doch mal eben eine Mail an die Hellwig Immobilien GmbH raus, dass wir den Vertrag eigentlich halt doch verlängern wollen.", "intent": "unknown", "timeframe": null, "entity": "Hellwig Immobilien GmbH", "stratum": 4}
+{"text": "Mein Drucker spinnt heute schon wieder, der zieht halt eigentlich nie das Papier ein, was soll ich denn da mal machen?", "intent": "unknown", "timeframe": "today", "entity": null, "stratum": 4}
+{"text": "Die Aufgabe mit der Rauchmelderwartung in der Lindenstraße kannst du mal abhaken, die hab ich eigentlich heute Morgen schon erledigt.", "intent": "unknown", "timeframe": "today", "entity": null, "stratum": 4}
+{"text": "Überweis mal eben die 840 Euro an die Firma Kowalski Haustechnik, die Rechnung ist halt eigentlich schon seit Tagen fällig.", "intent": "unknown", "timeframe": null, "entity": "Kowalski Haustechnik", "stratum": 4}
+{"text": "Was hat die Frau Zimmermann eigentlich in ihrem Kalender für nächste Woche stehen, hat die halt überhaupt mal Zeit für eine Begehung?", "intent": "unknown", "timeframe": "week", "entity": "Frau Zimmermann", "stratum": 4}
+{"text": "Rechne mir mal schnell aus, was 19 Prozent Mehrwertsteuer auf 2.350 Euro sind, das brauch ich halt eigentlich für die Angebotsaufstellung.", "intent": "unknown", "timeframe": null, "entity": null, "stratum": 4}
+{"text": "Wie war eigentlich dein Wochenende, hast du halt mal was Schönes gemacht, bevor wir gleich in den Stress mit den Eigentümerversammlungen starten?", "intent": "unknown", "timeframe": "today", "entity": null, "stratum": 4}
+{"text": "Antworte doch mal bitte auf die Mail von der Stadtwerke Bergmann AG, dass wir den Zählerstand halt eigentlich schon letzte Woche durchgegeben haben.", "intent": "unknown", "timeframe": null, "entity": "Stadtwerke Bergmann AG", "stratum": 4}
+{"text": "Notier mir als To-do: Dachlatten bei der Holzhandlung Berger nachbestellen.", "intent": "create_task", "timeframe": null, "entity": "Holzhandlung Berger", "stratum": 1}
+{"text": "Setz auf meine Liste, dass ich heute noch das Angebot für die Familie Kranz schreiben muss.", "intent": "create_task", "timeframe": "today", "entity": "Familie Kranz", "stratum": 1}
+{"text": "Merk dir als Aufgabe: Gerüstprüfprotokoll für die Baustelle in der Lindenstraße ausfüllen.", "intent": "create_task", "timeframe": null, "entity": null, "stratum": 1}
+{"text": "Schreib auf, dass ich morgen die Schutzausrüstung auf Vollständigkeit kontrollieren muss.", "intent": "create_task", "timeframe": "tomorrow", "entity": null, "stratum": 1}
+{"text": "Leg eine Aufgabe an: Rechnung an die Hausverwaltung Sonnleitner diese Woche rausschicken.", "intent": "create_task", "timeframe": "week", "entity": "Hausverwaltung Sonnleitner", "stratum": 1}
+{"text": "Notier bitte: Dachziegel für das Projekt Weidenweg zählen und die Menge festhalten.", "intent": "create_task", "timeframe": null, "entity": null, "stratum": 1}
+{"text": "Setz auf die Liste: Dachfenster-Maße für Firma Velux-Partner Möller noch heute durchgeben.", "intent": "create_task", "timeframe": "today", "entity": "Velux-Partner Möller", "stratum": 1}
+{"text": "Ich muss morgen den Transporter volltanken, schreib das als To-do auf.", "intent": "create_task", "timeframe": "tomorrow", "entity": null, "stratum": 1}
+{"text": "Merk dir als Aufgabe: Fotos vom Sturmschaden bei Herrn Albrecht sortieren und abspeichern.", "intent": "create_task", "timeframe": null, "entity": null, "stratum": 1}
+{"text": "Trag als To-do ein, dass ich diese Woche die Dachrinnen-Winkel bei der Metallbau Hartmann GmbH bestellen muss.", "intent": "create_task", "timeframe": "week", "entity": "Metallbau Hartmann GmbH", "stratum": 1}
+{"text": "Notier mir mal als To-do, dass ich bis Freitag eigentlich noch die Aufmaße für die Baustelle Lindenallee nachrechnen muss.", "intent": "create_task", "timeframe": "week", "entity": "Lindenallee", "stratum": 4}
+{"text": "Setz mir halt auf die Liste, dass ich morgen früh die Bauleitungsmappe für den Rohbau von der Firma Brandtner Hochbau durchgehen muss.", "intent": "create_task", "timeframe": "tomorrow", "entity": "Brandtner Hochbau", "stratum": 4}
+{"text": "Merk dir mal als Aufgabe für heute: Lieferschein von Kowalski Baustoffe mit der Bestellung abgleichen.", "intent": "create_task", "timeframe": "today", "entity": "Kowalski Baustoffe", "stratum": 4}
+{"text": "Schreib mir eigentlich noch auf, dass ich diese Woche halt die Mängelliste für Haus drei fertig machen muss.", "intent": "create_task", "timeframe": "week", "entity": null, "stratum": 4}
+{"text": "Leg mir mal ne Aufgabe an: morgen den Bauzeitenplan für den Kunden Herr Steinfeld überarbeiten, aber nur für mich, ohne Besprechung.", "intent": "create_task", "timeframe": "tomorrow", "entity": "Herr Steinfeld", "stratum": 4}
+{"text": "Trag mir halt als To-do ein, dass ich heute Abend noch die Fotos vom Fundament sortieren und ablegen muss.", "intent": "create_task", "timeframe": "today", "entity": null, "stratum": 4}
+{"text": "Notier mal als Aufgabe, dass ich die Abnahmeprotokolle von der Elektrofirma Voltwerk bis Ende der Woche unterschreiben und einscannen muss.", "intent": "create_task", "timeframe": "week", "entity": "Voltwerk", "stratum": 4}
+{"text": "Setz mir eigentlich noch auf die To-do-Liste: Sicherheitsunterweisung für die neuen Leute vorbereiten, also die Unterlagen halt zusammenstellen.", "intent": "create_task", "timeframe": null, "entity": null, "stratum": 4}
+{"text": "Merk dir mal für morgen, dass ich bei der Baustelle Am Hafen die Gerüstprüfung selber dokumentieren muss, ist ja eigentlich meine Aufgabe.", "intent": "create_task", "timeframe": "tomorrow", "entity": "Am Hafen", "stratum": 4}
+{"text": "Schreib mir halt heute noch als To-do auf, dass ich die Nachtragsangebote von Meierhoff Trockenbau prüfen und freigeben muss.", "intent": "create_task", "timeframe": "today", "entity": "Meierhoff Trockenbau", "stratum": 4}
