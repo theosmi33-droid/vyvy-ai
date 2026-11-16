@@ -1,0 +1,71 @@
+name: Synthesize (Claude)
+
+# A third, bottleneck-focused teacher: training/synthesize_claude.py targets only
+# the WEAK intents and the near-miss pairs that training/synthesize.py's own
+# manifests show as hardest. Unlike Synthesize (Qwen2.5-14B + Phi-4 on a free
+# Kaggle GPU, scheduled automatically once per quota week), this costs real
+# money and runs only by hand, with a hard dollar budget the script enforces
+# itself. No GPU: it calls the Anthropic API from this runner directly.
+#
+# The result goes through tools/import_synth.py unchanged, so it gets the same
+# holdout-leak lock, duplicate check and semantic guard as every other round.
+
+on:
+  workflow_dispatch:
+    inputs:
+      budget_usd:
+        description: Hard spending limit for this run in US dollars
+        type: string
+        default: "5"
+      round:
+        description: Round label (blank = manual-<timestamp>)
+        type: string
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: train
+  cancel-in-progress: false
+
+jobs:
+  synth-claude:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: claude
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Generate and blind-verify with Claude
+        run: |
+          set -euo pipefail
+          pip install -q anthropic
+          python training/synthesize_claude.py --out out \
+            --budget-usd "${{ inputs.budget_usd }}" --round "${{ inputs.round }}"
+          echo "## Synthesize (Claude)" >> "$GITHUB_STEP_SUMMARY"
+          cat out/synth_manifest.json >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Import through the usual holdout-leak lock
+        run: |
+          set -euo pipefail
+          pip install -q -r tools/semantic-requirements.txt
+          python tools/import_synth.py out --round "${{ inputs.round }}" | tee import.path
+          echo "imported=$(cat import.path)" >> "$GITHUB_ENV"
+
+      - name: Commit the kept sentences
+        run: |
+          set -euo pipefail
+          path="$imported"
+          git add "$path" "${path%.jsonl}.json"
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -m "Teacher sentences $(basename "$path") (training/synthesize_claude.py)"
+          git pull --rebase origin main
+          git push origin HEAD:main
