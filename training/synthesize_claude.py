@@ -130,7 +130,12 @@ def call(client, model: str, prompt: str, budget: Budget, max_tokens: int = 1024
     resp = client.messages.create(model=model, max_tokens=max_tokens,
                                   messages=[{"role": "user", "content": prompt}])
     budget.add(resp.usage)
-    return resp.content[0].text if resp.content else None
+    # Extended thinking (or any future block type) can put a non-text block first;
+    # take the first block that actually is text, not blindly content[0].
+    for block in resp.content:
+        if getattr(block, "type", None) == "text":
+            return block.text
+    return None
 
 
 def main(argv: list[str] | None = None) -> int:
