@@ -23,10 +23,23 @@ import improve_report  # noqa: E402
 SAFETY = improve_report.SAFETY
 
 
+def carries_text(value) -> bool:
+    """True if any dict anywhere in the result has a "text" key (bench.py's per_intent misses do)."""
+    if isinstance(value, dict):
+        return "text" in value or any(carries_text(v) for v in value.values())
+    if isinstance(value, list):
+        return any(carries_text(v) for v in value)
+    return False
+
+
 def summarise(result: dict) -> dict:
+    if carries_text(result):
+        raise SystemExit("the result carries question texts; it must hold ids and verdicts only")
+    if result.get("kind", "intent") != "intent":
+        # create-v<N> and inject-v<N>: counts from the kernel (runner/sealed_score.py); not a goal record.
+        return {"adapter": result["adapter"], "sealed_version": result["sealed_version"], "kind": result["kind"],
+                "items_sha256": result["items_sha256"], **result["summary"], "looks": 1}
     items = result["items"]
-    if any("text" in i for i in items):
-        raise SystemExit("the result carries question texts; it must hold ids and intents only")
     correct = sum(i["got"] == i["expected"] for i in items)
     return {
         "adapter": result["adapter"], "sealed_version": result["sealed_version"],
@@ -48,6 +61,10 @@ def main(argv: list[str] | None = None) -> int:
     args = p.parse_args(argv)
     s = summarise(json.loads(args.result.read_text(encoding="utf-8")))
     args.out.write_text(json.dumps(s, indent=1) + "\n", encoding="utf-8")
+    if s.get("kind", "intent") != "intent":
+        print(f"### Sealed set {s['sealed_version']}\n\n{s['adapter']}: "
+              + ", ".join(f"{k} {v}" for k, v in s.items() if isinstance(v, int) and k != "looks") + "\n")
+        return 0
     print(f"### Sealed set {s['sealed_version']}\n\n{s['adapter']}: {s['correct']}/{s['n']} "
           f"({s['correct'] / s['n']:.1%}), wrong actions {s['wrong_actions']}, "
           f"wrong actions on {s['unknown_n']} unknown questions: {s['false_actions']}.\n")

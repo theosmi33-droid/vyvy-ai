@@ -1,0 +1,72 @@
+name: Sealed check
+
+# Semantic check of privately written sealed sets (create-v<N>, inject-v<N>) against
+# the training data, every holdout, the probes and the teacher examples. Runs in a
+# Kaggle CPU kernel (no GPU quota) that reads the private datasets vyvy-sealed-<version>;
+# the result holds ids and scores only (tools/sealed_semantic.py). By hand only.
+on:
+  workflow_dispatch:
+    inputs:
+      versions:
+        description: Sealed set versions, space-separated (e.g. "create-v1 inject-v1")
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sealed-check
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    environment: kaggle
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+      VERSIONS: ${{ inputs.versions }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Start the CPU kernel on Kaggle
+        run: |
+          set -euo pipefail
+          for v in $VERSIONS; do [[ "$v" =~ ^(create|inject)-v[0-9]+$ ]] || { echo "invalid version $v" >&2; exit 1; }; done
+          pip install -q kaggle==2.2.5 six==1.17.0
+          # shellcheck disable=SC2086
+          kid=$(python tools/kaggle_job.py --dir job --owner "$KAGGLE_USERNAME" --repo "$GITHUB_REPOSITORY" \
+                  --commit "$GITHUB_SHA" --semantic-check $VERSIONS)
+          # No accelerator: the kernel runs on CPU and uses no GPU quota.
+          kaggle kernels push -p job
+          echo "KID=$kid" >> "$GITHUB_ENV"
+
+      - name: Wait for the kernel and report ids and scores
+        run: |
+          set -uo pipefail
+          for _ in $(seq 1 100); do
+            status=$(kaggle kernels status "$KID" 2>&1 || true)
+            case "$status" in
+              *complete*|*COMPLETE*) break ;;
+              *error*|*ERROR*|*cancel*|*CANCEL*) echo "$status" >&2; exit 1 ;;
+            esac
+            sleep 60
+          done
+          kaggle kernels output "$KID" -p out --file-pattern 'semantic_result\.json$'
+          python - <<'EOF' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          r = json.load(open("out/semantic_result.json"))
+          print(f"## Sealed check ({r['model'].split('/')[-1]}, report >= {r['report']}, fail >= {r['fail']})\n")
+          for v, s in r["sets"].items():
+              print(f"### {v}: {s['n']} entries, median {s['median']}, failing {s['failing']}\n")
+              for h in s["hits"]:
+                  print(f"- {h['id']} {h['score']} ({h['kind']})")
+              print()
+          raise SystemExit(1 if any(s["failing"] for s in r["sets"].values()) else 0)
+          EOF

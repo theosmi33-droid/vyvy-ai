@@ -46,8 +46,10 @@ jobs:
       - name: Once per sealed set, accepted adapters only
         run: |
           set -euo pipefail
-          [[ "$ADAPTER" =~ ^[a-z0-9][a-z0-9.-]{0,60}$ && "$VERSION" =~ ^v[0-9]+$ ]] || { echo "invalid input" >&2; exit 1; }
-          if gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" --paginate --jq '.[].assets[].name' \
+          [[ "$ADAPTER" =~ ^[a-z0-9][a-z0-9.-]{0,60}$ && "$VERSION" =~ ^((create|inject)-)?v[0-9]+$ ]] || { echo "invalid input" >&2; exit 1; }
+          # create-v<N> and inject-v<N> measure every candidate (a veto, like the active holdout);
+          # only the intent sets v<N> are the one-look goal check.
+          if [[ "$VERSION" =~ ^v[0-9]+$ ]] && gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" --paginate --jq '.[].assets[].name' \
                | grep -qx "sealed_${VERSION}_result.json"; then
             echo "Sealed set $VERSION was already looked at; it proves nothing a second time." >&2; exit 1
           fi
