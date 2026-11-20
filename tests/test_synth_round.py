@@ -23,10 +23,17 @@ def test_week_change() -> None:
     assert collect.synth_round(at("2026-11-09T12:00:00")) == "2026-11-07"  # Monday: no new round
 
 
-def test_legacy_round_counts_for_its_week() -> None:
+def test_legacy_round_counts_for_its_week(tmp_path, monkeypatch) -> None:
     # The 2026-W45 sentences were taken in on Saturday 07.11; that quota week is done.
+    # Its own data folder: the real data/train/ gains a round every week (20.11.2026: the
+    # round of 2026-11-14 came in and the second assertion failed on real data).
+    (tmp_path / "data" / "train").mkdir(parents=True)
+    (tmp_path / "data" / "train" / "vyvy_synth_9c0fcc500_2026-W45.jsonl").write_text("", encoding="utf-8")
+    monkeypatch.setattr(collect, "ROOT", tmp_path)
     assert collect.synth_done(at("2026-11-10T08:00:00"))
     assert not collect.synth_done(at("2026-11-14T00:00:00"))
+    (tmp_path / "data" / "train" / "vyvy_synth_01ba17a81_2026-11-14.jsonl").write_text("", encoding="utf-8")
+    assert collect.synth_done(at("2026-11-14T00:00:00"))
 
 
 def test_an_extra_round_keeps_the_regular_one() -> None:
@@ -52,5 +59,4 @@ def test_an_extra_round_keeps_the_regular_one() -> None:
 
 if __name__ == "__main__":
     test_week_change()
-    test_legacy_round_counts_for_its_week()
-    print("ok")
+    print("ok (the other tests need pytest)")
