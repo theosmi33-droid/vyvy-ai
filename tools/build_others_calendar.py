@@ -44,6 +44,8 @@ import bench  # noqa: E402
 import build_unknown_hard as hard  # noqa: E402
 
 OUT = ROOT / "data" / "train" / "vyvy_others_calendar_v1.jsonl"
+#: Built later (tools/build_retired_holdout.py); left out of the comparison so --check stays stable.
+LATER = (ROOT / "data" / "train" / "vyvy_retired_blind_v2.jsonl",)
 QUOTAS = {"unknown": 120, "appointments_today": 30, "appointments_tomorrow": 30}
 TIMEFRAME = {"appointments_today": "today", "appointments_tomorrow": "tomorrow"}
 
@@ -113,7 +115,7 @@ def contrast_groups(intent: str) -> dict[str, list[tuple[str, str]]]:
 def build(seed: int, max_similarity: float) -> tuple[list[dict], dict[str, int], list[tuple[str, str]]]:
     rng = random.Random(f"{seed}-others-calendar")
     # Compared against every training file except this one and build_unknown_hard's own output.
-    keep = hard.Filter(max_similarity, own=(OUT,))
+    keep = hard.Filter(max_similarity, own=(OUT, *LATER))
     rows, counts = [], {}
     picked = hard.draw(unknown_groups(), QUOTAS["unknown"], rng, keep, "unknown")
     counts["unknown"] = len(picked)

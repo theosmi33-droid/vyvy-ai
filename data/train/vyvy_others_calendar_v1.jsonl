@@ -1,0 +1,180 @@
+{"text": "Bin ich heute bei dem Bauleiter", "intent": "appointments_today", "timeframe": "today", "entity": "dem Bauleiter"}
+{"text": "wann ist morgen vormittag der nächste freie termin bei der praxis dr. vogelsang?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat die Praxis Dr. Vogelsang heute noch Sprechzeiten?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Steht heute Nachmittag bei mir ein Termin mit Herrn Demirci drin?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Demirci"}
+{"text": "Bis wann ist die Kollegin aus dem Einkauf heute Nachmittag mit Terminen belegt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Bin ich heute Nachmittag bei Herrn Demirci", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Demirci"}
+{"text": "Ist Frau Kowalczyk heute noch komplett verplant?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie viele Termine hat Herr Demirci heute noch?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Zeig mir die Termine von Frau Kowalczyk für heute noch.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welche Termine stehen heute noch im Kalender von der Kollegin aus dem Einkauf?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welche Termine stehen morgen früh im Kalender von Frau Brandauer", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welche Termine stehen heute Nachmittag im Kalender von der Geschäftsführerin", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Zeig mir die Termine von Frau Brandauer für morgen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann ist heute Nachmittag der nächste freie Termin bei dem Ingenieurbüro Hellwig?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat das Steuerbüro Rauscher morgen Vormittag Sprechzeiten?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Zeig mir die Termine von der Geschäftsführerin für morgen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist Frau Brandauer morgen Vormittag komplett verplant?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Habe ich morgen einen Termin mit der Geschäftsführerin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "der Geschäftsführerin"}
+{"text": "Zeig mir die Termine von Herrn Demirci für heute.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Habe ich heute noch einen Termin mit der Kollegin aus dem Einkauf?", "intent": "appointments_today", "timeframe": "today", "entity": "der Kollegin aus dem Einkauf"}
+{"text": "Welche Termine vergibt die Schreinerei Kofler heute noch noch?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann hat Frau Kowalczyk heute den ersten Termin", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann ist morgen Vormittag der nächste freie Termin bei der Schreinerei Kofler", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat die Praxis Dr. Vogelsang morgen Sprechzeiten?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist der Kalender von Herrn Demirci morgen schon voll?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist die Schreinerei Kofler morgen früh mit Terminen ausgebucht?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Steht morgen Vormittag bei mir ein Termin mit Frau Brandauer drin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Brandauer"}
+{"text": "Steht morgen bei mir ein Termin mit Herrn Demirci drin", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Demirci"}
+{"text": "Hod da Bauleiter heit an Haufa Termine?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Is dr Kalenner vun dr Kollejin hück voll?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat das Steuerbüro Rauscher morgen Sprechzeiten?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Bin ich heute Nachmittag bei Frau Brandauer?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Brandauer"}
+{"text": "Ist Frau Kowalczyk heute Nachmittag komplett verplant?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann hat Herr Albrecht-Nies heute noch den ersten Termin?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welche Termine vergibt die Praxis Dr. Vogelsang morgen noch?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist das Ingenieurbüro Hellwig morgen Vormittag mit Terminen ausgebucht?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann hat die Teamleiterin morgen den ersten Termin?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist der Kalender von der Kollegin aus dem Einkauf heute Nachmittag schon voll?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Habe ich morgen einen Termin mit der Teamleiterin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "der Teamleiterin"}
+{"text": "Hani hüt en Termin bim Herr Albrecht-Nies?", "intent": "appointments_today", "timeframe": "today", "entity": "Herr Albrecht-Nies"}
+{"text": "Hat die Praxis Dr. Vogelsang heute Nachmittag Sprechzeiten?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat das Steuerbüro Rauscher morgen früh Sprechzeiten?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist der Kalender von Herrn Albrecht-Nies morgen Vormittag schon voll?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann ist heute Nachmittag der nächste freie Termin bei der Schreinerei Kofler?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Habe ich heute Nachmittag einen Termin mit der Teamleiterin?", "intent": "appointments_today", "timeframe": "today", "entity": "der Teamleiterin"}
+{"text": "Wie viele Termine hat Herr Demirci morgen früh?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Habe ich morgen früh einen Termin mit der Kollegin aus dem Einkauf?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "der Kollegin aus dem Einkauf"}
+{"text": "Bin ich morgen früh bei der Geschäftsführerin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "der Geschäftsführerin"}
+{"text": "Wann sehe ich morgen Herrn Demirci?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Demirci"}
+{"text": "Bin ich morgen Vormittag bei der Geschäftsführerin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "der Geschäftsführerin"}
+{"text": "Habe ich heute Nachmittag einen Termin mit der Kollegin aus dem Einkauf?", "intent": "appointments_today", "timeframe": "today", "entity": "der Kollegin aus dem Einkauf"}
+{"text": "Ist die Teamleiterin heute Nachmittag komplett verplant?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann ist morgen früh der nächste freie Termin bei der Praxis Dr. Vogelsang", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann sehe ich heute noch Frau Brandauer?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Brandauer"}
+{"text": "Wann ist morgen früh der nächste freie Termin bei dem Ingenieurbüro Hellwig?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Habe ich morgen einen Termin mit Herrn Albrecht-Nies", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Albrecht-Nies"}
+{"text": "Bin ich heute bei der Teamleiterin?", "intent": "appointments_today", "timeframe": "today", "entity": "der Teamleiterin"}
+{"text": "Habe ich heute Nachmittag einen Termin mit Herrn Albrecht-Nies?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Albrecht-Nies"}
+{"text": "Hät d Gschäftsfüererin morn vill Termin?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wos hod de Teamleiterin morsche fia Termine?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "welche termine stehen heute im kalender von dem bauleiter?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie viele Termine hat die Teamleiterin heute noch?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Steht heute noch bei mir ein Termin mit Frau Brandauer drin?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Brandauer"}
+{"text": "Was steht heute bei der Geschäftsführerin an Terminen drin?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Han ich hück noch jet met dä Kollejin usm Einkauf?", "intent": "appointments_today", "timeframe": "today", "entity": "dä Kollejin usm Einkauf"}
+{"text": "hat's steuerbüro rauscher morsche no en termin frei?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Bin ich heute noch bei Herrn Demirci?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Demirci"}
+{"text": "Ist die Praxis Dr. Vogelsang morgen Vormittag mit Terminen ausgebucht?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann sehe ich morgen Vormittag Frau Brandauer?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Brandauer"}
+{"text": "Ist die Praxis Dr. Vogelsang morgen mit Terminen ausgebucht?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann ist heute der nächste freie Termin bei der Praxis Dr. Vogelsang?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Zeig mir die Termine von Herrn Albrecht-Nies für heute Nachmittag.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "welche termine vergibt die praxis dr. vogelsang heute nachmittag noch?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wia schaut da Kalenda vo da Gschäftsführerin morgn aus?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "zeig mir die termine von herrn albrecht-nies für heute noch.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "ist die schreinerei kofler morgen mit terminen ausgebucht?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hett de Teamleitersch morgen veel Termine?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "isch d frau brandauer hüt verplant?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie viele Termine hat der Bauleiter morgen früh?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was steht heute Nachmittag bei der Teamleiterin an Terminen drin?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat die Schreinerei Kofler heute noch Sprechzeiten?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Steht heute noch bei mir ein Termin mit Herrn Albrecht-Nies drin?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Albrecht-Nies"}
+{"text": "Welche Termine vergibt das Ingenieurbüro Hellwig heute Nachmittag noch?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "wann ist morgen vormittag der nächste freie termin bei dem ingenieurbüro hellwig?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist das Ingenieurbüro Hellwig morgen früh mit Terminen ausgebucht?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "wann sehe ich morgen vormittag der kollegin aus dem einkauf?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "der Kollegin aus dem Einkauf"}
+{"text": "welche termine vergibt das steuerbüro rauscher heute noch?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Habe ich heute Nachmittag einen Termin mit dem Bauleiter?", "intent": "appointments_today", "timeframe": "today", "entity": "dem Bauleiter"}
+{"text": "Steht morgen früh bei mir ein Termin mit Herrn Demirci drin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Demirci"}
+{"text": "habe ich heute nachmittag einen termin mit der geschäftsführerin?", "intent": "appointments_today", "timeframe": "today", "entity": "der Geschäftsführerin"}
+{"text": "Ist das Steuerbüro Rauscher heute noch mit Terminen ausgebucht?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hab ich morsche was mit der Frau Kowalczyk?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "der Frau Kowalczyk"}
+{"text": "Habe ich heute einen Termin mit Frau Kowalczyk?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Kowalczyk"}
+{"text": "Welche Termine vergibt die Praxis Dr. Vogelsang heute noch?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Habe ich morgen Vormittag einen Termin mit der Teamleiterin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "der Teamleiterin"}
+{"text": "Hob i morgn wos beim Bauleiter ausgmacht", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Bauleiter"}
+{"text": "wann hat herr albrecht-nies heute den ersten termin?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist der Kalender von Herrn Albrecht-Nies morgen früh schon voll", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was hat'n die Frau Kowalczyk morsche fer Termine?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann ist heute noch der nächste freie Termin bei dem Ingenieurbüro Hellwig?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welche Termine stehen morgen früh im Kalender von Frau Kowalczyk?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "hat das steuerbüro rauscher heute nachmittag sprechzeiten?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie viele Termine hat die Teamleiterin morgen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "steht morgen bei mir ein termin mit der teamleiterin drin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "der Teamleiterin"}
+{"text": "Welche Termine vergibt die Schreinerei Kofler heute Nachmittag noch", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welche Termine vergibt das Steuerbüro Rauscher heute noch noch?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Habe ich morgen früh einen Termin mit Herrn Albrecht-Nies?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Albrecht-Nies"}
+{"text": "Welche Termine vergibt das Steuerbüro Rauscher morgen früh noch?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat die Praxis Dr. Vogelsang morgen früh Sprechzeiten?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann sehe ich morgen früh dem Bauleiter?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "dem Bauleiter"}
+{"text": "Welche Termine vergibt das Ingenieurbüro Hellwig morgen noch?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Its die Praxis Dr. Vogelsang heute Nachmittag mit Terminen ausgebucht?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Steht heute bei mir ein Termin mit Herrn Demirci drin?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Demirci"}
+{"text": "Hat die Schreinerei Kofler heute Nachmittag Sprechzeiten?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann ist morgen der nächste freie Termin bei der Schreinerei Kofler?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat das Ingenieurbüro Hellwig heute Nachmittag Sprechzeiten?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Zeig mir die Termine von Frau Brandauer für heute Nachmittag", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Bis wann ist Herr Demirci heute Nachmittag mit Terminen belegt", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "hob i morsche an termin mit da teamleiterin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "da Teamleiterin"}
+{"text": "Wann sehe ich morgen Vormittag Herrn Albrecht-Nies?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Albrecht-Nies"}
+{"text": "Ist der Kalender von dem Bauleiter morgen Vormittag schon voll", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Steht morgen früh bei mir ein Termin mit Frau Brandauer drin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Brandauer"}
+{"text": "Wann ist heute Nachmittag der nächste freie Termin bei der Praxis Dr. Vogelsang", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann ist heute Nachmittag der nächste freie Termin bei dem Steuerbüro Rauscher", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist daas Ingenieurbüro Hellwig morgen mit Terminen ausgebucht?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Zeig mir die Termine von der Teamleiterin für heute Nachmittag.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "wie viele termine hat frau kowalczyk morgen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann ist morgen früh der nächste freie Termin bei der Schreinerei Kofler?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist das Ingenieurbüro Hellwig heute noch mit Terminen ausgebucht?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hani morn öppis mit dr Frau Brandauer?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "dr Frau Brandauer"}
+{"text": "Wann ist heute der nächste freie Termin bei dem Ingenieurbüro Hellwig?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann sehe ich heute Nachmittag der Geschäftsführerin?", "intent": "appointments_today", "timeframe": "today", "entity": "der Geschäftsführerin"}
+{"text": "Welche Termine stehen morgen früh im Kalender von Herrn Albrecht-Nies?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welche Termine stehen heute noch im Kalender von Frau Brandauer?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist die Kollegin aus dem Einkauf morgen früh komplett verplant", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann sehe ich heute noch Herrn Demirci?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Demirci"}
+{"text": "Bin ich heute bei Herrn Demirci?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Demirci"}
+{"text": "Wann sehe ich morgen Vormittag Frau Kowalczyk?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Kowalczyk"}
+{"text": "Welche Termine vergibt die Schreinerei Kofler morgen noch?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Bis wann ist Herr Albrecht-Nies morgen mit Terminen belegt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Steht morgen früh bei mir ein Termin mit Frau Kowalczyk drin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Kowalczyk"}
+{"text": "Wann hat Frau Kowalczyk heute Nachmittag den ersten Termin?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist der Kalender von der Kollegin aus dem Einkauf morgen schon voll?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Han ich morje e Treffe met dem Herr Demirci?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "dem Herr Demirci"}
+{"text": "Ist Frau Kowalczyk morgen komplett verplant?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Habe ich heute Nachmittag einen Termin mit Frau Brandauer?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Brandauer"}
+{"text": "Welche Termine vergibt die Praxis Dr. Vogelsang morgen früh noch?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann ist morgen der nächste freie Termin bei dem Ingenieurbüro Hellwig?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Steht heute bei mir ein Termin mit Frau Brandauer drin?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Brandauer"}
+{"text": "wann sehe ich heute nachmittag frau kowalczyk?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Kowalczyk"}
+{"text": "Bin ich morgen früh bei Herrn Albrecht-Nies", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Albrecht-Nies"}
+{"text": "Bis wann ist Herr Demirci heute noch mit Terminen belegt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Steht morgen Vormittag bei mir ein Termin mit Herrn Albrecht-Nies drin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Herrn Albrecht-Nies"}
+{"text": "Was steht morgen Vormittag bei Herrn Demirci an Terminen drin?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Habe ich heute einen Termin mit der Kollegin aus dem Einkauf?", "intent": "appointments_today", "timeframe": "today", "entity": "der Kollegin aus dem Einkauf"}
+{"text": "Ist der Kalender von dem Bauleiter heute schon voll?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wat hätt dä Herr Demirci morje för Termine?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat die Praxis Dr. Vogelsang heute Sprechzeiten?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "bis wann ist die kollegin aus dem einkauf heute mit terminen belegt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann ist morgen früh der nächste freie Termin bei dem Steuerbüro Rauscher?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Habe ich heute Nachmittag einen Termin mit Herrn Demirci?", "intent": "appointments_today", "timeframe": "today", "entity": "Herrn Demirci"}
+{"text": "Wann sehe ich morgen Vormittag der Geschäftsführerin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "der Geschäftsführerin"}
+{"text": "Hat die Schreinerei Kofler morgen Vormittag Sprechzeiten?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann hat Herr Demirci morgen Vormittag den ersten Termin?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Is die Praxis Vogelsang heit ausgebucht?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Bin ich morgen früh bei Frau Kowalczyk?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Kowalczyk"}
+{"text": "Ist der Bauleiter heute Nachmittag komplett verplant?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Bis wann ist Herr Albrecht-Nies heute Nachmittag mit Terminen belegt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welche Termine vergibt die Praxis Dr. Vogelsang heute noch noch", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wat hat'n der Bauleita morjen so für Termine?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hob i heit no an Termin mit da Gschäftsführerin", "intent": "appointments_today", "timeframe": "today", "entity": "da Gschäftsführerin"}
+{"text": "Zeig mir die Termine von Herrn Albrecht-Nies für heute.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Bin ich heute Nachmittag bei der Kollegin aus dem Einkauf?", "intent": "appointments_today", "timeframe": "today", "entity": "der Kollegin aus dem Einkauf"}
+{"text": "Wann sehe ich heute Frau Brandauer?", "intent": "appointments_today", "timeframe": "today", "entity": "Frau Brandauer"}
+{"text": "Wie viele Termine hat die Teamleiterin heute Nachmittag?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Zeig mir die Termine von Herrn Albrecht-Nies für morgen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Welche Termine stehen heute noch im Kalender von Frau Kowalczyk?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann ist morgen der nächste freie Termin bei der Praxis Dr. Vogelsang?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "bin ich morgen vormittag bei frau brandauer?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": "Frau Brandauer"}
+{"text": "Hat die Schreinerei Kofler heute Sprechzeiten?", "intent": "unknown", "timeframe": null, "entity": null}

@@ -350,8 +350,11 @@ class Filter:
         """own: the generator's output files, left out of the training sentences compared against."""
         # The later others-calendar file (tools/build_others_calendar.py) is left out too, so
         # this generator's committed output stays exactly as the semantic check passed it.
-        own = own or (OUT, CONTRAST_OUT, ROOT / "data" / "train" / "vyvy_others_calendar_v1.jsonl")
+        own = own or (OUT, CONTRAST_OUT, ROOT / "data" / "train" / "vyvy_others_calendar_v1.jsonl",
+                      ROOT / "data" / "train" / "vyvy_retired_blind_v2.jsonl")
         self.max_similarity = max_similarity
+        # All holdouts the files were built against, the retired v2 included, so the output
+        # stays as the semantic check passed it (lock.GUARDED no longer has v2).
         holdout = [i for h in lock.HOLDOUTS if h.exists() for i in json.loads(h.read_text(encoding="utf-8"))["items"]]
         self.holdout = [(h["id"], lock.normalise(h["text"])) for h in holdout]
         self.seen = {lock.normalise(t) for t in load_negatives()}
