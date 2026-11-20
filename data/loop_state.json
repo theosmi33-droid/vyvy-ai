@@ -5,8 +5,8 @@
   "Qwen/Qwen2.5-1.5B-Instruct",
   "Qwen/Qwen2.5-7B-Instruct"
  ],
- "approved_on": "2026-11-11T08:04:34Z",
- "fingerprint": "a57b97f8b630a1aa32d066554916d81aa36b89c3c46bc0e1447bd974208cf758",
+ "approved_on": "2026-11-20T13:48:15Z",
+ "fingerprint": "dc42f30dc06c16e850f4118d2f49520d7b4358a7d40e9de4a16e43c1524bd481",
  "note": "Written by the user only. paused: no GPU run starts. one_round or weekly with bases and approved_on releases rounds (tools/loop_guard.py).",
  "seven_b_after_small": false
 }
