@@ -190,7 +190,7 @@ def test_gate_blocks_without_release_and_on_changed_rules() -> None:
     now = "2026-11-12T12:00:00Z"
     # The file itself is the user's switch; it only has to hold a mode the lock knows.
     state = json.loads((ROOT / "data" / "loop_state.json").read_text(encoding="utf-8"))
-    assert state["mode"] in ("paused", "one_round", "weekly")
+    assert state["mode"] in ("paused", "one_round", "weekly", "continuous")
     paused = dict(state, mode="paused")
     assert loop_guard.gate(paused, [], small, now, "x")[0] is False
     once = {"mode": "one_round", "approved_on": "2026-11-11T00:00:00Z", "bases": [small, loop_guard.SEVEN_B],

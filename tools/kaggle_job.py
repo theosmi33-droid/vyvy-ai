@@ -128,9 +128,10 @@ def write_synth_job(folder: Path, owner: str, repo: str, commit: str, round_: st
         raise SystemExit("repo must be OWNER/NAME")
     if not re.match(r"^[A-Za-z0-9_-]+$", owner):
         raise SystemExit("owner must be a Kaggle user name")
-    if not re.match(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}(-b)?$", round_):
+    if not re.match(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}(-b|-c[0-9]{2,3})?$", round_):
         raise SystemExit("round must be the date of the quota week's Saturday, e.g. 2026-11-14 "
-                         "(or 2026-11-14-b for the one extra round started by hand)")
+                         "(or 2026-11-14-b for the one extra round started by hand, "
+                         "or 2026-11-20-c03 in continuous mode)")
     folder.mkdir(parents=True, exist_ok=True)
     (folder / "synth.py").write_text(SYNTH_ENTRY.format(repo=json.dumps(repo), commit=json.dumps(commit),
                                                        round=json.dumps(round_)),

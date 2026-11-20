@@ -177,13 +177,32 @@ def main(argv: list[str] | None = None) -> int:
 LEGACY_ROUNDS = {"2026-11-07": "2026-W45"}
 
 
-def synth_round(now: datetime | None = None) -> str:
+def continuous_round(state: dict, history: list[dict]) -> str:
+    """Round label in continuous mode: the release date plus the rounds every released base
+    has decided since, e.g. 2026-11-20-c03. It moves on only when all bases have decided, so
+    one teacher run feeds both, and a new release starts counting from c00."""
+    done = [sum(1 for d in history if d["created"] > state["approved_on"]
+                and d["adapter"].startswith(f"vyvy-{loop_guard.SIZE[b]}-"))
+            for b in state.get("bases", []) if b in loop_guard.SIZE]
+    return f"{state['approved_on'][:10]}-c{min(done, default=0):02d}"
+
+
+def synth_round(now: datetime | None = None, state: dict | None = None,
+                history: list[dict] | None = None) -> str:
     """One teacher synthesis per Kaggle quota week (Saturday 00:00 UTC to Saturday).
 
     Kaggle resets the weekly GPU quota on Saturday 00:00 UTC. Rounds named after
     the ISO week (Monday) put two rounds into one quota week, and the second could
     not finish. The label is the date of the week's Saturday, e.g. 2026-11-14.
+
+    In continuous mode (data/loop_state.json) the round follows the decisions instead of
+    the calendar (continuous_round); quota_guard still waits for Kaggle's refresh.
     """
+    state = loop_guard.load_state() if state is None else state
+    if state and state.get("mode") == "continuous":
+        if history is None:
+            history = loop_guard.release_history(os.environ.get("GITHUB_REPOSITORY", ""))
+        return continuous_round(state, history)
     now = now or datetime.now(timezone.utc)
     saturday = now.date() - timedelta(days=(now.weekday() - 5) % 7)
     return saturday.isoformat()
@@ -208,7 +227,8 @@ def synth_waiting(now: datetime | None = None) -> bool:
 
 
 def synth_done(now: datetime | None = None) -> bool:
-    rounds = {synth_round(now), LEGACY_ROUNDS.get(synth_round(now), "")} - {""}
+    r = synth_round(now)
+    rounds = {r, LEGACY_ROUNDS.get(r, "")} - {""}
     return any(any((ROOT / "data" / "train").glob(f"vyvy_synth_*_{r}.jsonl")) for r in rounds)
 
 

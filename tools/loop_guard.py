@@ -83,6 +83,8 @@ def check(history: list[dict], *, now: str, approved: str | None, current: str,
 
 
 SEVEN_B = "Qwen/Qwen2.5-7B-Instruct"
+#: No weekly limit in continuous mode; the number only keeps check()'s arithmetic.
+CONTINUOUS_MAX_ROUNDS = 10**6
 SIZE = {"Qwen/Qwen2.5-1.5B-Instruct": "1.5b", SEVEN_B: "7b"}
 
 
@@ -91,10 +93,14 @@ def round_allowed(state: dict | None, history: list[dict], base: str, now: str) 
 
     The loop stops after every round: a decision (release) for base after the
     user's release of the round ends it. state is written only by the user:
-    {"schema": 1, "fingerprint", "approved_on" (ISO time), "mode": "paused" | "one_round" | "weekly",
-     "bases": [...]}. "one_round" allows one decision per base after approved_on;
-    "weekly" allows one per base and ISO week, so the next one waits for the following week.
-    The hold points of check() apply on top.
+    {"schema": 1, "fingerprint", "approved_on" (ISO time),
+     "mode": "paused" | "one_round" | "weekly" | "continuous", "bases": [...]}.
+    "one_round" allows one decision per base after approved_on; "weekly" allows one per
+    base and ISO week, so the next one waits for the following week. "continuous" ties
+    nothing to the calendar: the next round starts as soon as GPU and quota allow
+    (quota_guard waits for Kaggle's refresh by itself) and stops only at the hold points
+    of check(): changed rules, goal, an accepted adapter (rotation), or a plateau of
+    rejections. The hold points of check() apply on top in every mode but one_round.
     """
     if not state or state.get("mode", "paused") == "paused":
         return False, "paused: the user releases the next round (data/loop_state.json)"
@@ -106,6 +112,8 @@ def round_allowed(state: dict | None, history: list[dict], base: str, now: str) 
         if after:
             return False, f"round done ({after[-1]['adapter']}); report first, then the user releases the next"
         return True, "released for one round"
+    if state["mode"] == "continuous":
+        return True, "continuous: the next round starts when GPU and quota allow"
     if state["mode"] == "weekly":
         week = iso_week(now)
         done = [d for d in mine if iso_week(d["created"]) == week]
@@ -173,9 +181,11 @@ def gate(state: dict | None, history: list[dict], base: str, now: str, current: 
         return go, why
     if state.get("fingerprint") != current:
         return False, "rules or holdouts changed since the user approved them; the user decides"
-    if state["mode"] == "weekly":
+    if state["mode"] in ("weekly", "continuous"):
         since = [d for d in history if d["created"] > state["approved_on"]]
-        go, why = check(since, now=now, approved=current, current=current)
+        # continuous: no rounds-per-week limit; the plateau ends a run of rejections instead.
+        limit = CONTINUOUS_MAX_ROUNDS if state["mode"] == "continuous" else 5
+        go, why = check(since, now=now, approved=current, current=current, max_rounds=limit)
         if not go:
             return go, why
     # "seven_b_after_small": false (the user's choice) lets 7B train next to 1.5B; the
