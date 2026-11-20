@@ -29,10 +29,15 @@ it decides what is being asked and hands that decision over in a fixed format.
 
 ## Model classes
 
-| Class | Memory used | Target hardware | Base model |
-|---|---|---|---|
-| Vyvy AI 4GB | about 4 GB | computers with 8 GB RAM | Qwen 2.5 1.5B Instruct |
-| Vyvy AI 8GB | about 8 GB | computers with 12–16 GB RAM | Qwen 2.5 7B Instruct |
+| Class | Memory budget | Target hardware | Base model | Weights in the benchmark |
+|---|---|---|---|---|
+| Vyvy AI 4GB | at most 4 GB | computers with 8 GB RAM | Qwen 2.5 1.5B Instruct | GGUF Q8_0 (Q4_K_M also pinned) |
+| Vyvy AI 8GB | at most 8 GB | computers with 12–16 GB RAM | Qwen 2.5 7B Instruct | GGUF Q4_K_M |
+
+The class name is an upper limit for planning, not a measurement: how much memory
+a class really takes on an office computer (weights, adapter, context and the
+runtime together) has not been measured yet. The files and their checksums are
+pinned in `models.json`.
 
 Both base models are released under Apache 2.0.
 
