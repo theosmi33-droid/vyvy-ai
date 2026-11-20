@@ -136,6 +136,20 @@ def time_left_for_next(elapsed: float, durations: list[float], budget: float, ma
     return elapsed + max(durations) * 1.15 + margin <= budget
 
 
+def stop_if_due(control, stop_at: float | None, now: float) -> bool:
+    """At the stop time: evaluate and save once more, then end training (TrainerControl flags).
+
+    The Trainer reads these flags right after on_step_end, so the last checkpoint carries an
+    evaluation and load_best_model_at_end can choose among all checkpoints so far.
+    """
+    if stop_at is None or now < stop_at:
+        return False
+    control.should_evaluate = True
+    control.should_save = True
+    control.should_training_stop = True
+    return True
+
+
 def pick_best(results: list[dict]) -> int:
     """Highest validation accuracy; ties and missing accuracies decided by the lower validation loss."""
     def key(i: int):
@@ -283,13 +297,10 @@ def main(argv: list[str] | None = None) -> int:
             self.hit = False
 
         def on_step_end(self, args, state, control, **kwargs):
-            if stop_at is not None and time.monotonic() >= stop_at and not self.hit:
+            if not self.hit and stop_if_due(control, stop_at, time.monotonic()):
                 self.hit = True
                 print(f"Stop time reached at step {state.global_step}: last evaluation, best checkpoint kept",
                       flush=True)
-                control.should_evaluate = True
-                control.should_save = True
-                control.should_training_stop = True
             return control
 
     # Fixed Hugging Face commit of the base model (models.json), never "latest".

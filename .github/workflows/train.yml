@@ -92,6 +92,10 @@ jobs:
             # This week's teacher sentences are about to arrive; their push starts training.
             echo "SKIP=true" >> "$GITHUB_ENV"
             echo "Waiting for this week's synthesis (runs elsewhere); its push starts training." >> "$GITHUB_STEP_SUMMARY"
+          elif [ "$GITHUB_EVENT_NAME" = "push" ] && python -c "import sys; sys.path.insert(0, 'tools'); import collect; sys.exit(1 if collect.synth_done() else 0)"; then
+            # Same rule as train-colab.yml: a push trains only once this week's teacher sentences are in.
+            echo "SKIP=true" >> "$GITHUB_ENV"
+            echo "This week's teacher sentences are not in yet; Collect starts training after them." >> "$GITHUB_STEP_SUMMARY"
           elif [ -z "$NAME_INPUT" ] && [ -n "$trained" ]; then
             # Same training data and prompt as an existing release: trainer fixes alone do not retrain.
             echo "SKIP=true" >> "$GITHUB_ENV"

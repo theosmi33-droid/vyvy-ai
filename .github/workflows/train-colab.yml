@@ -76,6 +76,12 @@ jobs:
           elif python -c "import sys; sys.path.insert(0, 'tools'); import collect; sys.exit(0 if collect.synth_waiting() else 1)"; then
             echo "SKIP=true" >> "$GITHUB_ENV"
             echo "Waiting for this week's synthesis; its push starts training." >> "$GITHUB_STEP_SUMMARY"
+          elif [ "$GITHUB_EVENT_NAME" = "push" ] && python -c "import sys; sys.path.insert(0, 'tools'); import collect; sys.exit(1 if collect.synth_done() else 0)"; then
+            # 20.11.2026: a code push during the teacher run on Kaggle trained 1.5B on the old
+            # data and so used up the round. A push trains only once this week's teacher
+            # sentences are in; Collect starts training otherwise (also when the synthesis failed).
+            echo "SKIP=true" >> "$GITHUB_ENV"
+            echo "This week's teacher sentences are not in yet; Collect starts training after them." >> "$GITHUB_STEP_SUMMARY"
           elif [ -n "$trained" ]; then
             echo "SKIP=true" >> "$GITHUB_ENV"
             echo "Already trained on this data and prompt: $trained." >> "$GITHUB_STEP_SUMMARY"

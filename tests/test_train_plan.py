@@ -56,3 +56,22 @@ def test_colab_keeps_its_own_timeout(tmp_path):
     text = kaggle_job.write_colab_job(tmp_path / "colab_train.py", "owner/vyvy-ai", SHA, SMALL, "vyvy-1.5b-dabc",
                                       4, sweep="rank=16;lr=2e-4", budget=60).read_text(encoding="utf-8")
     assert 'STOP = "0"' in text
+
+
+def test_the_stop_time_ends_training_with_a_last_evaluation_and_checkpoint():
+    from types import SimpleNamespace
+
+    control = SimpleNamespace(should_evaluate=False, should_save=False, should_training_stop=False)
+    assert not train_lora.stop_if_due(control, None, 1e9)
+    assert not train_lora.stop_if_due(control, 100.0, 99.0)
+    assert not (control.should_evaluate or control.should_save or control.should_training_stop)
+    assert train_lora.stop_if_due(control, 100.0, 100.0)
+    assert control.should_evaluate and control.should_save and control.should_training_stop
+
+
+def test_a_push_trains_only_after_this_weeks_teacher_sentences():
+    # 20.11.2026: a code push during the teacher run trained 1.5B on the old data.
+    for name in ("train.yml", "train-colab.yml"):
+        text = (ROOT / ".github" / "workflows" / name).read_text(encoding="utf-8")
+        plan = text[text.index("Plan ("):text.index("Holdout lock")]
+        assert '"$GITHUB_EVENT_NAME" = "push"' in plan and "collect.synth_done()" in plan, name
