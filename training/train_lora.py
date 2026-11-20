@@ -449,6 +449,11 @@ def main(argv: list[str] | None = None) -> int:
         (args.out / "sweep.json").write_text(json.dumps(results, indent=1) + "\n", encoding="utf-8")
         print(f"Result ({phase}): rank {rank} lr {lr:g} seed {seed} -> val accuracy {metrics['val_accuracy']} "
               f"eval loss {metrics['eval_loss']}", flush=True)
+    if not results:
+        # Only a shard with no grid config gets here (a failing first config raises above);
+        # tools/merge_shards.py lists it under shards_missing.
+        print(f"Shard {args.shard}: no config to train", flush=True)
+        return 0
     best = results[pick_best(results)]
     print(f"Chosen: rank {best['rank']} lr {best['lr']:g} seed {best['seed']}", flush=True)
     if adapter_dir.exists():

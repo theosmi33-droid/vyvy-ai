@@ -314,9 +314,13 @@ def schedule(repo: str, owner: str) -> None:
     # synthesis belongs to the round of the first planned base.
     state, history = loop_guard.load_state(), loop_guard.release_history(repo)
     now = datetime.now(timezone.utc).isoformat()
-    go, why = loop_guard.gate(state, history, plan_train.ORDER[0], now, loop_guard.fingerprint())
-    if not go:
-        summary(f"Scheduler: {why}.")
+    # Every base on its own: on 20.11.2026 a decided 1.5B round ("round done") returned
+    # here before 7B was looked at, although 7B was released and the GPU was free.
+    gates = {base: loop_guard.gate(state, history, base, now, loop_guard.fingerprint(),
+                                   loop_guard.small_verdict_on_same_data(repo) if base == loop_guard.SEVEN_B else None)
+             for base in plan_train.ORDER}
+    if not any(go for go, _ in gates.values()):
+        summary("Scheduler: " + "; ".join(f"{base}: {why}" for base, (_, why) in gates.items()) + ".")
         return
     # Teacher sentences first: training on data that is about to grow wastes a run.
     pending = ROOT / "data" / "train" / f"vyvy_synth_{synth_round()}.pending"
@@ -343,8 +347,7 @@ def schedule(repo: str, owner: str) -> None:
         where = p.get("where", "kaggle")
         if (where == "kaggle" and not kaggle_free) or plan_train.trained_release(repo, base):
             continue
-        go, why = loop_guard.gate(state, history, base, now, loop_guard.fingerprint(),
-                                  loop_guard.small_verdict_on_same_data(repo) if base == loop_guard.SEVEN_B else None)
+        go, why = gates[base]
         if not go:
             summary(f"Scheduler: {base}: {why}.")
             continue

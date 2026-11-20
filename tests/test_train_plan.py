@@ -75,3 +75,37 @@ def test_a_push_trains_only_after_this_weeks_teacher_sentences():
         text = (ROOT / ".github" / "workflows" / name).read_text(encoding="utf-8")
         plan = text[text.index("Plan ("):text.index("Holdout lock")]
         assert '"$GITHUB_EVENT_NAME" = "push"' in plan and "collect.synth_done()" in plan, name
+
+
+def test_one_config_needs_one_gpu():
+    assert plan_train.grid_size("rank=16;lr=2e-4") == 1
+    assert plan_train.grid_size("rank=16,32;lr=2e-4,1e-4,3e-4") == 6
+    assert plan_train.grid_size("") == 1
+
+
+def test_the_scheduler_looks_at_every_base(monkeypatch):
+    # 20.11.2026: a decided 1.5B round returned before 7B was looked at.
+    import collect
+
+    started = []
+    monkeypatch.setattr(collect, "any_kernel_running", lambda: False)
+    monkeypatch.setattr(collect, "synth_waiting", lambda now=None: False)
+    monkeypatch.setattr(collect, "synth_done", lambda now=None: True)
+    monkeypatch.setattr(collect, "open_failure", lambda repo, kid, name: False)
+    monkeypatch.setattr(collect, "summary", lambda text: None)
+    monkeypatch.setattr(plan_train, "plan", lambda base, epochs=4: {**plan_train.PLANS[base], "name": "n"})
+    monkeypatch.setattr(plan_train, "trained_release", lambda repo, base: None)
+    monkeypatch.setattr(collect.loop_guard, "load_state", lambda: {"mode": "one_round"})
+    monkeypatch.setattr(collect.loop_guard, "release_history", lambda repo: [])
+    monkeypatch.setattr(collect.loop_guard, "small_verdict_on_same_data", lambda repo: None)
+    monkeypatch.setattr(collect.loop_guard, "gate",
+                        lambda state, history, base, *a, **k: (base == LARGE, "round done"))
+
+    def run(*args, check=True):
+        if args[:3] == ("gh", "workflow", "run"):
+            started.append(f"{args[3]} {args[-1]}")
+        return ""
+
+    monkeypatch.setattr(collect, "run", run)
+    collect.schedule("owner/vyvy-ai", "u")
+    assert started == [f"train.yml base={LARGE}"]

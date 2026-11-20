@@ -50,6 +50,14 @@ WORKFLOW = {"kaggle": "train.yml", "colab": "train-colab.yml"}
 ORDER = ["Qwen/Qwen2.5-1.5B-Instruct", "Qwen/Qwen2.5-7B-Instruct"]
 
 
+def grid_size(sweep: str) -> int:
+    """Number of grid configs in a sweep like "rank=16,32;lr=2e-4,1e-4" (as training/train_lora.py reads it)."""
+    n = 1
+    for part in filter(None, (s.strip() for s in sweep.split(";"))):
+        n *= len([x for x in part.partition("=")[2].split(",") if x.strip()])
+    return n
+
+
 def plan(base: str, epochs: float = 4) -> dict:
     if base not in PLANS:
         raise SystemExit(f"unknown base model: {base}")
@@ -133,7 +141,9 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(p))
             return 0
         p["trained"] = trained_release(args.repo, args.base)
-        if p["gpus"] == 1 and PLANS[args.base].get("gpus_after_7b") and seven_b_passed(args.repo):
+        # One sweep shard per GPU: with a single config the second GPU would get nothing.
+        configs = grid_size(p["sweep"])
+        if p["gpus"] == 1 and PLANS[args.base].get("gpus_after_7b") and configs > 1 and seven_b_passed(args.repo):
             p["gpus"] = 2
     print(json.dumps(p))
     return 0
