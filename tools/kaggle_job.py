@@ -42,6 +42,7 @@ BATCH = {batch}
 ACCUM = {accum}
 GPUS = {gpus}
 STAGGER = {stagger}
+STOP = {stop}
 SRC = "/tmp/vyvy"
 OUT = "/kaggle/working"
 
@@ -62,6 +63,8 @@ sh(sys.executable, "-m", "pip", "install", "-q", "-r", SRC + "/training/requirem
 # GGUF conversion happens on the GitHub runner (tools/convert_adapter.py).
 ARGS = [sys.executable, SRC + "/training/train_lora.py", "--base", BASE, "--name", NAME, "--epochs", EPOCHS,
         "--no-gguf", "--sweep", SWEEP, "--time-budget", BUDGET, "--batch", BATCH, "--grad-accum", ACCUM]
+if STOP != "0":
+    ARGS += ["--stop-after", STOP]
 if GPUS == 1:
     sh(*ARGS, "--out", OUT)
 else:
@@ -85,6 +88,10 @@ else:
         shutil.rmtree(d, ignore_errors=True)
 '''
 STAGGER_SECONDS = 420
+#: Minutes of the kernel limit (budget + 60, see train.yml) kept for setup before training
+#: and for the last evaluation, validation and saving after it: training stops after the
+#: budget itself, so the kernel always ends with an adapter (16.11.: ended without one).
+SETUP_AND_EXPORT_MIN = 60
 
 
 SYNTH_SLUG = "vyvy-synth-teacher"
@@ -177,12 +184,12 @@ def _check_run(repo: str, commit: str, base: str, name: str, epochs: float, swee
 
 
 def _entry(repo: str, commit: str, base: str, name: str, epochs: float, sweep: str, budget: float,
-           batch: int, accum: int, gpus: int, stagger: int) -> str:
+           batch: int, accum: int, gpus: int, stagger: int, stop: float = 0) -> str:
     return ENTRY.format(
         repo=json.dumps(repo), commit=json.dumps(commit), base=json.dumps(base),
         name=json.dumps(name), epochs=json.dumps(f"{epochs:g}"), sweep=json.dumps(sweep),
         budget=json.dumps(f"{budget:g}"), batch=json.dumps(str(batch)), accum=json.dumps(str(accum)),
-        gpus=gpus, stagger=int(stagger),
+        gpus=gpus, stagger=int(stagger), stop=json.dumps(f"{stop:g}"),
     )
 
 
@@ -199,8 +206,10 @@ def write_job(folder: Path, owner: str, repo: str, commit: str, base: str, name:
 
     slug = kernel_slug(base)
     folder.mkdir(parents=True, exist_ok=True)
+    # Training stops after the budget (train_lora.py --stop-after); the kernel limit adds
+    # SETUP_AND_EXPORT_MIN for everything around it. Colab runs keep their own job timeout.
     (folder / "train.py").write_text(_entry(repo, commit, base, name, epochs, sweep, budget, batch, accum,
-                                            gpus, stagger), encoding="utf-8")
+                                            gpus, stagger, stop=budget), encoding="utf-8")
     write_metadata(folder, f"{owner}/{slug}", slug, "train.py")
     return f"{owner}/{slug}"
 

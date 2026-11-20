@@ -98,8 +98,10 @@ jobs:
             echo "Already trained on this data and prompt: $trained." >> "$GITHUB_STEP_SUMMARY"
           fi
           ls data/train/*.jsonl >/dev/null 2>&1 || { echo "no training data in data/train/" >&2; exit 1; }
-          { echo "NAME=$name"; echo "SWEEP=$sweep"; echo "BUDGET=$budget"; echo "BATCH=$batch"; echo "ACCUM=$accum"; echo "GPUS=${gpus:-1}"; } >> "$GITHUB_ENV"
-          echo "Adapter: $name · sweep $sweep · budget $budget min · batch $batch x $accum" >> "$GITHUB_STEP_SUMMARY"
+          # The plan caps the epochs per base (tools/plan_train.py max_epochs); its value is the one the name hashes.
+          { echo "NAME=$name"; echo "SWEEP=$sweep"; echo "BUDGET=$budget"; echo "BATCH=$batch"; echo "ACCUM=$accum"; echo "GPUS=${gpus:-1}";
+            echo "PLAN_EPOCHS=$(get epochs)"; } >> "$GITHUB_ENV"
+          echo "Adapter: $name · sweep $sweep · budget $budget min · epochs $(get epochs) · batch $batch x $accum" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Holdout lock
         if: env.SKIP != 'true'
@@ -135,7 +137,7 @@ jobs:
           set -euo pipefail
           kid=$(python tools/kaggle_job.py --dir job --owner "$KAGGLE_USERNAME" \
                   --repo "$GITHUB_REPOSITORY" --commit "$GITHUB_SHA" --base "$BASE" --name "$NAME" \
-                  --epochs "$EPOCHS" --sweep "$SWEEP" --budget "$BUDGET" --batch "$BATCH" --grad-accum "$ACCUM" --gpus "$GPUS")
+                  --epochs "$PLAN_EPOCHS" --sweep "$SWEEP" --budget "$BUDGET" --batch "$BATCH" --grad-accum "$ACCUM" --gpus "$GPUS")
           # Kernel limit: budget plus 1 h for setup and export, below Kaggle's 12 h.
           kaggle kernels push -p job --accelerator NvidiaTeslaT4 --timeout "$(( (BUDGET + 60) * 60 ))"
           echo "Started $kid for $NAME; Collect publishes the result when it is done." >> "$GITHUB_STEP_SUMMARY"

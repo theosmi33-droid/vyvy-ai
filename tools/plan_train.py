@@ -34,7 +34,11 @@ PLANS = {
     "Qwen/Qwen2.5-1.5B-Instruct": {"size": "1.5b", "budget": 60, "sweep": "rank=16;lr=2e-4",
                                    "batch": 8, "grad_accum": 2, "gpus": 1, "gpus_after_7b": False,
                                    "where": "colab"},
-    "Qwen/Qwen2.5-7B-Instruct": {"size": "7b", "budget": 600, "sweep": "rank=16,32;lr=2e-4,1e-4,3e-4",
+    # 7B: one config, at most two epochs. On 16.11. the first of six configs needed about
+    # 15 h at 4 epochs (409 steps per epoch, about 32 s per step on one T4), so the kernel
+    # was ended without an adapter. Two epochs are about 8 h; the kernel's --stop-after
+    # ends training cleanly before Kaggle ends the session.
+    "Qwen/Qwen2.5-7B-Instruct": {"size": "7b", "budget": 600, "sweep": "rank=16;lr=2e-4", "max_epochs": 2,
                                  "batch": 2, "grad_accum": 8, "gpus": 1, "gpus_after_7b": True,
                                  "where": "kaggle"},
 }
@@ -49,13 +53,13 @@ ORDER = ["Qwen/Qwen2.5-1.5B-Instruct", "Qwen/Qwen2.5-7B-Instruct"]
 def plan(base: str, epochs: float = 4) -> dict:
     if base not in PLANS:
         raise SystemExit(f"unknown base model: {base}")
-    p = dict(PLANS[base], base=base, epochs=epochs)
+    p = dict(PLANS[base], base=base, epochs=min(epochs, PLANS[base].get("max_epochs", epochs)))
     h = hashlib.sha256()
     for f in sorted((ROOT / "data" / "train").glob("*.jsonl")):
         h.update(f.read_bytes())
     h.update(bench.PROMPTS[bench.prompt_for(base)].encode("utf-8"))
     h.update((ROOT / "training" / "train_lora.py").read_bytes())
-    h.update(f"{p['sweep']} {p['budget']} {epochs:g}".encode())
+    h.update(f"{p['sweep']} {p['budget']} {p['epochs']:g}".encode())
     p["name"] = f"vyvy-{p['size']}-d{h.hexdigest()[:8]}"
     return p
 

@@ -248,11 +248,16 @@ def main(argv: list[str] | None = None) -> int:
                    "the first values are tried first; empty = only --rank and --lr")
     p.add_argument("--time-budget", type=float, default=0, help="minutes for the whole sweep; no new config "
                    "starts when it would likely not finish in time (0 = no limit)")
+    p.add_argument("--stop-after", type=float, default=0, help="minutes after the start at which training "
+                   "stops even inside a config: one last evaluation and checkpoint, the best one so far is "
+                   "kept (0 = no limit; the Kaggle kernel passes its budget)")
     p.add_argument("--shard", default="0/1", help="i/n: train only every n-th grid config starting at i "
                    "(one process per GPU; tools/merge_shards.py joins the results)")
     p.add_argument("--batch", type=int, default=8)
     p.add_argument("--grad-accum", type=int, default=2)
     args = p.parse_args(argv)
+    # Measured from here, so the model download counts; the kernel limit covers the setup before.
+    stop_at = time.monotonic() + args.stop_after * 60 if args.stop_after > 0 else None
 
     paths = args.train or sorted((ROOT / "data" / "train").glob("*.jsonl"))
     if not paths:
@@ -268,7 +273,24 @@ def main(argv: list[str] | None = None) -> int:
     import torch
     from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
     from transformers import (AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, EarlyStoppingCallback,
-                              Trainer, TrainingArguments)
+                              Trainer, TrainerCallback, TrainingArguments)
+
+    class StopAt(TrainerCallback):
+        """Ends training at stop_at: evaluates and saves once more, so load_best_model_at_end
+        keeps the best checkpoint so far instead of the kernel being ended without one."""
+
+        def __init__(self) -> None:
+            self.hit = False
+
+        def on_step_end(self, args, state, control, **kwargs):
+            if stop_at is not None and time.monotonic() >= stop_at and not self.hit:
+                self.hit = True
+                print(f"Stop time reached at step {state.global_step}: last evaluation, best checkpoint kept",
+                      flush=True)
+                control.should_evaluate = True
+                control.should_save = True
+                control.should_training_stop = True
+            return control
 
     # Fixed Hugging Face commit of the base model (models.json), never "latest".
     revision = json.loads((ROOT / "models.json").read_text(encoding="utf-8"))["base"][args.base]
@@ -309,13 +331,14 @@ def main(argv: list[str] | None = None) -> int:
                 param.data = param.data.float()
         model.print_trainable_parameters()
         steps = math.ceil(len(data) / (batch * accum)) * args.epochs
+        stopper = StopAt()
         trainer = Trainer(
             model=model,
             train_dataset=data,
             eval_dataset=eval_data,
             data_collator=collator,
             # Stop once the validation loss no longer improves; keep the best epoch, not the last.
-            callbacks=[EarlyStoppingCallback(early_stopping_patience=1)],
+            callbacks=[EarlyStoppingCallback(early_stopping_patience=1), stopper],
             args=TrainingArguments(
                 output_dir=str(args.out / "checkpoints"), num_train_epochs=args.epochs,
                 per_device_train_batch_size=batch, gradient_accumulation_steps=accum,
@@ -340,7 +363,8 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"Validation accuracy not available ({type(exc).__name__}: {exc})", flush=True)
                 accuracy = None
             return {"eval_loss": min((h["eval_loss"] for h in history), default=None),
-                    "val_accuracy": accuracy, "history": history, "val_misses": misses}
+                    "val_accuracy": accuracy, "history": history, "val_misses": misses,
+                    "stopped_at_time": stopper.hit}
         finally:
             del trainer, model
             gc.collect()
@@ -378,6 +402,9 @@ def main(argv: list[str] | None = None) -> int:
     results: list[dict] = []
     while True:
         elapsed = (time.monotonic() - started) / 60
+        if results and stop_at is not None and time.monotonic() >= stop_at:
+            print(f"Stop time: no further config after {len(results)} ({elapsed:.0f} min)", flush=True)
+            break
         if results and not time_left_for_next(elapsed, [r["minutes"] for r in results], args.time_budget):
             print(f"Time budget: stopping after {len(results)} configs ({elapsed:.0f} min)", flush=True)
             break
@@ -434,9 +461,10 @@ def main(argv: list[str] | None = None) -> int:
         # Validation sentences (training data, never a holdout) the chosen config got wrong:
         # where the intent boundaries are still soft.
         "val_misses": best.get("val_misses", []),
-        "sweep": [{k: r[k] for k in ("rank", "lr", "seed", "phase", "minutes", "val_accuracy", "eval_loss")}
+        "sweep": [{k: r[k] for k in ("rank", "lr", "seed", "phase", "minutes", "val_accuracy", "eval_loss",
+                                     "stopped_at_time")}
                   for r in results],
-        "time_budget_min": args.time_budget, "shard": args.shard,
+        "time_budget_min": args.time_budget, "stop_after_min": args.stop_after, "shard": args.shard,
         "target_confidence": TARGET_CONFIDENCE, "holdout_lock": "passed",
     }
     (args.out / "manifest.json").write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8")
