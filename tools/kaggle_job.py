@@ -290,6 +290,10 @@ base = sorted(glob.glob("/tmp/models/" + model + "*.gguf"))[0]
 found = glob.glob("/kaggle/input/**/sealed_" + VERSION + ".json", recursive=True)
 assert len(found) == 1, "sealed set " + VERSION + " not attached: " + str(found)
 sealed = json.load(open(found[0]))
+# The attached file must be the recorded one (data/sealed_sets.json) and unchanged.
+digest = hashlib.sha256(json.dumps(sealed["items"], ensure_ascii=False, sort_keys=True).encode()).hexdigest()
+record = [r for r in json.load(open(SRC + "/data/sealed_sets.json")) if r["version"] == VERSION]
+assert record and record[-1]["items_sha256"] == digest == sealed["items_sha256"], "sealed set differs from its record"
 sys.path.insert(0, SRC + "/runner")
 import sealed_score  # noqa: E402  (runner/sealed_score.py: verdicts, never texts)
 KIND = sealed_score.kind_of(VERSION)
