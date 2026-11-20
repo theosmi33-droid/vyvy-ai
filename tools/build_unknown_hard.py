@@ -346,14 +346,18 @@ def noisy(text: str, rng: random.Random, typos: bool = True) -> str:
 
 
 class Filter:
-    def __init__(self, max_similarity: float) -> None:
+    def __init__(self, max_similarity: float, own: tuple[Path, ...] | None = None) -> None:
+        """own: the generator's output files, left out of the training sentences compared against."""
+        # The later others-calendar file (tools/build_others_calendar.py) is left out too, so
+        # this generator's committed output stays exactly as the semantic check passed it.
+        own = own or (OUT, CONTRAST_OUT, ROOT / "data" / "train" / "vyvy_others_calendar_v1.jsonl")
         self.max_similarity = max_similarity
         holdout = [i for h in lock.HOLDOUTS if h.exists() for i in json.loads(h.read_text(encoding="utf-8"))["items"]]
         self.holdout = [(h["id"], lock.normalise(h["text"])) for h in holdout]
         self.seen = {lock.normalise(t) for t in load_negatives()}
         self.by_intent: dict[str, list[str]] = {}
         for path in sorted((ROOT / "data" / "train").glob("*.jsonl")):
-            if path.resolve() in (OUT.resolve(), CONTRAST_OUT.resolve()):
+            if path.resolve() in {o.resolve() for o in own}:
                 continue
             for line in path.read_text(encoding="utf-8").splitlines():
                 if line.strip():
