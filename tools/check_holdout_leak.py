@@ -35,7 +35,14 @@ BLIND = ROOT / "data" / "holdout_blind_v1.json"
 BLIND_V2 = ROOT / "data" / "holdout_blind_v2.json"
 BLIND_V3 = ROOT / "data" / "holdout_blind_v3.json"
 BLIND_V4 = ROOT / "data" / "holdout_blind_v4.json"
+#: Every holdout ever used; generators that were built against all of them keep filtering
+#: against this list, so their committed output does not change.
 HOLDOUTS = [HOLDOUT, BLIND, BLIND_V2, BLIND_V3, BLIND_V4]
+#: Retired holdouts: no longer measured, released into the training data
+#: (data/train/vyvy_retired_blind_v2.jsonl, tools/build_retired_holdout.py). Issue 8, 20.11.2026.
+RETIRED = [BLIND_V2]
+#: What the lock protects today: training data must stay away from these.
+GUARDED = [h for h in HOLDOUTS if h not in RETIRED]
 TRAIN_DIR = ROOT / "data" / "train"
 # The teacher prompt carries example sentences (RULES); a holdout sentence there
 # would be copied into training data in many variants, so they are checked too.
@@ -97,7 +104,7 @@ def find_leaks(train: list[tuple[str, str]], holdout: list[dict], threshold: flo
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Fail if training data overlaps the holdout set")
     p.add_argument("--train", type=Path, nargs="*", help="training files (default: data/train/*.jsonl)")
-    p.add_argument("--holdout", type=Path, nargs="*", default=HOLDOUTS,
+    p.add_argument("--holdout", type=Path, nargs="*", default=GUARDED,
                    help="holdout sets to protect (default: development holdout and blind holdout)")
     p.add_argument("--threshold", type=float, default=0.85)
     p.add_argument("--prompts", type=Path, nargs="*",

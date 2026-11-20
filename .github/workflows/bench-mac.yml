@@ -73,7 +73,7 @@ jobs:
           set -uo pipefail
           run() {  # $1 model file, $2 label, $3 output, $4 adapter or empty
             VYVY_LORA_PATH="$4" python runner/bench.py --model "$1" --label "$2" --mode route \
-              --gpu-layers -1 --data data/holdout_blind_v2.json \
+              --gpu-layers -1 --data data/holdout_blind_v1.json \
               --summary "$GITHUB_STEP_SUMMARY" --json "$3.json" || echo "$2 failed" >> "$GITHUB_STEP_SUMMARY"
           }
           a15=$(grep '^Qwen2.5-1.5B-Instruct=' adapters.env | cut -d= -f2- || true)

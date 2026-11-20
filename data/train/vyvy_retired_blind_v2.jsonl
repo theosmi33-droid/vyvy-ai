@@ -1,0 +1,261 @@
+{"text": "Moin, wat steiht hüüt bi mi in'n Kalenner?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Was steht heute in meinem Kalender?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Wos steht heit no in meim Kalender drin?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Ist bei mir heute noch was?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Hob i heit am Nachmittag no an Termin?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Wat is bei mir heute so anjesetzt im Kalender?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Hab ich heut Nachmittag noch ein Meeting?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Watt hab ich heut noch so anne Termine, sach ma?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Guten Morgen, könnten Sie mir bitte sagen, welche Termine ich heute habe?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Was isch heit bei mir alles eitraga?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Was hab isch heit alles im Kalenner stehe?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Welche Baustellentermine hab ich heute noch?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Hab i heid nu wos ausgmacht?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Gugge mal, was hab'ch heute fer Termine?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Is heit no a Bsprechung bei mir eitrogn?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Hebb ik hüüt namiddag noch wat plaant?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Wie viele Patienten stehen heute noch bei mir im Terminplan?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Äh also was steht heute bei mir so an, Termine mein ich", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Hab ich heute, nee warte, ja doch heute, noch irgendwelche Meetings?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Bin ich heute um drei noch frei oder hab ich da was?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "bitte kurz: wann is mein nächstes meeting heute", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Steht die Abholung mit der Spedition heute bei mir im Kalender?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "hab ich heute um 3 was im kalender", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Also ich wollt mal fragen ob heut Nachmittag bei mir noch was eingetragen ist im Kalender", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Zeig mal, was heute so geplant ist bei mir.", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Bevor ich losfahre: muss ich heute noch irgendwo persönlich auftauchen?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Was hab ich denn heut Nachmittag zwischen zwei und vier eingetragen?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Bin heut als Bauleiter unterwegs – welche Baustellenbesprechungen stehen für heute an?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Gibt's heute noch was nach der Mittagspause, oder kann ich mich in die Abrechnung vertiefen?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Han ich morje irjendwelche Termine?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Könnte ich morgen früh noch jemanden reinschieben?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Wat hab ick'n morjen allet für Termine?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Hab i morga früh scho was eitraga?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Wat is morgen bei mir so los anne Termine?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Habe ich morgen das Meeting mit der Agentur Feldkamp?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Hob i morgn in da Fruah an Termin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Hab isch morje frieh schun en Termin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Wann muass i morgn beim earschtn Termin sein?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Was isn morchen bei mir so im Kalender eingedragen?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Morgen ich habe Termine? Bitte sagen.", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Gibt's morga bei mir irgendwelche Bsprechunga?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Muss isch morsche irschendwo hie, steht do was im Kalenner?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Muss ich morgen schon früh auf die Baustelle oder ist erst nachmittags was?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Sach amol, wos hob i morgn alles ausgmacht?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Wie sieht's'n morschen aus mit Terminen bei mir?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Sach ma, hab ich morgen noch Termine oder is der Tach frei?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Sind für morgen bei mir Gerichtstermine eingetragen?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "was steht morgen bei mir an termin mäßig", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Äh, was hab ich heute für Termine – nee, morgen mein ich, morgen", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Gibt's morgen bei mir irgendwelche Calls?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "morgen nachmittag hab ich da schon was drin im kalender", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Also für morgen, hab ich da schon was im Kalender stehen oder ist der noch frei", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Bin ich morgen um elf schon verplant?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "pls termine fr morgen", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Sagen Sie mir bitte, was morgen in meinem Terminkalender steht.", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Muss ich morgen früh schon vor acht im Büro sein, oder steht da erst später was?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Wos hob i no fia Aufgabn offn?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Wat mutt ik noch allens daun? Wat is noch open?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Was isch no alles z'erledige bi mir?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Wat för Aufjabe sin bei mir noch offe?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Was muass i no erledign?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Wat liecht bei mir noch allet uff'm Tisch an Aufjaben?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Welche Aufgaba han i no ned gmacht?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Watt hab ich noch so anne Aufgaben offen, die nich erledicht sind?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Welche Aufgaben hab ich bis Freitag noch zu machen?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Steht auf meina To-do-Listn no wos drauf?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Was hab isch noch alles fer Uffgawe zu mache?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Hab ich noch offene To-dos fürs Projekt Lindenhof?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Wos is no offen, a des wos erst nächste Woch fällig is?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Was isn noch nich erleedschd von meinen Aufgaben?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Was ist bei mir noch nicht abgehakt?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Welche Aufgabn hob i no offen fia de Vorbereitung vom Termin mit da Firma Grubinger?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Welsche Uffgabe sin noch offe, aach die wo ersch nächst Woch fällisch sin?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Welche Aufgaben sind noch nicht fertig? Die Deadline ist egal.", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Was hani no uf minere Liste, wo nonig erledigt isch?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Hab'ch noch offne Aufgaben, so Zeuch wie Termin mit'm Kundendienst ausmachen?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Ich habe noch welche Aufgaben offen?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Wat is bei mir noch nich abgehakt auf der To-do-Liste?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Ist die Aufgabe „Termin mit Steuerberater vereinbaren“ noch offen?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "was muss ich noch machen, alle todos bitte", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Also äh zeig mir mal meine offenen Aufgaben, alles was noch nicht erledigt ist", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Zeigen Sie mir bitte alle unerledigten Aufgaben.", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "welche tasks sind noch nicht erledigt", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Was muss ich eigentlich noch alles erledigen, so insgesamt, egal bis wann", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Was liegt bei mir noch so an Aufgaben rum?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "zeig mir meine offenen aufgabn, auch die mit frist ende monat", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Wos hob i ois übazogn bei de Aufgabn?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Wat heff ik vergeten? Wat is al över de Tied?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Was hani verpasst, wo scho hett söle fertig si?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Wat hab ick allet verpennt, wat schon überfällich is?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Welche To-dos hab ich verpennt?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Hab i ebbes vergessa, wo scho fällig gwä wär?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Welche Aufgaben sind schon drüber, wo ich dat Datum verpasst hab?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Was hätte ich eigentlich schon letzte Woche erledigen müssen?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Wos is bei meine Aufgabn scho üban Termin drüber?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Welche Deadlines hab ich schon gerissen?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Gibt's Aufgabn, wo i de Frist verschwitzt hob?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Hab'sch irchendwelsche Aufgaben, wo de Frist schon rum is?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Wos hätt i letzte Woch scho erledign miassn?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Welche Aufgaben sind schon über den Termin?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Was is'n bei mir alles liegn bliebn und scho z'spät?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Hab ich wat liegen lassen, wo die Frist schon vorbei is?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Ich habe Aufgaben, die schon zu spät sind? Welche?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "überfällige aufgaben pls", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Hab'ch vergessen, den Termin mit'm Steuerberater auszumachen? Die Aufgabe war doch bis letzte Woche fällig.", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Was ist bei mir liegen geblieben und eigentlich schon drüber?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "was hab ich verpennt, frist schon rum", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Äh was hab ich so verschwitzt, also Aufgaben wo das Fälligkeitsdatum schon durch ist", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Zeig mir die Aufgaben, bei denen das Fälligkeitsdatum schon vorbei ist.", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "welche todos sind übers datum", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Gibt's Aufgaben die ich gestern schon hätte fertig haben müssen", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Welche Aufgaben hätten gestern schon fertig sein sollen?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Zeig mal alles was überfällig ist, nee, nicht Termine, Aufgaben mein ich", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Was hab ich alles verschlampt, was längst fällig war?", "intent": "tasks_overdue", "timeframe": null, "entity": null}
+{"text": "Heff ik nee Post kregen? Nee Mails, mein ik.", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Is a neiche Post im Postfach?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Sin neu E-Mails för mich do?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Was ist Neues in meiner Inbox?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Gibt es ungelesene E-Mails?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Send no Mails do, wo i no ned glesa hab?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Is wat Neues im Postfach, wat ich noch nich gelesen hab?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Ist eine neue Mail von der Spedition Hartwig gekommen?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Wos is an ungelesene Mails do?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Hab isch ungelese Mails?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Wie viele ungelesene Nachrichten hab ich im Postfach?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Hod ma wer a Mail gschickt, de i no ned gseng hob?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Is vo da Firma Brandlhuber a neichs Mail kemma?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Is was Neues reikomme an Mails?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Ich habe E-Mails bekommen, die ich noch nicht gelesen?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Gibt's Mails, de i no ned aufgmacht hob?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Moin, is heut schon wat reingekommen an Mails, wat ich noch nich gelesen hab?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Hat mir jemand geschrieben, was ich noch nicht gelesen hab?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Könnten Sie bitte nachsehen, ob ungelesene E-Mails eingegangen sind?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "ungelesene emails bitte kurz", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Also äh hab ich irgendwelche ungelesenen Mails, so seit heute früh", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Ist eine Terminanfrage per Mail reingekommen, die ich noch nicht gelesen hab?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "hab ich was neues im posteingang", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Hat mir die Frau Okonkwo von Lindqvist Logistik schon zurückgeschrieben, ist da was Neues im Posteingang", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Was ist seit heute früh an neuen Mails reingekommen?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "irgendwelche neuen mails seit heute früh", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Lies mir mal eben die neuen E-Mails vor", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Check mal meine Inbox auf ungelesene Sachen.", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Ist seit heute früh irgendwas Neues in meinem Postfach gelandet?", "intent": "emails_unread", "timeframe": null, "entity": null}
+{"text": "Wos steht heit ois o, Termine, To-dos und Post zamm?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Maach mer ens 'ne Övverbleck för hück, met Termine, Aufjabe un Mails.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Was steht heute insgesamt an – Kalender, To-dos und Posteingang?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Machsch mr e Tagesübersicht mit Termin, Ufgabe und Mails?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Jib ma ne Übersicht über heute, allet zusammen: Termine, Aufjaben, Mails.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Erstell mir bitte eine Tagesübersicht mit Terminen, Aufgaben und E-Mails.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Wie sieht mein Tach aus? Termine, Aufgaben un Mails, alles auf einen Schlach.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Fass ma bitte mein ganzn Tag zamm, mit Kalender, Aufgabn und Posteingang.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Fass mir den Tag zusammen, also Termine, Aufgaben und ungelesene E-Mails.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "I hätt gern de Tagesübersicht: Termine, wos offn is und de neichn Mails.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Mach ma'n Tagesüberblick: Termine, Aufgaben und Mails zusamm.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Ich möchte Überblick für ganze Tag, alles: Termine, Aufgaben, E-Mails.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Zoag ma kurz mei ganzes Tagesprogramm, Termine, Aufgabn, Mails, ois zamm.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Gib mer mol die ganz Tachesübersicht, mit Termine, Uffgabe un Mails.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Bevor die Praxis aufmacht: Zeigen Sie mir bitte den ganzen Tag mit Terminen, Aufgaben und Post im Überblick.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Was is'n heit alles los bei mir, Termine, Aufgabn und Mails in aaner Übersicht?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Moin, ich brauch einmal den kompletten Tagesüberblick, Termine, To-dos und Post.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Mein Tagesplan komplett, also Kalender plus Aufgaben plus Inbox?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "tagesübersicht pls, termine aufgaben mails", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Erzähl mer mal, wie mei ganzer Tag aussieht, Termine, Aufgaben und Mails alles in eenem.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Wie sieht mein Tag aus, alles zusammen: Termine, To-dos, Mails?", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "briefing für heute: kalender + todos + mails", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Also äh fass mir mal den ganzen Tag zusammen, Termine Aufgaben Mails, alles", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Ich brauche die Tagesagenda mit Terminen, Aufgaben und neuen Nachrichten.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Gib mir bitte mal so ein Briefing für heute, also was an Terminen ist, was ich noch an Aufgaben hab und was an Mails reingekommen ist", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Morgenüberblick bitte – welche Termine heute, welche Aufgaben offen und was an Mails da ist.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "mein tag auf einen blick bitte, alles: termine, tasks, posteingang", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Mein Tagesüberblick bitte, mit allem drum und dran, Kalender, Aufgaben, Posteingang", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Mach mir die komplette Tagesübersicht: Kalender, Aufgabenliste, Postfach.", "intent": "daily_agenda", "timeframe": "today", "entity": null}
+{"text": "Trog ma morgn um zehne an Termin mit'm Huber Sepp ei.", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Maak mi 'n Termin för Dünnersdag Klock tein mit Hinnerk Ahlers.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Trag mir für Donnerstag um 10 ein Meeting mit Frau Okonkwo ein.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Mach ma bitte an Termin am Freitag um drei mit da Firma Wimmer.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Driesch mer ene Termin för Friedaach öm drei met dem Schmitz vun Kranzmaier Bedachunge en.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Bitte einen Termin am 14.11. um 15 Uhr mit Mandant Berger anlegen.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Chasch mr am Mäntig am nüni en Termin mit de Frau Zbinden iträge?", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Trach ma'n Termin ein, Montach um neune beim Zahnarzt.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Mach mir morgen um neun einen Call mit der Agentur Blauwerk.", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Mach mir en Termin am Donnerstag om zwoi mit em Herr Kächele.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Mach ma'n Termin für nächsten Dienstach, vierzehn Uhr, mit dem Kowalski vonne Firma Stahlbau Reckmann.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Ich möchte Termin machen für Montag, 8 Uhr, Baustelle Ahornweg.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Leg ma an Termin fürn Dienstag an, Zahnarzt um hoiba neine.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Mach mer en Termin am Mittwoch um halb elf mit de Fraa Gerber.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Legen Sie bitte für Herrn Yilmaz am Dienstag um halb zwölf einen Behandlungstermin bei mir an.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Bitte a Bsprechung mit'm Team am Mittwoch um elfe eitrogn.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Trach mir ma'n Termin ein, iebermorschen um neun, Besprechung mit'm Vertrieb.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Kannst du mir nächste Woche Mittwoch um 14 Uhr ein Teammeeting blocken?", "intent": "create_appointment", "timeframe": "week", "entity": null}
+{"text": "Kannst ma fia nächste Woch an Termin mit'm Steuerberater Moosleitner in Kalender eintragn?", "intent": "create_appointment", "timeframe": "week", "entity": null}
+{"text": "Leg mer en Termin a, Freidach Middach, Esse mit'm Herr Wenzel.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Neuer Termin: Freitag 13 Uhr, Mittagessen mit Herrn Castellano.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Schreib mer fei an Termin am Montag um achte nei, Besprechung mit da Firma Kreuzer.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Kannst mir morgen um zehn 'n Termin mit Frau Brodersen eintragen?", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Schreib mir bitte in den Kalender: Übergabe Lager Süd, Mittwoch 7 Uhr.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "termin anlegen morgen 14 uhr mit frau lindner", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Mach mer'n Termin fer nächste Woche Donnerschtag, Kundengespräch bei Möbel Rauschert.", "intent": "create_appointment", "timeframe": "week", "entity": null}
+{"text": "Bitte tragen Sie mir am 3. Dezember von 9 bis 11 eine Bürgersprechstunde ein.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "neuer termin fr 12.11. 9:30 kundengespräch pls", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Äh trag mal nen Termin ein am Freitag um drei, nee halb vier, Abstimmung mit dem Team Marketing", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Plan mir übermorgen so gegen vier einen Call mit dem Kunden Steinbrecher ein.", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Schreib ma auf: Angebot fia de Firma Pointner fertig machn.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Schriev mi 'ne Opgaav op: Reken an Hansen Hoffbau schicken.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Erstell mir eine Aufgabe: Angebot für Familie Brandner schreiben.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Leg ma a neie Aufgab an, Rechnung vo da Druckerei Haslinger prüfn.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Schriev mer op: Angebot för de Firma Pütz-Merten fädisch maache, bes Mittwoch.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Neues To-do: Rechnungen der Spedition Kowalczyk prüfen, bis Freitag.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Mach mr e neui Ufgab: Offerte für d Firma Gisler schribe.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Leg ma ne Aufjabe an: Druckerpapier bestell'n.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Bitte legen Sie eine Aufgabe an: Akte Hellwig für den Termin vorbereiten.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Nimm mr des auf d'Lischt: Reisekoschta abrechna bis Freitag.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Mach mir ma 'ne Aufgabe: Reisekosten abrechnen bis Monatsende.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Schreib auf meine To-do-Liste, dass ich den Laborbefund von Frau Demir anfordern muss.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Trog ma a To-do ei: Termin mit'm Notar vorbereitn.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Schreib mer uff als Uffgab, ich muss de Vertrag vun de Fraa Becker noch durchgucke.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Mach mir eine Aufgabe: Reifenwechsel für den Transporter organisieren.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Mach a Aufgab draus: Unterlagn an'n Herrn Rieder schickn, bis Ende Monat.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Mach mir ma ne Aufgabe: Urlaubsantrach einreichen.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Ich möchte neue Aufgabe machen: Material bestellen für Baustelle.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Kannst ma a Aufgab anlegn, dass i de Präsentation fia Mittwoch fertig mach?", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Leesch mer e Uffgab a: Termin mit'm Elektriker ausmache.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Füg bitte eine Aufgabe hinzu: Termin beim TÜV ausmachen.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Schreib mer des als Aufgabe nei: Lieferschein vo da Firma Dörfler nachfordern.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Notier mir mal als To-do: Rückruf bei Frau Petersen von Elbtal Kontor.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Kannst du als Aufgabe notieren, dass ich die Präsentation für Kunde Vogelsang bis nächsten Mittwoch fertig machen muss?", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "neue aufgabe: vertrag an meier schicken", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Schreib mer ne Aufgabe uff: Rechnungen fer Oktober abheften, bis Freitag.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Task anlegen: Fristverlängerung beim Landgericht beantragen, Deadline 20.11.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "todo anlegen pls - druckerpatronen bestellen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Äh ich muss noch, also mach mir ne Aufgabe draus, die Präsentation für Montag fertig machen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Setz mir bitte ein To-do: Urlaubsantrag von Herrn Petrović bearbeiten.", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Wia werd des Weda morgn in Minga?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wat för'n Weer kriegt wi hüüt?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hat Frau Lindqvist heute noch Termine frei?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was hat da Chef vom Bachmayr heit fia Termine?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie mäht mer eijentlich ene richtije Halve Hahn?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hed d Frau Ammann hüt no Ziit für es Meeting?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wat hat denn der Kollege Brandt morjen für Termine?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kannst du mir helfen, eine Mahnung freundlich zu formulieren?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann hot d'Firma Gschwendtner morga offa?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kannze mir ma 'ne nette Mail an mein Chef schreiben, dass ich später komm?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was ist der Unterschied zwischen Werkvertrag und Dienstvertrag?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Servus, wia geht's da heit?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie viel Einwohner hot eigentlich die Palz?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Na, wie geht's dir heute?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kannst ma a Mail an'n Kunden formuliern, dass ma de Lieferung verschiebn?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie spät ist es gerade in New York?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wia vui is drei mal siebzehn?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was hot die Firma Grünwald Feinkost morsche fer Termine frei?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie viele Urlaubstage stehen einem Azubi gesetzlich zu?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was is'n die Hauptstadt vo Australien?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann is heut Hochwasser anne Elbe?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann hat die Kanzlei Rautenberg nächste Woche noch Termine frei?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "schreib mir n text für ne absage an bewerber", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie geht's dir'n heute so?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Übersetz mir bitte „Lieferverzug“ ins Englische.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "wann hat herr kowalski morgen termine frei", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Äh was ist eigentlich die Hauptstadt von Kanada", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie ich kann Paket nach Polen schicken am billigsten?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "danke dir, passt scho", "intent": "unknown", "timeframe": null, "entity": null}

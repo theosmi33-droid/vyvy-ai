@@ -45,7 +45,7 @@ def main(argv: list[str] | None = None) -> int:
     from sentence_transformers import SentenceTransformer
 
     train = lock.load_train(sorted(lock.TRAIN_DIR.glob("*.jsonl")))
-    holdout = [i for h in lock.HOLDOUTS if h.exists() for i in json.loads(h.read_text(encoding="utf-8"))["items"]]
+    holdout = [i for h in lock.GUARDED if h.exists() for i in json.loads(h.read_text(encoding="utf-8"))["items"]]
     model = SentenceTransformer(MODEL, revision=REVISION, device="cpu")
     t = model.encode([text for _, text in train], batch_size=64, normalize_embeddings=True, convert_to_numpy=True)
     h = model.encode([i["text"] for i in holdout], batch_size=64, normalize_embeddings=True, convert_to_numpy=True)
