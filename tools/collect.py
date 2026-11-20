@@ -177,13 +177,24 @@ def main(argv: list[str] | None = None) -> int:
 LEGACY_ROUNDS = {"2026-11-07": "2026-W45"}
 
 
+#: Rejections in a row that hold one base in continuous mode (loop_guard.check's default).
+PLATEAU = 3
+
+
 def continuous_round(state: dict, history: list[dict]) -> str:
     """Round label in continuous mode: the release date plus the rounds every released base
     has decided since, e.g. 2026-11-20-c03. It moves on only when all bases have decided, so
     one teacher run feeds both, and a new release starts counting from c00."""
-    done = [sum(1 for d in history if d["created"] > state["approved_on"]
-                and d["adapter"].startswith(f"vyvy-{loop_guard.SIZE[b]}-"))
-            for b in state.get("bases", []) if b in loop_guard.SIZE]
+    done = []
+    for b in state.get("bases", []):
+        if b not in loop_guard.SIZE:
+            continue
+        mine = [d for d in history if d["created"] > state["approved_on"]
+                and d["adapter"].startswith(f"vyvy-{loop_guard.SIZE[b]}-")]
+        # A base held by its plateau (loop_guard.gate) decides nothing more; it must not hold the other.
+        if len(mine) >= PLATEAU and not any(d["accepted"] for d in mine[-PLATEAU:]):
+            continue
+        done.append(len(mine))
     return f"{state['approved_on'][:10]}-c{min(done, default=0):02d}"
 
 

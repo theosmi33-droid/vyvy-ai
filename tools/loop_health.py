@@ -8,6 +8,9 @@ hangs on the chain would stop together with it. Findings:
   --stale hours (default 4): the chain stopped (or GitHub disabled the schedules).
 - paused_long: data/loop_state.json says "paused" for more than --idle days.
 - no_decision: released, but no adapter decided for more than --idle days.
+- base_stuck: continuous mode, one released base has decided nothing for more than
+  --base-idle days while another has: the round counter (collect.continuous_round)
+  waits for every base, so the healthy base stands still too.
 - token_kaggle / token_colab: the weekly sign-in check failed (--kaggle/--colab fail).
 
 Each finding has one issue titled "Loop health: <key>"; an open one is not
@@ -41,6 +44,9 @@ TEXT = {
     "paused_long": "The loop has been paused for {age:.0f} days (data/loop_state.json). Nothing trains until the "
                    "user releases a round.",
     "no_decision": "No adapter was decided for {age:.0f} days although a round is released.",
+    "base_stuck": "Continuous mode stands still because of {bases}: no decision for more than {limit:g} days "
+                  "while another base decided. The next teacher round waits for every base; see the open "
+                  "failure issue of that base or pause it in data/loop_state.json.",
     "token_kaggle": "The weekly Kaggle sign-in failed: the token (secret KAGGLE_API_TOKEN) is missing or expired.",
     "token_colab": "The weekly Colab sign-in failed: the credentials (secret COLAB_ADC, environment colab) are "
                    "missing or expired.",
@@ -52,10 +58,11 @@ def hours(since: str, now: dt.datetime) -> float:
 
 
 def findings(now: dt.datetime, last_run: dict[str, str | None], state: dict | None, state_since: str | None,
-             last_decision: str | None, tokens: dict[str, str], stale: float = 4, idle: float = 7) -> tuple[dict, set]:
+             last_decision: str | None, tokens: dict[str, str], stale: float = 4, idle: float = 7,
+             history: list[dict] | None = None, base_idle: float = 3) -> tuple[dict, set]:
     """(findings {key: text}, keys checked). last_run: workflow -> createdAt of its newest run."""
     found: dict[str, str] = {}
-    checked = {"chain_collect", "chain_heartbeat", "paused_long", "no_decision"}
+    checked = {"chain_collect", "chain_heartbeat", "paused_long", "no_decision", "base_stuck"}
     for key, wf in (("chain_collect", "Collect"), ("chain_heartbeat", "Heartbeat")):
         age = hours(last_run[wf], now) if last_run.get(wf) else float("inf")
         if age > stale:
@@ -67,6 +74,18 @@ def findings(now: dt.datetime, last_run: dict[str, str | None], state: dict | No
         since = max(filter(None, [last_decision, state.get("approved_on")]), default=None)
         if since and hours(since, now) > idle * 24:
             found["no_decision"] = TEXT["no_decision"].format(age=hours(since, now) / 24)
+    if mode == "continuous" and state and history is not None:
+        decided = {}
+        for base in state.get("bases", []):
+            size = loop_guard.SIZE.get(base)
+            decided[base] = sorted(d["created"] for d in history if size and d["adapter"].startswith(f"vyvy-{size}-")
+                                   and d["created"] > state["approved_on"])
+        # Behind: fewer decisions than another base, and the last one (or the release) is old.
+        most = max((len(v) for v in decided.values()), default=0)
+        stuck = sorted(b for b, v in decided.items() if len(v) < most
+                       and hours(v[-1] if v else state["approved_on"], now) > base_idle * 24)
+        if stuck:
+            found["base_stuck"] = TEXT["base_stuck"].format(bases=", ".join(stuck), limit=base_idle)
     for name, result in tokens.items():
         checked.add(f"token_{name}")
         if result != "ok":
@@ -119,13 +138,15 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--colab", choices=["ok", "fail"], help="result of the weekly Colab sign-in")
     p.add_argument("--stale", type=float, default=4)
     p.add_argument("--idle", type=float, default=7)
+    p.add_argument("--base-idle", type=float, default=3, help="continuous mode: days one base may go undecided")
     p.add_argument("--dry-run", action="store_true", help="only print what would be opened or closed")
     args = p.parse_args(argv)
     now = dt.datetime.now(dt.timezone.utc)
     history = loop_guard.release_history(args.repo)
     tokens = {k: v for k, v in (("kaggle", args.kaggle), ("colab", args.colab)) if v}
     found, checked = findings(now, last_runs(args.repo), loop_guard.load_state(), state_since(),
-                              history[-1]["created"] if history else None, tokens, args.stale, args.idle)
+                              history[-1]["created"] if history else None, tokens, args.stale, args.idle,
+                              history, args.base_idle)
     open_titles = {i["title"]: i["number"] for i in json.loads(
         gh("issue", "list", "--repo", args.repo, "--state", "open", "--search", f'"{PREFIX}" in:title',
            "--json", "number,title") or "[]")}

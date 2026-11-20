@@ -181,13 +181,24 @@ def gate(state: dict | None, history: list[dict], base: str, now: str, current: 
         return go, why
     if state.get("fingerprint") != current:
         return False, "rules or holdouts changed since the user approved them; the user decides"
-    if state["mode"] in ("weekly", "continuous"):
+    if state["mode"] == "weekly":
         since = [d for d in history if d["created"] > state["approved_on"]]
-        # continuous: no rounds-per-week limit; the plateau ends a run of rejections instead.
-        limit = CONTINUOUS_MAX_ROUNDS if state["mode"] == "continuous" else 5
-        go, why = check(since, now=now, approved=current, current=current, max_rounds=limit)
+        go, why = check(since, now=now, approved=current, current=current)
         if not go:
             return go, why
+    if state["mode"] == "continuous":
+        since = [d for d in history if d["created"] > state["approved_on"]]
+        # Rules, goal and rotation over all bases (an acceptance uses up the holdout for
+        # every base); no rounds-per-week limit. The plateau counts per base: a run of
+        # rejections of one base holds that base only, the other keeps going.
+        go, why = check(since, now=now, approved=current, current=current, plateau=CONTINUOUS_MAX_ROUNDS,
+                        max_rounds=CONTINUOUS_MAX_ROUNDS)
+        if not go:
+            return go, why
+        mine = [d for d in since if d["adapter"].startswith(f"vyvy-{SIZE[base]}-")]
+        go, why = check(mine, now=now, approved=current, current=current, max_rounds=CONTINUOUS_MAX_ROUNDS)
+        if not go:
+            return go, f"{base}: {why}"
     # "seven_b_after_small": false (the user's choice) lets 7B train next to 1.5B; the
     # quota guard still decides whether the GPU time is there.
     if base == SEVEN_B and state.get("seven_b_after_small", True):

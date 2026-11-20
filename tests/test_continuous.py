@@ -76,3 +76,42 @@ def test_the_teacher_kernel_takes_a_continuous_label(tmp_path):
     kaggle_job.write_synth_job(tmp_path, "user", "owner/repo", "a" * 40, "2026-11-20-c03")
     with pytest.raises(SystemExit):
         kaggle_job.write_synth_job(tmp_path, "user", "owner/repo", "a" * 40, "2026-11-20-c")
+
+
+def test_the_plateau_holds_one_base_only():
+    # 1.5B rejected three times in a row, 7B once: 1.5B stops, 7B goes on.
+    hist = [decided("vyvy-1.5b-d1", "2026-11-21T08:00:00Z"), decided("vyvy-7b-d1", "2026-11-21T20:00:00Z"),
+            decided("vyvy-1.5b-d2", "2026-11-22T08:00:00Z"), decided("vyvy-1.5b-d3", "2026-11-23T08:00:00Z")]
+    now = "2026-11-23T09:00:00Z"
+    go, why = loop_guard.gate(STATE, hist, SMALL, now, "x")
+    assert go is False and why.startswith(SMALL) and "vyvy-1.5b-d1" in why and "vyvy-1.5b-d3" in why
+    assert loop_guard.gate(STATE, hist, LARGE, now, "x")[0] is True
+    # Three rejections across both bases are no plateau of either.
+    mixed = [decided("vyvy-1.5b-d1", "2026-11-21T08:00:00Z"), decided("vyvy-7b-d1", "2026-11-21T20:00:00Z"),
+             decided("vyvy-1.5b-d2", "2026-11-22T08:00:00Z")]
+    assert loop_guard.gate(STATE, mixed, SMALL, now, "x")[0] is True
+    assert loop_guard.gate(STATE, mixed, LARGE, now, "x")[0] is True
+
+
+def test_a_held_base_does_not_hold_the_round_counter():
+    hist = [decided("vyvy-1.5b-d1", "2026-11-21T08:00:00Z"), decided("vyvy-1.5b-d2", "2026-11-22T08:00:00Z"),
+            decided("vyvy-1.5b-d3", "2026-11-23T08:00:00Z"), decided("vyvy-7b-d1", "2026-11-23T20:00:00Z"),
+            decided("vyvy-7b-d2", "2026-11-24T20:00:00Z")]
+    # 1.5B is held by its plateau; the counter follows 7B alone.
+    assert collect.continuous_round(STATE, hist) == "2026-11-20-c02"
+
+
+def test_a_base_that_falls_behind_is_reported():
+    from datetime import datetime, timezone
+
+    import loop_health
+
+    hist = [decided("vyvy-1.5b-d1", "2026-11-21T08:00:00Z")]
+    runs = {"Collect": "2026-11-25T11:00:00Z", "Heartbeat": "2026-11-25T11:00:00Z"}
+    now = datetime(2026, 11, 25, 12, tzinfo=timezone.utc)
+    found, checked = loop_health.findings(now, runs, STATE, None, hist[-1]["created"], {}, history=hist)
+    assert "base_stuck" in checked and LARGE in found["base_stuck"] and SMALL not in found["base_stuck"]
+    early = datetime(2026, 11, 22, 12, tzinfo=timezone.utc)
+    assert "base_stuck" not in loop_health.findings(early, runs, STATE, None, None, {}, history=hist)[0]
+    weekly = dict(STATE, mode="weekly")
+    assert "base_stuck" not in loop_health.findings(now, runs, weekly, None, None, {}, history=hist)[0]
