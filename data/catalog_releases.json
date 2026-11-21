@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "fetched": "2026-11-21T08:40:00Z",
+ "fetched": "2026-11-21T08:16:12Z",
  "source": "GitHub releases of this repository and the Hugging Face API at the pinned revisions (public)",
  "base_files": {
   "qwen2.5-1.5b-instruct-q8_0.gguf": {
@@ -35,14 +35,14 @@
    "manifest_sha256": "5d3a7ff8766c83a20a00b2069d0c6527fd5e78aafabb5ce8d380bb1ddda38b81",
    "adapter_manifest": false,
    "attested": null,
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "not checked: the release is not accepted"
+   },
    "bench_lora_run": null,
    "decision_ms_median": null,
    "cpu": null,
-   "signed_status": null,
-   "attestation": {
-    "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
-   }
+   "signed_status": null
   },
   {
    "tag": "vyvy-1.5b-d1e100e8d",
@@ -58,14 +58,14 @@
    "manifest_sha256": "d5a8873514a66aba101c83d2ab92f52cef37db1d1b85469334dc76e822f9665a",
    "adapter_manifest": false,
    "attested": null,
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "no adapter_manifest.json on the release"
+   },
    "bench_lora_run": "42361864579",
    "decision_ms_median": 585,
    "cpu": "AMD EPYC 9V74 80-Core Processor",
-   "signed_status": null,
-   "attestation": {
-    "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
-   }
+   "signed_status": null
   },
   {
    "tag": "vyvy-1.5b-d60e3101c",
@@ -81,14 +81,14 @@
    "manifest_sha256": "a48e4543fbc7f2ce5656442fdc524ae0a91f3603af404b2789ff0ae69f385e4a",
    "adapter_manifest": true,
    "attested": null,
-   "bench_lora_run": "42417127972",
-   "decision_ms_median": null,
-   "cpu": null,
-   "signed_status": null,
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
-   }
+    "why": "not checked: the release is not accepted"
+   },
+   "bench_lora_run": "42417127972",
+   "decision_ms_median": 589,
+   "cpu": "AMD EPYC 9V74 80-Core Processor",
+   "signed_status": "rejected"
   },
   {
    "tag": "vyvy-7b-dcc6d83db",
@@ -104,14 +104,14 @@
    "manifest_sha256": "f38db02617fea0a4eaf62ab9dc35fac5eae1bd4521bf462a4847ff2ddf6d1c5c",
    "adapter_manifest": true,
    "attested": null,
-   "bench_lora_run": "42441236212",
-   "decision_ms_median": null,
-   "cpu": null,
-   "signed_status": null,
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
-   }
+    "why": "not checked: the release is not accepted"
+   },
+   "bench_lora_run": "42441236212",
+   "decision_ms_median": 2131,
+   "cpu": "AMD EPYC 9V74 80-Core Processor",
+   "signed_status": "rejected"
   },
   {
    "tag": "vyvy-1.5b-d094ace1b",
@@ -127,14 +127,14 @@
    "manifest_sha256": "b2b6e2c049c8eeaa72a31566c533a13917d111a3d458deacb65043d9983ac355",
    "adapter_manifest": true,
    "attested": null,
-   "bench_lora_run": "42447024173",
-   "decision_ms_median": null,
-   "cpu": null,
-   "signed_status": null,
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
-   }
+    "why": "not checked: the release is not accepted"
+   },
+   "bench_lora_run": "42447024173",
+   "decision_ms_median": 639,
+   "cpu": "AMD EPYC 7763 64-Core Processor",
+   "signed_status": "rejected"
   },
   {
    "tag": "vyvy-1.5b-d61e3a974",
@@ -150,14 +150,14 @@
    "manifest_sha256": "639ba4f62954807a9226cddf3238c649b6fde0bbbb64ebb126ff4a35f00b6fa9",
    "adapter_manifest": true,
    "attested": null,
-   "bench_lora_run": "42526865621",
-   "decision_ms_median": null,
-   "cpu": null,
-   "signed_status": null,
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
-   }
+    "why": "not checked: the release is not accepted"
+   },
+   "bench_lora_run": "42526865621",
+   "decision_ms_median": 643,
+   "cpu": "AMD EPYC 7763 64-Core Processor",
+   "signed_status": "rejected"
   },
   {
    "tag": "vyvy-1.5b-d5c87bca5",
@@ -173,14 +173,14 @@
    "manifest_sha256": "22f9b280f02389b3024718dbcf5bb6272bf5679c6b66836b7301f2a3f1e979d1",
    "adapter_manifest": true,
    "attested": null,
-   "bench_lora_run": "42616343618",
-   "decision_ms_median": null,
-   "cpu": null,
-   "signed_status": null,
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
-   }
+    "why": "not checked: the release is not accepted"
+   },
+   "bench_lora_run": "42616343618",
+   "decision_ms_median": 632,
+   "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+   "signed_status": "rejected"
   },
   {
    "tag": "vyvy-1.5b-d84f55739",
@@ -196,14 +196,14 @@
    "manifest_sha256": "9a0b3ce9dc65398e40d166e62ff0878f3b0edd098e82cedbe20f1c74d1a60d76",
    "adapter_manifest": true,
    "attested": null,
-   "bench_lora_run": "42656200936",
-   "decision_ms_median": null,
-   "cpu": null,
-   "signed_status": null,
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
-   }
+    "why": "not checked: the release is not accepted"
+   },
+   "bench_lora_run": "42656200936",
+   "decision_ms_median": 718,
+   "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+   "signed_status": "rejected"
   },
   {
    "tag": "vyvy-1.5b-da8577af3",
@@ -219,14 +219,14 @@
    "manifest_sha256": "c7e81a46815fbc2046544124692149efb3a561a4f0cd6227d984c8421a878537",
    "adapter_manifest": true,
    "attested": null,
-   "bench_lora_run": "43046797991",
-   "decision_ms_median": null,
-   "cpu": null,
-   "signed_status": null,
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
-   }
+    "why": "not checked: the release is not accepted"
+   },
+   "bench_lora_run": "43046797991",
+   "decision_ms_median": 664,
+   "cpu": "AMD EPYC 7763 64-Core Processor",
+   "signed_status": "rejected"
   },
   {
    "tag": "vyvy-1.5b-d37929906",
@@ -242,14 +242,14 @@
    "manifest_sha256": "ba2a3bfb56167d6e4f01e65a7163413a87769b43215d36e8d06f49a533942b6c",
    "adapter_manifest": true,
    "attested": null,
-   "bench_lora_run": "44775941499",
-   "decision_ms_median": null,
-   "cpu": null,
-   "signed_status": null,
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
-   }
+    "why": "not checked: the release is not accepted"
+   },
+   "bench_lora_run": "44775941499",
+   "decision_ms_median": 600,
+   "cpu": "AMD EPYC 9V74 80-Core Processor",
+   "signed_status": "rejected"
   },
   {
    "tag": "vyvy-7b-d89442b39",
@@ -265,14 +265,14 @@
    "manifest_sha256": "3d753ea6dd7e18f364c754d1f2759f97a6998ea6296967f8f0107d12ece2a076",
    "adapter_manifest": true,
    "attested": null,
-   "bench_lora_run": "44867036984",
-   "decision_ms_median": null,
-   "cpu": null,
-   "signed_status": null,
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
-   }
+    "why": "not checked: the release is not accepted"
+   },
+   "bench_lora_run": "44867036984",
+   "decision_ms_median": 1650,
+   "cpu": "AMD EPYC 9V45 96-Core Processor",
+   "signed_status": "rejected"
   }
  ]
 }
