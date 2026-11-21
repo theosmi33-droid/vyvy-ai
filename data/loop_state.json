@@ -1,12 +1,12 @@
 {
  "schema": 1,
- "mode": "one_round",
+ "mode": "continuous",
  "bases": [
   "Qwen/Qwen2.5-1.5B-Instruct",
   "Qwen/Qwen2.5-7B-Instruct"
  ],
- "approved_on": "2026-11-20T13:48:15Z",
+ "approved_on": "2026-11-21T07:51:48Z",
  "fingerprint": "dc42f30dc06c16e850f4118d2f49520d7b4358a7d40e9de4a16e43c1524bd481",
- "note": "Written by the user only. paused: no GPU run starts. one_round or weekly with bases and approved_on releases rounds (tools/loop_guard.py).",
+ "note": "Written by the user only. paused: no GPU run starts. one_round or weekly with bases and approved_on releases rounds; continuous runs round after round while GPU and quota allow (tools/loop_guard.py).",
  "seven_b_after_small": false
 }
