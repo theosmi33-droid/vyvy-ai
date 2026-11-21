@@ -79,3 +79,9 @@ def test_the_check_hands_back_to_collect():
     text = (ROOT / ".github" / "workflows" / "sealed-check.yml").read_text(encoding="utf-8")
     assert "gh workflow run collect.yml" in text and "actions: write" in text
     assert text.index("Start Collect again") > text.index("upload-artifact")
+    # Only with a kept result: a check that kept none must not start the next one through Collect.
+    step = text[text.index("- name: Start Collect again"):]
+    condition = next(line.strip() for line in step.splitlines() if line.strip().startswith("if:"))
+    assert condition == "if: always() && hashFiles('out/semantic_result.json') != ''"
+    upload = text[text.index("actions/upload-artifact"):text.index("Start Collect again")]
+    assert "path: out/semantic_result.json" in upload  # the same file the condition looks for

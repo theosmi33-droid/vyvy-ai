@@ -106,9 +106,12 @@ jobs:
 
       # Collect started this check and ended its chain (no GPU kernel was running), so nothing
       # would look again until the next heartbeat (21.11.2026: training waited for hours).
-      # Start Collect now; it reads the kept result and trains or holds.
+      # Start Collect now; it reads the kept result and trains or holds. Only with a kept result:
+      # a check that kept none (Kaggle unreachable, push failed, bad input) would make Collect
+      # start the next check at once - a loop as long as the cause lasts. Without a result the
+      # chain ends as before and the heartbeat tries again later.
       - name: Start Collect again
-        if: always()
+        if: always() && hashFiles('out/semantic_result.json') != ''
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run collect.yml --repo "$GITHUB_REPOSITORY" --ref main
