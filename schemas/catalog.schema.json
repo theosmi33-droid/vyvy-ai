@@ -1,0 +1,35 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "Vyvy AI model catalog, schema 1",
+ "description": "Written by tools/build_catalog.py from models.json and data/catalog_releases.json; never by hand.",
+ "type": "object",
+ "required": ["schema", "contract", "states", "snapshot_fetched", "entries"],
+ "properties": {
+  "schema": {"const": 1},
+  "contract": {"type": "object", "required": ["version", "intents", "grammar", "grammar_sha256", "prompts_sha256"],
+               "properties": {"version": {"const": 1}, "grammar_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}},
+  "snapshot_fetched": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T"}
+ },
+ "$defs": {
+  "entry": {
+   "type": "object",
+   "required": ["id", "class", "class_note", "state", "selectable", "base", "adapter", "contract", "measured"],
+   "properties": {
+    "state": {"enum": ["selectable", "accepted_unsigned", "candidate", "rejected", "planned"]},
+    "base": {"type": "object", "required": ["model", "files", "origin", "author", "licence"],
+             "properties": {"origin": {"const": "third-party work, used unchanged"}, "licence": {"const": "Apache-2.0"}}},
+    "measured": {"type": "object", "required": ["status"], "properties": {"status": {"enum": ["measured", "not measured"]}}}
+   }
+  },
+  "adapter": {
+   "type": "object",
+   "required": ["tag", "file", "sha256", "size", "manifest_sha256", "lora_scale", "origin", "licence", "released"],
+   "properties": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "origin": {"const": "Vyvy AI"},
+    "licence": {"enum": ["Apache-2.0", "PolyForm-Noncommercial-1.0.0"]}
+   }
+  }
+ }
+}

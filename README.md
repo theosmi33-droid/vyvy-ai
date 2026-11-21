@@ -41,6 +41,25 @@ pinned in `models.json`.
 
 Both base models are released under Apache 2.0.
 
+## Model catalog
+
+`catalog.json` is the one list of models an application may offer, readable
+without this repository (schema in `schemas/catalog.schema.json`). It is written
+by `tools/build_catalog.py` from `models.json` and a snapshot of the releases,
+never by hand, and refreshed after every benchmark decision.
+
+- Each entry has exactly one state: `selectable` (accepted and signed by
+  bench-lora), `accepted_unsigned`, `candidate`, `rejected` or `planned`. Only
+  `selectable` may be offered, and only after `tools/verify_adapter.py` passed.
+- The base model is listed as a third-party work, used unchanged, with its own
+  licence; the adapter is Vyvy's, with the licence of its release.
+- Each adapter names the output contract it was measured on (prompt, grammar,
+  contract version); use it only with exactly that contract.
+- Numbers appear only where they were measured, with the machine and the run;
+  everything else says "not measured". No number carries over to other hardware.
+- 14B and 32B are listed as planned: no files, no adapter, no measurement, no
+  schedule.
+
 ## Benchmark
 
 This repository contains the public benchmark every Vyvy AI model has to pass:
