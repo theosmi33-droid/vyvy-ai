@@ -528,6 +528,35 @@ class VyvyBenchRunner:
                              self.min_confidence, self.timeout_s, self.clock, system=self.system)
 
 
+def peak_memory_mb() -> float | None:
+    """Peak resident memory of this process (weights, adapter, context and runtime together), in MB.
+    Standard library only: getrusage on Linux and macOS, GetProcessMemoryInfo on Windows."""
+    try:
+        if sys.platform == "win32":
+            import ctypes
+            from ctypes import wintypes
+
+            class Counters(ctypes.Structure):
+                _fields_ = [("cb", wintypes.DWORD), ("PageFaultCount", wintypes.DWORD),
+                            ("PeakWorkingSetSize", ctypes.c_size_t), ("WorkingSetSize", ctypes.c_size_t),
+                            ("QuotaPeakPagedPoolUsage", ctypes.c_size_t), ("QuotaPagedPoolUsage", ctypes.c_size_t),
+                            ("QuotaPeakNonPagedPoolUsage", ctypes.c_size_t), ("QuotaNonPagedPoolUsage", ctypes.c_size_t),
+                            ("PagefileUsage", ctypes.c_size_t), ("PeakPagefileUsage", ctypes.c_size_t)]
+
+            c = Counters()
+            c.cb = ctypes.sizeof(Counters)
+            handle = ctypes.windll.kernel32.GetCurrentProcess()
+            if not ctypes.windll.psapi.GetProcessMemoryInfo(handle, ctypes.byref(c), c.cb):
+                return None
+            return round(c.PeakWorkingSetSize / 2**20, 1)
+        import resource
+
+        peak = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+        return round(peak / 2**20 if sys.platform == "darwin" else peak / 2**10, 1)  # bytes on macOS, KB on Linux
+    except Exception:  # noqa: BLE001  (not measurable here: reported as null, never guessed)
+        return None
+
+
 def cpu_times() -> tuple[int, int] | None:
     """(steal, total) jiffies of all CPUs from /proc/stat; None where that file does not exist.
 
@@ -731,13 +760,16 @@ def main(argv: list[str] | None = None) -> int:
         if args.lora and not args.lora.is_file():
             print(f"No adapter file: {args.lora}", file=sys.stderr)
             return 2
+        load_start = time.perf_counter()
         if args.mode == "classify":
             model = llama_classifier(args.model, args.threads, args.ctx, intents, args.lora)
         elif args.mode == "route":
             model = llama_router(args.model, args.threads, args.ctx, intents, args.lora)
         else:
             model = llama_model(args.model, args.threads, args.ctx, args.lora)
-        model(PROMPTS[prompt_name], 'Question: "Hallo"', grammar)  # warm-up, not timed
+        load_s = time.perf_counter() - load_start
+        model(PROMPTS[prompt_name], 'Question: "Hallo"', grammar)  # warm-up, not in the per-question times
+        first_s = time.perf_counter() - load_start
         adapter = f" + adapter `{args.lora.name}`" if args.lora else " · no adapter"
         header = (f"Model `{args.label or args.model.name}`{adapter} · mode `{args.mode}` · "
                   f"prompt `{prompt_name}` · "
@@ -755,7 +787,18 @@ def main(argv: list[str] | None = None) -> int:
     result["gpu_layers"] = args.gpu_layers
     result["label"] = args.label or (args.model.name if args.model else "dry-run")
     result["adapter"] = args.lora.name if args.lora else None
+    ms = sorted(r["ms"] for r in result["items"])
+    result["p95_ms"] = ms[min(len(ms) - 1, math.ceil(0.95 * len(ms)) - 1)] if ms else None
+    # Measured on this machine only; never carried over to other hardware.
+    result["resources"] = None if args.dry_run else {
+        "load_s": round(load_s, 2), "first_decision_s": round(first_s, 2), "peak_memory_mb": peak_memory_mb(),
+        "platform": f"{platform.system()} {platform.machine()}", "python": platform.python_version(),
+        "threads": args.threads}
     text = report(result, header)
+    if result["resources"]:
+        r = result["resources"]
+        text += (f"\nLoad {r['load_s']} s · first decision after {r['first_decision_s']} s · "
+                 f"peak memory {r['peak_memory_mb']} MB · p95 {result['p95_ms']} ms per question\n")
     print(text)
     if args.summary:
         with args.summary.open("a", encoding="utf-8") as f:

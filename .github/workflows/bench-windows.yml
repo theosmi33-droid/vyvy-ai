@@ -1,0 +1,105 @@
+name: Bench Windows
+
+# The benchmark on GitHub's Windows runner (CPU only, free for public repositories):
+# most offices work on Windows, and until now there were only Linux and Apple Silicon
+# numbers. Both classes in route mode, each with and without its current default
+# adapter, one job on one machine; besides accuracy and time per question it records
+# load time, time to the first decision and peak memory (runner/bench.py "resources").
+# The numbers describe this runner only and are never carried over to other hardware.
+#
+# llama-cpp-python 0.3.16 has no Windows wheel (PyPI has the source only, the project's
+# CPU index starts again at 0.3.18). It is built once from source with MSVC, as on the
+# other runners pinned to 0.3.16, and the wheel is cached; a cache miss costs about
+# 15 to 25 runner minutes, free on a public repository.
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Bench LoRA"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bench-windows
+  cancel-in-progress: false
+
+jobs:
+  bench-windows:
+    runs-on: windows-latest
+    timeout-minutes: 180
+    defaults:
+      run:
+        shell: bash
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: wheels
+          key: windows-wheel-llama-cpp-python-0.3.16-py312-native-off
+
+      - name: Install dependencies (CPU build from source, cached wheel)
+        env:
+          CMAKE_ARGS: -DGGML_NATIVE=OFF
+        run: |
+          set -euo pipefail
+          if ! ls wheels/llama_cpp_python-0.3.16-*.whl >/dev/null 2>&1; then
+            pip wheel --no-deps llama-cpp-python==0.3.16 -w wheels
+          fi
+          pip install wheels/llama_cpp_python-0.3.16-*.whl
+          pip install -r requirements.txt
+          python -c "import llama_cpp; print(llama_cpp.llama_print_system_info().decode())"
+
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: models
+          key: windows-models-qwen2.5-1.5b-q8_0-7b-q4_k_m
+
+      - name: Download the pinned models
+        run: |
+          set -euo pipefail
+          python tools/fetch_model.py qwen2.5-1.5b-instruct-q8_0 --dir models
+          python tools/fetch_model.py qwen2.5-7b-instruct-q4_k_m --dir models
+
+      - name: Default adapters (newest accepted release per class)
+        run: |
+          set -euo pipefail
+          for base in Qwen/Qwen2.5-1.5B-Instruct Qwen/Qwen2.5-7B-Instruct; do
+            sha=$(python -c "import hashlib,sys; sys.path.insert(0,'runner'); import bench; print(hashlib.sha256(bench.PROMPTS[bench.prompt_for(sys.argv[1])].encode()).hexdigest())" "$base")
+            tag=$(python tools/previous_adapter.py --repo "$GITHUB_REPOSITORY" --base "$base" --prompt-sha256 "$sha")
+            if [ -n "$tag" ]; then
+              gh release download "$tag" --repo "$GITHUB_REPOSITORY" --pattern "$tag.gguf" --dir adapters
+              echo "${base##*/}=adapters/$tag.gguf" >> adapters.env
+            fi
+          done
+          touch adapters.env; cat adapters.env
+
+      - name: Measure on Windows (CPU)
+        run: |
+          set -uo pipefail
+          threads=$(python -c "import os; print(os.cpu_count() or 4)")
+          run() {  # $1 model file, $2 label, $3 output, $4 adapter or empty
+            VYVY_LORA_PATH="$4" python runner/bench.py --model "$1" --label "$2" --mode route \
+              --threads "$threads" --data data/holdout_blind_v1.json \
+              --summary "$GITHUB_STEP_SUMMARY" --json "$3.json" || echo "$2 failed" >> "$GITHUB_STEP_SUMMARY"
+          }
+          a15=$(grep '^Qwen2.5-1.5B-Instruct=' adapters.env | cut -d= -f2- || true)
+          a7=$(grep '^Qwen2.5-7B-Instruct=' adapters.env | cut -d= -f2- || true)
+          run models/qwen2.5-1.5b-instruct-q8_0.gguf qwen2.5-1.5b-instruct-q8_0 win-1-small ""
+          [ -n "$a15" ] && run models/qwen2.5-1.5b-instruct-q8_0.gguf "qwen2.5-1.5b-instruct-q8_0+adapter" win-2-small-adapter "$a15"
+          run models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf qwen2.5-7b-instruct-q4_k_m win-3-large ""
+          [ -n "$a7" ] && run models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf "qwen2.5-7b-instruct-q4_k_m+adapter" win-4-large-adapter "$a7"
+          ls win-*.json >/dev/null 2>&1 && python tools/compare_results.py win-*.json | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: bench-windows-results
+          path: win-*.json
+          retention-days: 90
