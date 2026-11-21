@@ -149,7 +149,12 @@ jobs:
           EOF
 
       - name: Report a failed run
-        if: failure() && env.SKIP != 'true'
+        # cancelled(): the job time limit ends a run as cancelled, not failed (21.11.2026:
+        # the retry ran into timeout-minutes; without a report the next heartbeat started
+        # a third run instead of waiting for a fix).
+        if: (failure() || cancelled()) && env.SKIP != 'true'
+        env:
+          JOB_STATUS: ${{ job.status }}
         run: |
           python - <<'EOF'
           import os, sys, time
@@ -161,7 +166,12 @@ jobs:
           start = os.environ.get("TRAIN_START")
           minutes = f" after {round((time.time() - int(start)) / 60)} min" if start else ""
           # Counted per issue (21.11.2026): how often and after how long the connection drops.
-          cause = "Colab connection lost" if "Connection was lost" in log else "Colab run failed"
+          if "Connection was lost" in log:
+              cause = "Colab connection lost"
+          elif os.environ.get("JOB_STATUS") == "cancelled":
+              cause = "Colab run cancelled (job time limit?)"
+          else:
+              cause = "Colab run failed"
           collect.report_failure(os.environ["GITHUB_REPOSITORY"], os.environ["KID"], [cause + minutes], tail,
                                  os.environ.get("NAME") or None)
           EOF

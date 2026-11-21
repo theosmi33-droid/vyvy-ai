@@ -234,6 +234,10 @@ def test_colab_plan_waits_for_a_fix_like_collect():
     assert plan.index("collect.open_failure(") < plan.index("tools/sealed_gate.py"), "before any GPU-bound check"
     report = text[text.index("- name: Report a failed run"):]
     assert "Connection was lost" in report and "TRAIN_START" in report
+    # The job time limit ends a run as cancelled; it must still be reported (21.11.2026).
+    kopf = report[:report.index("run: |")]
+    assert "cancelled()" in kopf and "JOB_STATUS: ${{ job.status }}" in kopf
+    assert "Colab run cancelled" in report
     train = text[text.index("- name: Train on a Colab T4"):text.index("- name: Publish the candidate")]
     assert train.index("TRAIN_START") < train.index("colab --auth adc new")
 
