@@ -84,8 +84,16 @@ def failure_title(kid: str, name: str | None, tail: list[str]) -> str:
 def report_failure(repo: str, kid: str, causes: list[str], tail: list[str], name: str | None = None) -> None:
     title = failure_title(kid, name, tail)
     existing = run("gh", "issue", "list", "--repo", repo, "--state", "all", "--search", f'"{title}" in:title',
-                   "--json", "title", "--jq", ".[].title", check=False)
-    if title in existing.splitlines():
+                   "--json", "number,title,state", "--jq",
+                   f'.[] | select(.title == "{title}") | "\\(.number) \\(.state)"', check=False)
+    found = existing.strip().splitlines()
+    if found:
+        number, state = (found[0].split() + ["", ""])[:2]
+        if state.upper() == "OPEN":
+            # The same plan failed again: the note makes open_failure hold the next start
+            # (21.11.2026: a second Colab run started at once after a dropped connection).
+            run("gh", "issue", "comment", number, "--repo", repo, "--body",
+                f"Failed again: {', '.join(causes)}. {RETRY_NOTE} The run waits for a fix.", check=False)
         summary(f"{kid}: failure already reported ({title}).")
         return
     body = "\n".join([f"Kernel `{kid}` ended with an error.", "", "Likely cause: " + ", ".join(causes), "",
@@ -299,7 +307,7 @@ def any_kernel_running() -> bool:
     return bool(run(sys.executable, str(ROOT / "tools" / "kaggle_busy.py"), check=False).strip())
 
 
-def open_failure(repo: str, kid: str, name: str) -> bool:
+def open_failure(repo: str, kid: str, name: str, *, mark: bool = True) -> bool:
     """True if this exact planned run already failed, is not closed and was already retried once.
 
     The first time a run is found failed, it is retried automatically (a comment on the
@@ -317,6 +325,10 @@ def open_failure(repo: str, kid: str, name: str) -> bool:
                    '.comments[] | select(.author.login == "github-actions" or .author.login == "app/github-actions") | .body', check=False)
     if RETRY_NOTE in comments:
         return True
+    if not mark:
+        # Read only (the Plan step of train-colab.yml): the one retry is recorded by
+        # whoever starts it (Collect) or by report_failure when it fails again.
+        return False
     run("gh", "issue", "comment", number, "--repo", repo, "--body",
         f"{RETRY_NOTE} If it fails again, the run waits for a fix.", check=False)
     return False

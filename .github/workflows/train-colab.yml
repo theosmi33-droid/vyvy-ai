@@ -85,6 +85,11 @@ jobs:
           elif [ -n "$trained" ]; then
             echo "SKIP=true" >> "$GITHUB_ENV"
             echo "Already trained on this data and prompt: $trained." >> "$GITHUB_STEP_SUMMARY"
+          elif NAME="$name" KID="colab/$size" python -c "import os, sys; sys.path.insert(0, 'tools'); import collect; sys.exit(0 if collect.open_failure(os.environ['GITHUB_REPOSITORY'], os.environ['KID'], os.environ['NAME'], mark=False) else 1)"; then
+            # Same rule as Collect (tools/collect.py open_failure): one automatic retry, then
+            # the plan waits for a fix (21.11.2026: a queued run trained again at once).
+            echo "SKIP=true" >> "$GITHUB_ENV"
+            echo "colab/$size: $name failed and was retried once; waiting for a fix (open issue)." >> "$GITHUB_STEP_SUMMARY"
           elif ! python tools/sealed_gate.py --repo "$GITHUB_REPOSITORY" --start > sealed_gate.json; then
             # Today's training data has not passed the Sealed check yet (started now if missing).
             echo "SKIP=true" >> "$GITHUB_ENV"
@@ -119,6 +124,7 @@ jobs:
             --base "$BASE" --name "$NAME" --epochs "$EPOCHS" --sweep "$SWEEP" --budget "$BUDGET" \
             --batch "$BATCH" --grad-accum "$ACCUM"
           session="train-$GITHUB_RUN_ID"
+          echo "TRAIN_START=$(date +%s)" >> "$GITHUB_ENV"
           colab --auth adc new -s "$session" --gpu T4
           # The GPU is released whatever happens below.
           trap 'colab --auth adc stop -s "$session" || true' EXIT
@@ -146,12 +152,16 @@ jobs:
         if: failure() && env.SKIP != 'true'
         run: |
           python - <<'EOF'
-          import os, sys
+          import os, sys, time
           from pathlib import Path
           sys.path.insert(0, "tools")
           import collect
           log = Path("colab.log").read_text(encoding="utf-8", errors="replace") if Path("colab.log").exists() else ""
           tail = log.splitlines()[-30:] or ["no log available"]
-          collect.report_failure(os.environ["GITHUB_REPOSITORY"], os.environ["KID"], ["Colab run failed"], tail,
+          start = os.environ.get("TRAIN_START")
+          minutes = f" after {round((time.time() - int(start)) / 60)} min" if start else ""
+          # Counted per issue (21.11.2026): how often and after how long the connection drops.
+          cause = "Colab connection lost" if "Connection was lost" in log else "Colab run failed"
+          collect.report_failure(os.environ["GITHUB_REPOSITORY"], os.environ["KID"], [cause + minutes], tail,
                                  os.environ.get("NAME") or None)
           EOF

@@ -196,3 +196,59 @@ def test_nothing_running_starts_colab_as_before(scheduler, monkeypatch):
     monkeypatch.setattr(plan_train, "trained_release", lambda repo, base: "done" if base == LARGE else None)
     collect.schedule("owner/vyvy-ai", "u")
     assert scheduler == [f"train-colab.yml base={SMALL}"]
+
+
+def _gh_issues(monkeypatch, antwort: str):
+    gesehen: list[tuple] = []
+
+    def run(*args, check=True):
+        gesehen.append(args)
+        return antwort if args[:3] == ("gh", "issue", "list") else ""
+
+    monkeypatch.setattr(collect, "run", run)
+    monkeypatch.setattr(collect, "summary", lambda text: None)
+    return gesehen
+
+
+def test_a_second_failure_of_the_same_plan_holds_the_next_start(monkeypatch):
+    # 21.11.2026: after a dropped Colab connection the queued run trained again at once.
+    gesehen = _gh_issues(monkeypatch, "17 OPEN\n")
+    collect.report_failure("o/r", "colab/1.5b", ["Colab connection lost after 127 min"], [], "vyvy-1.5b-x")
+    kommentar = [a for a in gesehen if a[:3] == ("gh", "issue", "comment")]
+    assert kommentar and kommentar[0][3] == "17"
+    text = kommentar[0][kommentar[0].index("--body") + 1]
+    assert collect.RETRY_NOTE in text and "after 127 min" in text
+    assert not [a for a in gesehen if a[:3] == ("gh", "issue", "create")]
+
+
+def test_a_closed_issue_is_not_commented(monkeypatch):
+    gesehen = _gh_issues(monkeypatch, "17 CLOSED\n")
+    collect.report_failure("o/r", "colab/1.5b", ["Colab run failed"], [], "vyvy-1.5b-x")
+    assert not [a for a in gesehen if a[:3] in (("gh", "issue", "comment"), ("gh", "issue", "create"))]
+
+
+def test_colab_plan_waits_for_a_fix_like_collect():
+    text = (Path(__file__).resolve().parent.parent / ".github" / "workflows" / "train-colab.yml").read_text(encoding="utf-8")
+    plan = text[text.index("Plan (Colab only"):text.index("Holdout lock")]
+    assert "collect.open_failure(" in plan and "mark=False" in plan and "KID=\"colab/$size\"" in plan
+    assert plan.index("collect.open_failure(") < plan.index("tools/sealed_gate.py"), "before any GPU-bound check"
+    report = text[text.index("- name: Report a failed run"):]
+    assert "Connection was lost" in report and "TRAIN_START" in report
+    train = text[text.index("- name: Train on a Colab T4"):text.index("- name: Publish the candidate")]
+    assert train.index("TRAIN_START") < train.index("colab --auth adc new")
+
+
+def test_the_plan_reads_but_never_marks_the_retry(monkeypatch):
+    """Collect marks the one retry before it starts the run; the Plan step must not
+    see that mark as its own and hold the retry it was started for."""
+    gesehen: list[tuple] = []
+
+    def run(*args, check=True):
+        gesehen.append(args)
+        if args[:3] == ("gh", "issue", "list"):
+            return "17\n"
+        return ""  # no Collect note yet
+
+    monkeypatch.setattr(collect, "run", run)
+    assert collect.open_failure("o/r", "colab/1.5b", "n", mark=False) is False
+    assert not [a for a in gesehen if a[:3] == ("gh", "issue", "comment")]
