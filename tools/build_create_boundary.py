@@ -158,7 +158,8 @@ def questions() -> dict[str, list[tuple[str, str]]]:
 
 def build(seed: int, max_similarity: float) -> tuple[list[dict], dict[str, int], list[tuple[str, str]]]:
     rng = random.Random(f"{seed}-create-boundary")
-    keep = hard.Filter(max_similarity, own=(OUT,))
+    # Built later (tools/build_foreign_text.py); left out so --check stays stable.
+    keep = hard.Filter(max_similarity, own=(OUT, ROOT / "data" / "train" / "vyvy_foreign_text_v1.jsonl"))
     rows, counts = [], {}
     groups = {"about": [(t, None) for t in about()], "others": [(t, None) for t in others()],
               "statements": [(t, None) for t in statements()], "existing": [(t, None) for t in existing()]}
