@@ -7,6 +7,8 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "tools"))
 
 import collect  # noqa: E402
@@ -14,6 +16,14 @@ import collect  # noqa: E402
 
 def at(text: str) -> datetime:
     return datetime.fromisoformat(text).replace(tzinfo=timezone.utc)
+
+
+@pytest.fixture(autouse=True)
+def weekly_rounds(monkeypatch):
+    # These tests are about the Saturday label of the one_round and weekly modes. They must not
+    # read the real data/loop_state.json: since 21.11.2026 it says "continuous", whose rounds
+    # follow the decisions instead (tests/test_continuous.py).
+    monkeypatch.setattr(collect.loop_guard, "load_state", lambda path=None: {"mode": "one_round"})
 
 
 def test_week_change() -> None:
