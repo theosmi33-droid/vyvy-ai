@@ -84,6 +84,8 @@ jobs:
         run: |
           set -euo pipefail
           kaggle kernels output "$KID" -p out --file-pattern 'sealed_result\.json$'
+          # The kernel writes a result with "error" when it fails (Kaggle reports a crash as success).
+          python -c "import json,sys; r=json.load(open('out/sealed_result.json')); e=r.get('error'); e and print('Sealed kernel failed:', e['kind'] + ':', e['line'], file=sys.stderr); sys.exit(1 if e else 0)"
           python tools/sealed_eval.py out/sealed_result.json --out "sealed_${VERSION}_summary.json" >> "$GITHUB_STEP_SUMMARY"
           cp out/sealed_result.json "sealed_${VERSION}_result.json"
           gh release upload "$ADAPTER" "sealed_${VERSION}_result.json" "sealed_${VERSION}_summary.json" \

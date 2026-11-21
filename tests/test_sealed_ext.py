@@ -134,3 +134,18 @@ def test_the_semantic_check_refuses_an_unrecorded_set(tmp_path):
         sealed_semantic.recorded(tmp_path / "sealed_create-v1.json", data)  # its checksum is not the recorded one
     with pytest.raises(SystemExit):
         sealed_semantic.recorded(tmp_path / "sealed_create-v9.json", data)  # no record at all
+
+
+def test_kernels_always_write_a_result_and_the_check_runs_in_its_own_environment(tmp_path):
+    # Kaggle reported crashed scripts as successful (20.11.2026); the result file carries the error.
+    kaggle_job.write_semantic_job(tmp_path / "s", "user", "owner/repo", "a" * 40, ["create-v1"])
+    check = (tmp_path / "s" / "check.py").read_text()
+    assert '"-m", "venv", VENV' in check and 'py = VENV + "/bin/python"' in check
+    assert "error=dict(kind=type(exc).__name__" in check
+    kaggle_job.write_sealed_job(tmp_path / "m", "user", "owner/repo", "a" * 40, "vyvy-1.5b-d0000000a",
+                                "vyvy-sealed-create-v1", "create-v1")
+    measure = (tmp_path / "m" / "sealed.py").read_text()
+    assert "def measure():" in measure and "error=dict(kind=type(exc).__name__" in measure
+    for workflow, name in (("sealed-check.yml", "semantic_result"), ("sealed-eval.yml", "sealed_result")):
+        text = (ROOT / ".github" / "workflows" / workflow).read_text(encoding="utf-8")
+        assert name in text and "error" in text

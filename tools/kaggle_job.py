@@ -278,40 +278,48 @@ def fetch(name):
     return path
 
 
-sh("git", "clone", "--quiet", "https://github.com/" + REPO, SRC)
-sh("git", "-C", SRC, "checkout", "--quiet", COMMIT)
-sh(sys.executable, "-m", "pip", "install", "-q", "-r", SRC + "/requirements.txt")
-manifest = json.load(open(fetch("manifest.json")))
-gguf = fetch(ADAPTER + ".gguf")
-assert hashlib.sha256(open(gguf, "rb").read()).hexdigest() == manifest["adapter_sha256"], "adapter checksum"
-model = MODELS[manifest["base"]]
-sh(sys.executable, SRC + "/tools/fetch_model.py", model, "--dir", "/tmp/models")
-base = sorted(glob.glob("/tmp/models/" + model + "*.gguf"))[0]
-found = glob.glob("/kaggle/input/**/sealed_" + VERSION + ".json", recursive=True)
-assert len(found) == 1, "sealed set " + VERSION + " not attached: " + str(found)
-sealed = json.load(open(found[0]))
-# The attached file must be the recorded one (data/sealed_sets.json) and unchanged.
-digest = hashlib.sha256(json.dumps(sealed["items"], ensure_ascii=False, sort_keys=True).encode()).hexdigest()
-record = [r for r in json.load(open(SRC + "/data/sealed_sets.json")) if r["version"] == VERSION]
-assert record and record[-1]["items_sha256"] == digest == sealed["items_sha256"], "sealed set differs from its record"
-sys.path.insert(0, SRC + "/runner")
-import sealed_score  # noqa: E402  (runner/sealed_score.py: verdicts, never texts)
-KIND = sealed_score.kind_of(VERSION)
-items = [dict(id=i["id"], text=i["text"], expected_intent=sealed_score.expected_intent(i)) for i in sealed["items"]]
-json.dump(dict(name="sealed " + VERSION, items=items), open("/tmp/sealed.json", "w"), ensure_ascii=False)
-sh(sys.executable, SRC + "/runner/bench.py", "--model", base, "--label", model, "--mode", "route",
-   "--data", "/tmp/sealed.json", "--threads", str(os.cpu_count() or 4), "--json", "/tmp/result.json",
-   env=dict(ENV, VYVY_LORA_PATH=gguf))
-result = json.load(open("/tmp/result.json"))
-if KIND == "intent":
-    result["items"] = [dict(id=r["id"], expected=r["expected"], got=r["got"]) for r in result["items"]]
-else:
-    result["items"] = sealed_score.verdicts(KIND, sealed["items"], result["items"])
-    result["summary"] = sealed_score.summary(KIND, result["items"])
-for key in [k for k in result if k not in ("items", "summary", "n", "intent_correct", "median_ms")]:
-    result.pop(key)
-result.update(adapter=ADAPTER, sealed_version=VERSION, kind=KIND, items_sha256=sealed["items_sha256"])
-json.dump(result, open(OUT + "/sealed_result.json", "w"), indent=1)
+def measure():
+    sh("git", "clone", "--quiet", "https://github.com/" + REPO, SRC)
+    sh("git", "-C", SRC, "checkout", "--quiet", COMMIT)
+    sh(sys.executable, "-m", "pip", "install", "-q", "-r", SRC + "/requirements.txt")
+    manifest = json.load(open(fetch("manifest.json")))
+    gguf = fetch(ADAPTER + ".gguf")
+    assert hashlib.sha256(open(gguf, "rb").read()).hexdigest() == manifest["adapter_sha256"], "adapter checksum"
+    model = MODELS[manifest["base"]]
+    sh(sys.executable, SRC + "/tools/fetch_model.py", model, "--dir", "/tmp/models")
+    base = sorted(glob.glob("/tmp/models/" + model + "*.gguf"))[0]
+    found = glob.glob("/kaggle/input/**/sealed_" + VERSION + ".json", recursive=True)
+    assert len(found) == 1, "sealed set " + VERSION + " not attached: " + str(found)
+    sealed = json.load(open(found[0]))
+    # The attached file must be the recorded one (data/sealed_sets.json) and unchanged.
+    digest = hashlib.sha256(json.dumps(sealed["items"], ensure_ascii=False, sort_keys=True).encode()).hexdigest()
+    record = [r for r in json.load(open(SRC + "/data/sealed_sets.json")) if r["version"] == VERSION]
+    assert record and record[-1]["items_sha256"] == digest == sealed["items_sha256"], "sealed set differs from its record"
+    sys.path.insert(0, SRC + "/runner")
+    import sealed_score  # noqa: E402,PLC0415  (runner/sealed_score.py: verdicts, never texts)
+    KIND = sealed_score.kind_of(VERSION)
+    items = [dict(id=i["id"], text=i["text"], expected_intent=sealed_score.expected_intent(i)) for i in sealed["items"]]
+    json.dump(dict(name="sealed " + VERSION, items=items), open("/tmp/sealed.json", "w"), ensure_ascii=False)
+    sh(sys.executable, SRC + "/runner/bench.py", "--model", base, "--label", model, "--mode", "route",
+       "--data", "/tmp/sealed.json", "--threads", str(os.cpu_count() or 4), "--json", "/tmp/result.json",
+       env=dict(ENV, VYVY_LORA_PATH=gguf))
+    result = json.load(open("/tmp/result.json"))
+    if KIND == "intent":
+        result["items"] = [dict(id=r["id"], expected=r["expected"], got=r["got"]) for r in result["items"]]
+    else:
+        result["items"] = sealed_score.verdicts(KIND, sealed["items"], result["items"])
+        result["summary"] = sealed_score.summary(KIND, result["items"])
+    for key in [k for k in result if k not in ("items", "summary", "n", "intent_correct", "median_ms")]:
+        result.pop(key)
+    result.update(adapter=ADAPTER, sealed_version=VERSION, kind=KIND, items_sha256=sealed["items_sha256"])
+    json.dump(result, open(OUT + "/sealed_result.json", "w"), indent=1)
+
+
+try:
+    measure()
+except Exception as exc:  # noqa: BLE001  (Kaggle reports a crash as success; the workflow reads this)
+    json.dump(dict(error=dict(kind=type(exc).__name__, line=str(exc)[-400:]), adapter=ADAPTER,
+                   sealed_version=VERSION, items=[]), open(OUT + "/sealed_result.json", "w"))
 '''
 
 
@@ -343,7 +351,12 @@ def write_sealed_job(folder: Path, owner: str, repo: str, commit: str, adapter: 
 SEMANTIC_SLUG = "vyvy-sealed-check"
 SEMANTIC_ENTRY = '''\
 # Generated by tools/kaggle_job.py. Runs on Kaggle, not in the repository.
+# The check runs in its own empty environment: Kaggle's preinstalled packages (torchvision
+# for another torch on 20.11.2026) broke the import of sentence-transformers. Whatever
+# happens, semantic_result.json is written; on a failure it holds "error" (kind and last
+# line, never a sentence), because Kaggle reports a crashed script as successful.
 import glob
+import json
 import os
 import subprocess
 import sys
@@ -352,21 +365,43 @@ REPO = {repo}
 COMMIT = {commit}
 VERSIONS = {versions}
 SRC = "/tmp/vyvy"
+VENV = "/tmp/venv"
+OUT = "/kaggle/working/semantic_result.json"
 ENV = dict(os.environ, VYVY_COMMIT=COMMIT)
 
 
 def sh(*args):
     print("+", " ".join(args), flush=True)
-    subprocess.run(args, check=True, env=ENV)
+    done = subprocess.run(args, env=ENV, capture_output=True, text=True)
+    print(done.stdout[-4000:], done.stderr[-4000:], sep="\\n", flush=True)
+    if done.returncode != 0:
+        last = (done.stderr.strip().splitlines() or done.stdout.strip().splitlines() or ["no output"])[-1]
+        raise RuntimeError(args[0].rsplit("/", 1)[-1] + " " + " ".join(args[1:3]) + ": " + last[-300:])
 
 
-sh("git", "clone", "--quiet", "https://github.com/" + REPO, SRC)
-sh("git", "-C", SRC, "checkout", "--quiet", COMMIT)
-sh(sys.executable, "-m", "pip", "install", "-q", "-r", SRC + "/tools/semantic-kernel-requirements.txt")
-files = [f for v in VERSIONS for f in glob.glob("/kaggle/input/**/sealed_" + v + ".json", recursive=True)]
-assert len(files) == len(VERSIONS), "sealed sets not attached: " + str(files)
-subprocess.run([sys.executable, SRC + "/tools/sealed_semantic.py", *files, "--out", "/kaggle/working/semantic_result.json"],
-               env=ENV)
+try:
+    sh("git", "clone", "--quiet", "https://github.com/" + REPO, SRC)
+    sh("git", "-C", SRC, "checkout", "--quiet", COMMIT)
+    try:
+        sh(sys.executable, "-m", "venv", VENV)
+    except RuntimeError:
+        # No ensurepip in the image: virtualenv brings its own pip.
+        sh(sys.executable, "-m", "pip", "install", "-q", "virtualenv")
+        sh(sys.executable, "-m", "virtualenv", "-q", VENV)
+    py = VENV + "/bin/python"
+    sh(py, "-m", "pip", "install", "-q", "--upgrade", "pip")
+    sh(py, "-m", "pip", "install", "-q", "-r", SRC + "/tools/semantic-kernel-requirements.txt")
+    files = [f for v in VERSIONS for f in glob.glob("/kaggle/input/**/sealed_" + v + ".json", recursive=True)]
+    if len(files) != len(VERSIONS):
+        raise RuntimeError("sealed sets not attached: found " + str(len(files)) + " of " + str(len(VERSIONS)))
+    done = subprocess.run([py, SRC + "/tools/sealed_semantic.py", *files, "--out", OUT], env=ENV,
+                          capture_output=True, text=True)
+    print(done.stdout[-4000:], done.stderr[-4000:], sep="\\n", flush=True)
+    if not os.path.exists(OUT):
+        last = (done.stderr.strip().splitlines() or ["no output"])[-1]
+        raise RuntimeError("sealed_semantic.py: " + last[-300:])
+except Exception as exc:  # noqa: BLE001  (written into the result; the workflow fails on it)
+    json.dump(dict(error=dict(kind=type(exc).__name__, line=str(exc)[-400:]), sets=dict()), open(OUT, "w"))
 '''
 
 

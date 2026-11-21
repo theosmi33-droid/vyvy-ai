@@ -61,7 +61,14 @@ jobs:
           kaggle kernels output "$KID" -p out --file-pattern 'semantic_result\.json$'
           python - <<'EOF' >> "$GITHUB_STEP_SUMMARY"
           import json
-          r = json.load(open("out/semantic_result.json"))
+          try:
+              r = json.load(open("out/semantic_result.json"))
+          except FileNotFoundError:
+              print("## Sealed check\n\nThe kernel wrote no result (see its log on Kaggle).")
+              raise SystemExit(1)
+          if r.get("error"):
+              print(f"## Sealed check failed in the kernel\n\n{r['error']['kind']}: {r['error']['line']}")
+              raise SystemExit(1)
           print(f"## Sealed check ({r['model'].split('/')[-1]}, report >= {r['report']}, fail >= {r['fail']})\n")
           print("Versions: " + ", ".join(f"{k} {v}" for k, v in r.get("versions", {}).items()) + "\n")
           for v, s in r["sets"].items():
