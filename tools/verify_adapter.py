@@ -89,6 +89,23 @@ def gh_attestation(path: Path, repo: str, bundle: Path | None) -> tuple[bool, st
     return done.returncode == 0, lines[-1] if lines else ""
 
 
+def release_state(tag: str, title: str, signed_status: str | None, attested: bool | None) -> str:
+    """The one rule for what an application may offer, without downloading the files.
+
+    selectable:        title is the bare tag, adapter_manifest.json says accepted, and
+                       bench-lora's signature is verified (steps 1 and 3 of verify();
+                       checksum and base model are checked when the file is loaded)
+    accepted_unsigned: title is the bare tag, but no signed acceptance (released before the
+                       signature existed, or not yet verified) - never selectable
+    candidate / rejected: by the release title
+    """
+    if title == f"{tag} (candidate)":
+        return "candidate"
+    if title != tag:
+        return "rejected"
+    return "selectable" if signed_status == "accepted" and attested is True else "accepted_unsigned"
+
+
 def verify(adapter: Path, manifest_path: Path, base: Path, *, repo: str = REPO, offline: bool = False,
            bundle_dir: Path | None = None,
            title: Callable[[str], str] = release_title,
