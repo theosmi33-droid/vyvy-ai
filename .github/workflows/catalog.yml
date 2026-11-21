@@ -1,17 +1,18 @@
 name: Catalog
 
-# Keeps catalog.json current: after every Bench LoRA decision (and by hand) it reads the
-# public releases and the base model file sizes (tools/build_catalog.py --refresh),
+# Keeps catalog.json current: after every Bench LoRA decision and platform benchmark (and by
+# hand) it reads the public releases, the base model file sizes and the platform results (tools/build_catalog.py --refresh),
 # rebuilds catalog.json and commits both when anything changed. No model, no secret.
 on:
   workflow_run:
-    workflows: [Bench LoRA]
+    workflows: [Bench LoRA, Bench Windows, Bench Mac]
     types: [completed]
   workflow_dispatch:
 
 permissions:
   contents: write  # commit data/catalog_releases.json and catalog.json
   attestations: read  # gh attestation verify of accepted releases
+  actions: read  # results of the platform benchmarks (Bench Windows, Bench Mac)
 
 concurrency:
   group: catalog

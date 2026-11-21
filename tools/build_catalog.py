@@ -30,6 +30,7 @@ import argparse
 import hashlib
 import json
 import re
+import subprocess
 import sys
 import tempfile
 import urllib.request
@@ -97,6 +98,23 @@ def measured(r: dict) -> dict:
             "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"}
 
 
+#: Benchmarks on fixed platforms whose results go into the list, by workflow and artifact.
+PLATFORM_RUNS = {"bench-windows.yml": "bench-windows-results", "bench-mac.yml": "bench-mac-results"}
+MEMORY_NOTE = "peak during the measurement, whole process (model, adapter, context, runtime and Python)"
+
+
+def platform_measurements(snap: dict, spec: dict, adapter_file: str | None) -> list[dict]:
+    """The platform runs of this class with exactly this adapter (None = base model alone).
+    Each number names its run and machine; nothing is carried over to other hardware."""
+    out = []
+    for m in snap.get("platform_runs", []):
+        if m["gguf"] == spec["gguf"] and m.get("adapter") == adapter_file:
+            out.append({k: m.get(k) for k in ("platform", "machine", "threads", "run", "measured_at", "data", "n",
+                                              "intent_correct", "decision_ms_median", "decision_ms_p95", "load_s",
+                                              "first_decision_s", "peak_memory_mb")} | {"peak_memory_note": MEMORY_NOTE})
+    return out
+
+
 def build(models: dict, snap: dict) -> dict:
     con = contract()
     entries = []
@@ -116,7 +134,8 @@ def build(models: dict, snap: dict) -> dict:
                 "contract": {"version": con["version"], "prompt": r["prompt"], "prompt_sha256": r["prompt_sha256"],
                              "grammar_sha256": con["grammar_sha256"], "grammar_recorded_at_training": False},
                 "attestation": r.get("attestation") or {"verified_by": "not verified"},
-                "measured": measured(r)})
+                "measured": measured(r),
+                "measured_on_platforms": platform_measurements(snap, spec, r["adapter_file"])})
     for spec in PLANNED:
         entries.append({"id": spec["class"].replace(" ", "-").lower(), "class": spec["class"],
                         "class_note": "no files, no adapter, no measurement, no schedule", "state": "planned",
@@ -128,7 +147,10 @@ def build(models: dict, snap: dict) -> dict:
                        "tools/verify_adapter.py passed on the downloaded files"),
         "accepted_unsigned": "accepted before the signature existed, or not yet verified; never selectable",
         "candidate": "trained, not decided", "rejected": "decided against", "planned": "listed only, never selectable"},
-        "snapshot_fetched": snap["fetched"], "entries": entries}
+        "snapshot_fetched": snap["fetched"],
+        # The base models alone, as they were measured on fixed platforms (no adapter).
+        "base_measurements": {spec["class"]: platform_measurements(snap, spec, None) for spec in CLASSES},
+        "entries": entries}
 
 
 def render(catalog: dict) -> str:
@@ -168,6 +190,35 @@ def attestation(tag: str, assets: dict, attest=verify_adapter.gh_attestation, fe
     return all(ok for ok, _ in results), {"verified_by": VERIFIED_BY, **details}
 
 
+def platform_runs(gh=None) -> list[dict]:
+    """Results of the newest successful run of each platform benchmark on main (runs in the cloud)."""
+    def run_gh(*args: str) -> str:
+        return subprocess.run(["gh", *args], capture_output=True, text=True, check=True).stdout
+
+    gh = gh or run_gh
+    out = []
+    for workflow, artifact in PLATFORM_RUNS.items():
+        ids = json.loads(gh("run", "list", "--repo", REPO, "--workflow", workflow, "--branch", "main", "--status",
+                            "success", "--limit", "1", "--json", "databaseId,createdAt") or "[]")
+        if not ids:
+            continue
+        run_id, at = ids[0]["databaseId"], ids[0]["createdAt"]
+        with tempfile.TemporaryDirectory() as tmp:
+            gh("run", "download", str(run_id), "--repo", REPO, "--name", artifact, "--dir", tmp)
+            for f in sorted(Path(tmp).glob("*.json")):
+                r = json.loads(f.read_text(encoding="utf-8"))
+                res = r.get("resources") or {}
+                label = r.get("label", "")
+                out.append({"platform": res.get("platform"), "machine": r.get("cpu"), "threads": res.get("threads"),
+                            "run": f"https://github.com/{REPO}/actions/runs/{run_id}", "measured_at": at,
+                            "data": "data/holdout_blind_v1.json",
+                            "gguf": label.split("+")[0], "adapter": r.get("adapter"), "n": r.get("n"),
+                            "intent_correct": r.get("intent_correct"), "decision_ms_median": r.get("median_ms"),
+                            "decision_ms_p95": r.get("p95_ms"), "load_s": res.get("load_s"),
+                            "first_decision_s": res.get("first_decision_s"), "peak_memory_mb": res.get("peak_memory_mb")})
+    return out
+
+
 def refresh(models: dict, now: str) -> dict:
     """Snapshot of the public releases and the base file sizes (runs in the cloud)."""
     releases = json.loads(_get(f"https://api.github.com/repos/{REPO}/releases?per_page=100"))
@@ -202,7 +253,7 @@ def refresh(models: dict, now: str) -> dict:
                     "signed_status": signed.get("status") if signed else None})
     return {"schema": 1, "fetched": now,
             "source": "GitHub releases of this repository and the Hugging Face API at the pinned revisions (public)",
-            "base_files": base_files, "releases": out}
+            "base_files": base_files, "releases": out, "platform_runs": platform_runs()}
 
 
 def main(argv: list[str] | None = None) -> int:

@@ -28,6 +28,10 @@
   "planned": "listed only, never selectable"
  },
  "snapshot_fetched": "2026-11-21T08:16:12Z",
+ "base_measurements": {
+  "Vyvy AI 4GB": [],
+  "Vyvy AI 8GB": []
+ },
  "entries": [
   {
    "id": "vyvy-1.5b-d3c9d1bc4",
@@ -79,7 +83,8 @@
     "load_s": null,
     "decision_ms_median": null,
     "decision_ms_p95": null
-   }
+   },
+   "measured_on_platforms": []
   },
   {
    "id": "vyvy-1.5b-d1e100e8d",
@@ -134,7 +139,8 @@
     "machine": "AMD EPYC 9V74 80-Core Processor",
     "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/42361864579",
     "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
-   }
+   },
+   "measured_on_platforms": []
   },
   {
    "id": "vyvy-1.5b-d60e3101c",
@@ -189,7 +195,8 @@
     "machine": "AMD EPYC 9V74 80-Core Processor",
     "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/42417127972",
     "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
-   }
+   },
+   "measured_on_platforms": []
   },
   {
    "id": "vyvy-1.5b-d094ace1b",
@@ -244,7 +251,8 @@
     "machine": "AMD EPYC 7763 64-Core Processor",
     "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/42447024173",
     "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
-   }
+   },
+   "measured_on_platforms": []
   },
   {
    "id": "vyvy-1.5b-d61e3a974",
@@ -299,7 +307,8 @@
     "machine": "AMD EPYC 7763 64-Core Processor",
     "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/42526865621",
     "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
-   }
+   },
+   "measured_on_platforms": []
   },
   {
    "id": "vyvy-1.5b-d5c87bca5",
@@ -354,7 +363,8 @@
     "machine": "INTEL(R) XEON(R) PLATINUM 8573C",
     "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/42616343618",
     "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
-   }
+   },
+   "measured_on_platforms": []
   },
   {
    "id": "vyvy-1.5b-d84f55739",
@@ -409,7 +419,8 @@
     "machine": "INTEL(R) XEON(R) PLATINUM 8573C",
     "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/42656200936",
     "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
-   }
+   },
+   "measured_on_platforms": []
   },
   {
    "id": "vyvy-1.5b-da8577af3",
@@ -464,7 +475,8 @@
     "machine": "AMD EPYC 7763 64-Core Processor",
     "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/43046797991",
     "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
-   }
+   },
+   "measured_on_platforms": []
   },
   {
    "id": "vyvy-1.5b-d37929906",
@@ -519,7 +531,8 @@
     "machine": "AMD EPYC 9V74 80-Core Processor",
     "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44775941499",
     "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
-   }
+   },
+   "measured_on_platforms": []
   },
   {
    "id": "vyvy-7b-dcc6d83db",
@@ -578,7 +591,8 @@
     "machine": "AMD EPYC 9V74 80-Core Processor",
     "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/42441236212",
     "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
-   }
+   },
+   "measured_on_platforms": []
   },
   {
    "id": "vyvy-7b-d89442b39",
@@ -637,7 +651,8 @@
     "machine": "AMD EPYC 9V45 96-Core Processor",
     "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44867036984",
     "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
-   }
+   },
+   "measured_on_platforms": []
   },
   {
    "id": "planned-14b",
