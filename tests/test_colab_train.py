@@ -68,6 +68,7 @@ def scheduler(monkeypatch):
     monkeypatch.setattr(collect, "synth_done", lambda now=None: True)
     monkeypatch.setattr(collect, "open_failure", lambda repo, kid, name: False)
     monkeypatch.setattr(collect, "summary", lambda text: None)
+    monkeypatch.setattr(collect, "sealed_ready", lambda repo: (True, "passed"))
     monkeypatch.setattr(plan_train, "plan", lambda base, epochs=4: {**plan_train.PLANS[base], "name": "n"})
     # The loop lock is open here; its own tests are in test_improve_loop.py.
     monkeypatch.setattr(collect.loop_guard, "load_state", lambda: {"mode": "one_round"})
@@ -148,3 +149,10 @@ def test_another_kernel_on_kaggle_does_not_hold_the_colab_plan(scheduler, monkey
     monkeypatch.setattr(collect, "same_plan_on_kaggle", lambda owner, base: False)
     collect.schedule("owner/vyvy-ai", "u")
     assert scheduler == [f"train-colab.yml base={SMALL}"]
+
+
+def test_no_training_before_the_sealed_check_passed(scheduler, monkeypatch):
+    monkeypatch.setattr(plan_train, "trained_release", lambda repo, base: None)
+    monkeypatch.setattr(collect, "sealed_ready", lambda repo: (False, "running"))
+    collect.schedule("owner/vyvy-ai", "u")
+    assert scheduler == []

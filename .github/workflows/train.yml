@@ -100,6 +100,10 @@ jobs:
             # Same training data and prompt as an existing release: trainer fixes alone do not retrain.
             echo "SKIP=true" >> "$GITHUB_ENV"
             echo "Already trained on this data and prompt: $trained." >> "$GITHUB_STEP_SUMMARY"
+          elif ! python tools/sealed_gate.py --repo "$GITHUB_REPOSITORY" --start > sealed_gate.json; then
+            # Today's training data has not passed the Sealed check yet (started now if missing).
+            echo "SKIP=true" >> "$GITHUB_ENV"
+            echo "Waiting for the Sealed check: $(cat sealed_gate.json)" >> "$GITHUB_STEP_SUMMARY"
           fi
           ls data/train/*.jsonl >/dev/null 2>&1 || { echo "no training data in data/train/" >&2; exit 1; }
           # The plan caps the epochs per base (tools/plan_train.py max_epochs); its value is the one the name hashes.

@@ -105,21 +105,23 @@ def counts(items: list[dict], kind: str) -> dict:
             "accept": dict(Counter(a for i in items for a in i.get("accept", [])))}
 
 
-def known_sentences() -> list[tuple[str, str]]:
-    """(kind, text) of everything a sealed sentence must stay away from."""
-    out = [("train", t) for _, t in lock.load_train(sorted(lock.TRAIN_DIR.glob("*.jsonl")))]
-    out += [("holdout", i["text"]) for h in lock.HOLDOUTS if h.exists()
+def known_sentences() -> list[tuple[str, str, str]]:
+    """(kind, text, where) of everything a sealed sentence must stay away from. where is a
+    location without text: file:line for training data, the id for holdouts and probes."""
+    out = [("train", t, where) for where, t in lock.load_train(sorted(lock.TRAIN_DIR.glob("*.jsonl")))]
+    out += [("holdout", i["text"], i["id"]) for h in lock.HOLDOUTS if h.exists()
             for i in json.loads(h.read_text(encoding="utf-8"))["items"]]
-    out += [("probe", i["text"]) for p in PROBES for i in json.loads(p.read_text(encoding="utf-8")).get("items", [])]
-    out += [("teacher", t) for p in (lock.SYNTH, lock.PATTERNS) for _, t in lock.load_prompt_examples(p)]
+    out += [("probe", i["text"], i["id"]) for p in PROBES
+            for i in json.loads(p.read_text(encoding="utf-8")).get("items", [])]
+    out += [("teacher", t, where) for p in (lock.SYNTH, lock.PATTERNS) for where, t in lock.load_prompt_examples(p)]
     return out
 
 
-def near(items: list[dict], known: list[tuple[str, str]], threshold: float) -> list[tuple[str, float, str]]:
+def near(items: list[dict], known: list[tuple[str, str, str]], threshold: float) -> list[tuple[str, float, str]]:
     """(own id, best score, kind of the closer sentence) at or above threshold; no text."""
     import difflib
 
-    norm = [(k, s, set(s.split())) for k, t in known for s in [lock.normalise(t)]]
+    norm = [(k, s, set(s.split())) for k, t, _ in known for s in [lock.normalise(t)]]
     out = []
     for i in items:
         t = lock.normalise(i["text"])

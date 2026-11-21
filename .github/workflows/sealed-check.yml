@@ -3,14 +3,18 @@ name: Sealed check
 # Semantic check of privately written sealed sets (create-v<N>, inject-v<N>) against
 # the training data, every holdout, the probes and the teacher examples. Runs in a
 # Kaggle CPU kernel (no GPU quota) that reads the private datasets vyvy-sealed-<version>;
-# the result holds ids and scores only (tools/sealed_semantic.py). By hand only.
+# the result holds ids, scores and the training line of a hit (file:line), never a text
+# (tools/sealed_semantic.py). The result is kept as the artifact sealed-check-<data hash>:
+# Collect and Train start a GPU run only after the check of today's training data passed
+# (tools/sealed_gate.py), and start this workflow themselves when it is missing.
 on:
   workflow_dispatch:
     inputs:
       versions:
-        description: Sealed set versions, space-separated (e.g. "create-v1 inject-v1")
+        description: Sealed set versions, space-separated (empty = every create/inject set in data/sealed_sets.json)
         type: string
-        required: true
+        required: false
+        default: ""
 
 permissions:
   contents: read
@@ -38,7 +42,11 @@ jobs:
       - name: Start the CPU kernel on Kaggle
         run: |
           set -euo pipefail
+          if [ -z "${VERSIONS// /}" ]; then
+            VERSIONS=$(python -c "import sys; sys.path.insert(0, 'tools'); import sealed_gate; print(' '.join(sealed_gate.versions()))")
+          fi
           for v in $VERSIONS; do [[ "$v" =~ ^(create|inject)-v[0-9]+$ ]] || { echo "invalid version $v" >&2; exit 1; }; done
+          echo "DATA=$(python tools/sealed_gate.py --hash)" >> "$GITHUB_ENV"
           pip install -q kaggle==2.2.5 six==1.17.0
           # shellcheck disable=SC2086
           kid=$(python tools/kaggle_job.py --dir job --owner "$KAGGLE_USERNAME" --repo "$GITHUB_REPOSITORY" \
@@ -50,31 +58,47 @@ jobs:
       - name: Wait for the kernel and report ids and scores
         run: |
           set -uo pipefail
+          mkdir -p out
           for _ in $(seq 1 100); do
             status=$(kaggle kernels status "$KID" 2>&1 || true)
             case "$status" in
               *complete*|*COMPLETE*) break ;;
-              *error*|*ERROR*|*cancel*|*CANCEL*) echo "$status" >&2; exit 1 ;;
+              *error*|*ERROR*|*cancel*|*CANCEL*) echo "$status" >&2; break ;;
             esac
             sleep 60
           done
-          kaggle kernels output "$KID" -p out --file-pattern 'semantic_result\.json$'
+          kaggle kernels output "$KID" -p out --file-pattern 'semantic_result\.json$' || true
           python - <<'EOF' >> "$GITHUB_STEP_SUMMARY"
           import json
+          import os
           try:
               r = json.load(open("out/semantic_result.json"))
-          except FileNotFoundError:
-              print("## Sealed check\n\nThe kernel wrote no result (see its log on Kaggle).")
-              raise SystemExit(1)
+          except (FileNotFoundError, json.JSONDecodeError):
+              # Kept as the artifact too, so the gate holds training instead of starting the check again.
+              r = {"error": {"kind": "NoResult", "line": "the kernel wrote no result (see its log on Kaggle)"}, "sets": {}}
+              json.dump(r, open("out/semantic_result.json", "w"))
+          r["data"] = os.environ["DATA"]
+          json.dump(r, open("out/semantic_result.json", "w"), indent=1)
           if r.get("error"):
               print(f"## Sealed check failed in the kernel\n\n{r['error']['kind']}: {r['error']['line']}")
               raise SystemExit(1)
           print(f"## Sealed check ({r['model'].split('/')[-1]}, report >= {r['report']}, fail >= {r['fail']})\n")
+          print(f"Training data state {r['data']}\n")
           print("Versions: " + ", ".join(f"{k} {v}" for k, v in r.get("versions", {}).items()) + "\n")
           for v, s in r["sets"].items():
               print(f"### {v}: {s['n']} entries, median {s['median']}, failing {s['failing']}\n")
               for h in s["hits"]:
-                  print(f"- {h['id']} {h['score']} ({h['kind']})")
+                  where = f", {h['where']}" if h.get("where") and h["kind"] == "train" else ""
+                  print(f"- {h['id']} {h['score']} ({h['kind']}{where})")
               print()
           raise SystemExit(1 if any(s["failing"] for s in r["sets"].values()) else 0)
           EOF
+
+      # Kept for tools/sealed_gate.py whatever the result: passed, held, or failed in the kernel.
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always() && env.DATA != ''
+        with:
+          name: sealed-check-${{ env.DATA }}
+          path: out/semantic_result.json
+          if-no-files-found: ignore
+          retention-days: 90

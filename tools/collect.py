@@ -337,6 +337,13 @@ def same_plan_on_kaggle(owner: str, base: str) -> bool:
     return kaggle_watchdog.state_of(status) == "running" and bool(re.search(r"running|queued", status, re.I))
 
 
+def sealed_ready(repo: str) -> tuple[bool, str]:
+    """True when today's training data passed the Sealed check; starts the check when it is missing."""
+    done = subprocess.run([sys.executable, str(ROOT / "tools" / "sealed_gate.py"), "--repo", repo, "--start"],
+                          capture_output=True, text=True)
+    return done.returncode == 0, (done.stdout.strip() or done.stderr.strip()[-300:])
+
+
 def schedule(repo: str, owner: str) -> None:
     # One Kaggle run at a time (any kernel of the account holds the GPU); a Colab
     # run does not hold it, so Colab plans are started independently of Kaggle.
@@ -370,6 +377,12 @@ def schedule(repo: str, owner: str) -> None:
             run("gh", "workflow", "run", "synth.yml", "--repo", repo, "--ref", "main")
             summary(f"Scheduler: started the teacher run {synth_name()}.")
             return
+    # Today's training data must have passed the Sealed check (tools/sealed_gate.py); when
+    # it is missing the gate starts it, and training waits for its result.
+    ready, why = sealed_ready(repo)
+    if not ready:
+        summary(f"Scheduler: no training before the Sealed check passes: {why}")
+        return
     if not kaggle_free:
         summary("Scheduler: a kernel of the account is running; no new Kaggle run.")
     started = False

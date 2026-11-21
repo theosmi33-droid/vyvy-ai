@@ -54,7 +54,7 @@ def check(files: list[Path], report: float, fail: float) -> dict:
         recorded(path, d)
     known = audit_check.known_sentences()
     model = SentenceTransformer(sem.MODEL, revision=sem.REVISION, device="cpu")
-    k = model.encode([t for _, t in known], batch_size=64, normalize_embeddings=True, convert_to_numpy=True)
+    k = model.encode([t for _, t, _ in known], batch_size=64, normalize_embeddings=True, convert_to_numpy=True)
     out = {"model": sem.MODEL, "report": report, "fail": fail, "versions": versions(), "sets": {}}
     for path in files:
         items = data[path]["items"]
@@ -62,7 +62,10 @@ def check(files: list[Path], report: float, fail: float) -> dict:
                          convert_to_numpy=True)
         sim = e @ k.T
         best, which = sim.max(axis=1), sim.argmax(axis=1)
-        hits = sorted(({"id": items[n]["id"], "score": round(float(best[n]), 3), "kind": known[int(which[n])][0]}
+        # "where": file:line of a training sentence (or a holdout id) - on a failing hit the
+        # training line is dropped, never the sealed sentence. No text.
+        hits = sorted(({"id": items[n]["id"], "score": round(float(best[n]), 3), "kind": known[int(which[n])][0],
+                        "where": known[int(which[n])][2]}
                        for n in range(len(items)) if best[n] >= report), key=lambda h: -h["score"])
         out["sets"][path.stem.removeprefix("sealed_")] = {
             "n": len(items), "hits": hits, "failing": sum(h["score"] >= fail for h in hits),

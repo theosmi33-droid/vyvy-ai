@@ -85,6 +85,10 @@ jobs:
           elif [ -n "$trained" ]; then
             echo "SKIP=true" >> "$GITHUB_ENV"
             echo "Already trained on this data and prompt: $trained." >> "$GITHUB_STEP_SUMMARY"
+          elif ! python tools/sealed_gate.py --repo "$GITHUB_REPOSITORY" --start > sealed_gate.json; then
+            # Today's training data has not passed the Sealed check yet (started now if missing).
+            echo "SKIP=true" >> "$GITHUB_ENV"
+            echo "Waiting for the Sealed check: $(cat sealed_gate.json)" >> "$GITHUB_STEP_SUMMARY"
           fi
           { echo "NAME=$name"; echo "SWEEP=$sweep"; echo "BUDGET=$budget"; echo "BATCH=$batch"; echo "ACCUM=$accum";
             echo "KID=colab/$size"; } >> "$GITHUB_ENV"

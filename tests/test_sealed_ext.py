@@ -108,7 +108,7 @@ def test_audit_check_prints_ids_only(tmp_path, capsys, monkeypatch):
     (tmp_path / "sealed_inject-v1.json").write_text(json.dumps(frame(INJECT, "inject-v1"), ensure_ascii=False))
     terms = tmp_path / "terms.json"
     terms.write_text(json.dumps({"_comment": "x", "marken": ["Quell"]}))
-    monkeypatch.setattr(audit_check, "known_sentences", lambda: [("train", "Aufgabe anlegen Leiter zurückbringen bitte")])
+    monkeypatch.setattr(audit_check, "known_sentences", lambda: [("train", "Aufgabe anlegen Leiter zurückbringen bitte", "x.jsonl:1")])
     assert audit_check.main(["--dir", str(tmp_path), "--terms", str(terms)]) == 1
     out = capsys.readouterr().out
     assert "term: c-1" in out and "near: c-2" in out

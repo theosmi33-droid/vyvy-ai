@@ -93,6 +93,7 @@ def test_the_scheduler_looks_at_every_base(monkeypatch):
     monkeypatch.setattr(collect, "synth_done", lambda now=None: True)
     monkeypatch.setattr(collect, "open_failure", lambda repo, kid, name: False)
     monkeypatch.setattr(collect, "summary", lambda text: None)
+    monkeypatch.setattr(collect, "sealed_ready", lambda repo: (True, "passed"))
     monkeypatch.setattr(plan_train, "plan", lambda base, epochs=4: {**plan_train.PLANS[base], "name": "n"})
     monkeypatch.setattr(plan_train, "trained_release", lambda repo, base: None)
     monkeypatch.setattr(collect.loop_guard, "load_state", lambda: {"mode": "one_round"})
