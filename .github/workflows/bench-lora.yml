@@ -22,7 +22,7 @@ on:
         type: string
         required: true
       remeasure:
-        description: "Measure an already decided release again: never changes its title, status or notes, never replaces a file"
+        description: "Measure an accepted release that has no signature yet: never changes its title, status or notes, never replaces a file"
         type: boolean
         default: false
 
@@ -260,7 +260,9 @@ jobs:
         run: |
           set -euo pipefail
           title=$(gh release view "$ADAPTER" --repo "$GITHUB_REPOSITORY" --json name --jq .name)
-          [ "$title" != "$ADAPTER (candidate)" ] || { echo "remeasure is for decided releases only" >&2; exit 1; }
+          # Accepted releases only: a rejected one measured again on v3 would be a second try at the same
+          # holdout, and a signed "accepted" must never sit next to a "(rejected)" title.
+          [ "$title" = "$ADAPTER" ] || { echo "remeasure is for accepted releases only; title is '$title'" >&2; exit 1; }
           assets=$(gh release view "$ADAPTER" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name')
           day=$(date -u +%F)
           prefix="remeasure-$day"

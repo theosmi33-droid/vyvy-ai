@@ -229,9 +229,16 @@ attestation, Sigstore). An application takes an adapter only if all four hold:
 4. The base model matches `measured_with` in `adapter_manifest.json` (file and
    SHA-256): an adapter is only measured on that base.
 
+A signature alone never means "accepted": bench-lora signs every adapter it
+measures, rejected ones too, so the signature only says which run measured
+which file. Acceptance is step 1 - the bare release title and the signed
+`adapter_manifest.json` with `"status": "accepted"` - and all four steps must hold.
+
 Adapters decided before bench-lora signed (up to and including
 `vyvy-1.5b-d1e100e8d`, the default of 07.11.2026) carry no attestation and
-cannot pass step 3; the next accepted adapter replaces them.
+cannot pass step 3 until they are measured again under today's rule
+(bench-lora with the input `remeasure`, accepted releases only); otherwise the
+next accepted adapter replaces them.
 
 ### Run locally
 

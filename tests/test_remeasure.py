@@ -66,7 +66,10 @@ def test_the_remeasure_path_never_changes_the_release():
     assert "gh release edit" not in record and "--clobber" not in record and "gh release delete" not in record
     assert '"${prefix}_$f"' in record and 'prefix="remeasure-$day"' in record
     assert 'grep -qx adapter_manifest.json <<<"$assets"' in record and "exit 1" in record
-    assert '"$ADAPTER (candidate)"' in record
+    # Accepted releases only: "(rejected)" and "(candidate)" both stop before anything is measured into the release.
+    assert '[ "$title" = "$ADAPTER" ] || {' in record
+    guard = record.index('[ "$title" = "$ADAPTER" ]')
+    assert guard < record.index("gh release upload") and guard < record.index("release_manifest.py")
     uploads = re.findall(r"gh release upload[^\n]*", record)
     assert uploads == ['gh release upload "$ADAPTER" "${files[@]}" --repo "$GITHUB_REPOSITORY"']
     notice = s["Open the remeasurement notice"]
@@ -87,3 +90,12 @@ def test_the_signed_manifest_says_it_is_a_remeasurement():
     assert "remeasure" not in plain and again["remeasure"]["remeasured_on"] == "2026-11-21"
     # Optional field: readers of schema 1 accept both.
     assert verify_adapter.schema_problems(plain) == verify_adapter.schema_problems(again)
+
+
+def test_the_title_guard_lets_only_the_bare_tag_through():
+    import subprocess
+
+    guard = '[ "$title" = "$ADAPTER" ] || { echo "refused" >&2; exit 1; }'
+    for title, ok in (("vyvy-1.5b-dX", True), ("vyvy-1.5b-dX (rejected)", False), ("vyvy-1.5b-dX (candidate)", False)):
+        done = subprocess.run(["bash", "-c", f'ADAPTER=vyvy-1.5b-dX; title="{title}"; {guard}'], capture_output=True)
+        assert (done.returncode == 0) is ok, title
