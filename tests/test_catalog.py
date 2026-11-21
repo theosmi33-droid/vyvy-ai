@@ -82,3 +82,37 @@ def test_every_adapter_names_the_contract_it_was_measured_on():
         if e["adapter"]:
             assert e["contract"]["version"] == CATALOG["contract"]["version"] == 1
             assert e["contract"]["prompt_sha256"] and e["contract"]["grammar_sha256"] == CATALOG["contract"]["grammar_sha256"]
+
+
+def test_selectable_needs_both_files_verified_as_signed_by_bench_lora(monkeypatch):
+    assets = {"vyvy-1.5b-dX.gguf": {}, "adapter_manifest.json": {}}
+    fetch = lambda url: b"x"  # noqa: E731
+
+    def signer(results):
+        calls = iter(results)
+        return lambda path, repo, bundle: next(calls)
+
+    # Attestation exists, but not by bench-lora on main (wrong signer): not selectable.
+    ok, how = build_catalog.attestation("vyvy-1.5b-dX", assets, signer([(False, "signer mismatch")] * 2), fetch)
+    assert ok is False and verify_adapter.release_state("t", "t", "accepted", ok) == "accepted_unsigned"
+    # Only the GGUF signed, the manifest not: not selectable.
+    ok, _ = build_catalog.attestation("vyvy-1.5b-dX", assets, signer([(True, "ok"), (False, "no")]), fetch)
+    assert ok is False
+    # Both signed by bench-lora on main: selectable, and the record says how it was checked.
+    ok, how = build_catalog.attestation("vyvy-1.5b-dX", assets, signer([(True, "ok"), (True, "ok")]), fetch)
+    assert ok is True and "--signer-workflow" in how["verified_by"] and "refs/heads/main" in how["verified_by"]
+    assert verify_adapter.release_state("t", "t", "accepted", ok) == "selectable"
+    # The check cannot run: no CLI, no download, no manifest - never selectable.
+    for case in (build_catalog.attestation("vyvy-1.5b-dX", assets, signer([(False, "GitHub CLI (gh) not installed")] * 2), fetch),
+                 build_catalog.attestation("vyvy-1.5b-dX", assets, signer([]), lambda url: (_ for _ in ()).throw(OSError())),
+                 build_catalog.attestation("vyvy-1.5b-dX", {"vyvy-1.5b-dX.gguf": {}}, signer([]), fetch)):
+        assert case[0] is None and case[1]["verified_by"] == "not verified"
+        assert verify_adapter.release_state("t", "t", "accepted", case[0]) == "accepted_unsigned"
+
+
+def test_every_entry_says_how_its_signature_was_checked():
+    for e in CATALOG["entries"]:
+        if e["adapter"]:
+            assert e["attestation"]["verified_by"], e["id"]
+            if e["state"] == "selectable":
+                assert e["attestation"]["verified_by"] != "not verified", e["id"]

@@ -38,7 +38,11 @@
    "bench_lora_run": null,
    "decision_ms_median": null,
    "cpu": null,
-   "signed_status": null
+   "signed_status": null,
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   }
   },
   {
    "tag": "vyvy-1.5b-d1e100e8d",
@@ -57,7 +61,11 @@
    "bench_lora_run": "42361864579",
    "decision_ms_median": 585,
    "cpu": "AMD EPYC 9V74 80-Core Processor",
-   "signed_status": null
+   "signed_status": null,
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   }
   },
   {
    "tag": "vyvy-1.5b-d60e3101c",
@@ -76,7 +84,11 @@
    "bench_lora_run": "42417127972",
    "decision_ms_median": null,
    "cpu": null,
-   "signed_status": null
+   "signed_status": null,
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   }
   },
   {
    "tag": "vyvy-7b-dcc6d83db",
@@ -95,7 +107,11 @@
    "bench_lora_run": "42441236212",
    "decision_ms_median": null,
    "cpu": null,
-   "signed_status": null
+   "signed_status": null,
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   }
   },
   {
    "tag": "vyvy-1.5b-d094ace1b",
@@ -114,7 +130,11 @@
    "bench_lora_run": "42447024173",
    "decision_ms_median": null,
    "cpu": null,
-   "signed_status": null
+   "signed_status": null,
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   }
   },
   {
    "tag": "vyvy-1.5b-d61e3a974",
@@ -133,7 +153,11 @@
    "bench_lora_run": "42526865621",
    "decision_ms_median": null,
    "cpu": null,
-   "signed_status": null
+   "signed_status": null,
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   }
   },
   {
    "tag": "vyvy-1.5b-d5c87bca5",
@@ -152,7 +176,11 @@
    "bench_lora_run": "42616343618",
    "decision_ms_median": null,
    "cpu": null,
-   "signed_status": null
+   "signed_status": null,
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   }
   },
   {
    "tag": "vyvy-1.5b-d84f55739",
@@ -171,7 +199,11 @@
    "bench_lora_run": "42656200936",
    "decision_ms_median": null,
    "cpu": null,
-   "signed_status": null
+   "signed_status": null,
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   }
   },
   {
    "tag": "vyvy-1.5b-da8577af3",
@@ -190,7 +222,11 @@
    "bench_lora_run": "43046797991",
    "decision_ms_median": null,
    "cpu": null,
-   "signed_status": null
+   "signed_status": null,
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   }
   },
   {
    "tag": "vyvy-1.5b-d37929906",
@@ -209,7 +245,11 @@
    "bench_lora_run": "44775941499",
    "decision_ms_median": null,
    "cpu": null,
-   "signed_status": null
+   "signed_status": null,
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   }
   },
   {
    "tag": "vyvy-7b-d89442b39",
@@ -228,7 +268,11 @@
    "bench_lora_run": "44867036984",
    "decision_ms_median": null,
    "cpu": null,
-   "signed_status": null
+   "signed_status": null,
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   }
   }
  ]
 }

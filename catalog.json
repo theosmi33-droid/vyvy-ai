@@ -21,7 +21,7 @@
   }
  },
  "states": {
-  "selectable": "accepted and signed by bench-lora; may be offered after tools/verify_adapter.py passed",
+  "selectable": "accepted, and both the GGUF and adapter_manifest.json verified as signed by bench-lora on main (gh attestation verify, signer workflow and refs/heads/main); may be offered after tools/verify_adapter.py passed on the downloaded files",
   "accepted_unsigned": "accepted before the signature existed, or not yet verified; never selectable",
   "candidate": "trained, not decided",
   "rejected": "decided against",
@@ -68,6 +68,10 @@
     "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
+   },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
    },
    "measured": {
     "status": "not measured",
@@ -116,6 +120,10 @@
     "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
+   },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
    },
    "measured": {
     "status": "measured",
@@ -168,6 +176,10 @@
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
    },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   },
    "measured": {
     "status": "not measured",
     "memory_mb": null,
@@ -215,6 +227,10 @@
     "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
+   },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
    },
    "measured": {
     "status": "not measured",
@@ -264,6 +280,10 @@
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
    },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   },
    "measured": {
     "status": "not measured",
     "memory_mb": null,
@@ -311,6 +331,10 @@
     "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
+   },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
    },
    "measured": {
     "status": "not measured",
@@ -360,6 +384,10 @@
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
    },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   },
    "measured": {
     "status": "not measured",
     "memory_mb": null,
@@ -408,6 +436,10 @@
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
    },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   },
    "measured": {
     "status": "not measured",
     "memory_mb": null,
@@ -455,6 +487,10 @@
     "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
+   },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
    },
    "measured": {
     "status": "not measured",
@@ -508,6 +544,10 @@
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
    },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   },
    "measured": {
     "status": "not measured",
     "memory_mb": null,
@@ -559,6 +599,10 @@
     "prompt_sha256": "478793e00add0c103b293909c39a334cdab658df605446418f99999837b40c9c",
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
+   },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
    },
    "measured": {
     "status": "not measured",

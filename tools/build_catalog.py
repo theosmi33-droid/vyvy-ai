@@ -31,6 +31,7 @@ import hashlib
 import json
 import re
 import sys
+import tempfile
 import urllib.request
 from pathlib import Path
 
@@ -114,6 +115,7 @@ def build(models: dict, snap: dict) -> dict:
                 # grammar, which an application must use with this adapter.
                 "contract": {"version": con["version"], "prompt": r["prompt"], "prompt_sha256": r["prompt_sha256"],
                              "grammar_sha256": con["grammar_sha256"], "grammar_recorded_at_training": False},
+                "attestation": r.get("attestation") or {"verified_by": "not verified"},
                 "measured": measured(r)})
     for spec in PLANNED:
         entries.append({"id": spec["class"].replace(" ", "-").lower(), "class": spec["class"],
@@ -121,7 +123,9 @@ def build(models: dict, snap: dict) -> dict:
                         "selectable": False, "base": {"model": spec["base"], "files": None, **BASE_ORIGIN},
                         "adapter": None, "contract": None, "measured": {"status": NOT_MEASURED}})
     return {"schema": 1, "contract": con, "states": {
-        "selectable": "accepted and signed by bench-lora; may be offered after tools/verify_adapter.py passed",
+        "selectable": ("accepted, and both the GGUF and adapter_manifest.json verified as signed by bench-lora on "
+                       "main (gh attestation verify, signer workflow and refs/heads/main); may be offered after "
+                       "tools/verify_adapter.py passed on the downloaded files"),
         "accepted_unsigned": "accepted before the signature existed, or not yet verified; never selectable",
         "candidate": "trained, not decided", "rejected": "decided against", "planned": "listed only, never selectable"},
         "snapshot_fetched": snap["fetched"], "entries": entries}
@@ -135,6 +139,33 @@ def _get(url: str) -> bytes:
     req = urllib.request.Request(url, headers={"Accept": "application/vnd.github+json", "User-Agent": "vyvy-catalog"})
     with urllib.request.urlopen(req, timeout=60) as r:
         return r.read()
+
+
+VERIFIED_BY = (f"gh attestation verify --signer-workflow {REPO}/{verify_adapter.SIGNER} "
+               "--source-ref refs/heads/main (tools/verify_adapter.gh_attestation), for the GGUF and adapter_manifest.json")
+
+
+def attestation(tag: str, assets: dict, attest=verify_adapter.gh_attestation, fetch=None) -> tuple[bool | None, dict]:
+    """True only if bench-lora on main signed both the GGUF and adapter_manifest.json, checked with
+    the same function as verify(); False if a check failed; None if it could not run. Only
+    True can make an entry selectable."""
+    if "adapter_manifest.json" not in assets:
+        return None, {"verified_by": "not verified", "why": "no adapter_manifest.json on the release"}
+    fetch = fetch or _get
+    with tempfile.TemporaryDirectory() as tmp:
+        paths = []
+        try:
+            for name in (f"{tag}.gguf", "adapter_manifest.json"):
+                path = Path(tmp) / name
+                path.write_bytes(fetch(f"https://github.com/{REPO}/releases/download/{tag}/{name}"))
+                paths.append(path)
+        except Exception as exc:  # noqa: BLE001  (no download: not verified, never selectable)
+            return None, {"verified_by": "not verified", "why": f"download failed: {type(exc).__name__}"}
+        results = [attest(path, REPO, None) for path in paths]
+    details = {"gguf": results[0][1][-200:], "adapter_manifest": results[1][1][-200:]}
+    if any("not installed" in d for d in details.values()):
+        return None, {"verified_by": "not verified", "why": "GitHub CLI not available", **details}
+    return all(ok for ok, _ in results), {"verified_by": VERIFIED_BY, **details}
 
 
 def refresh(models: dict, now: str) -> dict:
@@ -155,13 +186,16 @@ def refresh(models: dict, now: str) -> dict:
         verdict = json.loads(_get(dl + "verdict.json")) if "verdict.json" in assets else None
         g = assets[f"{tag}.gguf"]
         digest = g["digest"].removeprefix("sha256:")
-        att = json.loads(_get(f"https://api.github.com/repos/{REPO}/attestations/sha256:{digest}")) if signed else None
+        if x["name"] == tag:
+            attested, how = attestation(tag, assets)
+        else:
+            attested, how = None, {"verified_by": "not verified", "why": "not checked: the release is not accepted"}
         run = re.findall(r"bench-lora \(run (\d+)\)", x.get("body") or "")
         out.append({"tag": tag, "title": x["name"], "prerelease": x["prerelease"], "created": x["created_at"],
                     "base": m["base"], "prompt": m.get("prompt"), "prompt_sha256": m.get("prompt_sha256"),
                     "adapter_file": g["name"], "adapter_size": g["size"], "adapter_sha256": digest,
                     "manifest_sha256": assets["manifest.json"]["digest"].removeprefix("sha256:"),
-                    "adapter_manifest": signed is not None, "attested": bool(att and att.get("attestations")),
+                    "adapter_manifest": signed is not None, "attested": attested, "attestation": how,
                     "bench_lora_run": run[-1] if run else None,
                     "decision_ms_median": verdict.get("adapter_median_ms") if verdict else None,
                     "cpu": verdict.get("cpu") if verdict else None,

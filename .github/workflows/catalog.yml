@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: write  # commit data/catalog_releases.json and catalog.json
+  attestations: read  # gh attestation verify of accepted releases
 
 concurrency:
   group: catalog
@@ -38,9 +39,14 @@ jobs:
           if git diff --quiet -- catalog.json; then
             echo "catalog.json unchanged" >> "$GITHUB_STEP_SUMMARY"; exit 0
           fi
+          # Only the list and its snapshot may change here.
+          other=$(git status --porcelain | grep -v -e ' catalog.json$' -e ' data/catalog_releases.json$' || true)
+          if [ -n "$other" ]; then echo "unexpected changes: $other" >&2; exit 1; fi
           git add catalog.json data/catalog_releases.json
           git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
             commit -m "Catalog: refreshed from the releases (tools/build_catalog.py)"
           git pull --rebase origin main
+          # The list must still match its sources after the rebase.
+          python tools/build_catalog.py --check
           git push origin HEAD:main
           echo "catalog.json updated" >> "$GITHUB_STEP_SUMMARY"
