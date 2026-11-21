@@ -362,7 +362,7 @@ def sh(*args):
 
 sh("git", "clone", "--quiet", "https://github.com/" + REPO, SRC)
 sh("git", "-C", SRC, "checkout", "--quiet", COMMIT)
-sh(sys.executable, "-m", "pip", "install", "-q", "-r", SRC + "/tools/semantic-requirements.txt")
+sh(sys.executable, "-m", "pip", "install", "-q", "-r", SRC + "/tools/semantic-kernel-requirements.txt")
 files = [f for v in VERSIONS for f in glob.glob("/kaggle/input/**/sealed_" + v + ".json", recursive=True)]
 assert len(files) == len(VERSIONS), "sealed sets not attached: " + str(files)
 subprocess.run([sys.executable, SRC + "/tools/sealed_semantic.py", *files, "--out", "/kaggle/working/semantic_result.json"],

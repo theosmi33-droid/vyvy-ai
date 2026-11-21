@@ -12,6 +12,7 @@ tools/check_semantic_leak.py; an id at or above --fail fails the set.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -23,15 +24,40 @@ import audit_check  # noqa: E402
 import check_semantic_leak as sem  # noqa: E402
 
 
+def recorded(path: Path, data: dict) -> None:
+    """The file must be the recorded, unchanged set (data/sealed_sets.json), as in the measuring kernel."""
+    version = path.stem.removeprefix("sealed_")
+    digest = hashlib.sha256(json.dumps(data["items"], ensure_ascii=False, sort_keys=True).encode()).hexdigest()
+    rows = [r for r in json.loads((ROOT / "data" / "sealed_sets.json").read_text(encoding="utf-8"))
+            if r["version"] == version]
+    if not rows or rows[-1]["items_sha256"] != digest or data.get("items_sha256") != digest:
+        raise SystemExit(f"{version}: the sealed set differs from its record in data/sealed_sets.json")
+
+
+def versions() -> dict:
+    import platform
+
+    import sentence_transformers
+    import torch
+    import transformers
+
+    return {"python": platform.python_version(), "torch": torch.__version__,
+            "sentence_transformers": sentence_transformers.__version__, "transformers": transformers.__version__,
+            "model": sem.MODEL, "revision": sem.REVISION}
+
+
 def check(files: list[Path], report: float, fail: float) -> dict:
     from sentence_transformers import SentenceTransformer
 
+    data = {path: json.loads(path.read_text(encoding="utf-8")) for path in files}
+    for path, d in data.items():
+        recorded(path, d)
     known = audit_check.known_sentences()
     model = SentenceTransformer(sem.MODEL, revision=sem.REVISION, device="cpu")
     k = model.encode([t for _, t in known], batch_size=64, normalize_embeddings=True, convert_to_numpy=True)
-    out = {"model": sem.MODEL, "report": report, "fail": fail, "sets": {}}
+    out = {"model": sem.MODEL, "report": report, "fail": fail, "versions": versions(), "sets": {}}
     for path in files:
-        items = json.loads(path.read_text(encoding="utf-8"))["items"]
+        items = data[path]["items"]
         e = model.encode([i["text"] for i in items], batch_size=64, normalize_embeddings=True,
                          convert_to_numpy=True)
         sim = e @ k.T

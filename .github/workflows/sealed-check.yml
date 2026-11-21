@@ -63,6 +63,7 @@ jobs:
           import json
           r = json.load(open("out/semantic_result.json"))
           print(f"## Sealed check ({r['model'].split('/')[-1]}, report >= {r['report']}, fail >= {r['fail']})\n")
+          print("Versions: " + ", ".join(f"{k} {v}" for k, v in r.get("versions", {}).items()) + "\n")
           for v, s in r["sets"].items():
               print(f"### {v}: {s['n']} entries, median {s['median']}, failing {s['failing']}\n")
               for h in s["hits"]:

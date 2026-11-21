@@ -94,7 +94,11 @@ def test_kernels_take_the_new_versions(tmp_path):
     meta = json.loads((tmp_path / "b" / "kernel-metadata.json").read_text())
     assert meta["enable_gpu"] is False and meta["is_private"] is True
     assert meta["dataset_sources"] == ["user/vyvy-sealed-create-v1", "user/vyvy-sealed-inject-v1"]
-    compile((tmp_path / "b" / "check.py").read_text(), "check.py", "exec")
+    check = (tmp_path / "b" / "check.py").read_text()
+    compile(check, "check.py", "exec")
+    # Kaggle runs Python 3.13: the kernel has its own requirements (torch 2.4.1 has no 3.13 build).
+    assert "/tools/semantic-kernel-requirements.txt" in check
+    assert (ROOT / "tools" / "semantic-kernel-requirements.txt").exists()
     with pytest.raises(SystemExit):
         kaggle_job.write_semantic_job(tmp_path / "c", "user", "owner/repo", "a" * 40, ["v1"])
 
@@ -120,3 +124,13 @@ def test_audit_check_finds_form_problems():
     assert any("title span" in p for p in problems) and any("when span" in p for p in problems)
     assert any("writing intent" in p for p in audit_check.form(frame(bad[1:], "inject-v1"), "inject", intents))
     assert audit_check.form(frame(CREATE, "create-v1"), "create", intents) == []
+
+
+def test_the_semantic_check_refuses_an_unrecorded_set(tmp_path):
+    import sealed_semantic
+
+    data = frame(CREATE, "create-v1")
+    with pytest.raises(SystemExit):
+        sealed_semantic.recorded(tmp_path / "sealed_create-v1.json", data)  # its checksum is not the recorded one
+    with pytest.raises(SystemExit):
+        sealed_semantic.recorded(tmp_path / "sealed_create-v9.json", data)  # no record at all

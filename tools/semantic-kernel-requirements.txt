@@ -1,0 +1,11 @@
+# For tools/sealed_semantic.py in the Kaggle CPU kernel (Python 3.13 on Kaggle, 20.11.2026).
+# tools/semantic-requirements.txt pins torch 2.4.1 and numpy 1.26 for the GitHub runner
+# (Python 3.12); neither exists for 3.13. Same sentence model and revision
+# (check_semantic_leak.MODEL/REVISION) and the same sentence-transformers and transformers,
+# so the weights, tokenizer and normalisation are identical; another torch or numpy
+# changes the embeddings only at float rounding, far below the 0.90/0.97 thresholds.
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.6.0
+sentence-transformers==5.1.2
+transformers==4.57.6
+numpy>=2.1,<2.4
