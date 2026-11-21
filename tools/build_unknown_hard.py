@@ -351,7 +351,8 @@ class Filter:
         # The later others-calendar file (tools/build_others_calendar.py) is left out too, so
         # this generator's committed output stays exactly as the semantic check passed it.
         own = own or (OUT, CONTRAST_OUT, ROOT / "data" / "train" / "vyvy_others_calendar_v1.jsonl",
-                      ROOT / "data" / "train" / "vyvy_retired_blind_v2.jsonl")
+                      ROOT / "data" / "train" / "vyvy_retired_blind_v2.jsonl",
+                      ROOT / "data" / "train" / "vyvy_create_boundary_v1.jsonl")
         self.max_similarity = max_similarity
         # All holdouts the files were built against, the retired v2 included, so the output
         # stays as the semantic check passed it (lock.GUARDED no longer has v2).

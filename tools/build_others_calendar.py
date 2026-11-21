@@ -45,7 +45,8 @@ import build_unknown_hard as hard  # noqa: E402
 
 OUT = ROOT / "data" / "train" / "vyvy_others_calendar_v1.jsonl"
 #: Built later (tools/build_retired_holdout.py); left out of the comparison so --check stays stable.
-LATER = (ROOT / "data" / "train" / "vyvy_retired_blind_v2.jsonl",)
+LATER = (ROOT / "data" / "train" / "vyvy_retired_blind_v2.jsonl",
+         ROOT / "data" / "train" / "vyvy_create_boundary_v1.jsonl")
 QUOTAS = {"unknown": 120, "appointments_today": 30, "appointments_tomorrow": 30}
 TIMEFRAME = {"appointments_today": "today", "appointments_tomorrow": "tomorrow"}
 

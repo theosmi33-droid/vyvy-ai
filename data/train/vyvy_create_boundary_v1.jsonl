@@ -1,0 +1,268 @@
+{"text": "Eigentlich wollte ich heute den Ölwechsel beim Transporter eintragen lassen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kann man Aufgaben auch mit Erinnerung anlegen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was hab ich im Verein noch alles zu erledigen?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Trag im Kalender vom Team nächste Woche am Dienstag den Termin mit Herrn Okafor ein", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Den Kundentermin bei der Firma Rohleder ist übrigens heute um drei.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Neue Aufgabe: den Wartungsvertrag kündigen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Hak die Aufgabe „das Wartezimmer aufräumen“ ab", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "mach mir für den termin mit herrn okafor einen termin, am freitag um neun", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Eigentlich wollte ich heute das Angebot für den Zaun rausschicken", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Erinner mich bis Dienstag, die Schlüssel für die Halle nachmachen lassen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "welche aufgaben sind in der werkstatt noch offen?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Trag mir am Freitag um neun die Vorstandssitzung ein", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Was hab ich in der Praxis noch alles zu erledigen?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: die Besprechung mit Frau Albers, morgen früh", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Leg mir die Aufgabe an, den Getränkelieferanten anrufen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: das Gespräch mit der Steuerberaterin, morgen um zehn", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Erinner mich bis Dienstag, das Wartezimmer aufräumen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Trag im Kalender der Kollegin am Empfang heute um drei die Besprechung mit Frau Albers ein", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag im Kalender von Herrn Kaya morgen um zehn das Gespräch mit der Steuerberaterin ein", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag im Kalender von Frau Wendt heute um drei den Kundentermin bei der Firma Rohleder ein", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Verschieb den Termin mit Herrn Okafor auf am Freitag um neun", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Erinner mich bis Dienstag, den Wartungsvertrag kündigen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Darf die Aushilfe selbst Termine eintragen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag im Kalender vom Azubi morgen um zehn die Vorstandssitzung ein", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Erinner mich bis Dienstag, die Waage eichen lassen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "schreib mir auf, dass ich die waage eichen lassen muss", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Schreib der Kollegin am Empfang auf die Liste, die Waage eichen lassen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg mir die Aufgabe an, den Wartungsvertrag kündigen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: das Gespräch mit der Steuerberaterin, morgen früh", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Trag mir morgen früh den Termin mit Herrn Okafor ein", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Trag im Kalender vom Vereinskassierer heute um drei das Gespräch mit der Steuerberaterin ein", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag im Kalender vom Azubi heute um drei den Termin mit Herrn Okafor ein", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was hab ich im Büro noch alles zu erledigen?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "leg einen termin an: die probe vom chor, am freitag um neun", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: die Abnahme in der Werkstatt, morgen um zehn", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Irgendwann müsste man mal die Rechnung an Bäckerei Lindner schreiben.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag mir morgen früh die Besprechung mit Frau Albers ein", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Die Abnahme in der Werkstatt ist übrigens morgen früh.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "trag mir am freitag um neun den termin mit herrn okafor ein", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Soll ich die Rechnung an Bäckerei Lindner schreiben als Aufgabe oder als Termin anlegen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Markier „die Rechnung an Bäckerei Lindner schreiben“ als erledigt", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ist den Termin mit Herrn Okafor schon eingetragen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Lösch die Aufgabe „die Vollmacht von Frau Haug einscannen“", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "kann man einen termin auch ohne uhrzeit eintragen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Die Probe vom Chor ist übrigens morgen um zehn.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "trag mir morgen früh den kundentermin bei der firma rohleder ein", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Schreib mir auf, dass ich den Ölwechsel beim Transporter eintragen lassen muss", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Hab ich morgen den Terimn mit Herrn Okafor?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Leg einen Termin an: das Gespräch mit der Steuerberaterin, nächste Woche am Dienstag", "intent": "create_appointment", "timeframe": "week", "entity": null}
+{"text": "Trag mir heute Nachmittag den Kundentermin bei der Firma Rohleder ein", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "Leg einen Termin an: die Vortandssitzung, heute Nachmittag", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "Schreib mir auf, dass ich die Rechnung an Bäckerei Lindner schreiben muss", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Die Aufgabenliste wird immer länger.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hak die Aufgabe „die Rechnung an Bäckerei Lindner schreiben“ ab", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Lösch die Aufgabe „die Schlüssel für die Halle nachmachen lassen“", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Schreib mir auf, dass ich Druckerpapier bestellen muss", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Den Termin mit Herrn Okafor ist übrigens am Freitag um neun.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Eigentlich wollte ich heute die Akte Brenner kopieren.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag im Kalender vom Azubi nächste Woche am Dienstag die Abnahme in der Werkstatt ein", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Schreib mir auf, dass ich den Getränkelieferanten anrufen muss", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Lösch die Aufgabe „das Angebot für den Zaun rausschicken“", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie leg i a Aufgob o, des hob i nia kapiert", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Erinner mich bis Dienstag, das Angebot für den Zaun rausschicken", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Wie trage ich einen Termin für jede Woche ein?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Dat Wocehnende is endlich frei.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mach mir für die Abnahme in der Werkstatt einen Termin, morgen früh", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "die vorstandssitzung ist übrigens nächste woche am dienstag.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Erinner mich bis Dienstag, die Spendenquittungen verschicken", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Sag die Anprobe miit Frau Szabo ab", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: den Kundentermin bei der Firma Rohleder, morgen um zehn", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Trag im Kalender von Herrn Kaya heute um drei die Probe vom Chor ein", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag mir nächste Woche am Dienstag die Vorstandssitzung ein", "intent": "create_appointment", "timeframe": "week", "entity": null}
+{"text": "trag im kalender von frau wendt morgen um zehn die besprechung mit frau albers ein", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Irgendwann müsste man mal Druckerpapier bestellen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Ich hätte gern mal enen Tag ohne Termine.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Die Anprobe mit Frau Szabo ist übrigens heute um drei.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Muss ich für jede Aufgabe ein Fälligkeitsdatum angeben?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Erinner mich bis Dienstag, den Ölwechsel beim Transporter eintragen lassen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "leg dem azubi die aufgabe an, den ölwechsel beim transporter eintragen lassen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hab ich morgen die Abnahme in der Werkstatt?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Trag mir heute Nachmittag das Gespräch mit der Steuerberaterin ein", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "Wo kann ich eine neue Aufgabe eintragen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hak die Aufgabe „die Kasse zählen“ ab", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Eigentlich wollte ich heute die Rechnung an Bäckerei Lindner schreiben.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Erinner mich bis Dienstag, die Kasse zählen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "trag im kalender vom team heute um drei die vorstandssitzung ein", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "trag im kalender vom vereinskassierer morgen um zehn die abnahme in der werkstatt ein", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "erinner mich bis dienstag, die fotos fürs schaufenster aussuchen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Neue Aufgabe: die Waage eichen lassen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Soll ich die Kasse zählen als Aufgabe oder als Termin anlegen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hak die Aufgabe „ds Angebot für den Zaun rausschicken“ ab", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann ist heute die Anprobe mit Frau Szabo?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Leg einen Termin an: die Probe vom Chor, nächste Woche am Dienstag", "intent": "create_appointment", "timeframe": "week", "entity": null}
+{"text": "Irgendwann müsste man mal den Getränkelieferanten anrufen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Eigentlich wollte ich heute Druckerpapier bestellen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg Frau Wendt die Aufgabe an, den Mitgliedsbeitrag einziehen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: die Vorstandssitzung, morgen früh", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Trag mir heute Nachmittag die Besprechung mit Frau Albers ein", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "Wann ist heute die Abnahme in der Werkstatt", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Trag mir nächste Woche am Dientag die Anprobe mit Frau Szabo ein", "intent": "create_appointment", "timeframe": "week", "entity": null}
+{"text": "Wann ist heute den Termin mit Herrn Okafor?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Leg mir die Aufgabe an, die Akte Brenner kopieren", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Soll ich den Mitgliedsbeitrag einziehen als ufgabe oder als Termin anlegen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Soll ich das Angebot für den Zaun rausschicken als Aufgabe oder als Termin anlegen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Eigentlich wollte ich heute den Mitgliedsbeitrag einziehen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Schreib ma auf, i muass d Kassn zählen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Leg mir die Aufgabe an, die Fotos fürs Schaufenster aussuchen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: die Anprobe mit Frau Szabo, am Freitag um neun", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Erinner mich bis Dienstag, die Vollmacht von Frau Haug einscannen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Trag mir heute Nachmittag den Terimn mit Herrn Okafor ein", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "Irgendwann müsste man mal die Vollmacht von Frau Haug einscannen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann ist heute die Besprechung mit Frau Albers?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Markier „den Getränkelieferanten anrufen“ als erledigt", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Erinner mich bis Dienstag, die Rechnung an Bäckerei Lindner schreiben", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: die Abnahme in der Werkstatt, am Freitag um neun", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Irgendwann müsste man mal die Waage eichen lassen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "schreib mir auf, dass ich die fotos fürs schaufenster aussuchen muss", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Hak die Aufgabe „die Vollmacht von Frau Haug einscannen“ ab", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Schreib mir auf, dass ich die Akte Brenner kopieren muss", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Markier „das Rezept für Herrn Uysal vorbereiten“ als erledigt", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "leg einen termin an: den termin mit herrn okafor, am freitag um neun", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Was hab ich im Laden noch alles zu erledigen?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: deen Kundentermin bei der Firma Rohleder, heute Nachmittag", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "Schreib dem Mario auf, dass er d Kasse zählt", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "mach mir für die anprobe mit frau szabo einen termin, heute um drei", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "Leg einen Termin an: die Probe vom Chor, morgen früh", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "mach mer e ufgab: papier bstelle", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Leg dem Vereinskassierer die Aufgabe an, das Rezept für Herrn Uysal vorbereiten", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was hab ich in der Werkstatt noch alles zu erledigen?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: den Kundentermin bei der Firma Rohleder, morgen früh", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Schreib mir auf, dass ich das Rezept für Herrn Uysal vorbereiten muss", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Leg dem ganzen Team die Aufgabe an, die Vollmacht von Frau Haug einscannen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag die Abnahme in der Werkstatt ab", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "trag mir heute nachmittag die vorstandssitzung ein", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "trog bei da chefin morgn den termin mitm elektriker ei", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "leg einen termin an: den kundentermin bei der firma rohleder, heute um drei", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "Leg der Kollegin am Empfang die Aufgabe an, die Kasse zählen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Schreib mir auf, dass ich den Wartungsvertrag kündigen muss", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Gibt es eine Vorlage für Termine mit Kunden?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hab ich morgen das Gespräch mit der Steuerberaterin?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Sag den Kundentermin bei der Firma Rohleder ab", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: die Anprobe mit Frau Szabo, heute Nachmittag", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "Schreib mir auf, dass ich die Spendenquittungen verschicken muss", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: die Anprobe mit Frau Szabo, nächste Woche am Dienstag", "intent": "create_appointment", "timeframe": "week", "entity": null}
+{"text": "Leg mir die Aufgabe an, die Spendenquittungen verschicken", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Schreib mir auf, dass ich die Kasse zählen muss", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Wer dar fbei uns Termine im gemeinsamen Kalender anlegen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag mir nächste Woche am Dienstag die Besprechung mit Fra Albers ein", "intent": "create_appointment", "timeframe": "week", "entity": null}
+{"text": "markier „das wartezimmer aufräumen“ als erledigt", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: die Probe vom Chor, morgen um zehn", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Leg einen Termin an: die Anprobe mit Frau Szabo, morgen früh", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "trag mir nächste woche am dienstag den kundentermin bei der firma rohleder ein", "intent": "create_appointment", "timeframe": "week", "entity": null}
+{"text": "eigentlich wollte ich heute den wartungsvertrag kündigen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Verschieb die Besprechung mit Frau Albers auf morgen um zehn", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Neue Aufgabe: die Fotos fürs Schaufenster aussuchen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Mach em Kassierer e Ufgab, de Beitrag iizieh", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann ist heute den Kundentermin bei der Firma Rohleder?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Chan mer do au Ufgabe mit Erinnerig mache?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "leg einen termin an: das gespräch mit der steuerberaterin, heute nachmittag", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "Leg einen Termin an: die Vorstandssitzung, nächste Woche am Dienstag", "intent": "create_appointment", "timeframe": "week", "entity": null}
+{"text": "Verschieb den Kundentermin bei der Firma Rohleder auf am Freitag um neun", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wie trage ich die Vorstandssitzung am besten ein?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "wie lege ich hier einen termin an?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hab ich morgen die Besprechung mit Frau Albers?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Trag mir morgen um zehn die Vorstandssitzung ein", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "eigentlich wollte ich heute die fotos fürs schaufenster aussuchen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mach mir für den Kundentemrin bei der Firma Rohleder einen Termin, heute um drei", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "Leg einen Termin an: die Vorstandssitzung, morgen um zehn", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Wie jeht dat, en Termin anzulegen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Markier „die Vollmacht von Frau Haug einscannen“ als erledigt", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Kann ich Aufgaben einer Farbe zuordnen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Schreib Herrn Kaya auf die Liste, die Vollmacht von Frau Haug einscannen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: die Besprechung mit Frau Albers, nächste Woche am Dienstag", "intent": "create_appointment", "timeframe": "week", "entity": null}
+{"text": "trag mir am freitag um neun die abnahme in der werkstatt ein", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "schreib mir auf, dass ich den mitgliedsbeitrag einziehen muss", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Trag mir morgen früh die Probe vom Chor ein", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "neue aufgabe: die kasse zählen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Trag mir morgen um zehn die Anprobe mit Frau Szabo ein", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Neue Aufgabe: den Getränkelieferanten anrufen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Trag im Kalender vom Vereinskassierer nächste Woche am Dienstag die Probe vom Chor ein", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hok de Kassn ob, de hob i scho zählt", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Schreib mir auf, dass ich die Vollmacht von Frau Haug einscannen muss", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Wie trage ich den Termin mit Herrn Okafor am besten ein?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Schreib dem Vereinskassierer auf die Liste, den Getränkelieferanten anrufen", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "leg einen termin an: den termin mit herrn okafor, heute nachmittag", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "Schreib dem Azubi auf die Liste, das Angebot für den Zaun rausschicken", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hab ich morgen die Vorstandssitzung?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Leg einen Termin an: die Abnahme in der Werkstatt, morgen früh", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Lösch die Aufgabe „die Rechnung an Bäckerei Lindner schreiben“", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Wann ist heute daas Gespräch mit der Steuerberaterin?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Wie viele Aufgaben kann man höchstens anlegen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "trag im kalender von frau wendt nächste woche am dienstag die vorstandssitzung ein", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: den Termin mit Herrn Okafor, morgen früh", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "leg mir die aufgabe an, das wartezimmer aufräumen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Hak die Aufgabe „Druckerpapier bestellen“ ab", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hak die Aufgabe „die Waage eichen lassen“ ab", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: den Termin mit Herrn Okafor, nächste Woche am Dienstag", "intent": "create_appointment", "timeframe": "week", "entity": null}
+{"text": "Trag im Kalender vom Team morgen um zehn den Kundentermin bei der Firma Rohleder ein", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "schreib mir auf, dass ich das angebot für den zaun rausschicken muss", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Markier „die Akte Brenner kopieren“ als erledigt", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag mir heute um drei den Terin mit Herrn Okafor ein", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "Neue Aufgabe: die Akte Brenner kopieren", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: die Besprechung mit Frau Albers, morgen um zehn", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Wo trog i an Termin ei, im Handy oder am PC?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Irgendwann müsste man mal den Ölwechsel beim Transporter eintragen lassen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Eigentlich wollte ich heute den Getränkelieferanten anrufen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Was hab ich in der Kanzlei noch alles zu erledigen?", "intent": "tasks_open", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: die Vorstandssitzung, heute um drei", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "Erinner mich bis Dienstag, den Getränkelieferanten anrufen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "trag mir am freitag um neun das gespräch mit der steuerberaterin ein", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Irgendwann müsste man mal die Schlüssel für die Halle nachmachen lassen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag mir morgen früh die Abnahme in der Werkstatt ein", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Sag den Termin mit Herrn Okafor ab", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Schreib mir auf, dass ich das Wartezimmer aufräumen muss", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Morgen wird wieder ein voller Tag.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "wie trage ich die besprechung mit frau albers am besten ein?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Geht es, einen Termin für mehrere Leute anzulegen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hak die Aufgabe „das Rezept für Herrn Uysal vorbereiten“ ab", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag mir morgen früh das Gespräch mit der Steuerberaterin ein", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Ist das Gespräch mit der Steuerberaterin schon eingetragen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Irgendwann müsste man mal das Angebot für den Zaun rausschicken", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Lösch die Aufgabe „das Rezept für Herrn Uysal vorbereiten“", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "irgendwann müsste man mal die kasse zählen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Sag das Gespräch mit der Steuerberaterin ab", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Eigentlich wollte ich heute die Vollmacht von Frau Haug einscannen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Markier „die Waage eichen lassen“ als erledigt", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Neue Aufgabe: den Mitgliedsbeitrag einziehen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Verschieb die Anprobe mit Frau Szabo auf am Freitag um neun", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag mir hheute Nachmittag die Abnahme in der Werkstatt ein", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "Mei, so vui Termine heid.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Streich die Auffgabe mit dem Druckerpapier wieder", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag im Kalender der Kollegin am Empfang nächste Woche am Dienstag den Kundentermin bei der Firma Rohleder ein", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Schreib dem ganzen Team auf die Liste, die Rechnung an Bäckerei Lindner schreiben", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag mir nächste Woche am Dienstag die Probe vom Chor ein", "intent": "create_appointment", "timeframe": "week", "entity": null}
+{"text": "Trag im Kalender der Kollegin am Empfang morgen um zehn die Anprobe mit Frau Szabo ein", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Hab ich morgen die Anprobe mit Frau Szabo?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Irgendwann müsste man mal das Rezept für Herrn Uysal vorbereiten.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag mir morgen früh die Anprobe mit Frau Szabo ein", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Hab ich morgen den Kundentermin bei der Firma Rohleder?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Hab ich morgen die Probe vom Chor?", "intent": "appointments_tomorrow", "timeframe": "tomorrow", "entity": null}
+{"text": "Schreib Frau Wendt auf die Liste, das Rezept für Herrn Uysal vorbereiten", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Erinner mich bis Dienstag, den Mitgliedsbeitrag einziehen", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "wann ist heute die vorstandssitzung?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Mach mir für die Besprechung mit Frau Albers einen Termin, morgen um zehn", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Trag im Kalender von Herrn Kaya nächste Woche am Dienstag die Anprobe mit Frau Szabo ein", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: das Gespräch mit der Steuerberaterin, am Freitag um neun", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Wann ist heute die Probe vom Chor?", "intent": "appointments_today", "timeframe": "today", "entity": null}
+{"text": "Irgendwann müsste man mal den Wartungsvertrag kündigen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Mach mir für das Gespräc mit der Steuerberaterin einen Termin, heute Nachmittag", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "eigentlich wollte ich heute die kasse zählen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Erinner mich bis Dienstag, das Rezept für Herrn Uysal vorbereiten", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: den Termin mit Herrn Okafor, morgen um zehn", "intent": "create_appointment", "timeframe": "tomorrow", "entity": null}
+{"text": "Leg einen Termin an: den Kundentermin bei der Firma Rohleder, nächste Woche am Dienstag", "intent": "create_appointment", "timeframe": "week", "entity": null}
+{"text": "Leg einen Termin an: den Kundentermin bei der Firma Rohleder, am Freitag um neun", "intent": "create_appointment", "timeframe": null, "entity": null}
+{"text": "Wiee trage ich den Kundentermin bei der Firma Rohleder am besten ein?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag mir nächste Woche am Dienstag das Gespräch mit der Steuerberaterin ein", "intent": "create_appointment", "timeframe": "week", "entity": null}
+{"text": "Irgendwann müsste man mal den Mitgliedsbeitrag einziehen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Trag mir heute Nachmittag die Probe vom Chor ein", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "Markier „die Schlüssel für die Halle nachmachen lassen“ als erledigt", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Eigentlich wollte ich heute die Waage eichen lassen.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "eigentlich wollte ich heute die spendenquittungen verschicken.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Irgendwann müsste man mal die Spendenquittungen verschicken.", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "sag die vorstandssitzung ab", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Erinner mich bis Dienstag, die Akte Brenner kopieren", "intent": "create_task", "timeframe": null, "entity": null}
+{"text": "Ist den Kundentermin bei der Firma Rohleder schon eingetragen?", "intent": "unknown", "timeframe": null, "entity": null}
+{"text": "Leg einen Termin an: die Anprobe mit Frau Szabo, heute um drei", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "Leg einen Termin an: die Abnahme in der Werkstatt, heute um drei", "intent": "create_appointment", "timeframe": "today", "entity": null}
+{"text": "Leg Herrn Kaya die Aufgabe an, die Schlüssel für die Halle nachmachen lassen", "intent": "unknown", "timeframe": null, "entity": null}
