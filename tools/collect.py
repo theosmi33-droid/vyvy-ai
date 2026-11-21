@@ -344,6 +344,21 @@ def sealed_ready(repo: str) -> tuple[bool, str]:
     return done.returncode == 0, (done.stdout.strip() or done.stderr.strip()[-300:])
 
 
+def colab_busy(repo: str) -> bool | None:
+    """True while a Train on Colab run is not completed (queued, waiting, pending, running);
+    None when the answer cannot be read. 21.11.2026: every heartbeat started a new Colab
+    run while one was training; the concurrency group only kept it waiting."""
+    done = subprocess.run(["gh", "run", "list", "--repo", repo, "--workflow", plan_train.WORKFLOW["colab"],
+                           "--limit", "20", "--json", "status"], capture_output=True, text=True)
+    try:
+        runs = json.loads(done.stdout) if done.returncode == 0 else None
+    except json.JSONDecodeError:
+        runs = None
+    if not isinstance(runs, list):
+        return None
+    return any(r.get("status") != "completed" for r in runs)
+
+
 def schedule(repo: str, owner: str) -> None:
     # One Kaggle run at a time (any kernel of the account holds the GPU); a Colab
     # run does not hold it, so Colab plans are started independently of Kaggle.
@@ -396,6 +411,15 @@ def schedule(repo: str, owner: str) -> None:
             summary(f"Scheduler: {base}: {why}.")
             continue
         kid = f"{owner}/{kaggle_job.kernel_slug(base)}" if where == "kaggle" else f"colab/{p['size']}"
+        if where == "colab":
+            # An unreadable answer never counts as "nothing runs": the next heartbeat asks again.
+            busy = colab_busy(repo)
+            if busy is None:
+                summary(f"Scheduler: {base}: state of Colab not readable; no start.")
+                continue
+            if busy:
+                summary(f"Scheduler: {base}: Colab is training already (a Train on Colab run is not done); no start.")
+                continue
         if where == "colab" and not kaggle_free and same_plan_on_kaggle(owner, base):
             # A Colab plan trained on Kaggle by hand (train.yml gpu=kaggle) must not run twice.
             summary(f"Scheduler: {base} is training on Kaggle right now; no Colab run.")

@@ -3,6 +3,8 @@
     python -m pytest tests/test_colab_train.py
 """
 
+import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -69,6 +71,7 @@ def scheduler(monkeypatch):
     monkeypatch.setattr(collect, "open_failure", lambda repo, kid, name: False)
     monkeypatch.setattr(collect, "summary", lambda text: None)
     monkeypatch.setattr(collect, "sealed_ready", lambda repo: (True, "passed"))
+    monkeypatch.setattr(collect, "colab_busy", lambda repo: False)
     monkeypatch.setattr(plan_train, "plan", lambda base, epochs=4: {**plan_train.PLANS[base], "name": "n"})
     # The loop lock is open here; its own tests are in test_improve_loop.py.
     monkeypatch.setattr(collect.loop_guard, "load_state", lambda: {"mode": "one_round"})
@@ -156,3 +159,40 @@ def test_no_training_before_the_sealed_check_passed(scheduler, monkeypatch):
     monkeypatch.setattr(collect, "sealed_ready", lambda repo: (False, "running"))
     collect.schedule("owner/vyvy-ai", "u")
     assert scheduler == []
+
+
+@pytest.mark.parametrize("busy", [True, None])
+def test_a_colab_run_not_done_or_unreadable_starts_no_second(scheduler, monkeypatch, busy):
+    # 21.11.2026: every heartbeat started a new Colab run while one was training.
+    said: list[str] = []
+    monkeypatch.setattr(collect, "summary", said.append)
+    monkeypatch.setattr(plan_train, "trained_release", lambda repo, base: None)
+    monkeypatch.setattr(collect, "colab_busy", lambda repo: busy)
+    collect.schedule("owner/vyvy-ai", "u")
+    assert scheduler == [f"train.yml base={LARGE}"]  # Kaggle unchanged
+    assert any(("training already" if busy else "not readable") in s for s in said)
+
+
+def _gh(monkeypatch, code: int, out: str) -> None:
+    monkeypatch.setattr(collect.subprocess, "run",
+                        lambda *a, **k: subprocess.CompletedProcess(a[0], code, out, "boom"))
+
+
+@pytest.mark.parametrize("status, busy", [
+    ("in_progress", True), ("queued", True), ("waiting", True), ("pending", True), ("requested", True),
+    ("completed", False)])
+def test_every_run_not_completed_counts_as_busy(monkeypatch, status, busy):
+    _gh(monkeypatch, 0, json.dumps([{"status": "completed"}, {"status": status}]))
+    assert collect.colab_busy("o/r") is busy
+
+
+@pytest.mark.parametrize("code, out", [(1, ""), (0, ""), (0, "not json"), (0, "{}")])
+def test_an_unreadable_answer_is_none_never_free(monkeypatch, code, out):
+    _gh(monkeypatch, code, out)
+    assert collect.colab_busy("o/r") is None
+
+
+def test_nothing_running_starts_colab_as_before(scheduler, monkeypatch):
+    monkeypatch.setattr(plan_train, "trained_release", lambda repo, base: "done" if base == LARGE else None)
+    collect.schedule("owner/vyvy-ai", "u")
+    assert scheduler == [f"train-colab.yml base={SMALL}"]
