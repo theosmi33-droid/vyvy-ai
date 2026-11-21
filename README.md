@@ -57,6 +57,14 @@ never by hand, and refreshed after every benchmark decision.
   contract version); use it only with exactly that contract.
 - Numbers appear only where they were measured, with the machine and the run;
   everything else says "not measured". No number carries over to other hardware.
+- Platform numbers (schema 2, since 21.11.2026) are the median of the newest
+  three successful runs per platform, with their spread and all three runs: one
+  run on a shared runner is no number to promise to anyone.
+- Peak memory is read differently per operating system and must not be compared
+  across platforms: on Windows it is the peak working set including the
+  memory-mapped pages of the model file; on macOS the maximum resident set,
+  without memory on the graphics side (Metal). Use the value of the platform you
+  install on.
 - 14B and 32B are listed as planned: no files, no adapter, no measurement, no
   schedule.
 

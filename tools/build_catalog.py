@@ -100,18 +100,49 @@ def measured(r: dict) -> dict:
 
 #: Benchmarks on fixed platforms whose results go into the list, by workflow and artifact.
 PLATFORM_RUNS = {"bench-windows.yml": "bench-windows-results", "bench-mac.yml": "bench-mac-results"}
+#: Runs per platform the numbers are taken over: one run on a shared runner is no number to promise.
+RUNS_PER_PLATFORM = 3
 MEMORY_NOTE = "peak during the measurement, whole process (model, adapter, context, runtime and Python)"
+#: How the peak is read differs per operating system, so the numbers must not be compared across platforms.
+MEMORY_BY_PLATFORM = {
+    "Windows": "peak working set, including the memory-mapped pages of the model file",
+    "Darwin": "maximum resident set; memory on the graphics side (Metal) is not included",
+    "Linux": "maximum resident set",
+}
+VALUES = ("intent_correct", "decision_ms_median", "decision_ms_p95", "load_s", "first_decision_s", "peak_memory_mb")
+
+
+def _median(xs: list[float]) -> float | None:
+    xs = sorted(x for x in xs if x is not None)
+    if not xs:
+        return None
+    mid = len(xs) // 2
+    value = xs[mid] if len(xs) % 2 else (xs[mid - 1] + xs[mid]) / 2
+    return round(value, 2) if isinstance(value, float) else value
 
 
 def platform_measurements(snap: dict, spec: dict, adapter_file: str | None) -> list[dict]:
-    """The platform runs of this class with exactly this adapter (None = base model alone).
-    Each number names its run and machine; nothing is carried over to other hardware."""
-    out = []
+    """The platform runs of this class with exactly this adapter (None = base model alone), one
+    entry per platform: the median of each value over the newest RUNS_PER_PLATFORM runs, its
+    spread (smallest and largest) and every run. Nothing is carried over to other hardware."""
+    by_platform: dict[str, list[dict]] = {}
     for m in snap.get("platform_runs", []):
         if m["gguf"] == spec["gguf"] and m.get("adapter") == adapter_file:
-            out.append({k: m.get(k) for k in ("platform", "machine", "threads", "run", "measured_at", "data", "n",
-                                              "intent_correct", "decision_ms_median", "decision_ms_p95", "load_s",
-                                              "first_decision_s", "peak_memory_mb")} | {"peak_memory_note": MEMORY_NOTE})
+            by_platform.setdefault(m["platform"], []).append(m)
+    out = []
+    for platform, runs in sorted(by_platform.items(), key=lambda x: str(x[0])):
+        runs = sorted(runs, key=lambda m: m["measured_at"], reverse=True)[:RUNS_PER_PLATFORM]
+        system = str(platform).split()[0]
+        out.append({
+            "platform": platform, "machines": sorted({m.get("machine") or "" for m in runs}),
+            "threads": sorted({m.get("threads") for m in runs if m.get("threads") is not None}),
+            "data": runs[0]["data"], "n": runs[0]["n"], "n_runs": len(runs),
+            "runs": [m["run"] for m in runs], "measured_at": [m["measured_at"] for m in runs],
+            **{k: _median([m.get(k) for m in runs]) for k in VALUES},
+            "spread": {k: [min(v), max(v)] if (v := [m[k] for m in runs if m.get(k) is not None]) else None
+                       for k in VALUES},
+            "peak_memory_note": f"{MEMORY_NOTE}; {MEMORY_BY_PLATFORM.get(system, 'reading not described')} - "
+                                "not comparable across platforms"})
     return out
 
 
@@ -141,7 +172,7 @@ def build(models: dict, snap: dict) -> dict:
                         "class_note": "no files, no adapter, no measurement, no schedule", "state": "planned",
                         "selectable": False, "base": {"model": spec["base"], "files": None, **BASE_ORIGIN},
                         "adapter": None, "contract": None, "measured": {"status": NOT_MEASURED}})
-    return {"schema": 1, "contract": con, "states": {
+    return {"schema": 2, "contract": con, "states": {
         "selectable": ("accepted, and both the GGUF and adapter_manifest.json verified as signed by bench-lora on "
                        "main (gh attestation verify, signer workflow and refs/heads/main); may be offered after "
                        "tools/verify_adapter.py passed on the downloaded files"),
@@ -191,7 +222,7 @@ def attestation(tag: str, assets: dict, attest=verify_adapter.gh_attestation, fe
 
 
 def platform_runs(gh=None) -> list[dict]:
-    """Results of the newest successful run of each platform benchmark on main (runs in the cloud)."""
+    """Results of the newest successful runs of each platform benchmark on main (runs in the cloud)."""
     def run_gh(*args: str) -> str:
         return subprocess.run(["gh", *args], capture_output=True, text=True, check=True).stdout
 
@@ -199,23 +230,27 @@ def platform_runs(gh=None) -> list[dict]:
     out = []
     for workflow, artifact in PLATFORM_RUNS.items():
         ids = json.loads(gh("run", "list", "--repo", REPO, "--workflow", workflow, "--branch", "main", "--status",
-                            "success", "--limit", "1", "--json", "databaseId,createdAt") or "[]")
-        if not ids:
-            continue
-        run_id, at = ids[0]["databaseId"], ids[0]["createdAt"]
-        with tempfile.TemporaryDirectory() as tmp:
-            gh("run", "download", str(run_id), "--repo", REPO, "--name", artifact, "--dir", tmp)
-            for f in sorted(Path(tmp).glob("*.json")):
-                r = json.loads(f.read_text(encoding="utf-8"))
-                res = r.get("resources") or {}
-                label = r.get("label", "")
-                out.append({"platform": res.get("platform"), "machine": r.get("cpu"), "threads": res.get("threads"),
-                            "run": f"https://github.com/{REPO}/actions/runs/{run_id}", "measured_at": at,
-                            "data": "data/holdout_blind_v1.json",
-                            "gguf": label.split("+")[0], "adapter": r.get("adapter"), "n": r.get("n"),
-                            "intent_correct": r.get("intent_correct"), "decision_ms_median": r.get("median_ms"),
-                            "decision_ms_p95": r.get("p95_ms"), "load_s": res.get("load_s"),
-                            "first_decision_s": res.get("first_decision_s"), "peak_memory_mb": res.get("peak_memory_mb")})
+                            "success", "--limit", str(RUNS_PER_PLATFORM), "--json", "databaseId,createdAt") or "[]")
+        for run in ids:
+            out += _platform_run(gh, artifact, run["databaseId"], run["createdAt"])
+    return out
+
+
+def _platform_run(gh, artifact: str, run_id: int, at: str) -> list[dict]:
+    out = []
+    with tempfile.TemporaryDirectory() as tmp:
+        gh("run", "download", str(run_id), "--repo", REPO, "--name", artifact, "--dir", tmp)
+        for f in sorted(Path(tmp).glob("*.json")):
+            r = json.loads(f.read_text(encoding="utf-8"))
+            res = r.get("resources") or {}
+            label = r.get("label", "")
+            out.append({"platform": res.get("platform"), "machine": r.get("cpu"), "threads": res.get("threads"),
+                        "run": f"https://github.com/{REPO}/actions/runs/{run_id}", "measured_at": at,
+                        "data": "data/holdout_blind_v1.json",
+                        "gguf": label.split("+")[0], "adapter": r.get("adapter"), "n": r.get("n"),
+                        "intent_correct": r.get("intent_correct"), "decision_ms_median": r.get("median_ms"),
+                        "decision_ms_p95": r.get("p95_ms"), "load_s": res.get("load_s"),
+                        "first_decision_s": res.get("first_decision_s"), "peak_memory_mb": res.get("peak_memory_mb")})
     return out
 
 

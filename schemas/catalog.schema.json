@@ -1,11 +1,11 @@
 {
  "$schema": "https://json-schema.org/draft/2020-12/schema",
- "title": "Vyvy AI model catalog, schema 1",
+ "title": "Vyvy AI model catalog, schema 2",
  "description": "Written by tools/build_catalog.py from models.json and data/catalog_releases.json; never by hand.",
  "type": "object",
  "required": ["schema", "contract", "states", "snapshot_fetched", "entries"],
  "properties": {
-  "schema": {"const": 1},
+  "schema": {"const": 2},
   "contract": {"type": "object", "required": ["version", "intents", "grammar", "grammar_sha256", "prompts_sha256"],
                "properties": {"version": {"const": 1}, "grammar_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}},
   "snapshot_fetched": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T"}

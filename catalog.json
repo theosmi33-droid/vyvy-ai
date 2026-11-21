@@ -1,5 +1,5 @@
 {
- "schema": 1,
+ "schema": 2,
  "contract": {
   "version": 1,
   "intents": [
@@ -31,70 +31,210 @@
  "base_measurements": {
   "Vyvy AI 4GB": [
    {
-    "platform": "Windows AMD64",
-    "machine": "AMD64 Family 26 Model 2 Stepping 1, AuthenticAMD",
-    "threads": 4,
-    "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886140491",
-    "measured_at": "2026-11-21T08:42:39Z",
-    "data": "data/holdout_blind_v1.json",
-    "n": 90,
-    "intent_correct": 77,
-    "decision_ms_median": 432,
-    "decision_ms_p95": 566,
-    "load_s": 0.41,
-    "first_decision_s": 4.32,
-    "peak_memory_mb": 1733.6,
-    "peak_memory_note": "peak during the measurement, whole process (model, adapter, context, runtime and Python)"
-   },
-   {
     "platform": "Darwin arm64",
-    "machine": "Apple M1 (Virtual)",
-    "threads": 3,
-    "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886117409",
-    "measured_at": "2026-11-21T08:42:18Z",
+    "machines": [
+     "Apple M1 (Virtual)"
+    ],
+    "threads": [
+     3
+    ],
     "data": "data/holdout_blind_v1.json",
     "n": 90,
+    "n_runs": 1,
+    "runs": [
+     "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886117409"
+    ],
+    "measured_at": [
+     "2026-11-21T08:42:18Z"
+    ],
     "intent_correct": 77,
     "decision_ms_median": 540,
     "decision_ms_p95": 2223,
     "load_s": 11.43,
     "first_decision_s": 14.03,
     "peak_memory_mb": 2050.4,
-    "peak_memory_note": "peak during the measurement, whole process (model, adapter, context, runtime and Python)"
+    "spread": {
+     "intent_correct": [
+      77,
+      77
+     ],
+     "decision_ms_median": [
+      540,
+      540
+     ],
+     "decision_ms_p95": [
+      2223,
+      2223
+     ],
+     "load_s": [
+      11.43,
+      11.43
+     ],
+     "first_decision_s": [
+      14.03,
+      14.03
+     ],
+     "peak_memory_mb": [
+      2050.4,
+      2050.4
+     ]
+    },
+    "peak_memory_note": "peak during the measurement, whole process (model, adapter, context, runtime and Python); maximum resident set; memory on the graphics side (Metal) is not included - not comparable across platforms"
+   },
+   {
+    "platform": "Windows AMD64",
+    "machines": [
+     "AMD64 Family 26 Model 2 Stepping 1, AuthenticAMD"
+    ],
+    "threads": [
+     4
+    ],
+    "data": "data/holdout_blind_v1.json",
+    "n": 90,
+    "n_runs": 1,
+    "runs": [
+     "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886140491"
+    ],
+    "measured_at": [
+     "2026-11-21T08:42:39Z"
+    ],
+    "intent_correct": 77,
+    "decision_ms_median": 432,
+    "decision_ms_p95": 566,
+    "load_s": 0.41,
+    "first_decision_s": 4.32,
+    "peak_memory_mb": 1733.6,
+    "spread": {
+     "intent_correct": [
+      77,
+      77
+     ],
+     "decision_ms_median": [
+      432,
+      432
+     ],
+     "decision_ms_p95": [
+      566,
+      566
+     ],
+     "load_s": [
+      0.41,
+      0.41
+     ],
+     "first_decision_s": [
+      4.32,
+      4.32
+     ],
+     "peak_memory_mb": [
+      1733.6,
+      1733.6
+     ]
+    },
+    "peak_memory_note": "peak during the measurement, whole process (model, adapter, context, runtime and Python); peak working set, including the memory-mapped pages of the model file - not comparable across platforms"
    }
   ],
   "Vyvy AI 8GB": [
    {
-    "platform": "Windows AMD64",
-    "machine": "AMD64 Family 26 Model 2 Stepping 1, AuthenticAMD",
-    "threads": 4,
-    "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886140491",
-    "measured_at": "2026-11-21T08:42:39Z",
-    "data": "data/holdout_blind_v1.json",
-    "n": 90,
-    "intent_correct": 84,
-    "decision_ms_median": 1426,
-    "decision_ms_p95": 1855,
-    "load_s": 2.17,
-    "first_decision_s": 22.34,
-    "peak_memory_mb": 7434.4,
-    "peak_memory_note": "peak during the measurement, whole process (model, adapter, context, runtime and Python)"
-   },
-   {
     "platform": "Darwin arm64",
-    "machine": "Apple M1 (Virtual)",
-    "threads": 3,
-    "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886117409",
-    "measured_at": "2026-11-21T08:42:18Z",
+    "machines": [
+     "Apple M1 (Virtual)"
+    ],
+    "threads": [
+     3
+    ],
     "data": "data/holdout_blind_v1.json",
     "n": 90,
+    "n_runs": 1,
+    "runs": [
+     "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886117409"
+    ],
+    "measured_at": [
+     "2026-11-21T08:42:18Z"
+    ],
     "intent_correct": 84,
     "decision_ms_median": 2528,
     "decision_ms_p95": 4877,
     "load_s": 7.56,
     "first_decision_s": 33.41,
     "peak_memory_mb": 4575.4,
-    "peak_memory_note": "peak during the measurement, whole process (model, adapter, context, runtime and Python)"
+    "spread": {
+     "intent_correct": [
+      84,
+      84
+     ],
+     "decision_ms_median": [
+      2528,
+      2528
+     ],
+     "decision_ms_p95": [
+      4877,
+      4877
+     ],
+     "load_s": [
+      7.56,
+      7.56
+     ],
+     "first_decision_s": [
+      33.41,
+      33.41
+     ],
+     "peak_memory_mb": [
+      4575.4,
+      4575.4
+     ]
+    },
+    "peak_memory_note": "peak during the measurement, whole process (model, adapter, context, runtime and Python); maximum resident set; memory on the graphics side (Metal) is not included - not comparable across platforms"
+   },
+   {
+    "platform": "Windows AMD64",
+    "machines": [
+     "AMD64 Family 26 Model 2 Stepping 1, AuthenticAMD"
+    ],
+    "threads": [
+     4
+    ],
+    "data": "data/holdout_blind_v1.json",
+    "n": 90,
+    "n_runs": 1,
+    "runs": [
+     "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886140491"
+    ],
+    "measured_at": [
+     "2026-11-21T08:42:39Z"
+    ],
+    "intent_correct": 84,
+    "decision_ms_median": 1426,
+    "decision_ms_p95": 1855,
+    "load_s": 2.17,
+    "first_decision_s": 22.34,
+    "peak_memory_mb": 7434.4,
+    "spread": {
+     "intent_correct": [
+      84,
+      84
+     ],
+     "decision_ms_median": [
+      1426,
+      1426
+     ],
+     "decision_ms_p95": [
+      1855,
+      1855
+     ],
+     "load_s": [
+      2.17,
+      2.17
+     ],
+     "first_decision_s": [
+      22.34,
+      22.34
+     ],
+     "peak_memory_mb": [
+      7434.4,
+      7434.4
+     ]
+    },
+    "peak_memory_note": "peak during the measurement, whole process (model, adapter, context, runtime and Python); peak working set, including the memory-mapped pages of the model file - not comparable across platforms"
    }
   ]
  },
@@ -208,36 +348,106 @@
    },
    "measured_on_platforms": [
     {
-     "platform": "Windows AMD64",
-     "machine": "AMD64 Family 26 Model 2 Stepping 1, AuthenticAMD",
-     "threads": 4,
-     "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886140491",
-     "measured_at": "2026-11-21T08:42:39Z",
-     "data": "data/holdout_blind_v1.json",
-     "n": 90,
-     "intent_correct": 81,
-     "decision_ms_median": 433,
-     "decision_ms_p95": 594,
-     "load_s": 0.7,
-     "first_decision_s": 4.65,
-     "peak_memory_mb": 2036.8,
-     "peak_memory_note": "peak during the measurement, whole process (model, adapter, context, runtime and Python)"
-    },
-    {
      "platform": "Darwin arm64",
-     "machine": "Apple M1 (Virtual)",
-     "threads": 3,
-     "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886117409",
-     "measured_at": "2026-11-21T08:42:18Z",
+     "machines": [
+      "Apple M1 (Virtual)"
+     ],
+     "threads": [
+      3
+     ],
      "data": "data/holdout_blind_v1.json",
      "n": 90,
+     "n_runs": 1,
+     "runs": [
+      "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886117409"
+     ],
+     "measured_at": [
+      "2026-11-21T08:42:18Z"
+     ],
      "intent_correct": 81,
      "decision_ms_median": 542,
      "decision_ms_p95": 1384,
      "load_s": 5.87,
      "first_decision_s": 8.16,
      "peak_memory_mb": 1864.9,
-     "peak_memory_note": "peak during the measurement, whole process (model, adapter, context, runtime and Python)"
+     "spread": {
+      "intent_correct": [
+       81,
+       81
+      ],
+      "decision_ms_median": [
+       542,
+       542
+      ],
+      "decision_ms_p95": [
+       1384,
+       1384
+      ],
+      "load_s": [
+       5.87,
+       5.87
+      ],
+      "first_decision_s": [
+       8.16,
+       8.16
+      ],
+      "peak_memory_mb": [
+       1864.9,
+       1864.9
+      ]
+     },
+     "peak_memory_note": "peak during the measurement, whole process (model, adapter, context, runtime and Python); maximum resident set; memory on the graphics side (Metal) is not included - not comparable across platforms"
+    },
+    {
+     "platform": "Windows AMD64",
+     "machines": [
+      "AMD64 Family 26 Model 2 Stepping 1, AuthenticAMD"
+     ],
+     "threads": [
+      4
+     ],
+     "data": "data/holdout_blind_v1.json",
+     "n": 90,
+     "n_runs": 1,
+     "runs": [
+      "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886140491"
+     ],
+     "measured_at": [
+      "2026-11-21T08:42:39Z"
+     ],
+     "intent_correct": 81,
+     "decision_ms_median": 433,
+     "decision_ms_p95": 594,
+     "load_s": 0.7,
+     "first_decision_s": 4.65,
+     "peak_memory_mb": 2036.8,
+     "spread": {
+      "intent_correct": [
+       81,
+       81
+      ],
+      "decision_ms_median": [
+       433,
+       433
+      ],
+      "decision_ms_p95": [
+       594,
+       594
+      ],
+      "load_s": [
+       0.7,
+       0.7
+      ],
+      "first_decision_s": [
+       4.65,
+       4.65
+      ],
+      "peak_memory_mb": [
+       2036.8,
+       2036.8
+      ]
+     },
+     "peak_memory_note": "peak during the measurement, whole process (model, adapter, context, runtime and Python); peak working set, including the memory-mapped pages of the model file - not comparable across platforms"
     }
    ]
   },

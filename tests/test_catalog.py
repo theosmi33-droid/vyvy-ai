@@ -130,8 +130,9 @@ def test_platform_runs_go_to_exactly_their_model_and_adapter():
          "load_s": 2.66, "first_decision_s": 31.88, "peak_memory_mb": None}]}
     small, large = build_catalog.CLASSES
     got = build_catalog.platform_measurements(snap, small, "vyvy-1.5b-dX.gguf")
-    assert len(got) == 1 and got[0]["first_decision_s"] == 6.46 and got[0]["run"].endswith("/1")
-    assert "whole process" in got[0]["peak_memory_note"]
+    assert len(got) == 1 and got[0]["first_decision_s"] == 6.46 and got[0]["runs"][0].endswith("/1")
+    assert "whole process" in got[0]["peak_memory_note"] and "not comparable across platforms" in got[0]["peak_memory_note"]
+    assert "memory-mapped" in got[0]["peak_memory_note"]  # Windows reading
     assert build_catalog.platform_measurements(snap, small, None) == []            # never carried to the base alone
     assert build_catalog.platform_measurements(snap, large, "vyvy-1.5b-dX.gguf") == []  # nor to another class
     assert build_catalog.platform_measurements(snap, large, None)[0]["peak_memory_mb"] is None  # null stays null
@@ -157,3 +158,25 @@ def test_platform_runs_are_read_from_the_newest_successful_run(tmp_path):
     r = runs[0]
     assert r["gguf"] == "qwen2.5-1.5b-instruct-q8_0" and r["adapter"] == "vyvy-1.5b-dX.gguf"
     assert r["first_decision_s"] == 6.46 and r["run"].endswith("/runs/7")
+
+
+def test_platform_numbers_are_the_median_of_the_newest_three_runs():
+    def run(i, ms, peak):
+        return {"platform": "Windows AMD64", "machine": "cpu", "threads": 4, "run": f"https://github.com/x/actions/runs/{i}",
+                "measured_at": f"2026-11-2{i}T09:00:00Z", "data": "data/holdout_blind_v1.json",
+                "gguf": "qwen2.5-7b-instruct-q4_k_m", "adapter": None, "n": 90, "intent_correct": 84,
+                "decision_ms_median": ms, "decision_ms_p95": ms * 1.4, "load_s": 2.0, "first_decision_s": ms / 70,
+                "peak_memory_mb": peak}
+    snap = {"platform_runs": [run(1, 9999, 100.0), run(2, 2108, None), run(3, 1426, 7434.4), run(4, 1800, 7400.0)]}
+    got = build_catalog.platform_measurements(snap, build_catalog.CLASSES[1], None)[0]
+    assert got["n_runs"] == 3 and [r[-1] for r in got["runs"]] == ["4", "3", "2"]  # the oldest run is left out
+    assert got["decision_ms_median"] == 1800 and got["spread"]["decision_ms_median"] == [1426, 2108]
+    assert got["peak_memory_mb"] == 7417.2 and got["spread"]["peak_memory_mb"] == [7400.0, 7434.4]  # null left out
+    mac = dict(run(5, 2500, 4575.4), platform="Darwin arm64")
+    notes = {m["platform"]: m["peak_memory_note"] for m in
+             build_catalog.platform_measurements({"platform_runs": [mac, run(3, 1426, 7434.4)]}, build_catalog.CLASSES[1], None)}
+    assert "Metal" in notes["Darwin arm64"] and "memory-mapped" in notes["Windows AMD64"]
+
+
+def test_schema_version_2():
+    assert CATALOG["schema"] == 2 and SCHEMA["properties"]["schema"]["const"] == 2
