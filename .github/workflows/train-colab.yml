@@ -125,11 +125,13 @@ jobs:
             --batch "$BATCH" --grad-accum "$ACCUM"
           session="train-$GITHUB_RUN_ID"
           echo "TRAIN_START=$(date +%s)" >> "$GITHUB_ENV"
-          colab --auth adc new -s "$session" --gpu T4
+          # Into the log too: when Colab assigns no GPU this is the only output (21.11.2026:
+          # "Service Unavailable" on /tun/m/assign, the report said only "no log available").
+          colab --auth adc new -s "$session" --gpu T4 2>&1 | tee colab.log
           # The GPU is released whatever happens below.
           trap 'colab --auth adc stop -s "$session" || true' EXIT
           # No output timeout: an epoch can run for minutes without a line.
-          colab --auth adc exec -s "$session" -f colab_train.py --timeout 0 2>&1 | tee colab.log
+          colab --auth adc exec -s "$session" -f colab_train.py --timeout 0 2>&1 | tee -a colab.log
           colab --auth adc download -s "$session" /content/out.tgz out.tgz
           mkdir -p out && tar -xzf out.tgz -C out
           test -f out/manifest.json
@@ -168,6 +170,8 @@ jobs:
           # Counted per issue (21.11.2026): how often and after how long the connection drops.
           if "Connection was lost" in log:
               cause = "Colab connection lost"
+          elif "/tun/m/assign" in log or "Service Unavailable" in log:
+              cause = "Colab assigned no GPU"
           elif os.environ.get("JOB_STATUS") == "cancelled":
               cause = "Colab run cancelled (job time limit?)"
           else:
