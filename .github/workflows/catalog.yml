@@ -1,0 +1,52 @@
+name: Catalog
+
+# Keeps catalog.json current: after every Bench LoRA decision (and by hand) it reads the
+# public releases and the base model file sizes (tools/build_catalog.py --refresh),
+# rebuilds catalog.json and commits both when anything changed. No model, no secret.
+on:
+  workflow_run:
+    workflows: [Bench LoRA]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write  # commit data/catalog_releases.json and catalog.json
+  attestations: read  # gh attestation verify of accepted releases
+
+concurrency:
+  group: catalog
+  cancel-in-progress: false
+
+jobs:
+  catalog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Refresh and commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python tools/build_catalog.py --refresh
+          if git diff --quiet -- catalog.json; then
+            echo "catalog.json unchanged" >> "$GITHUB_STEP_SUMMARY"; exit 0
+          fi
+          # Only the list and its snapshot may change here.
+          other=$(git status --porcelain | grep -v -e ' catalog.json$' -e ' data/catalog_releases.json$' || true)
+          if [ -n "$other" ]; then echo "unexpected changes: $other" >&2; exit 1; fi
+          git add catalog.json data/catalog_releases.json
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -m "Catalog: refreshed from the releases (tools/build_catalog.py)"
+          git pull --rebase origin main
+          # The list must still match its sources after the rebase.
+          python tools/build_catalog.py --check
+          git push origin HEAD:main
+          echo "catalog.json updated" >> "$GITHUB_STEP_SUMMARY"

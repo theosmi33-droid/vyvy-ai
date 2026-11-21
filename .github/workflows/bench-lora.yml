@@ -21,6 +21,10 @@ on:
         description: Release tag of the adapter, e.g. vyvy-1.5b-d1234abcd
         type: string
         required: true
+      remeasure:
+        description: "Measure an accepted release that has no signature yet: never changes its title, status or notes, never replaces a file"
+        type: boolean
+        default: false
 
 permissions:
   contents: write      # mark the release accepted or rejected
@@ -224,6 +228,7 @@ jobs:
           fi
 
       - name: Mark the release
+        if: ${{ !inputs.remeasure }}
         env:
           ACCEPTED: ${{ steps.decide.outputs.accepted }}
           MODEL: ${{ steps.adapter.outputs.model }}
@@ -244,8 +249,48 @@ jobs:
             base_v1.json lora_v1.json base_dev.json lora_dev.json base_shadow.json lora_shadow.json \
             --repo "$GITHUB_REPOSITORY" --clobber
 
+      # A remeasurement of a decided release (input remeasure): the release stays as it is - title,
+      # status and notes unchanged, no file replaced. The results are added under a dated name;
+      # only when accepted does adapter_manifest.json come too, and only if the release has none.
+      - name: Record the remeasurement
+        if: ${{ inputs.remeasure }}
+        env:
+          ACCEPTED: ${{ steps.decide.outputs.accepted }}
+          MODEL: ${{ steps.adapter.outputs.model }}
+        run: |
+          set -euo pipefail
+          title=$(gh release view "$ADAPTER" --repo "$GITHUB_REPOSITORY" --json name --jq .name)
+          # Accepted releases only: a rejected one measured again on v3 would be a second try at the same
+          # holdout, and a signed "accepted" must never sit next to a "(rejected)" title.
+          [ "$title" = "$ADAPTER" ] || { echo "remeasure is for accepted releases only; title is '$title'" >&2; exit 1; }
+          assets=$(gh release view "$ADAPTER" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name')
+          day=$(date -u +%F)
+          prefix="remeasure-$day"
+          if grep -q "^$prefix" <<<"$assets"; then echo "a remeasurement of $day is already attached" >&2; exit 1; fi
+          files=()
+          for f in verdict.json base_blind.json lora_blind.json base_v1.json lora_v1.json base_dev.json lora_dev.json \
+                   base_shadow.json lora_shadow.json; do
+            cp "$f" "${prefix}_$f"
+            files+=("${prefix}_$f")
+          done
+          if [ "$ACCEPTED" = true ]; then
+            if grep -qx adapter_manifest.json <<<"$assets"; then
+              echo "adapter_manifest.json is already attached; a remeasurement never replaces it" >&2; exit 1
+            fi
+            created=$(gh release view "$ADAPTER" --repo "$GITHUB_REPOSITORY" --json createdAt --jq .createdAt)
+            first=$(gh release view "$ADAPTER" --repo "$GITHUB_REPOSITORY" --json body --jq .body \
+                      | grep -o 'bench-lora (run [0-9]*): [a-z]*' | head -n 1 || true)
+            python tools/release_manifest.py adapter/manifest.json verdict.json \
+              --gguf-key "$MODEL" --run-id "$GITHUB_RUN_ID" --out adapter_manifest.json \
+              --remeasured-on "$day" --first-decision "released $created; $first"
+            files+=(adapter_manifest.json)
+          fi
+          gh release upload "$ADAPTER" "${files[@]}" --repo "$GITHUB_REPOSITORY"
+          echo "Remeasurement of $ADAPTER attached as ${prefix}_*; the release itself is unchanged." >> "$GITHUB_STEP_SUMMARY"
+
       # Signs which run of this repository measured exactly this adapter file and manifest.
       - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        if: ${{ !inputs.remeasure || steps.decide.outputs.accepted == 'true' }}
         with:
           subject-path: |
             adapter_manifest.json
@@ -255,7 +300,7 @@ jobs:
       # GITHUB_TOKEN start no workflow_run, issue #5), so bench-lora opens the notice itself.
       # Same title as Watch's, whose duplicate check then skips it for runs started by hand.
       - name: Open the rejection notice
-        if: steps.decide.outputs.accepted != 'true'
+        if: steps.decide.outputs.accepted != 'true' && !inputs.remeasure
         run: |
           set -euo pipefail
           title="Adapter rejected: Bench LoRA (run $GITHUB_RUN_ID)"
@@ -264,6 +309,14 @@ jobs:
           reason=$(python -c "import json; print(json.load(open('verdict.json'))['reason'])")
           gh issue create --repo "$GITHUB_REPOSITORY" --title "$title" --body \
             "\`$ADAPTER\` was rejected: $reason. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID. Opened by bench-lora; it stays open as a decision to read."
+
+      - name: Open the remeasurement notice
+        if: steps.decide.outputs.accepted != 'true' && inputs.remeasure
+        run: |
+          set -euo pipefail
+          reason=$(python -c "import json; print(json.load(open('verdict.json'))['reason'])")
+          gh issue create --repo "$GITHUB_REPOSITORY" --title "Remeasure rejected: $ADAPTER (run $GITHUB_RUN_ID)" --body \
+            "\`$ADAPTER\` did not pass today's rule when measured again: $reason. The release is unchanged and stays unsigned. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID. Opened by bench-lora."
 
       - name: Fail when rejected
         if: steps.decide.outputs.accepted != 'true'

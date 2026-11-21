@@ -1,0 +1,654 @@
+{
+ "schema": 1,
+ "contract": {
+  "version": 1,
+  "intents": [
+   "appointments_today",
+   "appointments_tomorrow",
+   "tasks_open",
+   "tasks_overdue",
+   "emails_unread",
+   "daily_agenda",
+   "create_appointment",
+   "create_task",
+   "unknown"
+  ],
+  "grammar": "grammars/slots.gbnf",
+  "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
+  "prompts_sha256": {
+   "compact": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+   "detailed": "478793e00add0c103b293909c39a334cdab658df605446418f99999837b40c9c"
+  }
+ },
+ "states": {
+  "selectable": "accepted, and both the GGUF and adapter_manifest.json verified as signed by bench-lora on main (gh attestation verify, signer workflow and refs/heads/main); may be offered after tools/verify_adapter.py passed on the downloaded files",
+  "accepted_unsigned": "accepted before the signature existed, or not yet verified; never selectable",
+  "candidate": "trained, not decided",
+  "rejected": "decided against",
+  "planned": "listed only, never selectable"
+ },
+ "snapshot_fetched": "2026-11-21T08:40:00Z",
+ "entries": [
+  {
+   "id": "vyvy-1.5b-d3c9d1bc4",
+   "class": "Vyvy AI 4GB",
+   "class_note": "planning limit for memory, not a measurement",
+   "state": "candidate",
+   "selectable": false,
+   "base": {
+    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "gguf": "qwen2.5-1.5b-instruct-q8_0",
+    "gguf_repo": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+    "gguf_revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "files": {
+     "qwen2.5-1.5b-instruct-q8_0.gguf": {
+      "sha256": "d7efb072e7724d25048a4fda0a3e10b04bdef5d06b1403a1c93bd9f1240a63c8",
+      "size": 1894532128
+     }
+    },
+    "origin": "third-party work, used unchanged",
+    "author": "Qwen team, Alibaba Cloud",
+    "licence": "Apache-2.0"
+   },
+   "adapter": {
+    "tag": "vyvy-1.5b-d3c9d1bc4",
+    "file": "vyvy-1.5b-d3c9d1bc4.gguf",
+    "sha256": "a5d4293900b2276e26e5ff6d6cd22061c911478f96a1a93ef81c57d8a05e4869",
+    "size": 73886368,
+    "manifest_sha256": "5d3a7ff8766c83a20a00b2069d0c6527fd5e78aafabb5ce8d380bb1ddda38b81",
+    "lora_scale": 1.0,
+    "origin": "Vyvy AI",
+    "licence": "Apache-2.0",
+    "released": "2026-11-06T22:05:52Z"
+   },
+   "contract": {
+    "version": 1,
+    "prompt": "compact",
+    "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+    "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
+    "grammar_recorded_at_training": false
+   },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   },
+   "measured": {
+    "status": "not measured",
+    "memory_mb": null,
+    "load_s": null,
+    "decision_ms_median": null,
+    "decision_ms_p95": null
+   }
+  },
+  {
+   "id": "vyvy-1.5b-d1e100e8d",
+   "class": "Vyvy AI 4GB",
+   "class_note": "planning limit for memory, not a measurement",
+   "state": "accepted_unsigned",
+   "selectable": false,
+   "base": {
+    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "gguf": "qwen2.5-1.5b-instruct-q8_0",
+    "gguf_repo": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+    "gguf_revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "files": {
+     "qwen2.5-1.5b-instruct-q8_0.gguf": {
+      "sha256": "d7efb072e7724d25048a4fda0a3e10b04bdef5d06b1403a1c93bd9f1240a63c8",
+      "size": 1894532128
+     }
+    },
+    "origin": "third-party work, used unchanged",
+    "author": "Qwen team, Alibaba Cloud",
+    "licence": "Apache-2.0"
+   },
+   "adapter": {
+    "tag": "vyvy-1.5b-d1e100e8d",
+    "file": "vyvy-1.5b-d1e100e8d.gguf",
+    "sha256": "70fadedb5f6132796cbaaf0ddb19f9dbdd77785d3e8b64b6bc0f0cc731a28fc9",
+    "size": 73886368,
+    "manifest_sha256": "d5a8873514a66aba101c83d2ab92f52cef37db1d1b85469334dc76e822f9665a",
+    "lora_scale": 1.0,
+    "origin": "Vyvy AI",
+    "licence": "Apache-2.0",
+    "released": "2026-11-07T08:08:45Z"
+   },
+   "contract": {
+    "version": 1,
+    "prompt": "compact",
+    "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+    "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
+    "grammar_recorded_at_training": false
+   },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   },
+   "measured": {
+    "status": "measured",
+    "memory_mb": null,
+    "load_s": null,
+    "decision_ms_median": 585,
+    "decision_ms_p95": null,
+    "machine": "AMD EPYC 9V74 80-Core Processor",
+    "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/42361864579",
+    "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
+   }
+  },
+  {
+   "id": "vyvy-1.5b-d60e3101c",
+   "class": "Vyvy AI 4GB",
+   "class_note": "planning limit for memory, not a measurement",
+   "state": "rejected",
+   "selectable": false,
+   "base": {
+    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "gguf": "qwen2.5-1.5b-instruct-q8_0",
+    "gguf_repo": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+    "gguf_revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "files": {
+     "qwen2.5-1.5b-instruct-q8_0.gguf": {
+      "sha256": "d7efb072e7724d25048a4fda0a3e10b04bdef5d06b1403a1c93bd9f1240a63c8",
+      "size": 1894532128
+     }
+    },
+    "origin": "third-party work, used unchanged",
+    "author": "Qwen team, Alibaba Cloud",
+    "licence": "Apache-2.0"
+   },
+   "adapter": {
+    "tag": "vyvy-1.5b-d60e3101c",
+    "file": "vyvy-1.5b-d60e3101c.gguf",
+    "sha256": "a7995124310b6af0dba3d9e0d15fe9885e48dba5e289417e8e3390002ffb662c",
+    "size": 147745440,
+    "manifest_sha256": "a48e4543fbc7f2ce5656442fdc524ae0a91f3603af404b2789ff0ae69f385e4a",
+    "lora_scale": 1.0,
+    "origin": "Vyvy AI",
+    "licence": "Apache-2.0",
+    "released": "2026-11-07T16:37:54Z"
+   },
+   "contract": {
+    "version": 1,
+    "prompt": "compact",
+    "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+    "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
+    "grammar_recorded_at_training": false
+   },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   },
+   "measured": {
+    "status": "not measured",
+    "memory_mb": null,
+    "load_s": null,
+    "decision_ms_median": null,
+    "decision_ms_p95": null
+   }
+  },
+  {
+   "id": "vyvy-1.5b-d094ace1b",
+   "class": "Vyvy AI 4GB",
+   "class_note": "planning limit for memory, not a measurement",
+   "state": "rejected",
+   "selectable": false,
+   "base": {
+    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "gguf": "qwen2.5-1.5b-instruct-q8_0",
+    "gguf_repo": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+    "gguf_revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "files": {
+     "qwen2.5-1.5b-instruct-q8_0.gguf": {
+      "sha256": "d7efb072e7724d25048a4fda0a3e10b04bdef5d06b1403a1c93bd9f1240a63c8",
+      "size": 1894532128
+     }
+    },
+    "origin": "third-party work, used unchanged",
+    "author": "Qwen team, Alibaba Cloud",
+    "licence": "Apache-2.0"
+   },
+   "adapter": {
+    "tag": "vyvy-1.5b-d094ace1b",
+    "file": "vyvy-1.5b-d094ace1b.gguf",
+    "sha256": "c27fa2defa94a88a5dae1c3eff539f0039bc74f483fe1c12dbc286b60ef07c71",
+    "size": 73886368,
+    "manifest_sha256": "b2b6e2c049c8eeaa72a31566c533a13917d111a3d458deacb65043d9983ac355",
+    "lora_scale": 1.0,
+    "origin": "Vyvy AI",
+    "licence": "Apache-2.0",
+    "released": "2026-11-07T22:55:03Z"
+   },
+   "contract": {
+    "version": 1,
+    "prompt": "compact",
+    "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+    "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
+    "grammar_recorded_at_training": false
+   },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   },
+   "measured": {
+    "status": "not measured",
+    "memory_mb": null,
+    "load_s": null,
+    "decision_ms_median": null,
+    "decision_ms_p95": null
+   }
+  },
+  {
+   "id": "vyvy-1.5b-d61e3a974",
+   "class": "Vyvy AI 4GB",
+   "class_note": "planning limit for memory, not a measurement",
+   "state": "rejected",
+   "selectable": false,
+   "base": {
+    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "gguf": "qwen2.5-1.5b-instruct-q8_0",
+    "gguf_repo": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+    "gguf_revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "files": {
+     "qwen2.5-1.5b-instruct-q8_0.gguf": {
+      "sha256": "d7efb072e7724d25048a4fda0a3e10b04bdef5d06b1403a1c93bd9f1240a63c8",
+      "size": 1894532128
+     }
+    },
+    "origin": "third-party work, used unchanged",
+    "author": "Qwen team, Alibaba Cloud",
+    "licence": "Apache-2.0"
+   },
+   "adapter": {
+    "tag": "vyvy-1.5b-d61e3a974",
+    "file": "vyvy-1.5b-d61e3a974.gguf",
+    "sha256": "ce86612e8692238bf2e17a6f822c8e2c8a14ec73663a1d0a6b3268b4daf5d81a",
+    "size": 73886368,
+    "manifest_sha256": "639ba4f62954807a9226cddf3238c649b6fde0bbbb64ebb126ff4a35f00b6fa9",
+    "lora_scale": 1.0,
+    "origin": "Vyvy AI",
+    "licence": "Apache-2.0",
+    "released": "2026-11-08T19:24:37Z"
+   },
+   "contract": {
+    "version": 1,
+    "prompt": "compact",
+    "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+    "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
+    "grammar_recorded_at_training": false
+   },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   },
+   "measured": {
+    "status": "not measured",
+    "memory_mb": null,
+    "load_s": null,
+    "decision_ms_median": null,
+    "decision_ms_p95": null
+   }
+  },
+  {
+   "id": "vyvy-1.5b-d5c87bca5",
+   "class": "Vyvy AI 4GB",
+   "class_note": "planning limit for memory, not a measurement",
+   "state": "rejected",
+   "selectable": false,
+   "base": {
+    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "gguf": "qwen2.5-1.5b-instruct-q8_0",
+    "gguf_repo": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+    "gguf_revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "files": {
+     "qwen2.5-1.5b-instruct-q8_0.gguf": {
+      "sha256": "d7efb072e7724d25048a4fda0a3e10b04bdef5d06b1403a1c93bd9f1240a63c8",
+      "size": 1894532128
+     }
+    },
+    "origin": "third-party work, used unchanged",
+    "author": "Qwen team, Alibaba Cloud",
+    "licence": "Apache-2.0"
+   },
+   "adapter": {
+    "tag": "vyvy-1.5b-d5c87bca5",
+    "file": "vyvy-1.5b-d5c87bca5.gguf",
+    "sha256": "cf4c710f9324762b303590c770dbf91dfe5ff9263e3ab9fc7ff58513b01e4540",
+    "size": 73886368,
+    "manifest_sha256": "22f9b280f02389b3024718dbcf5bb6272bf5679c6b66836b7301f2a3f1e979d1",
+    "lora_scale": 1.0,
+    "origin": "Vyvy AI",
+    "licence": "Apache-2.0",
+    "released": "2026-11-09T08:42:46Z"
+   },
+   "contract": {
+    "version": 1,
+    "prompt": "compact",
+    "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+    "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
+    "grammar_recorded_at_training": false
+   },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   },
+   "measured": {
+    "status": "not measured",
+    "memory_mb": null,
+    "load_s": null,
+    "decision_ms_median": null,
+    "decision_ms_p95": null
+   }
+  },
+  {
+   "id": "vyvy-1.5b-d84f55739",
+   "class": "Vyvy AI 4GB",
+   "class_note": "planning limit for memory, not a measurement",
+   "state": "rejected",
+   "selectable": false,
+   "base": {
+    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "gguf": "qwen2.5-1.5b-instruct-q8_0",
+    "gguf_repo": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+    "gguf_revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "files": {
+     "qwen2.5-1.5b-instruct-q8_0.gguf": {
+      "sha256": "d7efb072e7724d25048a4fda0a3e10b04bdef5d06b1403a1c93bd9f1240a63c8",
+      "size": 1894532128
+     }
+    },
+    "origin": "third-party work, used unchanged",
+    "author": "Qwen team, Alibaba Cloud",
+    "licence": "Apache-2.0"
+   },
+   "adapter": {
+    "tag": "vyvy-1.5b-d84f55739",
+    "file": "vyvy-1.5b-d84f55739.gguf",
+    "sha256": "7992e8aca6bc76522bb72aea5bb71d15beaf6d40fcc04752f2517159febf0973",
+    "size": 73886368,
+    "manifest_sha256": "9a0b3ce9dc65398e40d166e62ff0878f3b0edd098e82cedbe20f1c74d1a60d76",
+    "lora_scale": 1.0,
+    "origin": "Vyvy AI",
+    "licence": "Apache-2.0",
+    "released": "2026-11-09T13:45:47Z"
+   },
+   "contract": {
+    "version": 1,
+    "prompt": "compact",
+    "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+    "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
+    "grammar_recorded_at_training": false
+   },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   },
+   "measured": {
+    "status": "not measured",
+    "memory_mb": null,
+    "load_s": null,
+    "decision_ms_median": null,
+    "decision_ms_p95": null
+   }
+  },
+  {
+   "id": "vyvy-1.5b-da8577af3",
+   "class": "Vyvy AI 4GB",
+   "class_note": "planning limit for memory, not a measurement",
+   "state": "rejected",
+   "selectable": false,
+   "base": {
+    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "gguf": "qwen2.5-1.5b-instruct-q8_0",
+    "gguf_repo": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+    "gguf_revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "files": {
+     "qwen2.5-1.5b-instruct-q8_0.gguf": {
+      "sha256": "d7efb072e7724d25048a4fda0a3e10b04bdef5d06b1403a1c93bd9f1240a63c8",
+      "size": 1894532128
+     }
+    },
+    "origin": "third-party work, used unchanged",
+    "author": "Qwen team, Alibaba Cloud",
+    "licence": "Apache-2.0"
+   },
+   "adapter": {
+    "tag": "vyvy-1.5b-da8577af3",
+    "file": "vyvy-1.5b-da8577af3.gguf",
+    "sha256": "fa43240d544d85a1dce4f8c3b967e47c8d57bb0fa8512fe0e3106a394dd2c985",
+    "size": 73886368,
+    "manifest_sha256": "c7e81a46815fbc2046544124692149efb3a561a4f0cd6227d984c8421a878537",
+    "lora_scale": 1.0,
+    "origin": "Vyvy AI",
+    "licence": "Apache-2.0",
+    "released": "2026-11-11T12:49:56Z"
+   },
+   "contract": {
+    "version": 1,
+    "prompt": "compact",
+    "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+    "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
+    "grammar_recorded_at_training": false
+   },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   },
+   "measured": {
+    "status": "not measured",
+    "memory_mb": null,
+    "load_s": null,
+    "decision_ms_median": null,
+    "decision_ms_p95": null
+   }
+  },
+  {
+   "id": "vyvy-1.5b-d37929906",
+   "class": "Vyvy AI 4GB",
+   "class_note": "planning limit for memory, not a measurement",
+   "state": "rejected",
+   "selectable": false,
+   "base": {
+    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "gguf": "qwen2.5-1.5b-instruct-q8_0",
+    "gguf_repo": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+    "gguf_revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "files": {
+     "qwen2.5-1.5b-instruct-q8_0.gguf": {
+      "sha256": "d7efb072e7724d25048a4fda0a3e10b04bdef5d06b1403a1c93bd9f1240a63c8",
+      "size": 1894532128
+     }
+    },
+    "origin": "third-party work, used unchanged",
+    "author": "Qwen team, Alibaba Cloud",
+    "licence": "Apache-2.0"
+   },
+   "adapter": {
+    "tag": "vyvy-1.5b-d37929906",
+    "file": "vyvy-1.5b-d37929906.gguf",
+    "sha256": "9099aca2169c2c93baa2787c52d211a44a8f430e20fa2b6216bfc3b63c2f9e6b",
+    "size": 73886368,
+    "manifest_sha256": "ba2a3bfb56167d6e4f01e65a7163413a87769b43215d36e8d06f49a533942b6c",
+    "lora_scale": 1.0,
+    "origin": "Vyvy AI",
+    "licence": "PolyForm-Noncommercial-1.0.0",
+    "released": "2026-11-20T14:04:08Z"
+   },
+   "contract": {
+    "version": 1,
+    "prompt": "compact",
+    "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+    "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
+    "grammar_recorded_at_training": false
+   },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   },
+   "measured": {
+    "status": "not measured",
+    "memory_mb": null,
+    "load_s": null,
+    "decision_ms_median": null,
+    "decision_ms_p95": null
+   }
+  },
+  {
+   "id": "vyvy-7b-dcc6d83db",
+   "class": "Vyvy AI 8GB",
+   "class_note": "planning limit for memory, not a measurement",
+   "state": "rejected",
+   "selectable": false,
+   "base": {
+    "model": "Qwen/Qwen2.5-7B-Instruct",
+    "revision": "a09a35458c702b33eeacc393d103063234e8bc28",
+    "gguf": "qwen2.5-7b-instruct-q4_k_m",
+    "gguf_repo": "Qwen/Qwen2.5-7B-Instruct-GGUF",
+    "gguf_revision": "bb5d59e06d9551d752d08b292a50eb208b07ab1f",
+    "files": {
+     "qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf": {
+      "sha256": "dfce12e3862a5283ccfb88221b48480e58745165de856439950d0f22590580db",
+      "size": 3993201344
+     },
+     "qwen2.5-7b-instruct-q4_k_m-00002-of-00002.gguf": {
+      "sha256": "539cf93f78e887edea1c04e2d7d8cdaca9d01dae9c9025bcb8accbe29df3d72a",
+      "size": 689872288
+     }
+    },
+    "origin": "third-party work, used unchanged",
+    "author": "Qwen team, Alibaba Cloud",
+    "licence": "Apache-2.0"
+   },
+   "adapter": {
+    "tag": "vyvy-7b-dcc6d83db",
+    "file": "vyvy-7b-dcc6d83db.gguf",
+    "sha256": "3a04d75ed4ea4445c2d55f7793c87c92707b211315e9595e80481fc7cdc19126",
+    "size": 161508000,
+    "manifest_sha256": "f38db02617fea0a4eaf62ab9dc35fac5eae1bd4521bf462a4847ff2ddf6d1c5c",
+    "lora_scale": 1.0,
+    "origin": "Vyvy AI",
+    "licence": "Apache-2.0",
+    "released": "2026-11-07T22:55:03Z"
+   },
+   "contract": {
+    "version": 1,
+    "prompt": "detailed",
+    "prompt_sha256": "478793e00add0c103b293909c39a334cdab658df605446418f99999837b40c9c",
+    "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
+    "grammar_recorded_at_training": false
+   },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   },
+   "measured": {
+    "status": "not measured",
+    "memory_mb": null,
+    "load_s": null,
+    "decision_ms_median": null,
+    "decision_ms_p95": null
+   }
+  },
+  {
+   "id": "vyvy-7b-d89442b39",
+   "class": "Vyvy AI 8GB",
+   "class_note": "planning limit for memory, not a measurement",
+   "state": "rejected",
+   "selectable": false,
+   "base": {
+    "model": "Qwen/Qwen2.5-7B-Instruct",
+    "revision": "a09a35458c702b33eeacc393d103063234e8bc28",
+    "gguf": "qwen2.5-7b-instruct-q4_k_m",
+    "gguf_repo": "Qwen/Qwen2.5-7B-Instruct-GGUF",
+    "gguf_revision": "bb5d59e06d9551d752d08b292a50eb208b07ab1f",
+    "files": {
+     "qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf": {
+      "sha256": "dfce12e3862a5283ccfb88221b48480e58745165de856439950d0f22590580db",
+      "size": 3993201344
+     },
+     "qwen2.5-7b-instruct-q4_k_m-00002-of-00002.gguf": {
+      "sha256": "539cf93f78e887edea1c04e2d7d8cdaca9d01dae9c9025bcb8accbe29df3d72a",
+      "size": 689872288
+     }
+    },
+    "origin": "third-party work, used unchanged",
+    "author": "Qwen team, Alibaba Cloud",
+    "licence": "Apache-2.0"
+   },
+   "adapter": {
+    "tag": "vyvy-7b-d89442b39",
+    "file": "vyvy-7b-d89442b39.gguf",
+    "sha256": "3c2d036fbe0f844412c2fde739c935126eb97932ca1a2dd6ac0b4ec472dc1b20",
+    "size": 161508000,
+    "manifest_sha256": "3d753ea6dd7e18f364c754d1f2759f97a6998ea6296967f8f0107d12ece2a076",
+    "lora_scale": 1.0,
+    "origin": "Vyvy AI",
+    "licence": "PolyForm-Noncommercial-1.0.0",
+    "released": "2026-11-20T17:54:07Z"
+   },
+   "contract": {
+    "version": 1,
+    "prompt": "detailed",
+    "prompt_sha256": "478793e00add0c103b293909c39a334cdab658df605446418f99999837b40c9c",
+    "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
+    "grammar_recorded_at_training": false
+   },
+   "attestation": {
+    "verified_by": "not verified",
+    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+   },
+   "measured": {
+    "status": "not measured",
+    "memory_mb": null,
+    "load_s": null,
+    "decision_ms_median": null,
+    "decision_ms_p95": null
+   }
+  },
+  {
+   "id": "planned-14b",
+   "class": "planned 14B",
+   "class_note": "no files, no adapter, no measurement, no schedule",
+   "state": "planned",
+   "selectable": false,
+   "base": {
+    "model": "Qwen/Qwen2.5-14B-Instruct",
+    "files": null,
+    "origin": "third-party work, used unchanged",
+    "author": "Qwen team, Alibaba Cloud",
+    "licence": "Apache-2.0"
+   },
+   "adapter": null,
+   "contract": null,
+   "measured": {
+    "status": "not measured"
+   }
+  },
+  {
+   "id": "planned-32b",
+   "class": "planned 32B",
+   "class_note": "no files, no adapter, no measurement, no schedule",
+   "state": "planned",
+   "selectable": false,
+   "base": {
+    "model": "Qwen/Qwen2.5-32B-Instruct",
+    "files": null,
+    "origin": "third-party work, used unchanged",
+    "author": "Qwen team, Alibaba Cloud",
+    "licence": "Apache-2.0"
+   },
+   "adapter": null,
+   "contract": null,
+   "measured": {
+    "status": "not measured"
+   }
+  }
+ ]
+}
