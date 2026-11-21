@@ -137,6 +137,9 @@ def platform_measurements(snap: dict, spec: dict, adapter_file: str | None) -> l
             "platform": platform, "machines": sorted({m.get("machine") or "" for m in runs}),
             "threads": sorted({m.get("threads") for m in runs if m.get("threads") is not None}),
             "data": runs[0]["data"], "n": runs[0]["n"], "n_runs": len(runs),
+            # A single value must not read like an average.
+            "basis": (f"median over the newest {RUNS_PER_PLATFORM} runs" if len(runs) >= RUNS_PER_PLATFORM
+                      else f"median over fewer than {RUNS_PER_PLATFORM} runs ({len(runs)})"),
             "runs": [m["run"] for m in runs], "measured_at": [m["measured_at"] for m in runs],
             **{k: _median([m.get(k) for m in runs]) for k in VALUES},
             "spread": {k: [min(v), max(v)] if (v := [m[k] for m in runs if m.get(k) is not None]) else None

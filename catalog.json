@@ -41,6 +41,7 @@
     "data": "data/holdout_blind_v1.json",
     "n": 90,
     "n_runs": 1,
+    "basis": "median over fewer than 3 runs (1)",
     "runs": [
      "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886117409"
     ],
@@ -92,6 +93,7 @@
     "data": "data/holdout_blind_v1.json",
     "n": 90,
     "n_runs": 1,
+    "basis": "median over fewer than 3 runs (1)",
     "runs": [
      "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886140491"
     ],
@@ -145,6 +147,7 @@
     "data": "data/holdout_blind_v1.json",
     "n": 90,
     "n_runs": 1,
+    "basis": "median over fewer than 3 runs (1)",
     "runs": [
      "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886117409"
     ],
@@ -196,6 +199,7 @@
     "data": "data/holdout_blind_v1.json",
     "n": 90,
     "n_runs": 1,
+    "basis": "median over fewer than 3 runs (1)",
     "runs": [
      "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886140491"
     ],
@@ -358,6 +362,7 @@
      "data": "data/holdout_blind_v1.json",
      "n": 90,
      "n_runs": 1,
+     "basis": "median over fewer than 3 runs (1)",
      "runs": [
       "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886117409"
      ],
@@ -409,6 +414,7 @@
      "data": "data/holdout_blind_v1.json",
      "n": 90,
      "n_runs": 1,
+     "basis": "median over fewer than 3 runs (1)",
      "runs": [
       "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886140491"
      ],

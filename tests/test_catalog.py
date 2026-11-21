@@ -170,6 +170,9 @@ def test_platform_numbers_are_the_median_of_the_newest_three_runs():
     snap = {"platform_runs": [run(1, 9999, 100.0), run(2, 2108, None), run(3, 1426, 7434.4), run(4, 1800, 7400.0)]}
     got = build_catalog.platform_measurements(snap, build_catalog.CLASSES[1], None)[0]
     assert got["n_runs"] == 3 and [r[-1] for r in got["runs"]] == ["4", "3", "2"]  # the oldest run is left out
+    assert got["basis"] == "median over the newest 3 runs"
+    one = build_catalog.platform_measurements({"platform_runs": [run(3, 1426, 7434.4)]}, build_catalog.CLASSES[1], None)[0]
+    assert one["basis"] == "median over fewer than 3 runs (1)"
     assert got["decision_ms_median"] == 1800 and got["spread"]["decision_ms_median"] == [1426, 2108]
     assert got["peak_memory_mb"] == 7417.2 and got["spread"]["peak_memory_mb"] == [7400.0, 7434.4]  # null left out
     mac = dict(run(5, 2500, 4575.4), platform="Darwin arm64")
