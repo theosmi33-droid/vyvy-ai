@@ -27,7 +27,7 @@
   "rejected": "decided against",
   "planned": "listed only, never selectable"
  },
- "snapshot_fetched": "2026-11-21T08:40:00Z",
+ "snapshot_fetched": "2026-11-21T08:16:12Z",
  "entries": [
   {
    "id": "vyvy-1.5b-d3c9d1bc4",
@@ -71,7 +71,7 @@
    },
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+    "why": "not checked: the release is not accepted"
    },
    "measured": {
     "status": "not measured",
@@ -123,7 +123,7 @@
    },
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+    "why": "no adapter_manifest.json on the release"
    },
    "measured": {
     "status": "measured",
@@ -178,14 +178,17 @@
    },
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+    "why": "not checked: the release is not accepted"
    },
    "measured": {
-    "status": "not measured",
+    "status": "measured",
     "memory_mb": null,
     "load_s": null,
-    "decision_ms_median": null,
-    "decision_ms_p95": null
+    "decision_ms_median": 589,
+    "decision_ms_p95": null,
+    "machine": "AMD EPYC 9V74 80-Core Processor",
+    "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/42417127972",
+    "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
    }
   },
   {
@@ -230,14 +233,17 @@
    },
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+    "why": "not checked: the release is not accepted"
    },
    "measured": {
-    "status": "not measured",
+    "status": "measured",
     "memory_mb": null,
     "load_s": null,
-    "decision_ms_median": null,
-    "decision_ms_p95": null
+    "decision_ms_median": 639,
+    "decision_ms_p95": null,
+    "machine": "AMD EPYC 7763 64-Core Processor",
+    "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/42447024173",
+    "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
    }
   },
   {
@@ -282,14 +288,17 @@
    },
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+    "why": "not checked: the release is not accepted"
    },
    "measured": {
-    "status": "not measured",
+    "status": "measured",
     "memory_mb": null,
     "load_s": null,
-    "decision_ms_median": null,
-    "decision_ms_p95": null
+    "decision_ms_median": 643,
+    "decision_ms_p95": null,
+    "machine": "AMD EPYC 7763 64-Core Processor",
+    "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/42526865621",
+    "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
    }
   },
   {
@@ -334,14 +343,17 @@
    },
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+    "why": "not checked: the release is not accepted"
    },
    "measured": {
-    "status": "not measured",
+    "status": "measured",
     "memory_mb": null,
     "load_s": null,
-    "decision_ms_median": null,
-    "decision_ms_p95": null
+    "decision_ms_median": 632,
+    "decision_ms_p95": null,
+    "machine": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/42616343618",
+    "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
    }
   },
   {
@@ -386,14 +398,17 @@
    },
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+    "why": "not checked: the release is not accepted"
    },
    "measured": {
-    "status": "not measured",
+    "status": "measured",
     "memory_mb": null,
     "load_s": null,
-    "decision_ms_median": null,
-    "decision_ms_p95": null
+    "decision_ms_median": 718,
+    "decision_ms_p95": null,
+    "machine": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/42656200936",
+    "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
    }
   },
   {
@@ -438,14 +453,17 @@
    },
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+    "why": "not checked: the release is not accepted"
    },
    "measured": {
-    "status": "not measured",
+    "status": "measured",
     "memory_mb": null,
     "load_s": null,
-    "decision_ms_median": null,
-    "decision_ms_p95": null
+    "decision_ms_median": 664,
+    "decision_ms_p95": null,
+    "machine": "AMD EPYC 7763 64-Core Processor",
+    "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/43046797991",
+    "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
    }
   },
   {
@@ -490,14 +508,17 @@
    },
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+    "why": "not checked: the release is not accepted"
    },
    "measured": {
-    "status": "not measured",
+    "status": "measured",
     "memory_mb": null,
     "load_s": null,
-    "decision_ms_median": null,
-    "decision_ms_p95": null
+    "decision_ms_median": 600,
+    "decision_ms_p95": null,
+    "machine": "AMD EPYC 9V74 80-Core Processor",
+    "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44775941499",
+    "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
    }
   },
   {
@@ -546,14 +567,17 @@
    },
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+    "why": "not checked: the release is not accepted"
    },
    "measured": {
-    "status": "not measured",
+    "status": "measured",
     "memory_mb": null,
     "load_s": null,
-    "decision_ms_median": null,
-    "decision_ms_p95": null
+    "decision_ms_median": 2131,
+    "decision_ms_p95": null,
+    "machine": "AMD EPYC 9V74 80-Core Processor",
+    "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/42441236212",
+    "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
    }
   },
   {
@@ -602,14 +626,17 @@
    },
    "attestation": {
     "verified_by": "not verified",
-    "why": "snapshot built without the GitHub CLI; the Catalog workflow verifies"
+    "why": "not checked: the release is not accepted"
    },
    "measured": {
-    "status": "not measured",
+    "status": "measured",
     "memory_mb": null,
     "load_s": null,
-    "decision_ms_median": null,
-    "decision_ms_p95": null
+    "decision_ms_median": 1650,
+    "decision_ms_p95": null,
+    "machine": "AMD EPYC 9V45 96-Core Processor",
+    "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44867036984",
+    "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
    }
   },
   {
