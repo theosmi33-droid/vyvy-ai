@@ -87,6 +87,7 @@ def scheduler(monkeypatch):
     monkeypatch.setattr(collect, "summary", lambda text: None)
     monkeypatch.setattr(collect, "sealed_ready", lambda repo: (True, "passed"))
     monkeypatch.setattr(collect, "colab_busy", lambda repo: False)
+    monkeypatch.setattr(collect, "no_gpu_wait", lambda repo, kid, now=None: "")
     monkeypatch.setattr(plan_train, "plan", lambda base, epochs=4: {**plan_train.PLANS[base], "name": "n"})
     # The loop lock is open here; its own tests are in test_improve_loop.py.
     monkeypatch.setattr(collect.loop_guard, "load_state", lambda: {"mode": "one_round"})
@@ -232,7 +233,7 @@ def test_a_second_failure_of_the_same_plan_holds_the_next_start(monkeypatch):
     kommentar = [a for a in gesehen if a[:3] == ("gh", "issue", "comment")]
     assert kommentar and kommentar[0][3] == "17"
     text = kommentar[0][kommentar[0].index("--body") + 1]
-    assert collect.RETRY_NOTE in text and "after 127 min" in text
+    assert collect.RETRY_NOTE in text and collect.FAILED_AGAIN in text and "after 127 min" in text
     assert not [a for a in gesehen if a[:3] == ("gh", "issue", "create")]
 
 
@@ -256,7 +257,7 @@ def test_colab_plan_waits_for_a_fix_like_collect():
     # The assignment of the GPU is logged and named (21.11.2026: Service Unavailable).
     schritt = text[text.index("- name: Train on a Colab T4"):text.index("- name: Publish the candidate")]
     assert 'new -s "$session" --gpu T4 2>&1 | tee colab.log' in schritt and "tee -a colab.log" in schritt
-    assert "Colab assigned no GPU" in report
+    assert "cause = collect.NO_GPU_NOTE" in report and "collect.report_no_gpu(" in report
     train = text[text.index("- name: Train on a Colab T4"):text.index("- name: Publish the candidate")]
     assert train.index("TRAIN_START") < train.index("colab --auth adc new")
 
@@ -275,3 +276,65 @@ def test_the_plan_reads_but_never_marks_the_retry(monkeypatch):
     monkeypatch.setattr(collect, "run", run)
     assert collect.open_failure("o/r", "colab/1.5b", "n", mark=False) is False
     assert not [a for a in gesehen if a[:3] == ("gh", "issue", "comment")]
+
+
+def _issue_gh(monkeypatch, liste: str, kommentare: str):
+    gesehen: list[tuple] = []
+
+    def run(*args, check=True):
+        gesehen.append(args)
+        if args[:3] == ("gh", "issue", "list"):
+            return liste
+        if args[:3] == ("gh", "issue", "view"):
+            return kommentare
+        return ""
+
+    monkeypatch.setattr(collect, "run", run)
+    monkeypatch.setattr(collect, "summary", lambda text: None)
+    return gesehen
+
+
+def test_the_plan_step_runs_the_retry_collect_just_marked(monkeypatch):
+    """21.11.2026, run 44941015097: Collect's retry note made the Plan step skip that retry."""
+    _issue_gh(monkeypatch, "18\n", collect.RETRY_NOTE + " If it fails again, the run waits for a fix.")
+    assert collect.open_failure("o/r", "colab/1.5b", "n", mark=False) is False
+    _issue_gh(monkeypatch, "18\n", f"{collect.FAILED_AGAIN} x. {collect.RETRY_NOTE}")
+    assert collect.open_failure("o/r", "colab/1.5b", "n", mark=False) is True
+
+
+def test_a_refused_gpu_has_its_own_issue_and_uses_no_retry(monkeypatch):
+    from datetime import datetime, timezone
+    gesehen = _issue_gh(monkeypatch, "", "")
+    collect.report_no_gpu("o/r", "colab/1.5b", datetime(2026, 11, 21, 19, 25, tzinfo=timezone.utc))
+    neu = [a for a in gesehen if a[:3] == ("gh", "issue", "create")]
+    assert neu and neu[0][neu[0].index("--title") + 1] == "Colab assigned no GPU: colab/1.5b"
+    assert "at 2026-11-21T19:25:00Z" in neu[0][neu[0].index("--body") + 1]
+    gesehen = _issue_gh(monkeypatch, "21\n", "")
+    collect.report_no_gpu("o/r", "colab/1.5b")
+    assert [a for a in gesehen if a[:3] == ("gh", "issue", "comment")] and \
+        not [a for a in gesehen if a[:3] == ("gh", "issue", "create")]
+
+
+def test_colab_is_asked_again_after_the_waiting_time(monkeypatch):
+    from datetime import datetime, timezone
+    _issue_gh(monkeypatch, "21\n", "Colab assigned no GPU at 2026-11-21T19:25:00Z; Collect asks again after 6 h.")
+    frueh = collect.no_gpu_wait("o/r", "colab/1.5b", now=datetime(2026, 11, 21, 21, 0, tzinfo=timezone.utc))
+    assert "next try after 22.11. 01:25 UTC" in frueh
+    assert collect.no_gpu_wait("o/r", "colab/1.5b", now=datetime(2026, 11, 22, 1, 30, tzinfo=timezone.utc)) == ""
+    _issue_gh(monkeypatch, "", "")
+    assert collect.no_gpu_wait("o/r", "colab/1.5b") == ""
+
+
+def test_the_scheduler_waits_after_a_refused_gpu(scheduler, monkeypatch):
+    monkeypatch.setattr(plan_train, "trained_release", lambda repo, base: None)
+    monkeypatch.setattr(collect, "no_gpu_wait", lambda repo, kid, now=None: "Colab assigned no GPU at 19:25 UTC")
+    collect.schedule("owner/vyvy-ai", "u")
+    assert scheduler == [f"train.yml base={LARGE}"]  # Kaggle unchanged
+
+
+def test_the_plan_step_also_waits_after_a_refused_gpu():
+    text = (Path(__file__).resolve().parent.parent / ".github" / "workflows" / "train-colab.yml").read_text()
+    plan = text[text.index("Plan (Colab only"):text.index("Holdout lock")]
+    assert "collect.no_gpu_wait(" in plan and plan.index("collect.no_gpu_wait(") < plan.index("tools/sealed_gate.py")
+    publish = text[text.index("- name: Publish the candidate"):text.index("- name: Report a failed run")]
+    assert "collect.close_no_gpu(" in publish

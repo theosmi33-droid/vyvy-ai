@@ -49,6 +49,14 @@ BASES = {
 }
 PATTERN = r"(^|/)(adapter/[^/]+|manifest\.json|sweep\.json)$"
 RETRY_NOTE = "Retried automatically once by Collect."
+#: Written by report_failure when the one retry failed too; only this holds the Plan step
+#: of train-colab.yml (21.11.2026: Collect's own retry note made that step skip the very
+#: retry it had just started).
+FAILED_AGAIN = "Failed again after the automatic retry."
+#: A refused GPU is no training failure: Colab is asked again after this many hours,
+#: without using up the one retry (21.11.2026: Service Unavailable on /tun/m/assign).
+NO_GPU_NOTE = "Colab assigned no GPU"
+NO_GPU_WAIT_HOURS = 6
 
 
 def run(*args: str, check: bool = True) -> str:
@@ -93,7 +101,7 @@ def report_failure(repo: str, kid: str, causes: list[str], tail: list[str], name
             # The same plan failed again: the note makes open_failure hold the next start
             # (21.11.2026: a second Colab run started at once after a dropped connection).
             run("gh", "issue", "comment", number, "--repo", repo, "--body",
-                f"Failed again: {', '.join(causes)}. {RETRY_NOTE} The run waits for a fix.", check=False)
+                f"{FAILED_AGAIN} {', '.join(causes)}. {RETRY_NOTE} The run waits for a fix.", check=False)
         summary(f"{kid}: failure already reported ({title}).")
         return
     body = "\n".join([f"Kernel `{kid}` ended with an error.", "", "Likely cause: " + ", ".join(causes), "",
@@ -323,15 +331,67 @@ def open_failure(repo: str, kid: str, name: str, *, mark: bool = True) -> bool:
     # Only Collect's own notes count: anyone can comment on a public issue.
     comments = run("gh", "issue", "view", number, "--repo", repo, "--json", "comments", "--jq",
                    '.comments[] | select(.author.login == "github-actions" or .author.login == "app/github-actions") | .body', check=False)
+    if not mark:
+        # Read only (the Plan step of train-colab.yml): only a failed retry holds it.
+        # Collect writes its retry note BEFORE it starts the retry; reading that note
+        # here skipped the retry itself (21.11.2026, run 44941015097).
+        return FAILED_AGAIN in comments
     if RETRY_NOTE in comments:
         return True
-    if not mark:
-        # Read only (the Plan step of train-colab.yml): the one retry is recorded by
-        # whoever starts it (Collect) or by report_failure when it fails again.
-        return False
     run("gh", "issue", "comment", number, "--repo", repo, "--body",
         f"{RETRY_NOTE} If it fails again, the run waits for a fix.", check=False)
     return False
+
+
+def no_gpu_title(kid: str) -> str:
+    return f"{NO_GPU_NOTE}: {kid}"
+
+
+def _no_gpu_issue(repo: str, kid: str) -> str:
+    title = no_gpu_title(kid)
+    found = run("gh", "issue", "list", "--repo", repo, "--state", "open", "--search", f'"{title}" in:title',
+                "--json", "number,title", "--jq", f'.[] | select(.title == "{title}") | .number', check=False)
+    return found.strip().splitlines()[0] if found.strip() else ""
+
+
+def report_no_gpu(repo: str, kid: str, when: datetime | None = None) -> None:
+    """Record a refused GPU on its own issue (one per kernel); it is no training failure."""
+    when = when or datetime.now(timezone.utc)
+    stamp = when.strftime("%Y-%m-%dT%H:%M:%SZ")
+    line = f"{NO_GPU_NOTE} at {stamp}; Collect asks again after {NO_GPU_WAIT_HOURS} h."
+    number = _no_gpu_issue(repo, kid)
+    if number:
+        run("gh", "issue", "comment", number, "--repo", repo, "--body", line, check=False)
+    else:
+        run("gh", "issue", "create", "--repo", repo, "--title", no_gpu_title(kid), "--body",
+            line + "\n\nNot a training failure: the free GPU was not assigned. Closed when a run of "
+            "this kernel trains again.")
+    summary(f"{kid}: {line}")
+
+
+def no_gpu_wait(repo: str, kid: str, now: datetime | None = None) -> str:
+    """Why Colab is not asked yet ('' = ask): the last refusal is younger than NO_GPU_WAIT_HOURS."""
+    number = _no_gpu_issue(repo, kid)
+    if not number:
+        return ""
+    stamps = run("gh", "issue", "view", number, "--repo", repo, "--json", "comments,body", "--jq",
+                 '[.body] + [.comments[] | select(.author.login == "github-actions" or '
+                 '.author.login == "app/github-actions") | .body] | .[]', check=False)
+    zeiten = [datetime.fromisoformat(m.replace("Z", "+00:00"))
+              for m in re.findall(rf"{NO_GPU_NOTE} at (\S+?Z)", stamps)]
+    if not zeiten:
+        return ""
+    weiter = max(zeiten) + timedelta(hours=NO_GPU_WAIT_HOURS)
+    now = now or datetime.now(timezone.utc)
+    if now >= weiter:
+        return ""
+    return f"{NO_GPU_NOTE} at {max(zeiten):%H:%M} UTC; next try after {weiter:%d.%m. %H:%M} UTC"
+
+
+def close_no_gpu(repo: str, kid: str, name: str) -> None:
+    if number := _no_gpu_issue(repo, kid):
+        run("gh", "issue", "close", number, "--repo", repo, "--comment",
+            f"Closed: `{name}` trained on this kernel again.", check=False)
 
 
 def close_failures(repo: str, kid: str, name: str) -> None:
@@ -423,6 +483,9 @@ def schedule(repo: str, owner: str) -> None:
             summary(f"Scheduler: {base}: {why}.")
             continue
         kid = f"{owner}/{kaggle_job.kernel_slug(base)}" if where == "kaggle" else f"colab/{p['size']}"
+        if where == "colab" and (warten := no_gpu_wait(repo, kid)):
+            summary(f"Scheduler: {base}: {warten}; no start.")
+            continue
         if where == "colab":
             # An unreadable answer never counts as "nothing runs": the next heartbeat asks again.
             busy = colab_busy(repo)

@@ -90,6 +90,9 @@ jobs:
             # the plan waits for a fix (21.11.2026: a queued run trained again at once).
             echo "SKIP=true" >> "$GITHUB_ENV"
             echo "colab/$size: $name failed and was retried once; waiting for a fix (open issue)." >> "$GITHUB_STEP_SUMMARY"
+          elif KID="colab/$size" python -c "import os, sys; sys.path.insert(0, 'tools'); import collect; w = collect.no_gpu_wait(os.environ['GITHUB_REPOSITORY'], os.environ['KID']); print(w); sys.exit(0 if w else 1)" > no_gpu.txt; then
+            echo "SKIP=true" >> "$GITHUB_ENV"
+            echo "colab/$size: $(cat no_gpu.txt); no start." >> "$GITHUB_STEP_SUMMARY"
           elif ! python tools/sealed_gate.py --repo "$GITHUB_REPOSITORY" --start > sealed_gate.json; then
             # Today's training data has not passed the Sealed check yet (started now if missing).
             echo "SKIP=true" >> "$GITHUB_ENV"
@@ -148,6 +151,7 @@ jobs:
           name = collect.publish(os.environ["GITHUB_REPOSITORY"], Path("out"), os.environ["BASE"], os.environ["GITHUB_SHA"])
           collect.summary(f"{os.environ['KID']}: published candidate `{name}`, bench-lora started." if name
                           else f"{os.environ['KID']}: {os.environ['NAME']} already published.")
+          collect.close_no_gpu(os.environ["GITHUB_REPOSITORY"], os.environ["KID"], os.environ["NAME"])
           EOF
 
       - name: Report a failed run
@@ -171,11 +175,15 @@ jobs:
           if "Connection was lost" in log:
               cause = "Colab connection lost"
           elif "/tun/m/assign" in log or "Service Unavailable" in log:
-              cause = "Colab assigned no GPU"
+              cause = collect.NO_GPU_NOTE
           elif os.environ.get("JOB_STATUS") == "cancelled":
               cause = "Colab run cancelled (job time limit?)"
           else:
               cause = "Colab run failed"
-          collect.report_failure(os.environ["GITHUB_REPOSITORY"], os.environ["KID"], [cause + minutes], tail,
-                                 os.environ.get("NAME") or None)
+          if cause == collect.NO_GPU_NOTE:
+              # Not a training failure: asked again after collect.NO_GPU_WAIT_HOURS, no retry used.
+              collect.report_no_gpu(os.environ["GITHUB_REPOSITORY"], os.environ["KID"])
+          else:
+              collect.report_failure(os.environ["GITHUB_REPOSITORY"], os.environ["KID"], [cause + minutes], tail,
+                                     os.environ.get("NAME") or None)
           EOF
