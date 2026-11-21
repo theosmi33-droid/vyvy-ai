@@ -72,3 +72,10 @@ def test_every_training_entry_passes_the_gate():
     assert "sealed_ready(repo)" in (ROOT / "tools" / "collect.py").read_text(encoding="utf-8")
     check = (ROOT / ".github" / "workflows" / "sealed-check.yml").read_text(encoding="utf-8")
     assert "sealed-check-${{ env.DATA }}" in check and "if: always()" in check
+
+
+def test_the_check_hands_back_to_collect():
+    # 21.11.2026: after the check the chain had ended; training waited for the next heartbeat.
+    text = (ROOT / ".github" / "workflows" / "sealed-check.yml").read_text(encoding="utf-8")
+    assert "gh workflow run collect.yml" in text and "actions: write" in text
+    assert text.index("Start Collect again") > text.index("upload-artifact")
