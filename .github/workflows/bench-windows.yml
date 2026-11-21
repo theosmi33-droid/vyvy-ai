@@ -56,6 +56,9 @@ jobs:
           pip install wheels/llama_cpp_python-0.3.16-*.whl
           pip install -r requirements.txt
           python -c "import llama_cpp; print(llama_cpp.llama_print_system_info().decode())"
+          # Peak memory must be readable here; a null would leave the catalog without the number
+          # an installer needs (run 44884073192 had null in all three runs).
+          python -c "import sys; sys.path.insert(0, 'runner'); import bench; v = bench.peak_memory_mb(); print('peak memory now', v, 'MB'); sys.exit(0 if v else 1)"
 
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:

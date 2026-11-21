@@ -545,8 +545,14 @@ def peak_memory_mb() -> float | None:
 
             c = Counters()
             c.cb = ctypes.sizeof(Counters)
-            handle = ctypes.windll.kernel32.GetCurrentProcess()
-            if not ctypes.windll.psapi.GetProcessMemoryInfo(handle, ctypes.byref(c), c.cb):
+            kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+            # Without restype/argtypes ctypes passes the pseudo-handle as a 32-bit int and the call fails
+            # on 64-bit Windows (Bench Windows 44884073192: peak null in all three runs).
+            kernel32.GetCurrentProcess.restype = wintypes.HANDLE
+            info = getattr(kernel32, "K32GetProcessMemoryInfo", None) or ctypes.WinDLL("psapi").GetProcessMemoryInfo
+            info.argtypes = [wintypes.HANDLE, ctypes.POINTER(Counters), wintypes.DWORD]
+            info.restype = wintypes.BOOL
+            if not info(kernel32.GetCurrentProcess(), ctypes.byref(c), c.cb):
                 return None
             return round(c.PeakWorkingSetSize / 2**20, 1)
         import resource
