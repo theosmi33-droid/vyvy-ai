@@ -36,6 +36,21 @@ def test_colab_script_is_the_kaggle_entry_for_one_gpu(tmp_path):
     compile(text, "colab_train.py", "exec")
 
 
+def test_colab_training_stops_at_its_budget(tmp_path):
+    """21.11.2026: the budget only kept a second config from starting; one config ran past the
+    Colab session and the job limit once the data had doubled."""
+    text = _script(tmp_path, budget=100)
+    assert 'STOP = "100"' in text and 'BUDGET = "100"' in text
+
+
+def test_the_1_5b_plan_fits_the_colab_job():
+    budget = plan_train.PLANS[SMALL]["budget"]
+    assert budget <= kaggle_job.COLAB_BUDGET_MAX
+    text = (Path(__file__).resolve().parent.parent / ".github" / "workflows" / "train-colab.yml").read_text()
+    limit = int(text.split("timeout-minutes:", 1)[1].split()[0])
+    assert budget + 60 <= limit, "setup, export and GGUF conversion need about an hour besides training"
+
+
 @pytest.mark.parametrize("budget", [0, kaggle_job.COLAB_BUDGET_MAX + 1])
 def test_colab_budget_stays_inside_a_free_session(tmp_path, budget):
     with pytest.raises(SystemExit):

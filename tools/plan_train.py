@@ -28,10 +28,11 @@ import bench  # noqa: E402
 #
 # "where" decides the GPU: 1.5B runs on one free Colab T4 (train-colab.yml), so
 # the weekly Kaggle quota stays with 7B and the teacher synthesis. On Colab it
-# trains one config only — rank 16, lr 2e-4 won every 1.5B sweep so far — within
-# 60 minutes, because a free Colab session is not held for long.
+# trains one config only — rank 16, lr 2e-4 won every 1.5B sweep so far — and stops
+# after 100 minutes (--stop-after, best checkpoint kept): a free Colab session dropped
+# the connection after about two hours on 21.11.2026, and setup takes about 20 minutes.
 PLANS = {
-    "Qwen/Qwen2.5-1.5B-Instruct": {"size": "1.5b", "budget": 60, "sweep": "rank=16;lr=2e-4",
+    "Qwen/Qwen2.5-1.5B-Instruct": {"size": "1.5b", "budget": 100, "sweep": "rank=16;lr=2e-4",
                                    "batch": 8, "grad_accum": 2, "gpus": 1, "gpus_after_7b": False,
                                    "where": "colab"},
     # 7B: one config, at most two epochs. On 16.11. the first of six configs needed about

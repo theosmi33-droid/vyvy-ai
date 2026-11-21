@@ -232,7 +232,11 @@ def write_colab_job(path: Path, repo: str, commit: str, base: str, name: str, ep
     _check_run(repo, commit, base, name, epochs, sweep, batch, accum)
     if not 0 < budget <= COLAB_BUDGET_MAX:
         raise SystemExit(f"budget must be between 1 and {COLAB_BUDGET_MAX} minutes on Colab")
-    script = _entry(repo, commit, base, name, epochs, sweep, budget, batch, accum, 1, 0)
+    # Training stops at the budget even inside the one config (train_lora.py --stop-after),
+    # as on Kaggle. Without it the budget only kept a SECOND config from starting: on
+    # 21.11.2026 the data had doubled (14 121 lines, 7 270 on 11.11.) and one config ran
+    # past the Colab session (connection lost after ~2 h) and the 200-minute job limit.
+    script = _entry(repo, commit, base, name, epochs, sweep, budget, batch, accum, 1, 0, stop=budget)
     script = script.replace('OUT = "/kaggle/working"', f'OUT = "{COLAB_OUT}"')
     script += f'sh("tar", "-czf", "{COLAB_ARCHIVE}", "-C", OUT, ".")\n'
     path.write_text(script, encoding="utf-8")

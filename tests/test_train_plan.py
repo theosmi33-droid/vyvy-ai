@@ -30,8 +30,10 @@ def test_7b_trains_one_config_for_at_most_two_epochs():
 
 
 def test_1_5b_plan_is_unchanged():
+    # 21.11.2026: budget 60 -> 100 and now enforced inside the config (--stop-after), see
+    # test_colab_training_stops_at_its_budget; sweep and epochs stay.
     p = plan_train.plan(SMALL)
-    assert p["epochs"] == 4 and p["sweep"] == "rank=16;lr=2e-4" and p["budget"] == 60
+    assert p["epochs"] == 4 and p["sweep"] == "rank=16;lr=2e-4" and p["budget"] == 100
 
 
 def test_the_name_follows_the_capped_epochs():
@@ -52,10 +54,11 @@ def test_without_a_budget_the_kernel_sets_no_stop(tmp_path):
     assert 'STOP = "0"' in (tmp_path / "train.py").read_text(encoding="utf-8")
 
 
-def test_colab_keeps_its_own_timeout(tmp_path):
+def test_colab_stops_at_its_budget_too(tmp_path):
+    # Until 21.11.2026 Colab had no stop time (STOP = "0"): one config ran past the session.
     text = kaggle_job.write_colab_job(tmp_path / "colab_train.py", "owner/vyvy-ai", SHA, SMALL, "vyvy-1.5b-dabc",
                                       4, sweep="rank=16;lr=2e-4", budget=60).read_text(encoding="utf-8")
-    assert 'STOP = "0"' in text
+    assert 'STOP = "60"' in text
 
 
 def test_the_stop_time_ends_training_with_a_last_evaluation_and_checkpoint():
