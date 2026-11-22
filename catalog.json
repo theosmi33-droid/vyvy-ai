@@ -27,7 +27,7 @@
   "rejected": "decided against",
   "planned": "listed only, never selectable"
  },
- "snapshot_fetched": "2026-11-21T08:52:36Z",
+ "snapshot_fetched": "2026-11-22T17:19:35Z",
  "base_measurements": {
   "Vyvy AI 4GB": [
    {
@@ -40,19 +40,23 @@
     ],
     "data": "data/holdout_blind_v1.json",
     "n": 90,
-    "n_runs": 1,
-    "basis": "median over fewer than 3 runs (1)",
+    "n_runs": 3,
+    "basis": "median over the newest 3 runs",
     "runs": [
-     "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886117409"
+     "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886117409",
+     "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44884073229",
+     "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44883593614"
     ],
     "measured_at": [
-     "2026-11-21T08:42:18Z"
+     "2026-11-21T08:42:18Z",
+     "2026-11-21T08:16:08Z",
+     "2026-11-21T08:10:10Z"
     ],
     "intent_correct": 77,
-    "decision_ms_median": 540,
-    "decision_ms_p95": 2223,
+    "decision_ms_median": 564,
+    "decision_ms_p95": 2025,
     "load_s": 11.43,
-    "first_decision_s": 14.03,
+    "first_decision_s": 18.01,
     "peak_memory_mb": 2050.4,
     "spread": {
      "intent_correct": [
@@ -61,23 +65,23 @@
      ],
      "decision_ms_median": [
       540,
-      540
+      1163
      ],
      "decision_ms_p95": [
-      2223,
+      1079,
       2223
      ],
      "load_s": [
-      11.43,
-      11.43
+      11.21,
+      15.18
      ],
      "first_decision_s": [
       14.03,
-      14.03
+      18.88
      ],
      "peak_memory_mb": [
-      2050.4,
-      2050.4
+      2037.7,
+      2053.6
      ]
     },
     "peak_memory_note": "peak during the measurement, whole process (model, adapter, context, runtime and Python); maximum resident set; memory on the graphics side (Metal) is not included - not comparable across platforms"
@@ -85,6 +89,7 @@
    {
     "platform": "Windows AMD64",
     "machines": [
+     "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD",
      "AMD64 Family 26 Model 2 Stepping 1, AuthenticAMD"
     ],
     "threads": [
@@ -92,19 +97,21 @@
     ],
     "data": "data/holdout_blind_v1.json",
     "n": 90,
-    "n_runs": 1,
-    "basis": "median over fewer than 3 runs (1)",
+    "n_runs": 2,
+    "basis": "median over fewer than 3 runs (2)",
     "runs": [
-     "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886140491"
+     "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886140491",
+     "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44884073192"
     ],
     "measured_at": [
-     "2026-11-21T08:42:39Z"
+     "2026-11-21T08:42:39Z",
+     "2026-11-21T08:16:08Z"
     ],
-    "intent_correct": 77,
-    "decision_ms_median": 432,
-    "decision_ms_p95": 566,
-    "load_s": 0.41,
-    "first_decision_s": 4.32,
+    "intent_correct": 77.0,
+    "decision_ms_median": 507.0,
+    "decision_ms_p95": 676.0,
+    "load_s": 0.48,
+    "first_decision_s": 5.25,
     "peak_memory_mb": 1733.6,
     "spread": {
      "intent_correct": [
@@ -113,19 +120,19 @@
      ],
      "decision_ms_median": [
       432,
-      432
+      582
      ],
      "decision_ms_p95": [
       566,
-      566
+      786
      ],
      "load_s": [
       0.41,
-      0.41
+      0.55
      ],
      "first_decision_s": [
       4.32,
-      4.32
+      6.18
      ],
      "peak_memory_mb": [
       1733.6,
@@ -146,43 +153,47 @@
     ],
     "data": "data/holdout_blind_v1.json",
     "n": 90,
-    "n_runs": 1,
-    "basis": "median over fewer than 3 runs (1)",
+    "n_runs": 3,
+    "basis": "median over the newest 3 runs",
     "runs": [
-     "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886117409"
+     "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886117409",
+     "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44884073229",
+     "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44883593614"
     ],
     "measured_at": [
-     "2026-11-21T08:42:18Z"
+     "2026-11-21T08:42:18Z",
+     "2026-11-21T08:16:08Z",
+     "2026-11-21T08:10:10Z"
     ],
     "intent_correct": 84,
     "decision_ms_median": 2528,
     "decision_ms_p95": 4877,
     "load_s": 7.56,
     "first_decision_s": 33.41,
-    "peak_memory_mb": 4575.4,
+    "peak_memory_mb": 4574.8,
     "spread": {
      "intent_correct": [
       84,
       84
      ],
      "decision_ms_median": [
-      2528,
-      2528
+      2306,
+      3677
      ],
      "decision_ms_p95": [
-      4877,
-      4877
+      4205,
+      10330
      ],
      "load_s": [
-      7.56,
-      7.56
+      4.43,
+      8.98
      ],
      "first_decision_s": [
-      33.41,
-      33.41
+      25.4,
+      55.43
      ],
      "peak_memory_mb": [
-      4575.4,
+      4541.2,
       4575.4
      ]
     },
@@ -191,6 +202,7 @@
    {
     "platform": "Windows AMD64",
     "machines": [
+     "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD",
      "AMD64 Family 26 Model 2 Stepping 1, AuthenticAMD"
     ],
     "threads": [
@@ -198,19 +210,21 @@
     ],
     "data": "data/holdout_blind_v1.json",
     "n": 90,
-    "n_runs": 1,
-    "basis": "median over fewer than 3 runs (1)",
+    "n_runs": 2,
+    "basis": "median over fewer than 3 runs (2)",
     "runs": [
-     "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886140491"
+     "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886140491",
+     "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44884073192"
     ],
     "measured_at": [
-     "2026-11-21T08:42:39Z"
+     "2026-11-21T08:42:39Z",
+     "2026-11-21T08:16:08Z"
     ],
-    "intent_correct": 84,
-    "decision_ms_median": 1426,
-    "decision_ms_p95": 1855,
-    "load_s": 2.17,
-    "first_decision_s": 22.34,
+    "intent_correct": 84.0,
+    "decision_ms_median": 1767.0,
+    "decision_ms_p95": 2476.0,
+    "load_s": 2.42,
+    "first_decision_s": 27.11,
     "peak_memory_mb": 7434.4,
     "spread": {
      "intent_correct": [
@@ -219,19 +233,19 @@
      ],
      "decision_ms_median": [
       1426,
-      1426
+      2108
      ],
      "decision_ms_p95": [
       1855,
-      1855
+      3097
      ],
      "load_s": [
       2.17,
-      2.17
+      2.66
      ],
      "first_decision_s": [
       22.34,
-      22.34
+      31.88
      ],
      "peak_memory_mb": [
       7434.4,
@@ -361,44 +375,48 @@
      ],
      "data": "data/holdout_blind_v1.json",
      "n": 90,
-     "n_runs": 1,
-     "basis": "median over fewer than 3 runs (1)",
+     "n_runs": 3,
+     "basis": "median over the newest 3 runs",
      "runs": [
-      "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886117409"
+      "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886117409",
+      "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44884073229",
+      "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44883593614"
      ],
      "measured_at": [
-      "2026-11-21T08:42:18Z"
+      "2026-11-21T08:42:18Z",
+      "2026-11-21T08:16:08Z",
+      "2026-11-21T08:10:10Z"
      ],
      "intent_correct": 81,
      "decision_ms_median": 542,
      "decision_ms_p95": 1384,
      "load_s": 5.87,
      "first_decision_s": 8.16,
-     "peak_memory_mb": 1864.9,
+     "peak_memory_mb": 1865.8,
      "spread": {
       "intent_correct": [
        81,
        81
       ],
       "decision_ms_median": [
-       542,
-       542
+       540,
+       1228
       ],
       "decision_ms_p95": [
-       1384,
-       1384
+       1172,
+       2758
       ],
       "load_s": [
-       5.87,
-       5.87
+       4.73,
+       7.69
       ],
       "first_decision_s": [
-       8.16,
-       8.16
+       6.88,
+       17.47
       ],
       "peak_memory_mb": [
        1864.9,
-       1864.9
+       1870.5
       ]
      },
      "peak_memory_note": "peak during the measurement, whole process (model, adapter, context, runtime and Python); maximum resident set; memory on the graphics side (Metal) is not included - not comparable across platforms"
@@ -406,6 +424,7 @@
     {
      "platform": "Windows AMD64",
      "machines": [
+      "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD",
       "AMD64 Family 26 Model 2 Stepping 1, AuthenticAMD"
      ],
      "threads": [
@@ -413,19 +432,21 @@
      ],
      "data": "data/holdout_blind_v1.json",
      "n": 90,
-     "n_runs": 1,
-     "basis": "median over fewer than 3 runs (1)",
+     "n_runs": 2,
+     "basis": "median over fewer than 3 runs (2)",
      "runs": [
-      "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886140491"
+      "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44886140491",
+      "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44884073192"
      ],
      "measured_at": [
-      "2026-11-21T08:42:39Z"
+      "2026-11-21T08:42:39Z",
+      "2026-11-21T08:16:08Z"
      ],
-     "intent_correct": 81,
-     "decision_ms_median": 433,
-     "decision_ms_p95": 594,
-     "load_s": 0.7,
-     "first_decision_s": 4.65,
+     "intent_correct": 81.0,
+     "decision_ms_median": 517.5,
+     "decision_ms_p95": 711.5,
+     "load_s": 0.75,
+     "first_decision_s": 5.55,
      "peak_memory_mb": 2036.8,
      "spread": {
       "intent_correct": [
@@ -434,19 +455,19 @@
       ],
       "decision_ms_median": [
        433,
-       433
+       602
       ],
       "decision_ms_p95": [
        594,
-       594
+       829
       ],
       "load_s": [
        0.7,
-       0.7
+       0.8
       ],
       "first_decision_s": [
        4.65,
-       4.65
+       6.46
       ],
       "peak_memory_mb": [
        2036.8,
@@ -965,6 +986,67 @@
     "decision_ms_p95": null,
     "machine": "AMD EPYC 9V45 96-Core Processor",
     "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44867036984",
+    "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
+   },
+   "measured_on_platforms": []
+  },
+  {
+   "id": "vyvy-7b-d8c7e19e3",
+   "class": "Vyvy AI 8GB",
+   "class_note": "planning limit for memory, not a measurement",
+   "state": "selectable",
+   "selectable": true,
+   "base": {
+    "model": "Qwen/Qwen2.5-7B-Instruct",
+    "revision": "a09a35458c702b33eeacc393d103063234e8bc28",
+    "gguf": "qwen2.5-7b-instruct-q4_k_m",
+    "gguf_repo": "Qwen/Qwen2.5-7B-Instruct-GGUF",
+    "gguf_revision": "bb5d59e06d9551d752d08b292a50eb208b07ab1f",
+    "files": {
+     "qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf": {
+      "sha256": "dfce12e3862a5283ccfb88221b48480e58745165de856439950d0f22590580db",
+      "size": 3993201344
+     },
+     "qwen2.5-7b-instruct-q4_k_m-00002-of-00002.gguf": {
+      "sha256": "539cf93f78e887edea1c04e2d7d8cdaca9d01dae9c9025bcb8accbe29df3d72a",
+      "size": 689872288
+     }
+    },
+    "origin": "third-party work, used unchanged",
+    "author": "Qwen team, Alibaba Cloud",
+    "licence": "Apache-2.0"
+   },
+   "adapter": {
+    "tag": "vyvy-7b-d8c7e19e3",
+    "file": "vyvy-7b-d8c7e19e3.gguf",
+    "sha256": "47bc51c86905074643900aee55cb233b682ded52cf09345bf8881bc857fcfabc",
+    "size": 161508000,
+    "manifest_sha256": "8911fb22a1ee8ed880122a2fa06f3f104b40ea898efebc4eba215f1ceb059dff",
+    "lora_scale": 1.0,
+    "origin": "Vyvy AI",
+    "licence": "PolyForm-Noncommercial-1.0.0",
+    "released": "2026-11-21T19:30:42Z"
+   },
+   "contract": {
+    "version": 1,
+    "prompt": "detailed",
+    "prompt_sha256": "478793e00add0c103b293909c39a334cdab658df605446418f99999837b40c9c",
+    "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
+    "grammar_recorded_at_training": false
+   },
+   "attestation": {
+    "verified_by": "gh attestation verify --signer-workflow theosmi33-droid/vyvy-ai/.github/workflows/bench-lora.yml --source-ref refs/heads/main (tools/verify_adapter.gh_attestation), for the GGUF and adapter_manifest.json",
+    "gguf": "",
+    "adapter_manifest": ""
+   },
+   "measured": {
+    "status": "measured",
+    "memory_mb": null,
+    "load_s": null,
+    "decision_ms_median": 2712,
+    "decision_ms_p95": null,
+    "machine": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "run": "https://github.com/theosmi33-droid/vyvy-ai/actions/runs/44967743000",
     "note": "decision time on the blind holdout, GitHub CPU runner; memory, load time and p95 not measured"
    },
    "measured_on_platforms": []
