@@ -31,6 +31,7 @@ permissions:
   issues: write        # holdout rotation notice
   id-token: write      # sign adapter_manifest.json (build provenance)
   attestations: write
+  actions: write       # start Catalog after runs the pipeline started itself
 
 concurrency:
   group: bench-lora-${{ inputs.adapter }}
@@ -219,9 +220,11 @@ jobs:
           [ "$code" -le 1 ] || exit "$code"
           echo "accepted=$([ "$code" -eq 0 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
           if python -c "import json,sys; sys.exit(0 if json.load(open('verdict.json'))['rotation_due'] else 1)"; then
-            title="Holdout rotation due (blind v3 used for $((decisions + 1)) decisions)"
-            if ! gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "Holdout rotation due in:title" \
-                 --json title --jq '.[].title' | grep -q "Holdout rotation due"; then
+            # Only a notice for this holdout counts: the open one for v2 (#8) kept v3 from getting its own.
+            prefix="Holdout rotation due (blind v3 "
+            title="${prefix}used for $((decisions + 1)) decisions)"
+            if ! gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "\"$prefix\" in:title" \
+                 --json title --jq '.[].title' | grep -qF "$prefix"; then
               gh issue create --repo "$GITHUB_REPOSITORY" --title "$title" --body \
                 "Blind holdout v3 has decided $((decisions + 1)) adapters. Replace it: v4 (shadow) becomes the active set, a newly written blind set becomes the shadow, and v3 may go into the training data. Opened by bench-lora."
             fi
@@ -317,6 +320,14 @@ jobs:
           reason=$(python -c "import json; print(json.load(open('verdict.json'))['reason'])")
           gh issue create --repo "$GITHUB_REPOSITORY" --title "Remeasure rejected: $ADAPTER (run $GITHUB_RUN_ID)" --body \
             "\`$ADAPTER\` did not pass today's rule when measured again: $reason. The release is unchanged and stays unsigned. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID. Opened by bench-lora."
+
+      # Catalog follows Bench LoRA through workflow_run, which GitHub does not fire for a run
+      # started with GITHUB_TOKEN (Collect, Train; issue #5): vyvy-7b-d8c7e19e3 was accepted on
+      # 22.11.2026 and never reached catalog.json. A dispatch it does keep. A run started by hand
+      # still reaches Catalog through workflow_run, so it is not started twice.
+      - name: Refresh the catalog
+        if: ${{ !cancelled() && github.actor == 'github-actions[bot]' }}
+        run: gh workflow run catalog.yml --repo "$GITHUB_REPOSITORY" --ref main
 
       - name: Fail when rejected
         if: steps.decide.outputs.accepted != 'true'

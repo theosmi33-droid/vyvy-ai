@@ -22,7 +22,9 @@ WORKFLOW = (ROOT / ".github" / "workflows" / "bench-lora.yml").read_text(encodin
 # comment and if: lines; only an "if" that keeps them off the remeasure path was added.
 UNCHANGED = {
     "Fetch the adapter again (signed with the manifest)": "6eaae8c0f269c6488e2e7319951948f6ee90176c275c9fa01109597ca4045d7e",
-    "Decide": "1b1f0b35148b8bdb0c6301ed4be21c9658a85326b6078ece68a1e2a5776f7a27",
+    # 22.11.2026: only the duplicate check of the rotation notice changed (one per holdout version,
+    # tests/test_bench_lora_notices.py); the decision itself is the same.
+    "Decide": "c6feffa74434dea50989764716b9b736d2b21913abdb1540e3abb3f9a80992bf",
     "Mark the release": "81799e0e15a3b0d9e15db9974332c4416662301960d20ffacaf3437983b17130",
     "actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2":
         "f08f843825b54565145af5c1d0f5acc1f3efcd4b074a38e61a66d61258c8f973",
