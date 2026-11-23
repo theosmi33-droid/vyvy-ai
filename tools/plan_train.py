@@ -59,12 +59,18 @@ def grid_size(sweep: str) -> int:
     return n
 
 
+def train_files() -> list[Path]:
+    """What training reads: the lines and the contract 2 relabelling of the contract 1 lines."""
+    folder = ROOT / "data" / "train"
+    return sorted(folder.glob("*.jsonl")) + [f for f in [folder / "relabel_v2.json"] if f.exists()]
+
+
 def plan(base: str, epochs: float = 4) -> dict:
     if base not in PLANS:
         raise SystemExit(f"unknown base model: {base}")
     p = dict(PLANS[base], base=base, epochs=min(epochs, PLANS[base].get("max_epochs", epochs)))
     h = hashlib.sha256()
-    for f in sorted((ROOT / "data" / "train").glob("*.jsonl")):
+    for f in train_files():
         h.update(f.read_bytes())
     h.update(bench.PROMPTS[bench.prompt_for(base)].encode("utf-8"))
     h.update((ROOT / "training" / "train_lora.py").read_bytes())
@@ -75,8 +81,7 @@ def plan(base: str, epochs: float = 4) -> dict:
 
 def inputs(base: str) -> tuple[dict, str]:
     """What decides whether a base model needs training: training files and prompt."""
-    files = {f.name: hashlib.sha256(f.read_bytes()).hexdigest()
-             for f in sorted((ROOT / "data" / "train").glob("*.jsonl"))}
+    files = {f.name: hashlib.sha256(f.read_bytes()).hexdigest() for f in train_files()}
     prompt = hashlib.sha256(bench.PROMPTS[bench.prompt_for(base)].encode("utf-8")).hexdigest()
     return files, prompt
 

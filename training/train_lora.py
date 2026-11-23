@@ -36,19 +36,22 @@ sys.path.insert(0, str(ROOT / "tools"))
 
 import bench  # noqa: E402  (same prompt and contract as the benchmark)
 import check_holdout_leak  # noqa: E402
+import relabel_v2  # noqa: E402  (contract 1 lines as contract 2 reads them)
 
 from convert_adapter import LLAMA_CPP_COMMIT  # noqa: E402
 TARGET_CONFIDENCE = 0.9
 LORA_TARGETS = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
 
 
-def load_rows(paths: list[Path], intents: tuple[str, ...]) -> list[dict]:
+def load_rows(paths: list[Path], intents: tuple[str, ...], overlay: dict | None = None) -> list[dict]:
+    """Training lines with their answers; contract 1 lines relabelled by data/train/relabel_v2.json."""
+    overlay = relabel_v2.load() if overlay is None else overlay
     rows = []
     for path in paths:
         for no, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
             if not line.strip():
                 continue
-            r = json.loads(line)
+            r = relabel_v2.apply(overlay, path.name, no, json.loads(line))
             # The answer in the fields of the current contract; a slot the line does not carry is null.
             answer = bench.answer_json(r.get("intent"), TARGET_CONFIDENCE, bench.FIELDS,
                                        **{f: r.get(f) for f in bench.FIELDS if f not in ("intent", "confidence")})
@@ -468,7 +471,7 @@ def main(argv: list[str] | None = None) -> int:
         "name": args.name, "base": args.base, "base_revision": revision, "adapter_dir": adapter_dir.name,
         "adapter_files": {f.name: sha256(f) for f in sorted(adapter_dir.iterdir()) if f.is_file()},
         "llama_cpp_commit": LLAMA_CPP_COMMIT, "training_git_commit": os.environ.get("VYVY_COMMIT"),
-        "train_files": {x.name: sha256(x) for x in paths},
+        "train_files": {x.name: sha256(x) for x in [*paths, *([relabel_v2.OUT] if relabel_v2.OUT.exists() else [])]},
         "train_sentences": len(rows), "prompt": prompt_name, "base_weights": quant,
         # The output contract the adapter was trained for; the catalog and the application
         # load it only with exactly this grammar.

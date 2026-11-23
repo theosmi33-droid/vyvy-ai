@@ -4,9 +4,9 @@ name: Data check
 # compares characters and words; the semantic check lists paraphrases.
 on:
   push:
-    paths: ["data/**", "training/synthesize.py", "training/patterns.py", "tools/check_holdout_leak.py", "tools/check_semantic_leak.py", "tools/semantic-requirements.txt", "tools/import_partner.py"]
+    paths: ["data/**", "training/synthesize.py", "training/patterns.py", "tools/check_holdout_leak.py", "tools/check_semantic_leak.py", "tools/semantic-requirements.txt", "tools/import_partner.py", "tools/relabel_v2.py"]
   pull_request:
-    paths: ["data/**", "training/synthesize.py", "training/patterns.py", "tools/check_holdout_leak.py", "tools/check_semantic_leak.py", "tools/semantic-requirements.txt", "tools/import_partner.py"]
+    paths: ["data/**", "training/synthesize.py", "training/patterns.py", "tools/check_holdout_leak.py", "tools/check_semantic_leak.py", "tools/semantic-requirements.txt", "tools/import_partner.py", "tools/relabel_v2.py"]
   workflow_dispatch:
     inputs:
       report:
@@ -32,6 +32,8 @@ jobs:
         run: python tools/check_holdout_leak.py
       - name: No personal data in partner files
         run: python tools/import_partner.py --check
+      - name: Contract 2 relabelling matches the rules and the data
+        run: python tools/relabel_v2.py --check
       - name: Semantic check (paraphrases of holdout sentences)
         if: always()
         env:

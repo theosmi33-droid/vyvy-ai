@@ -1,0 +1,4559 @@
+{
+ "schema": 1,
+ "about": "contract 1 training lines relabelled for contract 2 by tools/relabel_v2.py; applied by training/train_lora.py; the files in data/train/ stay as committed",
+ "rules_sha256": "d7c74c14f0812317a17ce4c0e5871acd5264034f2fd8e93767ac54bc835007ab",
+ "counts": {
+  "unknown_lines_seen": 4804,
+  "moved": 471,
+  "per_rule": {
+   "appointments_today->daily_agenda": 199,
+   "unknown->complete_task": 19,
+   "unknown->create_goal": 3,
+   "unknown->create_project": 5,
+   "unknown->delete_task": 14,
+   "unknown->draft_reply": 24,
+   "unknown->help_lookup": 15,
+   "unknown->start_timer": 4,
+   "unknown->stop_timer": 8,
+   "unknown->web_search": 172,
+   "unknown->write_email": 8
+  },
+  "per_file": {
+   "vyvy_create_boundary_v1.jsonl": 13,
+   "vyvy_partner_af84f746d.jsonl": 109,
+   "vyvy_retired_blind_v2.jsonl": 3,
+   "vyvy_synth_01ba17a81_2026-11-07-b.jsonl": 84,
+   "vyvy_synth_01ba17a81_2026-11-14.jsonl": 75,
+   "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl": 65,
+   "vyvy_synth_2e53bbfc8_real-01.jsonl": 7,
+   "vyvy_synth_2e53bbfc8_test-04.jsonl": 3,
+   "vyvy_synth_9c0fcc500_2026-W45.jsonl": 55,
+   "vyvy_train_v1.jsonl": 15,
+   "vyvy_unknown_hard_v1.jsonl": 42
+  },
+  "ambiguous_kept": 0,
+  "appointments_today_asking_for_work_kept": 46
+ },
+ "changes": [
+  {
+   "file": "vyvy_create_boundary_v1.jsonl",
+   "line": 7,
+   "text_sha256": "4a0610f5a65c080c",
+   "text": "Hak die Aufgabe „das Wartezimmer aufräumen“ ab",
+   "from": "unknown",
+   "to": "complete_task",
+   "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_create_boundary_v1.jsonl",
+   "line": 43,
+   "text_sha256": "f563f41c894472a9",
+   "text": "Lösch die Aufgabe „die Vollmacht von Frau Haug einscannen“",
+   "from": "unknown",
+   "to": "delete_task",
+   "rule": "unknown->delete_task"
+  },
+  {
+   "file": "vyvy_create_boundary_v1.jsonl",
+   "line": 54,
+   "text_sha256": "69e04f894505da6c",
+   "text": "Hak die Aufgabe „die Rechnung an Bäckerei Lindner schreiben“ ab",
+   "from": "unknown",
+   "to": "complete_task",
+   "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_create_boundary_v1.jsonl",
+   "line": 55,
+   "text_sha256": "0b32a9b68338461a",
+   "text": "Lösch die Aufgabe „die Schlüssel für die Halle nachmachen lassen“",
+   "from": "unknown",
+   "to": "delete_task",
+   "rule": "unknown->delete_task"
+  },
+  {
+   "file": "vyvy_create_boundary_v1.jsonl",
+   "line": 61,
+   "text_sha256": "c58c2f850b0450f4",
+   "text": "Lösch die Aufgabe „das Angebot für den Zaun rausschicken“",
+   "from": "unknown",
+   "to": "delete_task",
+   "rule": "unknown->delete_task"
+  },
+  {
+   "file": "vyvy_create_boundary_v1.jsonl",
+   "line": 83,
+   "text_sha256": "e054b14c1e842bbf",
+   "text": "Hak die Aufgabe „die Kasse zählen“ ab",
+   "from": "unknown",
+   "to": "complete_task",
+   "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_create_boundary_v1.jsonl",
+   "line": 91,
+   "text_sha256": "3dde5ed7e3d7bdf6",
+   "text": "Hak die Aufgabe „ds Angebot für den Zaun rausschicken“ ab",
+   "from": "unknown",
+   "to": "complete_task",
+   "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_create_boundary_v1.jsonl",
+   "line": 118,
+   "text_sha256": "1a853bb117d84e00",
+   "text": "Hak die Aufgabe „die Vollmacht von Frau Haug einscannen“ ab",
+   "from": "unknown",
+   "to": "complete_task",
+   "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_create_boundary_v1.jsonl",
+   "line": 189,
+   "text_sha256": "dd94c2c7862c28b7",
+   "text": "Lösch die Aufgabe „die Rechnung an Bäckerei Lindner schreiben“",
+   "from": "unknown",
+   "to": "delete_task",
+   "rule": "unknown->delete_task"
+  },
+  {
+   "file": "vyvy_create_boundary_v1.jsonl",
+   "line": 195,
+   "text_sha256": "f4015b0bfe9ab091",
+   "text": "Hak die Aufgabe „Druckerpapier bestellen“ ab",
+   "from": "unknown",
+   "to": "complete_task",
+   "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_create_boundary_v1.jsonl",
+   "line": 196,
+   "text_sha256": "07589fab633dc654",
+   "text": "Hak die Aufgabe „die Waage eichen lassen“ ab",
+   "from": "unknown",
+   "to": "complete_task",
+   "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_create_boundary_v1.jsonl",
+   "line": 218,
+   "text_sha256": "4441ccbff79b4b76",
+   "text": "Hak die Aufgabe „das Rezept für Herrn Uysal vorbereiten“ ab",
+   "from": "unknown",
+   "to": "complete_task",
+   "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_create_boundary_v1.jsonl",
+   "line": 222,
+   "text_sha256": "20c61694d81ab332",
+   "text": "Lösch die Aufgabe „das Rezept für Herrn Uysal vorbereiten“",
+   "from": "unknown",
+   "to": "delete_task",
+   "rule": "unknown->delete_task"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 15,
+   "text_sha256": "2c80ebf877bdb1fa",
+   "text": "Mal ehrlich, zeiterfassung beenden, Feierabend – schnell bitte.",
+   "from": "unknown",
+   "to": "stop_timer",
+   "rule": "unknown->stop_timer"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 18,
+   "text_sha256": "0e9226f29471461e",
+   "text": "Schau online nach die neuen Förderregeln.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 21,
+   "text_sha256": "742bdbbb090d6419",
+   "text": "Guck ma im Netz nach den Preis für Dämmwolle, gell.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 29,
+   "text_sha256": "e5eae6405a7df692",
+   "text": "Wo stelle ich im Programm die Zeiterfassung ein?",
+   "from": "unknown",
+   "to": "help_lookup",
+   "rule": "unknown->help_lookup"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 32,
+   "text_sha256": "32f596e59e5a80b3",
+   "text": "Kurz: schreib dem Sägewerk Ahorn a neue Mail wegen die Materialbestellung, ne.",
+   "from": "unknown",
+   "to": "write_email",
+   "rule": "unknown->write_email"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 40,
+   "text_sha256": "c2af9e1d643180a0",
+   "text": "Ähm, wo stelle ich im Programm die Kundenliste ein, danke?",
+   "from": "unknown",
+   "to": "help_lookup",
+   "rule": "unknown->help_lookup"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 58,
+   "text_sha256": "d3ae2f4a21d98ef3",
+   "text": "Antworte Herrn Kieselbach auf die letzte Mail, nur als Entwurf.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 62,
+   "text_sha256": "decfe413565403f2",
+   "text": "Hey, kannst du mir erklären, wie das Passwort hier geht, danke?",
+   "from": "unknown",
+   "to": "help_lookup",
+   "rule": "unknown->help_lookup"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 64,
+   "text_sha256": "f0ec5a039fa97a17",
+   "text": "Schreib dem Elektro Blitz KG a Antwort wegen die Materialbestellung, ne.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 75,
+   "text_sha256": "28cc1145c4fb789c",
+   "text": "Entwirf eine Antwort an Fliesen Mosaik OHG zu das Aufmaß.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 90,
+   "text_sha256": "a8c71f8b49802615",
+   "text": "Kurz: schreib dem Malerei Farbklecks a Antwort wegen das Angebot – schnell bitte.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 102,
+   "text_sha256": "a7835166de6ddef4",
+   "text": "Leg ein neues Projekt Dachsanierung West an.",
+   "from": "unknown",
+   "to": "create_project",
+   "rule": "unknown->create_project"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 109,
+   "text_sha256": "eb3074f0eff1238d",
+   "text": "Hey, starte die Zeit für Projekt Nordlicht – schnell bitte.",
+   "from": "unknown",
+   "to": "start_timer",
+   "rule": "unknown->start_timer"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 113,
+   "text_sha256": "9fc4b9370066dc45",
+   "text": "Guck mal: wie wird das Wetter am Wochenende, danke?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 116,
+   "text_sha256": "53f394565b4a4740",
+   "text": "Entwirf eine Antwort an Sägewerk Ahorn zu die Materialbestellung.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 117,
+   "text_sha256": "d0fdad84e6b818e2",
+   "text": "Hey, entwirf eine Antwort an Sanitär Tropfen GmbH zu die Mängel.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 148,
+   "text_sha256": "16f761816c0561c6",
+   "text": "Starte die Zeit für Dachsanierung West.",
+   "from": "unknown",
+   "to": "start_timer",
+   "rule": "unknown->start_timer"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 174,
+   "text_sha256": "0059ce80534a814e",
+   "text": "Lösch die Aufgabe Bauleiter anrufen.",
+   "from": "unknown",
+   "to": "delete_task",
+   "rule": "unknown->delete_task"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 180,
+   "text_sha256": "0bd678004468decc",
+   "text": "Starte die Zeit für Badumbau Lindenhof.",
+   "from": "unknown",
+   "to": "start_timer",
+   "rule": "unknown->start_timer"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 186,
+   "text_sha256": "43c508e9492a60f6",
+   "text": "Du, wo stelle ich im Programm die Kundenliste ein, gell?",
+   "from": "unknown",
+   "to": "help_lookup",
+   "rule": "unknown->help_lookup"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 189,
+   "text_sha256": "e08c265e8a91098c",
+   "text": "Entwirf eine Antwort an Malerei Farbklecks zu das Aufmaß.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 211,
+   "text_sha256": "dfce3704a1b0f8e8",
+   "text": "Mal ehrlich, zeiterfassung beenden, Feierabend, gell.",
+   "from": "unknown",
+   "to": "stop_timer",
+   "rule": "unknown->stop_timer"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 220,
+   "text_sha256": "80ce4efdbfd51206",
+   "text": "Du, entwirf eine Antwort an Sanitär Tropfen GmbH zu den Liefertermin.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 234,
+   "text_sha256": "79b472eaf416c324",
+   "text": "Ist auf der A8 gerade Stau, oder?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 236,
+   "text_sha256": "462c5c087851d248",
+   "text": "Guck mal: such im Internet nach die neuen Förderregeln.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 239,
+   "text_sha256": "7abbdc16c61ad4ce",
+   "text": "Mal ehrlich, guck ma im Netz nach den Kupferpreis.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 241,
+   "text_sha256": "017478f4bf18f924",
+   "text": "Schreib eine neue Mail an Nordstern Bau GmbH wegen das Angebot.",
+   "from": "unknown",
+   "to": "write_email",
+   "rule": "unknown->write_email"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 254,
+   "text_sha256": "d44a9aedec540367",
+   "text": "Du, such im Internet nach die neuen Förderregeln – schnell bitte.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 257,
+   "text_sha256": "1d7374628f013eda",
+   "text": "Du, schreib dem Sägewerk Ahorn a Antwort wegen die offene Rechnung.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 258,
+   "text_sha256": "d52f66750dd26fe4",
+   "text": "Mal ehrlich, antworte Herrn Ostwald auf die letzte Mail, nur als Entwurf, oder.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 259,
+   "text_sha256": "abbe919b469d012b",
+   "text": "Du, gibt's heute Abend Gewitter – schnell bitte?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 264,
+   "text_sha256": "c7f4939490ba3f60",
+   "text": "Entwirf eine Antwort an Nordstern Bau GmbH zu das Angebot.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 266,
+   "text_sha256": "3e99c377eda38b49",
+   "text": "Mal ehrlich, entwirf eine Antwort an Dachdeckerei Ziegelrot zu die Materialbestellung – schnell bitte.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 270,
+   "text_sha256": "4bc0589dd06f4f4a",
+   "text": "Entwirf eine Antwort an Fliesen Mosaik OHG zu die Abnahme.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 275,
+   "text_sha256": "f4e839679570c0a1",
+   "text": "Sag mal, wo stelle ich im Programm das Passwort ein, oder?",
+   "from": "unknown",
+   "to": "help_lookup",
+   "rule": "unknown->help_lookup"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 285,
+   "text_sha256": "789beaf22784caeb",
+   "text": "Entwirf eine Antwort an Sanitär Tropfen GmbH zu die Mängel.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 322,
+   "text_sha256": "41d74154ec23a313",
+   "text": "Kurz: hak die Aufgabe Gerüst abbauen ab bitte.",
+   "from": "unknown",
+   "to": "complete_task",
+   "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 327,
+   "text_sha256": "4932850a78b46fde",
+   "text": "Antworte Frau Sonnberg auf die letzte Mail, nur als Entwurf bitte.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 349,
+   "text_sha256": "70a7b9c9943cb218",
+   "text": "Guck ma im Netz nach die Öffnungszeiten vom Baustoffhandel, danke.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 350,
+   "text_sha256": "27c08e8f676350ec",
+   "text": "Wo stelle ich im Programm das Passwort ein?",
+   "from": "unknown",
+   "to": "help_lookup",
+   "rule": "unknown->help_lookup"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 362,
+   "text_sha256": "5b6a6b73c9452b39",
+   "text": "Ähm, schau online nach den Kupferpreis, oder.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 369,
+   "text_sha256": "35a5e04ce5246cb5",
+   "text": "Wo stelle ich im Programm den Export ein?",
+   "from": "unknown",
+   "to": "help_lookup",
+   "rule": "unknown->help_lookup"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 376,
+   "text_sha256": "4ca0758acdf33450",
+   "text": "Sag mal, schau online nach die Öffnungszeiten vom Baustoffhandel, ne.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 379,
+   "text_sha256": "c6374a563980a61f",
+   "text": "Lösch die Aufgabe Gerüst abbauen.",
+   "from": "unknown",
+   "to": "delete_task",
+   "rule": "unknown->delete_task"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 400,
+   "text_sha256": "f689837dcc515ab0",
+   "text": "Ähm, such im Internet nach den Kupferpreis, danke.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 403,
+   "text_sha256": "9a911deee40c0071",
+   "text": "Du, schau online nach den Preis für Dämmwolle, danke.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 410,
+   "text_sha256": "646e59164b18dbbf",
+   "text": "Sag mal, find im Internet raus: die Öffnungszeiten vom Baustoffhandel bitte.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 414,
+   "text_sha256": "e35039504f60b8d8",
+   "text": "Regnet es heute noch bitte?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 445,
+   "text_sha256": "0d3f8d4f5a73a9aa",
+   "text": "Entwirf eine Antwort an Sanitär Tropfen GmbH zu die Abnahme, oder.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 465,
+   "text_sha256": "d0b84dd623113e0b",
+   "text": "Guck mal: wo stelle ich im Programm das Passwort ein, oder?",
+   "from": "unknown",
+   "to": "help_lookup",
+   "rule": "unknown->help_lookup"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 471,
+   "text_sha256": "5e50d91b9931b639",
+   "text": "Schreib eine neue Mail an Dachdeckerei Ziegelrot wegen die Materialbestellung.",
+   "from": "unknown",
+   "to": "write_email",
+   "rule": "unknown->write_email"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 481,
+   "text_sha256": "f6bd76671158d1eb",
+   "text": "Mal ehrlich, entwirf eine Antwort an Dachdeckerei Ziegelrot zu das Angebot bitte.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 486,
+   "text_sha256": "3697ed78459a2dce",
+   "text": "Wann wurde die Mauer geöffnet bitte?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 493,
+   "text_sha256": "4dab71fd6fa813ac",
+   "text": "Guck ma im Netz nach den Kupferpreis, ne.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 500,
+   "text_sha256": "6f8dd494e68acd19",
+   "text": "Guck ma im Netz nach Lieferzeiten für Fenster, oder.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 504,
+   "text_sha256": "18d8866b8dbd4c72",
+   "text": "Entwirf eine Antwort an Fliesen Mosaik OHG zu die offene Rechnung.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 506,
+   "text_sha256": "7cf82c029af6c3e5",
+   "text": "Die Aufgabe Material bestellen ist doppelt angelegt, bitte entfernen – schnell bitte.",
+   "from": "unknown",
+   "to": "delete_task",
+   "rule": "unknown->delete_task"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 538,
+   "text_sha256": "bd6bb2ce0a8e1181",
+   "text": "Du, schau online nach die neuen Förderregeln, gell.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 549,
+   "text_sha256": "085d57b054b69b09",
+   "text": "Du, lösch die Aufgabe Zaun streichen.",
+   "from": "unknown",
+   "to": "delete_task",
+   "rule": "unknown->delete_task"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 557,
+   "text_sha256": "0f9bbfd66df8104c",
+   "text": "Kurz: entwirf eine Antwort an Fliesen Mosaik OHG zu das Aufmaß – schnell bitte.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 566,
+   "text_sha256": "38d0c46fe35fee19",
+   "text": "Ähm, guck ma im Netz nach den Kupferpreis, danke.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 620,
+   "text_sha256": "1088cfa6aba2e095",
+   "text": "Regnet es morgen in Stuttgart, oder?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 626,
+   "text_sha256": "402f6635550d02f8",
+   "text": "Ist auf der A8 gerade Stau bitte?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 628,
+   "text_sha256": "a588c8b9da7f95c2",
+   "text": "Mal ehrlich, bis wann hat Dachdeckerei Ziegelrot morgen offen?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 653,
+   "text_sha256": "e155f6b3fd3b124f",
+   "text": "Sag mal, leg ma a Projekt Badumbau Lindenhof o – schnell bitte.",
+   "from": "unknown",
+   "to": "create_project",
+   "rule": "unknown->create_project"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 655,
+   "text_sha256": "1e95230f728765b1",
+   "text": "Du, leg ma a Projekt Neubau Ahornweg o.",
+   "from": "unknown",
+   "to": "create_project",
+   "rule": "unknown->create_project"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 657,
+   "text_sha256": "de4bc7a13847dfbe",
+   "text": "Guck mal: schreib dem Sägewerk Ahorn a Antwort wegen die Abnahme, ne.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 670,
+   "text_sha256": "b3ef468b9a3b5054",
+   "text": "Sag mal, guck ma im Netz nach den Preis für Dämmwolle.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 677,
+   "text_sha256": "906b1965b0270845",
+   "text": "Hey, lösch die Aufgabe Material bestellen, oder.",
+   "from": "unknown",
+   "to": "delete_task",
+   "rule": "unknown->delete_task"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 678,
+   "text_sha256": "89aa81747455c628",
+   "text": "Ähm, leg ma a Projekt Umbau Werkhalle 7 o, oder.",
+   "from": "unknown",
+   "to": "create_project",
+   "rule": "unknown->create_project"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 683,
+   "text_sha256": "174b724ef2ebca97",
+   "text": "Hey, guck ma im Netz nach die Öffnungszeiten vom Baustoffhandel, oder.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 685,
+   "text_sha256": "0627a089f37c6084",
+   "text": "Guck mal: brauche ich heute einen Schirm, oder?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 689,
+   "text_sha256": "44edd2dd688f27ef",
+   "text": "Guck mal: hak die Aufgabe Angebot nachfassen ab.",
+   "from": "unknown",
+   "to": "complete_task",
+   "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 690,
+   "text_sha256": "e60ea2dd02422d40",
+   "text": "Schreib dem Dachdeckerei Ziegelrot a neue Mail wegen das Angebot.",
+   "from": "unknown",
+   "to": "write_email",
+   "rule": "unknown->write_email"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 693,
+   "text_sha256": "7e084cbaa79f1242",
+   "text": "Leg ein neues Projekt Badumbau Lindenhof an.",
+   "from": "unknown",
+   "to": "create_project",
+   "rule": "unknown->create_project"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 730,
+   "text_sha256": "91a795d3cd08e383",
+   "text": "Mal ehrlich, such im Internet nach Lieferzeiten für Fenster – schnell bitte.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 765,
+   "text_sha256": "5f71d2d7c1a75c34",
+   "text": "Hey, zeiterfassung beenden, Feierabend – schnell bitte.",
+   "from": "unknown",
+   "to": "stop_timer",
+   "rule": "unknown->stop_timer"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 770,
+   "text_sha256": "fd5c758263dc8121",
+   "text": "Hak die Aufgabe Rechnung prüfen ab.",
+   "from": "unknown",
+   "to": "complete_task",
+   "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 772,
+   "text_sha256": "bc6b799b406a19b3",
+   "text": "Guck mal: schau online nach die neuen Förderregeln.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 798,
+   "text_sha256": "52aabe889061bbd3",
+   "text": "Mal ehrlich, erfassung beenden – schnell bitte.",
+   "from": "unknown",
+   "to": "stop_timer",
+   "rule": "unknown->stop_timer"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 808,
+   "text_sha256": "3062a7d2dc442c6e",
+   "text": "Ähm, wo stelle ich im Programm die Zeiterfassung ein, gell?",
+   "from": "unknown",
+   "to": "help_lookup",
+   "rule": "unknown->help_lookup"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 814,
+   "text_sha256": "17ac0894c11e1dd9",
+   "text": "Du, die Aufgabe Gerüst abbauen ist doppelt angelegt, bitte entfernen.",
+   "from": "unknown",
+   "to": "delete_task",
+   "rule": "unknown->delete_task"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 822,
+   "text_sha256": "fcae3f2f78dbb9fe",
+   "text": "Schreib eine neue Mail an Holzbau Eiche AG wegen das Aufmaß.",
+   "from": "unknown",
+   "to": "write_email",
+   "rule": "unknown->write_email"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 823,
+   "text_sha256": "b0fbb887c6780f7c",
+   "text": "Hey, erfassung beenden.",
+   "from": "unknown",
+   "to": "stop_timer",
+   "rule": "unknown->stop_timer"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 828,
+   "text_sha256": "ec7fc65b5745ee0d",
+   "text": "Stopp die Zeit, oder.",
+   "from": "unknown",
+   "to": "stop_timer",
+   "rule": "unknown->stop_timer"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 839,
+   "text_sha256": "810bdd18ffd0dae1",
+   "text": "Ähm, schreib dem Fliesen Mosaik OHG a neue Mail wegen die Mängel bitte.",
+   "from": "unknown",
+   "to": "write_email",
+   "rule": "unknown->write_email"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 842,
+   "text_sha256": "8fa50296b1f51a33",
+   "text": "Sag mal, entwirf eine Antwort an Sägewerk Ahorn zu die Abnahme, danke.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 845,
+   "text_sha256": "a817a5c251d5eb28",
+   "text": "Mal ehrlich, neues Ziel: bis Jahresende zehn Bäder fertig, ne.",
+   "from": "unknown",
+   "to": "create_goal",
+   "rule": "unknown->create_goal"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 852,
+   "text_sha256": "fa5313aa63dc0cd6",
+   "text": "Ähm, brauche ich heute einen Schirm?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 872,
+   "text_sha256": "81b683d6777f1086",
+   "text": "Ähm, ist auf der A8 gerade Stau, oder?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 874,
+   "text_sha256": "09344985fd50caff",
+   "text": "Neues Ziel: jeden Monat zwei neue Kunden.",
+   "from": "unknown",
+   "to": "create_goal",
+   "rule": "unknown->create_goal"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 882,
+   "text_sha256": "89ed7284fbf7b1e6",
+   "text": "Kurz: zeiterfassugn beenden, Feierabend.",
+   "from": "unknown",
+   "to": "stop_timer",
+   "rule": "unknown->stop_timer"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 887,
+   "text_sha256": "19debf94b528cf3d",
+   "text": "Lösch die Aufgabe Rechnung prüfen, danke.",
+   "from": "unknown",
+   "to": "delete_task",
+   "rule": "unknown->delete_task"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 896,
+   "text_sha256": "50bf13c457c37e07",
+   "text": "Mal ehrlich, regnet es morgen in Stuttgart, danke?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 910,
+   "text_sha256": "2b5c0dbfc72811df",
+   "text": "Kurz: wie lange hat die Post in der Hauptstraße offen, ne?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 914,
+   "text_sha256": "ffac496e7de88199",
+   "text": "Starte die Zeit für Dachsanierung West – schnell bitte.",
+   "from": "unknown",
+   "to": "start_timer",
+   "rule": "unknown->start_timer"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 930,
+   "text_sha256": "a71a8c0469d052e8",
+   "text": "Ähm, schreib dem Sanitär Tropfen GmbH a Antwort wegen das Aufmaß bitte.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 936,
+   "text_sha256": "7cc3c7b694d3c43f",
+   "text": "Guck mal: find im Internet raus: den Preis für Dämmwolle, gell.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 954,
+   "text_sha256": "68e7c73ce2c2a62f",
+   "text": "Schreib eine neue Mail an Dachdeckerei Ziegelrot wegen die Mängel.",
+   "from": "unknown",
+   "to": "write_email",
+   "rule": "unknown->write_email"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 961,
+   "text_sha256": "04b5abdf62cdf958",
+   "text": "Ähm, wo stelle ich im Programm den Kalender ein?",
+   "from": "unknown",
+   "to": "help_lookup",
+   "rule": "unknown->help_lookup"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 972,
+   "text_sha256": "d16eda363e44a911",
+   "text": "Wo finde ich in diesem Programm die Zeiterfassung – schnell bitte?",
+   "from": "unknown",
+   "to": "help_lookup",
+   "rule": "unknown->help_lookup"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 977,
+   "text_sha256": "4d17d20f29b46cf6",
+   "text": "Entwirf eine Antwort an Sägewerk Ahorn zu das Angebot.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 985,
+   "text_sha256": "5bfc06181a76ce1f",
+   "text": "Sag mal, wo stelle ich im Programm den Export ein, danke?",
+   "from": "unknown",
+   "to": "help_lookup",
+   "rule": "unknown->help_lookup"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 991,
+   "text_sha256": "b4c7e53e4a81bf0e",
+   "text": "Ähm, guck ma im Netz nach die Öffnungszeiten vom Baustoffhandel, danke.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 993,
+   "text_sha256": "e1d08bdb35425478",
+   "text": "Schreib eine neue Mail an Malerei Farbklecks wegen die Mängel, ne.",
+   "from": "unknown",
+   "to": "write_email",
+   "rule": "unknown->write_email"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 994,
+   "text_sha256": "66804f14195a3b82",
+   "text": "Antworte Herrn Ostwald auf die letzte Mail, nur als Entwurf.",
+   "from": "unknown",
+   "to": "draft_reply",
+   "rule": "unknown->draft_reply"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 1007,
+   "text_sha256": "05269b1183f6bc02",
+   "text": "Du, hak die Aufgabe Gerüst abbauen ab.",
+   "from": "unknown",
+   "to": "complete_task",
+   "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 1010,
+   "text_sha256": "92aa8fcf2ddf072f",
+   "text": "Hey, neues Ziel: bis Jahresende zehn Bäder fertig.",
+   "from": "unknown",
+   "to": "create_goal",
+   "rule": "unknown->create_goal"
+  },
+  {
+   "file": "vyvy_partner_af84f746d.jsonl",
+   "line": 1039,
+   "text_sha256": "f7f196cf0660b41f",
+   "text": "Guck ma im Netz nach die neuen Förderregeln – schnell bitte.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_retired_blind_v2.jsonl",
+   "line": 4,
+   "text_sha256": "0396e2dda23df567",
+   "text": "Ist bei mir heute noch was?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_retired_blind_v2.jsonl",
+   "line": 16,
+   "text_sha256": "c2c9d7b5709a226c",
+   "text": "Hebb ik hüüt namiddag noch wat plaant?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_retired_blind_v2.jsonl",
+   "line": 25,
+   "text_sha256": "c39db8c01b25362b",
+   "text": "Zeig mal, was heute so geplant ist bei mir.",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 80,
+   "text_sha256": "f7790c0a57fb25b8",
+   "text": "Wie ist das Wetter jetzt eigentlich bei unserem Standort in München?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 110,
+   "text_sha256": "8183edde7afef0aa",
+   "text": "Wie wird eigentlich das Wetter am Freitag? Die Gartenparty soll's noch geben, oder?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 151,
+   "text_sha256": "42a2b1a19aee18c2",
+   "text": "S'wetter isch ja scho wieder übel; kannst du mir vorschlagen, wia ich heute zum Konzert komm?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 164,
+   "text_sha256": "0451fc4da0c5526a",
+   "text": "Hoi, wie sieht's eigentlich mit dem Wetter für morn aus?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 189,
+   "text_sha256": "a223ac17205213e0",
+   "text": "Haste schon das Wetter für die Pflanzung in der Hohenzollerndamm gesehen?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 275,
+   "text_sha256": "668a97dca5f2a05a",
+   "text": "Hallo, kann ich sehen, was heute so ansteht? Muss ich vielleicht irgendwohin? Und gibt's Nachrichten von der Baumschule?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 277,
+   "text_sha256": "b71db6dff18834a6",
+   "text": "Sag mal, was ist heute eigentlich geplant? Muss ich irgendwo hin oder hat der Kunde vom Parkplatz mal wieder was?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 279,
+   "text_sha256": "10d0ded30f516ef2",
+   "text": "Hey, was steht auf meiner Agenda heute? Gibt's vielleicht eine Mail, die ich nicht gesehen habe?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 389,
+   "text_sha256": "9732406903603688",
+   "text": "Wie sieht denn eigentlich das Wetter für Morgen aus? Kannst ja mal nachschauen, falls es was neues gibt.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 473,
+   "text_sha256": "2063d11798950aac",
+   "text": "Wenn dat Wetter in Hamburg schön is, dann machen wir heute Mittag vielleicht nen Spaziergang?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 719,
+   "text_sha256": "5fba4cefc5216943",
+   "text": "Kannste ma sagen, ob da morgen in der Haldenstrasse Stau isch?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 748,
+   "text_sha256": "b4d94be755844d26",
+   "text": "was steht heute in mei ner tagesordnung?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 749,
+   "text_sha256": "1cb13fe4198afdbb",
+   "text": "was ist heute programm?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 753,
+   "text_sha256": "3fbe27e8e37c2675",
+   "text": "heutstes programm bitte",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 805,
+   "text_sha256": "156b9b056ac9feab",
+   "text": "Hömma Assi, wat steht heut an?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 806,
+   "text_sha256": "9153a805ac4835b3",
+   "text": "Gell, was habn heut so im Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 807,
+   "text_sha256": "e89b3b0239d10f11",
+   "text": "Könntst mir saggn, woß heut so ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 808,
+   "text_sha256": "6bf6543e7af24331",
+   "text": "Was hamme mir heut so am Programm?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 809,
+   "text_sha256": "54b67b2e7f12d3e9",
+   "text": "Bist do wißn, was heut so vorhämmt?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 810,
+   "text_sha256": "c8e2a1d66893fee1",
+   "text": "Was is heut noch angesagt oder eingezeichnet?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 811,
+   "text_sha256": "6c8933198d0c5932",
+   "text": "Hast scho heut noch so an Agenda?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 812,
+   "text_sha256": "a177e8717706050d",
+   "text": "Wat steht heut noch für uns an?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 813,
+   "text_sha256": "969912610843f969",
+   "text": "Gell, was steckt heut noch im Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 814,
+   "text_sha256": "89361d4a31eed488",
+   "text": "Kannst mir saggn, wat heut so ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 816,
+   "text_sha256": "deab15ff2c10bfc2",
+   "text": "Heute - wat haste für mich im Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 818,
+   "text_sha256": "3b5498ab836b39d0",
+   "text": "Hey, was ist eigentlich geplant für heute?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 819,
+   "text_sha256": "7311ea4aa23c3083",
+   "text": "Wat haste für mich im Plan heut?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 820,
+   "text_sha256": "07f7f84bd79fc487",
+   "text": "Heute - wat haste für mich?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 896,
+   "text_sha256": "aebdfdd967d33c70",
+   "text": "Heut hamma doch noch wat im Planer drin, waß da wia?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1061,
+   "text_sha256": "8b4b1779d4c8fd60",
+   "text": "Was isch överall heit amal amal an?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1089,
+   "text_sha256": "59e7bcc5da622394",
+   "text": "Hat die Hausverwaltung morgen überhaupt offen? Ich möcht mich frage.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1092,
+   "text_sha256": "11470681fc726859",
+   "text": "Hast'n vielleicht die Öffnungszeiten vom Autohaus Müller im Auge? Morgen müsst ich da hin.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1101,
+   "text_sha256": "1c747e35cf5e6c99",
+   "text": "Serva, was hamschta am Plan, was muascht heit wia wos?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1102,
+   "text_sha256": "9920f497fa63f58f",
+   "text": "Möaßcht mir scho wia heit am Plan stehn?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1103,
+   "text_sha256": "821c2b0aadb15ae1",
+   "text": "Was hamme heit aufm Plan, woaßschta?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1104,
+   "text_sha256": "aecefba8487805c2",
+   "text": "Heit bei uns, waßschta was ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1105,
+   "text_sha256": "062a326406eb0839",
+   "text": "Hast de wia heit am Plan, was wuassschta?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1109,
+   "text_sha256": "34c7091bfa1122bf",
+   "text": "Woan mir heit noch was am Plan, woaßschta?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1234,
+   "text_sha256": "b9359395eced4e24",
+   "text": "Wie sieht mein Plan für heute aus?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1289,
+   "text_sha256": "0895c63973c87065",
+   "text": "Wat stond heit bei mir noch am Programm im Tagebuch?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1354,
+   "text_sha256": "8e7afc4239af686c",
+   "text": "Ey Boss, haste ne Ahnung wat heut bei mir am Plan steht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1359,
+   "text_sha256": "c211e0b8a8aa713e",
+   "text": "Kannste mir sagen wat heut auf'm Programm is?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1497,
+   "text_sha256": "7dc3c51ac5dd1892",
+   "text": "Weißt' du, wann der neue U-Bahn-Bahnhof hier fertiggemacht wird?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1505,
+   "text_sha256": "61d34de47beff2f5",
+   "text": "Hat die Apotheke in der Nachbarschaft, die von Frau Schneider, ne neue Öffnungszeit eingerichtet?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1581,
+   "text_sha256": "e7f3062b379e5fd4",
+   "text": "Wie heißt eigentlich das Programm, mit dem wir unsere Projekte überwachen?",
+   "from": "unknown",
+   "to": "help_lookup",
+   "rule": "unknown->help_lookup"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1620,
+   "text_sha256": "0c4c07eaf8a81d0f",
+   "text": "Grüß Gott Klaus, wat haste do nooge anstehe?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1621,
+   "text_sha256": "61fda43962859f28",
+   "text": "Hei Thomas, wat haste du heitte?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1622,
+   "text_sha256": "5db352f20561e5f4",
+   "text": "Guten Tag, Reinhard, wat hast du heitte am Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1624,
+   "text_sha256": "b06e490c66d1d7fe",
+   "text": "Hei Sebastian, wat haste du heugte?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1625,
+   "text_sha256": "e6e0c3fcb4f35a1e",
+   "text": "Grüß Gott Ralf, wat haste du heugte?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1626,
+   "text_sha256": "43387a1bf6c92efc",
+   "text": "Hallo Andreas, wat haste du heugte?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1726,
+   "text_sha256": "f14d7b744d9a5e4c",
+   "text": "Hastu schon guerkt wüe heuteti am Plan isch?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1728,
+   "text_sha256": "e8f5b8a9ab820d23",
+   "text": "Wääschte du heuteti Plan mal durch, was isch eingeplant?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1732,
+   "text_sha256": "fc44993aee8e0257",
+   "text": "Sag mi doch noch mal wüe heuteti am Plan isch?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1733,
+   "text_sha256": "9a3c59d51ba2ea49",
+   "text": "Heuteti Agenda isch mir so unklär, könntsch mir sagen, was eingeplant isch?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1831,
+   "text_sha256": "fcfb50f869fbf730",
+   "text": "Wat steht noch heeten drunne im Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1832,
+   "text_sha256": "8e5f4e9cb05d67e8",
+   "text": "Könnst do do eens sehn, wat heeten vorn Dag ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1988,
+   "text_sha256": "ef3b71fbd8507a22",
+   "text": "Servus Assistentn, sag mir wos heit ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1994,
+   "text_sha256": "01c2b37aff2f13b0",
+   "text": "Kannst du mir sagen, ob heit noch wat los is?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1996,
+   "text_sha256": "49795107eda52264",
+   "text": "Sag mal, wärs schon wieder Stau auf der Westbahn?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2005,
+   "text_sha256": "dfccc8ef6f974fc6",
+   "text": "Kannst mir sagen, wann der Zug von München nach Wien übermorgen fährt?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2141,
+   "text_sha256": "a3c0d9d0d918d18f",
+   "text": "Bitte sag mir, was heute geplant ist.",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2205,
+   "text_sha256": "f01be46669deb223",
+   "text": "Woaßt och, was ich heut ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2206,
+   "text_sha256": "9e7c8b4a0d0681e4",
+   "text": "Woaßt och, was unsere Kollegin Heidi heut ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2212,
+   "text_sha256": "70614d73252bd81b",
+   "text": "No nix geplant am Nachmittag bei unserem Lieferanten Herbert?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2242,
+   "text_sha256": "85c637ee92dafff3",
+   "text": "Könntest du bitte mal kurz nach dem Wetter für Montag sehen?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2336,
+   "text_sha256": "f82f819796d4541f",
+   "text": "Wie oft fähret der Bus 809 im Sommer zwischen Büren und Zofingen?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2338,
+   "text_sha256": "615d6a057ffd0674",
+   "text": "Sägts, da Stau am Zürcher Nordtangente morgen früh isch schwierig?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2339,
+   "text_sha256": "740c0257d5d179c5",
+   "text": "Welche S-Bahn kommt am kommenden Sonntag morgens um 6 Uhr vom Bahnhof Kaltental nach Bern?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2372,
+   "text_sha256": "df05a4b912e64749",
+   "text": "Was macht eigentlich das Projekt mit der neuen App von Google?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2496,
+   "text_sha256": "f05a50c0ffdfa2bd",
+   "text": "Hat die Apotheke auf der Hauptstrasse am Wochenende geöffnet?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2500,
+   "text_sha256": "08a58066c278d5ce",
+   "text": "Hastu wüsse, ob de Züge über die Wochenendzeit geplant sünd?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2501,
+   "text_sha256": "040eb04519721eff",
+   "text": "Sind da noch Stau auf de Autobahn?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2733,
+   "text_sha256": "8d9a3bd317a45a49",
+   "text": "Mannomann, was soll heute alles los sein bei meinem Rundgang, hast du das mitgekriegt?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2736,
+   "text_sha256": "b110fb3bcb5b6616",
+   "text": "Was gibt's denn heute noch im Programm, Assistant?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2811,
+   "text_sha256": "c87a0a43cbfb0ada",
+   "text": "Sag mal, is de Bäcker Heink am Dorfplatz jo geöffnet?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2816,
+   "text_sha256": "403f9622d3a32c57",
+   "text": "Hast du n Idea, wat de Stau bei Hamburg-Bramstedt för de Bundesstraße heut is?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2819,
+   "text_sha256": "6c49026bd7313600",
+   "text": "Kannst du wüdden, wann de S-Bahn för Hameln noocht wieder doan is?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2821,
+   "text_sha256": "39a07f0c813a6762",
+   "text": "Könnste sagn, wann de Züge ooch wieder normal daahnren? Se zijn seit'm Marder jo stör.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2822,
+   "text_sha256": "3332a8b425779fc9",
+   "text": "bitte sag mir was heute noch ansteht ich bin so im stress",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2824,
+   "text_sha256": "13d5d823364b4b04",
+   "text": "noch mal was hab ich heut alleine vor?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2850,
+   "text_sha256": "fad37005f04c8a12",
+   "text": "Was haste vohe ite am Programm, Assi?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2853,
+   "text_sha256": "02ccbb944f1f244a",
+   "text": "Kannste mir sagne wohe ite am Programm stehe?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2856,
+   "text_sha256": "f442c60fe290fa5e",
+   "text": "Kannste mir sagen, was heitte am Programm isch?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 37,
+   "text_sha256": "ddba7fa6a94f7b2d",
+   "text": "Hast du ne Ahnung, wann die S-Bahn um halb elf verlässt?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 89,
+   "text_sha256": "89539a687473a983",
+   "text": "hey assistent was steht auf meinem plan mit max und den neuen projekt",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 92,
+   "text_sha256": "ee3b99f26e192aa6",
+   "text": "hallo assistent was habe ich bis jetzt von marie und der marketingabteilung heute geplant",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 158,
+   "text_sha256": "120f33912cb886ca",
+   "text": "Welche Punkte stehen auf meiner Agenda für heute?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 209,
+   "text_sha256": "cf3036bf84113372",
+   "text": "Wie ist das Wetter heute?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 290,
+   "text_sha256": "4cb9c1d95f3bb460",
+   "text": "Wenn man alle Winkel eines Dreiecks zusammenaddiert, kommt man dann wirklich auf 180 Grad?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 437,
+   "text_sha256": "d7de8891e9575d15",
+   "text": "Wie isch em Plan i deheute Woche für mich?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 438,
+   "text_sha256": "24d0bdd0e351a69e",
+   "text": "Hesch du de komplette Plan vo heütigem Tag für mich?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 439,
+   "text_sha256": "10410c517553a88f",
+   "text": "Wes isch no für Appointments i der heutige Planer gschriben?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 441,
+   "text_sha256": "7a0d83cf69ea5377",
+   "text": "Kannsch mir den ganzen Plan vo heüt aufrüefen?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 520,
+   "text_sha256": "564028bdd7469719",
+   "text": "könnte das wetter heute morgen schon ein grund für die verspätung sein?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 545,
+   "text_sha256": "b6d5d0f070e036a8",
+   "text": "Ich hab ja echt keine Ahnung, was heute auf dem Plan steht, sag schon!",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 553,
+   "text_sha256": "29f653e9d762b9d3",
+   "text": "Hab ich heut geplant, ob ich noch irgendwen vom Personal seh?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 631,
+   "text_sha256": "40681030a97e990a",
+   "text": "Serva, Assistent, wässer heut noch nö Teermär angesagt gsi?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 632,
+   "text_sha256": "535cd738bb0cc9f5",
+   "text": "Moin, könntes mir sagn, wass heut am Plan gsi?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 635,
+   "text_sha256": "648773059e1f76e6",
+   "text": "Kanntest mir sagn, was heut noch alles ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 637,
+   "text_sha256": "f3bf0aa60e7edc4b",
+   "text": "Hast dö nö Teermär heut noch im Plan, oder kann ich mä auschnähren?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 665,
+   "text_sha256": "76019e579e8e69e1",
+   "text": "Servus, wos haste heit allemaal am Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 666,
+   "text_sha256": "c31be4c57482d50f",
+   "text": "Hast do noch was am Plan heit, Brigitte?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 669,
+   "text_sha256": "2e9ca1e17f3a9290",
+   "text": "Wos haste heit noch am Plan, Maria?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 670,
+   "text_sha256": "c1d5a965acbbc3aa",
+   "text": "Servus, hamscht de heit noch irgendwas am Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 672,
+   "text_sha256": "e3bc8917c2c316e5",
+   "text": "Brigitte, haste do noamals was heit am Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 674,
+   "text_sha256": "3c76707bb2bba246",
+   "text": "Maria, haste noamals was heit am Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 736,
+   "text_sha256": "eda96d9dab28fff1",
+   "text": "Plan für heute?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 737,
+   "text_sha256": "119c2744ea1f9cc1",
+   "text": "Wie sieht der Plan für heute aus?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 766,
+   "text_sha256": "06532bc0e593cbc9",
+   "text": "Wann ischs das nächste Mal Stau auf der Autobahn?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 773,
+   "text_sha256": "1f5cc76f4295c5da",
+   "text": "Welches ist die neue Uhrzeit für die S-Bahn Richtung Rickenbach?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 789,
+   "text_sha256": "07eca06bd7df348b",
+   "text": "Bitte lass mich wissen, was heute für mich ansteht.",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 816,
+   "text_sha256": "e71d25598d684ae3",
+   "text": "Sag mir mal, wia mei Agenda für heut aussieht.",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 886,
+   "text_sha256": "d62b1bcad8699790",
+   "text": "Wie is das Wetter morgen an der Ostsee?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 915,
+   "text_sha256": "da51b61da3375565",
+   "text": "Heute wärsch net scho gschehn, wat am Bau ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 917,
+   "text_sha256": "ef6ffa0a704b6464",
+   "text": "Hatte de heit noch was im Planer?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1065,
+   "text_sha256": "2810fedd5a41d516",
+   "text": "Welche Station fährt die S-Bahn an, wenn sie vorbei am Schloss ist?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1067,
+   "text_sha256": "51a471f1bf466457",
+   "text": "Wann fährt morgen Abend der letzte Zug nach Basel?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1070,
+   "text_sha256": "567f510ad37e59e8",
+   "text": "Steh't heute im Radio was über das Wetter fürs kommende Wochenende?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1382,
+   "text_sha256": "f799ac8e90ded241",
+   "text": "Hastu de Muster vom Holzschrank noch im Netz herum?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1478,
+   "text_sha256": "a6a21be4ba74291e",
+   "text": "Ey DiBoA, wat hast do denn heut am Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1480,
+   "text_sha256": "2448372149d413b0",
+   "text": "Heut is ja schon wieder so voll, was is denn auf mei Agenda?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1481,
+   "text_sha256": "6e80298d842c480a",
+   "text": "Mach mal ne Sache, wat is heute noch so geplant?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1482,
+   "text_sha256": "a990415d336a6d82",
+   "text": "Kannste mir sagen, wat heut alles ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1484,
+   "text_sha256": "06b641d4b27a2b7a",
+   "text": "Hey, was is heut denn noch so im Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1486,
+   "text_sha256": "3ac49666b3853749",
+   "text": "Was hab ich heut denn noch so geplant?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1506,
+   "text_sha256": "160202e44e2f0d29",
+   "text": "Möcht grad wissen, ob der Steuerberater Dr. Müller nächste Woche irgendwann offen hat für'n Besuch bei ihm?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1529,
+   "text_sha256": "ec2372f0db09ef39",
+   "text": "Könnste mir saggen, wat heutte am Tage alles ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1530,
+   "text_sha256": "d8dd90a840310ea7",
+   "text": "Hey Assistenz, is jo ned übersichtlich, wat heutte alles ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1534,
+   "text_sha256": "218f1916a332efa1",
+   "text": "Máddag Jens, kannste mir nochmals sagen, wat heutte ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1536,
+   "text_sha256": "47b8c2355dede440",
+   "text": "Hey Assistenz, is da nöd wat von 'ne Reeperbahn GmbH ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1537,
+   "text_sha256": "2d4964aa7ec67648",
+   "text": "Kannste mir bloß sagen, wat heutte alles ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1740,
+   "text_sha256": "e5dd24a85522b8ce",
+   "text": "Weniger Smalltalk und mehr Info, was heute ansteht!",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1827,
+   "text_sha256": "a2df9e663a909bdb",
+   "text": "Hast du merkt wat heut ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1832,
+   "text_sha256": "e1d77a1f115fcd1d",
+   "text": "Heute, hättisch noch wat Sonderlich am Plan drin, oder isch am Tag bloß normal beschäftig?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1833,
+   "text_sha256": "024060a7b7e624fd",
+   "text": "Määsch die Agenda an, ob ich heut noch wat außer dem normalen Programm vorhabe.",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1834,
+   "text_sha256": "bf2636576563ae32",
+   "text": "Heut, isch noch wat besonderes am Plan drin oder bin ich bloß im Normalbetrieb beschäftigt?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1844,
+   "text_sha256": "f640f461bceda1a1",
+   "text": "Wie heißt nochmal die Firma, bei der wir die Software liefern sollen?",
+   "from": "unknown",
+   "to": "help_lookup",
+   "rule": "unknown->help_lookup"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1990,
+   "text_sha256": "9f2d2a5fc991befe",
+   "text": "Kannst du mal sehen, was geplant ist?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1991,
+   "text_sha256": "82151e0d876ccafa",
+   "text": "Zeig mir nochmal, was heute los ist.",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2121,
+   "text_sha256": "68d29cf3f6f37264",
+   "text": "Was hat do heut am Programm für mich?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2135,
+   "text_sha256": "c6dbf54825f71098",
+   "text": "Was macht eigentlich das Wetter heute vormittag?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2164,
+   "text_sha256": "d44a1a3c4bcfd2c5",
+   "text": "Was ist geplant?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2165,
+   "text_sha256": "a86a830e66c52812",
+   "text": "Heutiges Programm?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2222,
+   "text_sha256": "0bb1c104c3c96c4b",
+   "text": "Das Wetter heut is ja ganz anders als gestern, oder?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2232,
+   "text_sha256": "02d3fb07d34ec3e8",
+   "text": "Sag mal, wat haste heute noch vorne am Schreibtisch los?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2237,
+   "text_sha256": "85a5fadde7bab07b",
+   "text": "Bist du dir sicher, dass heut nix weiter am Plan isse?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2260,
+   "text_sha256": "6bd3e48947af6d92",
+   "text": "Hast du ne Ahnung, ob da no am Nachmittag Stau am Arthaber is?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2261,
+   "text_sha256": "31f47791d22f980d",
+   "text": "Kannst mir nochma sag'n, ob da Bäckerscheit ned zu weit offen hat?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2334,
+   "text_sha256": "9e65502c720ea829",
+   "text": "Ey Boss, hast du mal 'n bissl nachgeschaut, was ich heut noch ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2417,
+   "text_sha256": "ed18a79d78e315b1",
+   "text": "Schi wissseste ob am Samstag da Zug bis zur Apotheke fährts?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2421,
+   "text_sha256": "b4c014f2764ad87a",
+   "text": "Hast du wüsse wann da Zug von Bern bis zur Hauptbahnhof fährt?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2482,
+   "text_sha256": "d67aa6df9e64940c",
+   "text": "wie lautet mein programm f�r heute?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2484,
+   "text_sha256": "175063c1075d8f96",
+   "text": "was hat mich heute noch im agenda?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2486,
+   "text_sha256": "7cf899f440038584",
+   "text": "was ist heute noch in meinem agenda?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2543,
+   "text_sha256": "aeb8a1f974285267",
+   "text": "Hab grad im Internet gesucht, was für 'ne Software wir brauchen für den neuen Server.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2671,
+   "text_sha256": "b6019ea7a7d69b19",
+   "text": "wie viele terme heute stehen an kannste mir sagen ?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2672,
+   "text_sha256": "878f481a2d116d5c",
+   "text": "moin moin was ist heutz geplant ?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2832,
+   "text_sha256": "922c86834fe01943",
+   "text": "Hoi, wie is denn das Wetter draussen heut?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 105,
+   "text_sha256": "b4afc307eac95718",
+   "text": "Habt ihr schon die Agenda durchgecheckt? Was steht bei mir heute so an?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 107,
+   "text_sha256": "dadb3aa59b801eeb",
+   "text": "Kannst du mir sagen, was heute mit den Mietern von Hausmeister Kowalski so ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 311,
+   "text_sha256": "69329e40b7b1f744",
+   "text": "Wie is des Wetter morgen eigentlich? Weißt, ob i an Regenjacka anzieh brauch?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 457,
+   "text_sha256": "fe50cac856d6e4dd",
+   "text": "S'Wetter heit is wieder so gschlampert, denk i, wir brauchen keine Räumaktion für den Parkplatz mehr.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 486,
+   "text_sha256": "5689b9994be87bf1",
+   "text": "Grüß Gott, Alexa, was steckt auf meim Plan für heute?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 490,
+   "text_sha256": "3cea1bd5fdd9e542",
+   "text": "Grüß di, Alexa, was steht denn heut für mich alles an?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 543,
+   "text_sha256": "9f4eb39248d25bd4",
+   "text": "Woaßt übrigens, ob da nochmals Stau am Nockherberg ist?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 546,
+   "text_sha256": "4c2651243ed32fa5",
+   "text": "Kannst'n sag'n, wann der Zug nach München aus München ausfährt?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 547,
+   "text_sha256": "dcdb912bb2e7c75a",
+   "text": "Wird'n morgen'n Regen bei uns in Wien sein, oder freie Sonn'?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 591,
+   "text_sha256": "94badb2b241acad3",
+   "text": "Ey Chef, wat is bei mir heut so angesagt?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 592,
+   "text_sha256": "40a1fddf61c787f7",
+   "text": "Heut hätt ich grad ne Frage, wat haste so am Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 654,
+   "text_sha256": "281d873f9d467674",
+   "text": "Moin, wie is dat heitigs mit de Wetter?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 680,
+   "text_sha256": "868b6ab09584f195",
+   "text": "Heut is noch was im Programm, oder heisst dat aba morgen?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 769,
+   "text_sha256": "fa219deef79c9272",
+   "text": "Vor de Morgenrunde muss i nooch e Telefonat mit de Möhring machen, wat isse ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 775,
+   "text_sha256": "d2fa3db5a5ce23c7",
+   "text": "was steh in mi agenda fyr heut",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 905,
+   "text_sha256": "31e4fe90b4be1fc3",
+   "text": "Kannste mir überhaupt sagen, ob's bei dem Bäcker Heinrich in der Nähe vonmorgen noch geöffnet ist?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 908,
+   "text_sha256": "c118fd673109e7ba",
+   "text": "Gibt's heut nen Stau auf der Bundesstraße?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 911,
+   "text_sha256": "38f288a895c9cafb",
+   "text": "Weißt du, ob's morgen regnet oder ned?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 912,
+   "text_sha256": "77108c86dbd3279c",
+   "text": "Könnste mir ne Vorhersage vom Wetter übermorgen machen?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 913,
+   "text_sha256": "c7b9ccfe797a93a4",
+   "text": "Läuft morgen nen Stau auf der Autobahn wegen eener Baustelle?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 914,
+   "text_sha256": "b5709f69965c0105",
+   "text": "Fährt der Zug nach Hannover vonmorgen noch pünktlich?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 963,
+   "text_sha256": "e2c09481c554711f",
+   "text": "Heute hab ich wénn no was am Programm?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 969,
+   "text_sha256": "3f0556638e5606a7",
+   "text": "Wénn heit noch wat am Programm is?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1076,
+   "text_sha256": "8b48021d2fef1752",
+   "text": "Was is heut im Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1079,
+   "text_sha256": "fbbd64ee96f9cbc0",
+   "text": "Was sollt heut noch los werden?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1080,
+   "text_sha256": "624b0d871d87cf75",
+   "text": "Könntest du mir mal sagen, wat heut noch ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1157,
+   "text_sha256": "400f942e952edbbb",
+   "text": "Ich muss wissen, was heute auf meinem Programm ist.",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1176,
+   "text_sha256": "4e93fc2231bba74c",
+   "text": "Hast du ne Ahnung, wann die Werkstatt von Herrn Schmidt offene Öffnungszeiten hat, damit ich mein Auto zum Inspektion bringen kann?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1372,
+   "text_sha256": "002fb1fd4e27c8f1",
+   "text": "Was isch denn das Wetter morgen?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1393,
+   "text_sha256": "1f2c9382ac0016d1",
+   "text": "Ey Assistent, was steht heute eigentlich auf dem Programm?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1529,
+   "text_sha256": "b7077df2f0c1d43c",
+   "text": "Ey Boss, haste schon mal ne Überblick vom heutigen Programm?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1531,
+   "text_sha256": "7afea5dd296bdbea",
+   "text": "Ey Assistent, sag ma nochmal, wat heut ansteht, ja?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1532,
+   "text_sha256": "865ff318ee361de8",
+   "text": "Was hab ich denn heut auf der Agenda?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1537,
+   "text_sha256": "251a0b1cb265b1d4",
+   "text": "Na gut, sag mir nochma, wat heut auf dem Plan steht.",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1569,
+   "text_sha256": "e84f75a18a61d913",
+   "text": "Was steht in meinem Plan für heute?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1570,
+   "text_sha256": "a06151474ad76423",
+   "text": "Was kommt heute aufs Programm?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1626,
+   "text_sha256": "d02fdf73a8ca40d4",
+   "text": "Hat die Werkstatt Bächler & Partner heute offen oder sind sie geschlossen?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1631,
+   "text_sha256": "3ca55406164424f5",
+   "text": "Weißt du vielleicht, ob der Lieferant Rohrer & Partnern noch heute offen hat?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1908,
+   "text_sha256": "867b541cb6c155a0",
+   "text": "Was steht heut so im Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1911,
+   "text_sha256": "17543bc3cdcfea7b",
+   "text": "Gucke mal, wos heut noch ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1914,
+   "text_sha256": "cacc614dba529adf",
+   "text": "Säge mir bitte wos heut no ansteht.",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1915,
+   "text_sha256": "5915d7f4aeb7e9de",
+   "text": "Wos steht heut do so im Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1930,
+   "text_sha256": "11a692d6a9887d56",
+   "text": "Etwas geplant?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1972,
+   "text_sha256": "4ac1033655024b8c",
+   "text": "Wüscht ch wüsse wann dr Lieferant noch offene Öffnungszeit heut hät?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1973,
+   "text_sha256": "7adceb4f24c2093f",
+   "text": "Hast du nö Ahnung wüsse ob d'Zahnarztpraxis am Freiweg morgen 'ne offene Öffnungszeit hät?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1975,
+   "text_sha256": "c0b651cf3dd40468",
+   "text": "Weeschst du ob d'Werkstatt morgemmoggend noch 'ne offene Öffnungszeit hätt würd?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1976,
+   "text_sha256": "55fd51ba3e6779a1",
+   "text": "Weeschst du wüsse wenn d'Werkstatt morgen noch 'ne offene Öffnungszeit hät?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1977,
+   "text_sha256": "313bfc73e51d39d4",
+   "text": "Hast du nö Ahnung ob dr Autohaus Okonkwo morgen noch 'ne Öffnungszeit hätt würd?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1978,
+   "text_sha256": "ee9f1e4627f7c5d5",
+   "text": "Wüsstest du wüsse wenn dr Lieferant morgen noch 'ne Öffnungszeit hätt würd?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 2061,
+   "text_sha256": "35b71873a090848d",
+   "text": "Kannst du mal ne Info besorgen, ob da morgen nen Stau bei der Baustelle in der Straße gibt?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 2062,
+   "text_sha256": "deca2583a4bd6b7f",
+   "text": "Hat die Apotheke von Doktor Müller heute noch offen oder muss ich mir meine Medikamente halt bis morgen warten lassen?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 2064,
+   "text_sha256": "897fe70e290b473d",
+   "text": "Wann fährt morgen früh der erste Bus nach Alexanderplatz los, damit ich pünktlich zur Arbeit komme?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 2069,
+   "text_sha256": "a19caae346c047e1",
+   "text": "Hast du ne Idee, wann die Züge wieder normal laufen, seitdem die technische Probleme auf dem Bahnhof von Herrn Schwarz sind?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 2149,
+   "text_sha256": "45c17cd2af30d05f",
+   "text": "Gibt's heit vielleicht eine Chance, dass der Bäckermeister von Eckart's Bäckerei bis sechs Uhr geöffnet hat?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 2152,
+   "text_sha256": "46358bd12fc1c7f9",
+   "text": "Könntest du kurz rauskriegen, wann das letzte Mal ein Zug von der Bahnhofsfirma Hafner & Hütte hier durchgefahren ist?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 2417,
+   "text_sha256": "e83bba96957872e0",
+   "text": "Hey, was meinst du, wie das Wetter heute Abend wird?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 2442,
+   "text_sha256": "d903e85658dbb724",
+   "text": "Hast du die Angebotsgutachten nohmmer von drm Rainer im Netz rumliegen?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 2454,
+   "text_sha256": "e8e5ea4eeaef7bcc",
+   "text": "Wie heißt nochmal das Programm, mit dem wir die Miete rausgeben?",
+   "from": "unknown",
+   "to": "help_lookup",
+   "rule": "unknown->help_lookup"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 2482,
+   "text_sha256": "7c6848279c832406",
+   "text": "Kannst du mir sagen, was alles ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 2484,
+   "text_sha256": "03fd26ecc99f2209",
+   "text": "Was ist eigentlich geplant?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 2490,
+   "text_sha256": "2139eb97869141d1",
+   "text": "Nää, vädere, wat is heiti an der Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 2493,
+   "text_sha256": "52321fa53c98e698",
+   "text": "Hast du ne Ahnung, wat heiti am Programm is?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 2502,
+   "text_sha256": "32f6cee7ca7bb6e2",
+   "text": "Gibt's heut noch wat am Plan für mich?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 2729,
+   "text_sha256": "6926867b626b4d3d",
+   "text": "Ist da nix drüber bekannt, wann die Zahnarztpraxis Dr. Weber noch offen hat?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 2778,
+   "text_sha256": "d306b3e0ac9f1ae0",
+   "text": "Was steht heut im Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_2e53bbfc8_real-01.jsonl",
+   "line": 6,
+   "text_sha256": "248c4de4bee510fe",
+   "text": "Hak die Aufgabe mit den Bewehrungsplänen ab, die hab ick heute Morjen schon allet durchjeguckt.",
+   "from": "unknown",
+   "to": "complete_task",
+   "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_synth_2e53bbfc8_real-01.jsonl",
+   "line": 10,
+   "text_sha256": "7742082c5d408b76",
+   "text": "Boah, bei dem Wetter heute kannste doch keen Bock auf Arbeit haben, hauptsache der Kaffee is jut, wa?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_2e53bbfc8_real-01.jsonl",
+   "line": 58,
+   "text_sha256": "76f256725d7e871d",
+   "text": "Aufgabe Rezeptbestellung abhaken, ist schon erledigt",
+   "from": "unknown",
+   "to": "complete_task",
+   "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_synth_2e53bbfc8_real-01.jsonl",
+   "line": 64,
+   "text_sha256": "3113c715995a46c6",
+   "text": "Ey, ich hab die Mail an die Baumschule Kowalski vorhin schon abgeschickt, tu die mal bitte bei den Aufgaben von heute abhaken.",
+   "from": "unknown",
+   "to": "complete_task",
+   "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_synth_2e53bbfc8_real-01.jsonl",
+   "line": 70,
+   "text_sha256": "ac6f729838f71120",
+   "text": "Dat Wetter is ja mal wieder total für'n Arsch, meinste, dat wird morgen noch wat mit Sonne oder soll ick die Tomaten gleich drinnen lassen?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_2e53bbfc8_real-01.jsonl",
+   "line": 72,
+   "text_sha256": "8cccf637c24270cc",
+   "text": "Ick hab die Angebote für die Dachbegrünung bei Hoffmann & Söhne schon alle fertig gemacht, lösch die Aufgabe von morgen mal aus der Liste.",
+   "from": "unknown",
+   "to": "delete_task",
+   "rule": "unknown->delete_task"
+  },
+  {
+   "file": "vyvy_synth_2e53bbfc8_real-01.jsonl",
+   "line": 98,
+   "text_sha256": "5fa414a8b28b594c",
+   "text": "Hesch es Wetter für s Wuchenänd gseh? Ich möcht am Samstig go wandere.",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_2e53bbfc8_test-04.jsonl",
+   "line": 43,
+   "text_sha256": "78cfd981c94cb92d",
+   "text": "Boah, wat is dat heute für 'n Wetter, ey, da kriegt man ja Rohrbruch im Kopp – wie war dein Wochenende so?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_2e53bbfc8_test-04.jsonl",
+   "line": 48,
+   "text_sha256": "9106416be518934b",
+   "text": "Hak die Aufgabe mit dem Heizungscheck bei Müllers heute ab, die hab ich nämlich schon fertich.",
+   "from": "unknown",
+   "to": "complete_task",
+   "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_synth_2e53bbfc8_test-04.jsonl",
+   "line": 74,
+   "text_sha256": "96316b4b96f8ee4c",
+   "text": "Die Aufgabe mit der Rauchmelderwartung in der Lindenstraße kannst du mal abhaken, die hab ich eigentlich heute Morgen schon erledigt.",
+   "from": "unknown",
+   "to": "complete_task",
+   "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 68,
+   "text_sha256": "4ae34a4d1387ff79",
+   "text": "Also, was hab ich denn heute überhaupt geplant?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 70,
+   "text_sha256": "c1f7caf8c43dd74f",
+   "text": "Was steht denn heute für mich in der Kartei an?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 72,
+   "text_sha256": "22d574f6de3c5e8d",
+   "text": "Kannst du mir sagen, ob ich heute irgendwo hin muss oder was ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 135,
+   "text_sha256": "86cbbe335d60febd",
+   "text": "Das Wetter ist heute echt schön, oder?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 141,
+   "text_sha256": "16974005609202b3",
+   "text": "Maa, tschau Toni, waß heite ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 142,
+   "text_sha256": "59698d860d8cd163",
+   "text": "Servus, könnt mir wüsse, was heidamag ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 145,
+   "text_sha256": "091d8d0d983d3fcf",
+   "text": "Moin, wüßts nicht, wat fürne Aufträge heidamag ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 148,
+   "text_sha256": "31cfdce57f23e23b",
+   "text": "Hoi Toni, sagst mal, waß heit ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 150,
+   "text_sha256": "1c615b0847172e0e",
+   "text": "Maa, kannst ma net sagen, wat heit ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 190,
+   "text_sha256": "e68d1215116e71c3",
+   "text": "Sagts mir bitte, was mir noch heut am Plan is?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 192,
+   "text_sha256": "70717409c45e7ae3",
+   "text": "Übterprüf ma mal, wa heut ansteht.",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 198,
+   "text_sha256": "7b04c22db9239d12",
+   "text": "Was is heut noch im Programm für mich?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 199,
+   "text_sha256": "f6fc724267aa9f07",
+   "text": "Übersehe mal kurz, was heut ansteht, ja?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 240,
+   "text_sha256": "24eee4a17e62018e",
+   "text": "die aufgabe für die blumentopfbesorgung kann ich jetzt abhaken",
+   "from": "unknown",
+   "to": "complete_task",
+   "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 343,
+   "text_sha256": "2a0d1f21a47edf47",
+   "text": "Was ist heute geplant?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 344,
+   "text_sha256": "d56eca91ff65597e",
+   "text": "Kannst du mir sagen, was heute ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 403,
+   "text_sha256": "bb33161c451ddadf",
+   "text": "Gibts eigentlich irgendwo im Netz eine Liste von den neuesten Hydrantenmodellen?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 411,
+   "text_sha256": "ba34d5d04fe1ef44",
+   "text": "Na mal scho, Liesl, wos heit am Plan für mier gibt?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 416,
+   "text_sha256": "38f589e284db92fd",
+   "text": "Wos hat der Tag heit noch für mich in Planung, Liesl?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 419,
+   "text_sha256": "b8ff413e62b7fed7",
+   "text": "Sag mal Liesl, wos steht denn heit so im Plan für mier?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 534,
+   "text_sha256": "d2365ad6310d4108",
+   "text": "schau mal kurz ob heute noch etwas ansteht",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 536,
+   "text_sha256": "b637fe5d8657b14e",
+   "text": "Moin, nix am Plan für heute?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 539,
+   "text_sha256": "81e0844e93af317b",
+   "text": "Was haste denn heut im Programm, Chef?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 555,
+   "text_sha256": "2f41c62cf357c111",
+   "text": "Hast do scho mal wat im Plan heut?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 556,
+   "text_sha256": "d13e027b223a1dbc",
+   "text": "Määttä, wüsstä owa net, was heut so ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 563,
+   "text_sha256": "ae12d370e2c25cbe",
+   "text": "Ümmol, was steht heut noch so im Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 564,
+   "text_sha256": "526defac7f5acd26",
+   "text": "Heut so, hat e Plan oder ne Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 572,
+   "text_sha256": "123e2d5129e0e86d",
+   "text": "Wollen wir kurz durchgehen, was heute ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 573,
+   "text_sha256": "bf283133b3c5b885",
+   "text": "Sag mal, was hab ich eigentlich heute noch vor?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 577,
+   "text_sha256": "70ab070f9e3a534e",
+   "text": "Ey Assistentin, wat hast do heut so für mich geplant?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 579,
+   "text_sha256": "2981e721fe646b9b",
+   "text": "Bist du dir sicher, das heut nix im Programm steht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 580,
+   "text_sha256": "ae3051217678a70f",
+   "text": "Ey, sag mal, was hab ich heut eigentlich vor?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 584,
+   "text_sha256": "d8d3e928a4a63523",
+   "text": "Scheint, als wär heut nichts geplant, haste ne Ahnung?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 585,
+   "text_sha256": "6d46afbaf6b2f065",
+   "text": "Was hab ich denn heute Schönes vor, kannst du mir das sagen?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 588,
+   "text_sha256": "b81ee7813da2593e",
+   "text": "Mensch, ich muss wissen, was heute noch ansteht!",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 622,
+   "text_sha256": "fe9f4a6e9400e61b",
+   "text": "Heut, wat haste no vörbereitet oder am Tagebuch am Stehen?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 684,
+   "text_sha256": "8fee9c44f5c48ad3",
+   "text": "wie siehts aus was heute in plan ist",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 686,
+   "text_sha256": "9febae1cd88d54a0",
+   "text": "was heuet genau ansteht kannst du mir das bitte mal nennen",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 688,
+   "text_sha256": "c32d6a2c024e0df6",
+   "text": "was heut ansteht das würde ich gerne wissen",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 692,
+   "text_sha256": "dfb5458e2059f4d2",
+   "text": "was heute für mich ansteht kannst du mir das sagen",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 732,
+   "text_sha256": "afb594f6b6aeda4e",
+   "text": "Sag ma schnell, wos heut am Plan steht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 736,
+   "text_sha256": "1f032e4619d728cc",
+   "text": "Heit am Plan, was stehl da neamlich?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 839,
+   "text_sha256": "f6782dc78846d672",
+   "text": "Kannste mir a Wat zusageg, waß heut is in meinem Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 1146,
+   "text_sha256": "40abcc0a935685f7",
+   "text": "Was steht heute an?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 1148,
+   "text_sha256": "0a808ffb82343caa",
+   "text": "Was habe ich heute geplant?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 1149,
+   "text_sha256": "9cff21c6a7536ee8",
+   "text": "Was hat es heute in der Kanzlei geplant?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 1153,
+   "text_sha256": "3c558f28ac7df548",
+   "text": "Hömma Assistentin, was steht heute am Plan für mia?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 1155,
+   "text_sha256": "69450a0124adad91",
+   "text": "Sag mal, wat heut ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 1159,
+   "text_sha256": "9be777f3dd3145cf",
+   "text": "Woaßsch mää wat heut alles ansteht?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 1163,
+   "text_sha256": "3e45869a7cb0f292",
+   "text": "Sag mir bitt, wat heut ansteht.",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 1164,
+   "text_sha256": "c093ff3ebb1587f4",
+   "text": "Hatte wia heut wat besonderes auf'm Plan?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 1198,
+   "text_sha256": "b06ec1796cb8c9db",
+   "text": "Sag eens, wat stond vandaag noch im Plan für mi?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 1200,
+   "text_sha256": "5c3c29dd080051da",
+   "text": "Wat is heute am Programm für unse Arbeitsgrupp?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 1203,
+   "text_sha256": "f850d1eac589a697",
+   "text": "Wullst mir sagen, was heutte vällig los ist?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 1228,
+   "text_sha256": "54a604d9c927012a",
+   "text": "sag mal was heute alles ansteht buroassistent",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_train_v1.jsonl",
+   "line": 52,
+   "text_sha256": "01ccd170410796ed",
+   "text": "Wann hat die Werkstatt am Samstag offen?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_train_v1.jsonl",
+   "line": 63,
+   "text_sha256": "8af5a2cf9f29574b",
+   "text": "Regnet es heute Nachmittag?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_train_v1.jsonl",
+   "line": 79,
+   "text_sha256": "cdf0baec9130e6fc",
+   "text": "Sag mal, Wie wird das Wetter morgen, oder?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_train_v1.jsonl",
+   "line": 211,
+   "text_sha256": "57682cc4697a92ec",
+   "text": "Was kostet gerade ein Liter Diesel?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_train_v1.jsonl",
+   "line": 311,
+   "text_sha256": "36d1f340bae095b9",
+   "text": "Hat das Finanzamt heute geöffnet?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_train_v1.jsonl",
+   "line": 482,
+   "text_sha256": "ea118fb313fe1e45",
+   "text": "Wat is'n dit für'n Wetter heute?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_train_v1.jsonl",
+   "line": 484,
+   "text_sha256": "2d169db8d1cb2df2",
+   "text": "Bitte: wie wird das wetter morgen, oder?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_train_v1.jsonl",
+   "line": 489,
+   "text_sha256": "cc32c302b0f30636",
+   "text": "Brauch ich morgen einen Schirm?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_train_v1.jsonl",
+   "line": 526,
+   "text_sha256": "2dd016dcabe8b6ab",
+   "text": "Wie wird das Wetter am Wochenende?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_train_v1.jsonl",
+   "line": 579,
+   "text_sha256": "e10164f9d309a36e",
+   "text": "Ist auf der A8 Stau?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_train_v1.jsonl",
+   "line": 720,
+   "text_sha256": "d0da207a587638d1",
+   "text": "Welche Öffnungszeiten hat der Baumarkt?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_train_v1.jsonl",
+   "line": 782,
+   "text_sha256": "7a3d9646be9bd6c6",
+   "text": "Streich die Aufgabe mit dem Lager, die hat sich erledigt.",
+   "from": "unknown",
+   "to": "delete_task",
+   "rule": "unknown->delete_task"
+  },
+  {
+   "file": "vyvy_train_v1.jsonl",
+   "line": 1103,
+   "text_sha256": "099caa058a95724d",
+   "text": "Stemple mich aus.",
+   "from": "unknown",
+   "to": "stop_timer",
+   "rule": "unknown->stop_timer"
+  },
+  {
+   "file": "vyvy_train_v1.jsonl",
+   "line": 1107,
+   "text_sha256": "e268de378c249ba6",
+   "text": "Markier die Aufgabe Angebot schreiben als erledigt.",
+   "from": "unknown",
+   "to": "complete_task",
+   "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_train_v1.jsonl",
+   "line": 1193,
+   "text_sha256": "312c38e97338b9f0",
+   "text": "Wann fährt der nächste Bus zum Bahnhof?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 11,
+   "text_sha256": "ce73f7a1415b69fe",
+   "text": "Regnet es heute Abend?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 16,
+   "text_sha256": "9090647c23dae11a",
+   "text": "wie wird das wetter heute?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 77,
+   "text_sha256": "3107967fa35bce8b",
+   "text": "Gibt es am Samstag Schnee?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 80,
+   "text_sha256": "a56f571dff625597",
+   "text": "Wie wird das Wetter übermorgen?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 86,
+   "text_sha256": "089bad63ff26d1ae",
+   "text": "Gibt es morgen Schnee?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 93,
+   "text_sha256": "0279d7c6fc6acbdc",
+   "text": "Fährt übermorgen die S-Bahn?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 95,
+   "text_sha256": "137e174a4e9d452f",
+   "text": "Fährt am Samstag die S-Bahn?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 103,
+   "text_sha256": "1d502456338dabdc",
+   "text": "hat das autohaus brückl am wochenende geöffnet?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 119,
+   "text_sha256": "ab738b4f1b0ebc9c",
+   "text": "Fährt heute die S-Bahn?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 140,
+   "text_sha256": "3ae12fdde77a78ac",
+   "text": "Regnet's morge im Ländle?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 143,
+   "text_sha256": "b93f3c45e734ad94",
+   "text": "Hat das Freibad übermorgen offen?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 153,
+   "text_sha256": "ab1ab58456df24d9",
+   "text": "brauche ich morgen früh einen schirm?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 192,
+   "text_sha256": "d63661f2a8bf2996",
+   "text": "gibt es am wochenende schnee?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 210,
+   "text_sha256": "8ee585500274241e",
+   "text": "Regnet es morgen?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 254,
+   "text_sha256": "d9653503826a7034",
+   "text": "Brauche ich übermorgen einen Schirm?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 288,
+   "text_sha256": "dda1c51fd5243035",
+   "text": "Schneit's übermorge?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 307,
+   "text_sha256": "5c5db38da1bbd89e",
+   "text": "Wann macht der Supermarkt am Samstag zu?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 321,
+   "text_sha256": "197e0f7b4b40bbd1",
+   "text": "Brauche ich heute Nachmittag einen Schirm?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 322,
+   "text_sha256": "3125c4a3bac6f5e8",
+   "text": "Hat die Spedition Wendler am Samstag geöffnet?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 326,
+   "text_sha256": "0e2b9b90f40d9c33",
+   "text": "Hat das Freibad am Sonntag offen?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 331,
+   "text_sha256": "478d71dcb41f2258",
+   "text": "Hat das Freibad am Samstag offen?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 349,
+   "text_sha256": "c76d3a6bbfdcbbde",
+   "text": "Fhärt am Sonntag die S-Bahn?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 352,
+   "text_sha256": "b39cd2bb6da374be",
+   "text": "Regnet es morgen früh?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 355,
+   "text_sha256": "6c31b7fff9fcc4c2",
+   "text": "Hat das Freibad am Wochenende offen?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 362,
+   "text_sha256": "53532167e638a51b",
+   "text": "Regnet es heute?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 369,
+   "text_sha256": "1d07408e279c6543",
+   "text": "Brauche ich heute Abend einen Schirm?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 376,
+   "text_sha256": "4129c7877750a613",
+   "text": "Brauche ich morgen einen Schirm?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 390,
+   "text_sha256": "91c3e41c77962e60",
+   "text": "Wie wird das Wetter morgen früh?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 396,
+   "text_sha256": "4162b4967e567bc2",
+   "text": "gibt es übermorgen schnee?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 418,
+   "text_sha256": "eb7903643688144c",
+   "text": "Regnet es amm Wochenende?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 419,
+   "text_sha256": "67f7fb93cc287104",
+   "text": "brauche ich am samstag einen schirm?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 426,
+   "text_sha256": "64eabd2ffa6bd400",
+   "text": "Brauche ich am Wochenende einen Schirm?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 446,
+   "text_sha256": "bc56a8e73f1ab891",
+   "text": "Regnet es am Samstag?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 482,
+   "text_sha256": "42b8f50a30074426",
+   "text": "Brauch i übamorgn z'Regensburg an Schirm",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 488,
+   "text_sha256": "a520ee9ed31f771d",
+   "text": "Is da Zug noch Nürnberg übamorgn wieda so voll?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 491,
+   "text_sha256": "c89f2f44d8b870d3",
+   "text": "Föhrt de Bahn övermorgen na Sylt?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 493,
+   "text_sha256": "97674eefd43545d6",
+   "text": "Fährt dr Zug am Sonndich überhaupt uff dr Gäubahn?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 503,
+   "text_sha256": "1d7afbff780be293",
+   "text": "Is övermorgen wedder Stau vörn Elbtunnel?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 521,
+   "text_sha256": "ac8f50d9b163c412",
+   "text": "Fahrt d'S-Bahn heit überhaupt bis Erding?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 522,
+   "text_sha256": "812c39873ae25123",
+   "text": "git's übermorn z'bärn schnee?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 524,
+   "text_sha256": "4e1860fa07e6fd59",
+   "text": "kommt d's-bahn morga pünktlich noch stuagart nei?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_unknown_hard_v1.jsonl",
+   "line": 528,
+   "text_sha256": "67e0d305fc8337e6",
+   "text": "Is morje widder Stau p dr Zoobröck?",
+   "from": "unknown",
+   "to": "web_search",
+   "rule": "unknown->web_search"
+  }
+ ],
+ "review": {
+  "ambiguous_kept": [],
+  "appointments_today_asking_for_work_kept": [
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+    "line": 50,
+    "text_sha256": "7489a1aa5feb595e",
+    "text": "Büet, i wüsch de Überblick für heute säge, was für Jobs i ha."
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+    "line": 51,
+    "text_sha256": "dd3b6485dd51e75e",
+    "text": "Hallo Büet, was ha i no für Aufgaben für heute?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+    "line": 54,
+    "text_sha256": "0e89ed11a6f588ba",
+    "text": "Büet, i muess wiessen, was für Aufgaben i ha für hüt."
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+    "line": 278,
+    "text_sha256": "13d48fbd8f638faa",
+    "text": "Hallo, könntest du mir nochmal sagen, was heute alles ansteht? Hab ich vielleicht was mit der Firma Blütenreich zu tun?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+    "line": 501,
+    "text_sha256": "39cb851d6abbc80f",
+    "text": "Was ham i jetz, was i beim Kunden Schmiedl heute zu erledigga hann?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+    "line": 504,
+    "text_sha256": "c3ed295ab8773d1f",
+    "text": "Schauts ma jetz, was i heut mit der Baufirma Müller zu schaffe hann?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+    "line": 505,
+    "text_sha256": "5ae7519dbe5f6a4c",
+    "text": "Wia siehts aus, was i heut zu schaffe hann, besonders morgends?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+    "line": 529,
+    "text_sha256": "ddfaf28822b5b4c0",
+    "text": "Bitte zeige mir, was ich heute alles zu tun habe."
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+    "line": 580,
+    "text_sha256": "264bc2f48c1ac40c",
+    "text": "Können wir durchgehen, was ich heute alles zu tun habe?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+    "line": 582,
+    "text_sha256": "e84b4792e1dade74",
+    "text": "Ich muss wissen, was ich heute alles in meiner Liste stehen hat."
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+    "line": 584,
+    "text_sha256": "5011b85eed28fe8f",
+    "text": "Ich brauche deine Hilfe, um herauszufinden, was ich heute alles zu tun habe."
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+    "line": 752,
+    "text_sha256": "7d1db1fb7970113c",
+    "text": "kannst du mir sagen was ich heut zu tun habe?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+    "line": 1236,
+    "text_sha256": "c0442c037e4bda46",
+    "text": "Meine Aufgaben für heute?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+    "line": 1543,
+    "text_sha256": "c9cd95b916150fa3",
+    "text": "Was ist heute zu tun?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+    "line": 1544,
+    "text_sha256": "a129e12b41834ea5",
+    "text": "Liste meine heutigen Aufgaben auf"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+    "line": 1763,
+    "text_sha256": "9669009c13e1f27d",
+    "text": "Hab ich heute noch wat druntergeschrieben zu tun?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+    "line": 2326,
+    "text_sha256": "870435f4266d6dfa",
+    "text": "Muss ich heut noch irgendwas für die Schwiegmutter erledigen?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+    "line": 91,
+    "text_sha256": "c97d86430c050001",
+    "text": "guten morgen assistent bitte liste alle aufgaben auf die ich heute vor dem mittagstand muss"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+    "line": 157,
+    "text_sha256": "d377ae4dfe828852",
+    "text": "Gibt es heute noch Aufgaben, die ich mit der Firma BlauWasser klären muss?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+    "line": 440,
+    "text_sha256": "00faacd85afd59ca",
+    "text": "Was hesch du alles für Aufgaben für heüt zügeordnet?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+    "line": 442,
+    "text_sha256": "c171e676b32d2257",
+    "text": "Wes isch i dr Telefonliste für heüt?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+    "line": 544,
+    "text_sha256": "31db3d40b990092f",
+    "text": "Also, was gibt es denn heute von dir so für mich zu tun?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+    "line": 785,
+    "text_sha256": "0a1550b7f2c8084c",
+    "text": "Kannst du mir sagen, was ich heute alles zu tun habe?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+    "line": 1739,
+    "text_sha256": "e79518bbfeb1212c",
+    "text": "Hallo, könntest du bitte mal überprüfen, was ich heute zu tun habe?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+    "line": 2674,
+    "text_sha256": "54f86b7ead7ad68d",
+    "text": "was steht heute noch auf der liste für mich ?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+    "line": 2723,
+    "text_sha256": "97bcc65213305ca0",
+    "text": "Ich muss wissen, ob ich heute noch irgendetwas im Büro zu erledigen habe."
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+    "line": 2724,
+    "text_sha256": "125409ca15b9400a",
+    "text": "Was hat es heute Abend für mich noch zu tun?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+    "line": 260,
+    "text_sha256": "012fca2decb0ef2a",
+    "text": "Kiekste, was hab i’ heute zu tun?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+    "line": 265,
+    "text_sha256": "66ecafcfc89a2565",
+    "text": "Kriegste ne Liste, was ich heute mit dem Projekt XY zu tun hab?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+    "line": 485,
+    "text_sha256": "4d6ad920ff3f41b1",
+    "text": "Guten Morgen, Siri, was hab i für Aufgaben heute eingeplant?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+    "line": 487,
+    "text_sha256": "1994f2f485b520df",
+    "text": "Servus, Google, wie schaut's aus mit meine Aufgaben heute?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+    "line": 596,
+    "text_sha256": "da301e22658bee4f",
+    "text": "Ey, haste heut noch wat für mich in der Liste?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+    "line": 1395,
+    "text_sha256": "39e522a6ed26c88d",
+    "text": "Würdest du mir mal sagen können, was ich heute alles zu tun habe?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+    "line": 1566,
+    "text_sha256": "c722cc79c4221c06",
+    "text": "Zeige mir, was ich heute noch zu tun habe"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+    "line": 1568,
+    "text_sha256": "66332a2fbe47e039",
+    "text": "Hast du meine Aufgaben für heute?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+    "line": 2486,
+    "text_sha256": "b330fc8a836c803a",
+    "text": "Könntest du mal meinen heutigen Zeitplan auflisten?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+    "line": 2497,
+    "text_sha256": "8b9db9fe13469d83",
+    "text": "Wann muß ich noch heute nix besonderes erledig?"
+   },
+   {
+    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+    "line": 2501,
+    "text_sha256": "dce62fbd73d352dc",
+    "text": "Hat's noch wat heut zu tun für uns?"
+   },
+   {
+    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+    "line": 67,
+    "text_sha256": "086e18013c1eb915",
+    "text": "Heute ist der Tag, an dem ich gern weiß, was für Aufgaben ansteht, kannst du das schnell mal rausfinden?"
+   },
+   {
+    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+    "line": 350,
+    "text_sha256": "87eaf9a3cea6b613",
+    "text": "Ich möchte wissen, welche Aufgaben heute zu erledigen sind."
+   },
+   {
+    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+    "line": 511,
+    "text_sha256": "2097bb071447ff13",
+    "text": "Ich muss wissen, was ich alles heute zu tun habe."
+   },
+   {
+    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+    "line": 515,
+    "text_sha256": "117eacfd430b852d",
+    "text": "Welche Aufgaben stehen heute auf meinem Plan?"
+   },
+   {
+    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+    "line": 569,
+    "text_sha256": "27a3012d235a598f",
+    "text": "Weißt du, ob ich heute irgendwas zu erledigen habe?"
+   },
+   {
+    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+    "line": 575,
+    "text_sha256": "5f23ec3529f1c1fe",
+    "text": "Sag mal, wüsste das jetzt, ob ich heute noch was zu tun habe?"
+   },
+   {
+    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+    "line": 586,
+    "text_sha256": "c09929afec3efdde",
+    "text": "Heut hat mich sowieso ne Ahnung nicht, ob ich was zu tun hab, kannst du mir helfen?"
+   },
+   {
+    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+    "line": 1232,
+    "text_sha256": "a419a94f94a4f871",
+    "text": "was muß ich heute erledigen?"
+   }
+  ]
+ }
+}

@@ -63,7 +63,10 @@ def test_contrast_pairs() -> None:
 def test_training_pipeline_reads_every_line() -> None:
     loaded = train_lora.load_rows([hard.OUT, hard.CONTRAST_OUT], intents())
     assert len(loaded) == 608
-    assert sum(json.loads(r["answer"])["intent"] == "unknown" for r in loaded) == 528
+    # Contract 2: the lines tools/relabel_v2.py moved off unknown (weather, trains, ...) are read with their new label.
+    moved = sum(c["from"] == "unknown" for (f, _), c in train_lora.relabel_v2.load().items() if f == hard.OUT.name)
+    assert sum(json.loads(r["answer"])["intent"] == "unknown" for r in loaded) == 528 - moved
+    assert len(loaded) == 608 and moved > 0
 
 
 def test_holdout_lock() -> None:
