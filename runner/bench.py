@@ -26,6 +26,7 @@ llama-cpp-python.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import os
@@ -39,15 +40,129 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_DATA = ROOT / "data" / "holdout_benchmarks.json"
-DEFAULT_GRAMMAR = ROOT / "grammars" / "slots.gbnf"
-FIELDS = ("intent", "timeframe", "entity", "confidence")
+# Output contracts. Contract 1 (9 intents, four fields) is frozen for the adapters trained on
+# it; contract 2 (25 intents, five fields) is the current one. A results file records its
+# contract, and tools/compare_adapter.py never compares across contracts.
+GRAMMARS = {1: ROOT / "grammars" / "slots.gbnf", 2: ROOT / "grammars" / "slots_v2.gbnf"}
+CONTRACT_VERSION = 2
+DEFAULT_GRAMMAR = GRAMMARS[CONTRACT_VERSION]
+FIELDS_BY_CONTRACT = {1: ("intent", "timeframe", "entity", "confidence"),
+                      2: ("intent", "timeframe", "entity", "content", "confidence")}
+FIELDS = FIELDS_BY_CONTRACT[CONTRACT_VERSION]
+# Contract 2 only; the grammar leaves lengths open, the validator closes them.
+MAX_CHARS = {"entity": 80, "content": 120}
 TIMEFRAMES = ("today", "tomorrow", "week")
 
-# One definition per intent, shared by every mode. The boundaries that small
-# models confuse most are spelled out: what is "on today" means appointments,
-# daily_agenda only covers an explicit whole-day overview; open vs. overdue
-# depends on the due date, not on urgency.
+# One definition per intent, shared by every mode, in the words the writers of the
+# decision set got (contract 2). The boundaries: current outside facts are web_search,
+# fixed knowledge is unknown; only appointments is appointments_today, only open work
+# is tasks_open, the day as a whole or without a kind is daily_agenda; tomorrow is
+# never daily_agenda.
 INTENT_HELP = {
+    "appointments_today": "own calendar appointments today: meetings, visits, fixed times, or where one has to "
+                          "be today",
+    "appointments_tomorrow": "own calendar appointments tomorrow",
+    "appointments_search": "find own appointments by keyword, person or a period other than today or tomorrow",
+    "daily_agenda": "what is on today overall: the whole day across appointments, tasks and email, or a general "
+                    "question about today that does not narrow it to one kind",
+    "tasks_open": "own tasks not done yet, whatever their due date",
+    "tasks_overdue": "own tasks whose due date has passed, or that were forgotten or missed",
+    "tasks_search": "find a particular own task by keyword or person",
+    "emails_unread": "new or unread email",
+    "emails_search": "find own email by sender, subject or keyword",
+    "email_thread_summary": "summarize an own email conversation",
+    "web_search": "look something up on the internet, including current outside facts (weather, opening hours, "
+                  "prices, traffic)",
+    "help_lookup": "how to use this office software or what it can do",
+    "create_appointment": "make a new appointment",
+    "create_task": "make a new task",
+    "complete_task": "mark an own task as done",
+    "reschedule_task": "move an own task to another day or time",
+    "delete_task": "remove an own task",
+    "write_email": "write a new email",
+    "draft_reply": "draft an answer to a received email",
+    "start_timer": "start recording working time",
+    "stop_timer": "stop recording working time",
+    "create_project": "create a new project",
+    "create_goal": "set a new goal",
+    "complete_goal": "mark a goal as reached",
+    "unknown": "anything else, including fixed general knowledge, arithmetic, small talk, and calendars or "
+               "affairs of other people or companies",
+}
+
+OUTPUT_HELP = ("timeframe: today, tomorrow, week or null. entity: a named person, company or project, or null. "
+               "content: the title, subject or search words in the words of the question, or null. "
+               "confidence: 0 to 1, how sure you are.")
+
+
+def _example(question: str, intent: str, timeframe: str | None, confidence: float,
+             entity: str | None = None, content: str | None = None) -> str:
+    answer = json.dumps({"intent": intent, "timeframe": timeframe, "entity": entity, "content": content,
+                         "confidence": confidence}, ensure_ascii=False)
+    return f'Question: "{question}" -> {answer}'
+
+
+# Compact prompt for small models (1.5B): short definitions, four examples.
+COMPACT_PROMPT = "\n".join([
+    "You translate one short German question or request from an office worker "
+    "(often regional dialect, colloquial wording or typos) into a JSON object. "
+    "You never answer the question and never carry out the request.",
+    "intent: appointments_today (own appointments today), appointments_tomorrow, "
+    "appointments_search (own appointments by keyword, person or another period), "
+    "daily_agenda (today as a whole, or today without saying what kind), "
+    "tasks_open (what is still to do), tasks_overdue (overdue, forgotten or missed work), "
+    "tasks_search (find an own task), emails_unread (new or unread email), emails_search (find own email), "
+    "email_thread_summary (summarize an own email conversation), "
+    "web_search (look up on the internet, also weather, opening hours, prices, traffic), "
+    "help_lookup (how to use this office software), create_appointment, create_task, "
+    "complete_task (mark an own task done), reschedule_task (move an own task), delete_task, "
+    "write_email (a new email), draft_reply (answer a received email), start_timer, stop_timer "
+    "(working time), create_project, create_goal, complete_goal (goal reached), "
+    "unknown (anything else, including fixed general knowledge, arithmetic, small talk, and "
+    "other people's or companies' calendars and affairs).",
+    OUTPUT_HELP,
+    "Examples:",
+    _example("Was liegt heut im Kalender, gell?", "appointments_today", "today", 0.9),
+    _example("Was is heut so los bei mir?", "daily_agenda", "today", 0.8),
+    _example("Schreib als Aufgabe auf: Leiter beim Verleih zurückgeben", "create_task", None, 0.9,
+             content="Leiter beim Verleih zurückgeben"),
+    _example("Wer hat die Glühbirne erfunden?", "unknown", None, 0.9),
+])
+
+# Detailed prompt for larger models (7B): every definition and more examples.
+DETAILED_PROMPT = "\n".join([
+    "You translate one short German question or request from an office worker "
+    "(often regional dialect, colloquial wording or typos) into a JSON object. "
+    "You never answer the question and never carry out the request.",
+    "intent: " + ", ".join(f"{k} ({v})" for k, v in INTENT_HELP.items()) + ".",
+    "Current outside facts are web_search, fixed knowledge is unknown. Only appointments is appointments_today, "
+    "only open work is tasks_open; the day as a whole, or today without a kind, is daily_agenda. Tomorrow is "
+    "never daily_agenda. Sending, deleting goals, prioritizing and checking conflicts are unknown.",
+    OUTPUT_HELP,
+    "Examples:",
+    _example("Was liegt heut im Kalender, gell?", "appointments_today", "today", 0.9),
+    _example("Was is heut so los bei mir?", "daily_agenda", "today", 0.8),
+    _example("Was muss ich diese Woche noch erledigen?", "tasks_open", "week", 0.9),
+    _example("Hab ich irgendwas Dringendes verpennt?", "tasks_overdue", None, 0.8),
+    _example("Schreib als Aufgabe auf: Leiter beim Verleih zurückgeben", "create_task", None, 0.9,
+             content="Leiter beim Verleih zurückgeben"),
+    _example("Such die Mails von Frau Albrecht zum Gerüst", "emails_search", None, 0.9,
+             entity="Frau Albrecht", content="Gerüst"),
+    _example("Regnet's morgen in Passau?", "web_search", "tomorrow", 0.8, content="Passau"),
+    _example("Wer hat die Glühbirne erfunden?", "unknown", None, 0.9),
+])
+
+PROMPTS = {"compact": COMPACT_PROMPT, "detailed": DETAILED_PROMPT}
+
+
+def prompt_for(model: str) -> str:
+    """Prompt name for a model file, label or Hugging Face id: compact for 1.5B, detailed otherwise."""
+    return "compact" if "1.5b" in model.lower() else "detailed"
+
+
+# Contract 1, frozen: the prompts the adapters of contract 1 were trained and measured with.
+# Kept only so tools/build_catalog.py can record their SHA-256; never used to measure.
+_V1_HELP = {
     "appointments_today": "own calendar appointments today, including what is on, planned or scheduled today",
     "appointments_tomorrow": "own calendar appointments tomorrow",
     "tasks_open": "tasks not done yet, whatever their due date",
@@ -60,57 +175,49 @@ INTENT_HELP = {
 }
 
 
-def _example(question: str, intent: str, timeframe: str | None, confidence: float) -> str:
+def _v1_example(question: str, intent: str, timeframe: str | None, confidence: float) -> str:
     answer = json.dumps({"intent": intent, "timeframe": timeframe, "entity": None, "confidence": confidence},
                         ensure_ascii=False)
     return f'Question: "{question}" -> {answer}'
 
 
-# Compact prompt for small models (1.5B): short definitions, three examples.
-# This is the prompt 1.5B was measured best with; longer definitions made it worse.
-COMPACT_PROMPT = (
-    "You translate one short German question or request from an office worker "
-    "(often regional dialect, colloquial wording or typos) into a JSON object. "
-    "You never answer the question.\n"
-    "intent: appointments_today (own appointments today), appointments_tomorrow, "
-    "tasks_open (what is still to do), tasks_overdue (overdue, forgotten or urgent work), "
-    "emails_unread (new or unread email), daily_agenda (what is on today in general), "
-    "create_appointment, create_task, unknown (anything else, including general "
-    "knowledge and questions about other companies).\n"
-    "timeframe: today, tomorrow, week or null. entity: a named person or company, or null. "
-    "confidence: 0 to 1, how sure you are.\n"
-    "Examples:\n"
-    'Question: "Was liegt heut im Kalender, gell?" -> {"intent": "appointments_today", '
-    '"timeframe": "today", "entity": null, "confidence": 0.9}\n'
-    'Question: "Hab ich irgendwas Dringendes verpennt?" -> {"intent": "tasks_overdue", '
-    '"timeframe": null, "entity": null, "confidence": 0.8}\n'
-    'Question: "Wer hat die Glühbirne erfunden?" -> {"intent": "unknown", "timeframe": null, '
-    '"entity": null, "confidence": 0.9}'
-)
-
-# Detailed prompt for larger models (7B): explicit boundaries and more examples.
-DETAILED_PROMPT = "\n".join([
-    "You translate one short German question or request from an office worker "
-    "(often regional dialect, colloquial wording or typos) into a JSON object. "
-    "You never answer the question.",
-    "intent: " + ", ".join(f"{k} ({v})" for k, v in INTENT_HELP.items()) + ".",
-    "timeframe: today, tomorrow, week or null. entity: a named person or company, or null. "
-    "confidence: 0 to 1, how sure you are.",
-    "Examples:",
-    _example("Was liegt heut im Kalender, gell?", "appointments_today", "today", 0.9),
-    _example("Was ist heute geplant?", "appointments_today", "today", 0.9),
-    _example("Was muss ich diese Woche noch erledigen?", "tasks_open", "week", 0.9),
-    _example("Hab ich irgendwas Dringendes verpennt?", "tasks_overdue", None, 0.8),
-    _example("Gib mir einen Überblick über den ganzen Tag", "daily_agenda", "today", 0.9),
-    _example("Wer hat die Glühbirne erfunden?", "unknown", None, 0.9),
-])
-
-PROMPTS = {"compact": COMPACT_PROMPT, "detailed": DETAILED_PROMPT}
-
-
-def prompt_for(model: str) -> str:
-    """Prompt name for a model file, label or Hugging Face id: compact for 1.5B, detailed otherwise."""
-    return "compact" if "1.5b" in model.lower() else "detailed"
+PROMPTS_V1 = {
+    "compact": (
+        "You translate one short German question or request from an office worker "
+        "(often regional dialect, colloquial wording or typos) into a JSON object. "
+        "You never answer the question.\n"
+        "intent: appointments_today (own appointments today), appointments_tomorrow, "
+        "tasks_open (what is still to do), tasks_overdue (overdue, forgotten or urgent work), "
+        "emails_unread (new or unread email), daily_agenda (what is on today in general), "
+        "create_appointment, create_task, unknown (anything else, including general "
+        "knowledge and questions about other companies).\n"
+        "timeframe: today, tomorrow, week or null. entity: a named person or company, or null. "
+        "confidence: 0 to 1, how sure you are.\n"
+        "Examples:\n"
+        'Question: "Was liegt heut im Kalender, gell?" -> {"intent": "appointments_today", '
+        '"timeframe": "today", "entity": null, "confidence": 0.9}\n'
+        'Question: "Hab ich irgendwas Dringendes verpennt?" -> {"intent": "tasks_overdue", '
+        '"timeframe": null, "entity": null, "confidence": 0.8}\n'
+        'Question: "Wer hat die Glühbirne erfunden?" -> {"intent": "unknown", "timeframe": null, '
+        '"entity": null, "confidence": 0.9}'
+    ),
+    "detailed": "\n".join([
+        "You translate one short German question or request from an office worker "
+        "(often regional dialect, colloquial wording or typos) into a JSON object. "
+        "You never answer the question.",
+        "intent: " + ", ".join(f"{k} ({v})" for k, v in _V1_HELP.items()) + ".",
+        "timeframe: today, tomorrow, week or null. entity: a named person or company, or null. "
+        "confidence: 0 to 1, how sure you are.",
+        "Examples:",
+        _v1_example("Was liegt heut im Kalender, gell?", "appointments_today", "today", 0.9),
+        _v1_example("Was ist heute geplant?", "appointments_today", "today", 0.9),
+        _v1_example("Was muss ich diese Woche noch erledigen?", "tasks_open", "week", 0.9),
+        _v1_example("Hab ich irgendwas Dringendes verpennt?", "tasks_overdue", None, 0.8),
+        _v1_example("Gib mir einen Überblick über den ganzen Tag", "daily_agenda", "today", 0.9),
+        _v1_example("Wer hat die Glühbirne erfunden?", "unknown", None, 0.9),
+    ]),
+}
+PROMPTS_BY_CONTRACT = {1: PROMPTS_V1, 2: PROMPTS}
 
 CLASSIFY_EXAMPLES = (
     ("Was liegt heut im Kalender, gell?", "appointments_today"),
@@ -213,33 +320,66 @@ def grammar_intents(text: str) -> tuple[str, ...]:
     return tuple(re.findall(r'"\\"([a-z_]+)\\""', m.group(1))) if m else ()
 
 
+def grammar_fields(text: str) -> tuple[str, ...]:
+    """The output fields in the order the root rule writes them."""
+    m = re.search(r"^root\s*::=\s*(.*)$", text, re.M)
+    return tuple(re.findall(r'\\"([a-z_]+)\\":', m.group(1))) if m else ()
+
+
+def grammar_contract(text: str) -> int:
+    """Contract version of a grammar, read from its fields; 0 if it fits none."""
+    fields = grammar_fields(text)
+    return next((v for v, f in FIELDS_BY_CONTRACT.items() if f == fields), 0)
+
+
+def answer_json(intent: str, confidence: float, fields: tuple[str, ...] | None = None, **slots) -> str:
+    """A valid answer for the given fields (default: the active contract); unset slots are null."""
+    fields = fields or ACTIVE_FIELDS
+    values = {"intent": intent, "confidence": confidence, **slots}
+    return json.dumps({f: values.get(f) for f in fields}, ensure_ascii=False)
+
+
+def row_fits(row: dict, intents: tuple[str, ...], fields: tuple[str, ...] = FIELDS) -> bool:
+    """A training or partner row fits the output contract (its text is not checked here)."""
+    answer = answer_json(row.get("intent"), 0.9, fields,
+                         **{f: row.get(f) for f in fields if f not in ("intent", "confidence")})
+    return parse_output(answer, intents, fields) is not None
+
+
 # ── Output parsing ─────────────────────────────────────────────────────────
 
 
 class IntentParser:
     """Strict validation of the model output against the output contract."""
 
-    def __init__(self, intents: tuple[str, ...]):
-        self.intents = intents
+    def __init__(self, intents: tuple[str, ...], fields: tuple[str, ...] | None = None):
+        self.intents, self.fields = intents, fields
 
     def parse(self, raw: str) -> dict | None:
-        return parse_output(raw, self.intents)
+        return parse_output(raw, self.intents, self.fields)
 
 
-def parse_output(raw: str, intents: tuple[str, ...]) -> dict | None:
-    """The model output, strictly validated. Anything unexpected -> None."""
+def parse_output(raw: str, intents: tuple[str, ...], fields: tuple[str, ...] | None = None) -> dict | None:
+    """The model output, strictly validated against the fields of one contract
+    (default: the active one). Anything unexpected -> None."""
+    fields = fields or ACTIVE_FIELDS
     try:
         obj = json.loads(raw)
     except (ValueError, TypeError):
         return None
-    if not isinstance(obj, dict) or tuple(obj) != FIELDS:
+    if not isinstance(obj, dict) or tuple(obj) != fields:
         return None
     if obj["intent"] not in intents:
         return None
     if obj["timeframe"] is not None and obj["timeframe"] not in TIMEFRAMES:
         return None
-    if obj["entity"] is not None and not isinstance(obj["entity"], str):
-        return None
+    for slot in ("entity", "content"):
+        if slot not in obj or obj[slot] is None:
+            continue
+        if not isinstance(obj[slot], str):
+            return None
+        if fields == FIELDS_BY_CONTRACT[2] and len(obj[slot]) > MAX_CHARS[slot]:
+            return None
     c = obj["confidence"]
     if isinstance(c, bool) or not isinstance(c, int | float) or not 0 <= c <= 1:
         return None
@@ -258,6 +398,7 @@ def outcome(parsed: dict | None, min_confidence: float) -> str:
 
 
 GPU_LAYERS = 0  # set from --gpu-layers; -1 offloads every layer (Metal on Apple Silicon)
+ACTIVE_FIELDS = FIELDS  # set from the grammar in main(); classify, route and the mock answer in these fields
 
 
 def thread_info(llm) -> str:
@@ -396,8 +537,7 @@ def llama_classifier(path: Path, threads: int, ctx: int, intents: tuple[str, ...
         best, probs = pick_intent({i: logit(t) for i, t in letter_ids.items()})
         stats = {"prompt_tokens": len(tokens), "completion_tokens": 0, **_perf_stats(llama_cpp, llm),
                  "probs": {i: round(p, 4) for i, p in probs.items()}}
-        return json.dumps({"intent": best, "timeframe": None, "entity": None,
-                           "confidence": round(probs[best], 4)}), stats
+        return answer_json(best, round(probs[best], 4)), stats
 
     run.info = thread_info(llm) + f" · letters {' '.join(f'{v}={k}' for k, v in letters.items())}"
     return run
@@ -484,8 +624,7 @@ def llama_router(path: Path, threads: int, ctx: int, intents: tuple[str, ...],
         stats = {"prompt_tokens": len(shared), "prompt_eval_tokens": perf["prompt_eval_tokens"],
                  "completion_tokens": extra, "prompt_ms": (t1 - t0) * 1000, "gen_ms": (t2 - t1) * 1000,
                  "gen_tps": None, "route_passes": passes}
-        return json.dumps({"intent": best, "timeframe": None, "entity": None,
-                           "confidence": round(conf, 4)}), stats
+        return answer_json(best, round(conf, 4)), stats
 
     run.info = thread_info(llm) + f" · prefill `{ROUTE_PREFILL}`"
     return run
@@ -505,7 +644,7 @@ def mock_model(expected: dict[str, str]) -> Model:
         if n % 11 == 0:
             intent = "unknown"
         conf = 0.3 if n % 17 == 0 else 0.9
-        return json.dumps({"intent": intent, "timeframe": None, "entity": None, "confidence": conf}), stats
+        return answer_json(intent, conf), stats
 
     return run
 
@@ -525,7 +664,8 @@ class VyvyBenchRunner:
 
     def run(self, items: list[dict]) -> dict:
         return run_benchmark(items, self.model, self.grammar, self.parser.intents,
-                             self.min_confidence, self.timeout_s, self.clock, system=self.system)
+                             self.min_confidence, self.timeout_s, self.clock, system=self.system,
+                             fields=self.parser.fields)
 
 
 def peak_memory_mb() -> float | None:
@@ -587,7 +727,7 @@ def run_benchmark(items: list[dict], model: Model, grammar: str, intents: tuple[
                   min_confidence: float, timeout_s: float = 4.0,
                   clock: Callable[[], float] = time.perf_counter,
                   cpu: Callable[[], tuple[int, int] | None] = cpu_times,
-                  system: str = DETAILED_PROMPT) -> dict:
+                  system: str = DETAILED_PROMPT, fields: tuple[str, ...] | None = None) -> dict:
     """Intent accuracy and the time limit are scored separately.
 
     intent_correct: right intent regardless of speed. within_timeout: right intent
@@ -601,7 +741,7 @@ def run_benchmark(items: list[dict], model: Model, grammar: str, intents: tuple[
         raw, stats = model(system, f'Question: "{item["text"]}"', grammar)
         ms = (clock() - t0) * 1000
         steal = steal_pct(c0, cpu())
-        got = outcome(parse_output(raw, intents), min_confidence)
+        got = outcome(parse_output(raw, intents, fields), min_confidence)
         ok = got == item["expected_intent"]
         timed_out = ms > timeout_s * 1000
         rec = {"id": item["id"], "expected": item["expected_intent"], "got": got, "ms": round(ms),
@@ -741,6 +881,14 @@ def main(argv: list[str] | None = None) -> int:
         print("Grammar check failed:\n  " + "\n  ".join(errors), file=sys.stderr)
         return 1
     intents = grammar_intents(grammar)
+    contract = grammar_contract(grammar)
+    if not contract:
+        print(f"Grammar fields {grammar_fields(grammar)} fit no output contract", file=sys.stderr)
+        return 1
+    if contract != CONTRACT_VERSION:
+        print(f"Grammar is contract {contract}; this benchmark measures contract {CONTRACT_VERSION} only "
+              "(contract 1 is frozen history)", file=sys.stderr)
+        return 1
     items = json.loads(args.data.read_text(encoding="utf-8"))["items"]
     unknown = sorted({i["expected_intent"] for i in items} - set(intents))
     if unknown:
@@ -784,9 +932,11 @@ def main(argv: list[str] | None = None) -> int:
     if len(items) < total:
         header += f"\n\nSample: {len(items)} of {total} questions, spread evenly over the dataset."
 
-    runner = VyvyBenchRunner(model, grammar, IntentParser(intents), args.min_confidence, args.timeout,
+    runner = VyvyBenchRunner(model, grammar, IntentParser(intents, FIELDS), args.min_confidence, args.timeout,
                              system=PROMPTS[prompt_name])
     result = runner.run(items)
+    result["contract"] = contract
+    result["grammar_sha256"] = hashlib.sha256(args.grammar.read_bytes()).hexdigest()
     result["mode"] = args.mode
     result["prompt"] = prompt_name
     result["cpu"] = None if args.dry_run else cpu_model()

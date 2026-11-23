@@ -1,0 +1,15 @@
+# Output contract 2 for the intent & slot extractor (25 intents, five fields).
+# Exactly one JSON object, fields in fixed order. "unknown" is mandatory:
+# when nothing fits, the model is forced there instead of inventing an intent.
+# Contract 1 (grammars/slots.gbnf) stays frozen for the adapters trained on it.
+# Lengths (content at most 120, entity at most 80 characters) are checked by the
+# validator (runner/bench.py parse_output), not here.
+# "ws" is an alternation with an empty branch, not a repetition (some
+# llama.cpp builds crash on unbounded whitespace repetition).
+root ::= "{" ws "\"intent\":" ws intent "," ws "\"timeframe\":" ws timeframe "," ws "\"entity\":" ws entity "," ws "\"content\":" ws content "," ws "\"confidence\":" ws confidence ws "}"
+intent ::= "\"appointments_today\"" | "\"appointments_tomorrow\"" | "\"appointments_search\"" | "\"daily_agenda\"" | "\"tasks_open\"" | "\"tasks_overdue\"" | "\"tasks_search\"" | "\"emails_unread\"" | "\"emails_search\"" | "\"email_thread_summary\"" | "\"web_search\"" | "\"help_lookup\"" | "\"create_appointment\"" | "\"create_task\"" | "\"complete_task\"" | "\"reschedule_task\"" | "\"delete_task\"" | "\"write_email\"" | "\"draft_reply\"" | "\"start_timer\"" | "\"stop_timer\"" | "\"create_project\"" | "\"create_goal\"" | "\"complete_goal\"" | "\"unknown\""
+timeframe ::= "\"today\"" | "\"tomorrow\"" | "\"week\"" | "null"
+entity ::= "null" | "\"" [^"\\\x7F\x00-\x1F]* "\""
+content ::= "null" | "\"" [^"\\\x7F\x00-\x1F]* "\""
+confidence ::= "0" | "1" | "0." [0-9] [0-9]? | "1.0"
+ws ::= | " "
