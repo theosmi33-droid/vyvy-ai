@@ -121,3 +121,25 @@ def test_character_similarity_does_not_depend_on_the_order():
         lex = build.Lexical(lock.MAX_SIMILARITY)
         lex.add_text("training", train)
         assert lex.near(held) == "training"
+
+
+def _old_pair():
+    rows = [r for r in lock.load_bench_examples() if r[0] == "bench.py:PROMPTS[detailed][2]"]
+    held = [i for i in json.loads((lock.ROOT / "data" / "holdout_blind_v1.json").read_text(encoding="utf-8"))["items"]
+            if i["id"] == "blind-022"]
+    return rows, held
+
+
+def test_exactly_one_known_old_pair():
+    assert len(lock.KNOWN_OLD_PAIRS) == 1
+
+
+def test_the_known_old_pair_passes_and_every_change_is_red():
+    rows, held = _old_pair()
+    leaks = lock.find_leaks(rows, held, lock.MAX_SIMILARITY)
+    assert len(leaks) == 1 and lock.known_old_pair(leaks[0])
+    changed_text = dict(leaks[0], holdout_text=leaks[0]["holdout_text"] + " jetzt")
+    other_place = dict(leaks[0], train="bench.py:PROMPTS[compact][2]")
+    other_id = dict(leaks[0], holdout="blind-023")
+    changed_prompt = dict(leaks[0], text=leaks[0]["text"] + " bitte sofort")
+    assert not any(lock.known_old_pair(x) for x in (changed_text, other_place, other_id, changed_prompt))

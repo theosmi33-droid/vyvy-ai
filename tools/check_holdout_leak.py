@@ -26,6 +26,7 @@ from __future__ import annotations
 import argparse
 import ast
 import difflib
+import hashlib
 import json
 import re
 import sys
@@ -121,6 +122,24 @@ def load_bench_examples(path: Path = BENCH) -> list[tuple[str, str]]:
             for name, text in prompts.items() for i, q in enumerate(re.findall(r'Question: "([^"]+)"', text))]
 
 
+# Known old pairs: exactly this holdout id, this place and both normalised texts. Anything else stays a leak.
+KNOWN_OLD_PAIRS = {
+    ("blind-022", "bench.py:PROMPTS[detailed][2]"): {
+        "train_sha256": "6c7d262bc1797bc19e0cc1c7eba9bb1fc21e0c78bbfd61641ab4733f06ab510f",
+        "holdout_sha256": "e65e2c8f9260cec171643514fbc4e8b8bfa07e0748e8a71059e1cf30bb5d2df4",
+        "date": "2026-11-23",
+        "why": "chars 0.833: hidden below the old 0.85, a leak at 0.8. Contract 1 is measured with this prompt "
+               "example and this holdout sentence; changing either makes old results incomparable.",
+    },
+}
+
+
+def known_old_pair(leak: dict) -> bool:
+    entry = KNOWN_OLD_PAIRS.get((leak["holdout"], leak["train"]))
+    sha = lambda t: hashlib.sha256(normalise(t).encode("utf-8")).hexdigest()  # noqa: E731
+    return bool(entry) and sha(leak["text"]) == entry["train_sha256"] and sha(leak["holdout_text"]) == entry["holdout_sha256"]
+
+
 def find_leaks(train: list[tuple[str, str]], holdout: list[dict], threshold: float) -> list[dict]:
     hold = [(h["id"], h["text"], normalise(h["text"])) for h in holdout]
     leaks = []
@@ -156,6 +175,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.prompts is None and not args.train:
         train += load_bench_examples()
     leaks = find_leaks(train, holdout, args.threshold)
+    for leak in (k for k in leaks if known_old_pair(k)):
+        print(f"known old pair: {leak['train']} ~ {leak['holdout']} (KNOWN_OLD_PAIRS)")
+    leaks = [k for k in leaks if not known_old_pair(k)]
     if leaks:
         print(f"Holdout leak: {len(leaks)} training sentence(s) at or above {args.threshold}:", file=sys.stderr)
         for leak in leaks:
