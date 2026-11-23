@@ -1,0 +1,189 @@
+name: Bench client
+
+# Measures time, memory and accuracy the way a user's computer would see them, on output
+# contract 2 (25 intents). Two classes (planning limits, decided 23.11.2026):
+#   8 GB class:  1.5B, Q4_K_M and Q8_0, 2 and 4 CPUs, memory 5.5 GB (free memory of an
+#                8 GB computer) and 3.5 GB (the same computer under load: browser, office)
+#   16 GB class: 7B Q4_K_M, 4 CPUs, memory 10 GB
+# Linux runs each cell in a container with a hard limit (--cpus, --memory, no swap above
+# it); a cell killed for lack of memory says so. macOS and Windows cannot be limited on a
+# hosted runner: they measure without a limit, with the same thread counts, and the summary
+# compares their peak memory with the class limit. A Linux container only approximates a
+# real laptop (CPU type, turbo, background programs). The numbers decide which 1.5B file
+# is the standard (Q4_K_M against Q8_0); until then bench-lora measures Q4_K_M.
+# By hand only, no GPU; nothing here decides about an adapter.
+on:
+  workflow_dispatch:
+    inputs:
+      adapter_small:
+        description: 1.5B adapter release tag, contract 2 (empty = base model only)
+        type: string
+        default: ""
+      adapter_large:
+        description: 7B adapter release tag, contract 2 (empty = base model only)
+        type: string
+        default: ""
+      data:
+        description: Question set (contract 2)
+        type: string
+        default: data/holdout_decision_c2.json
+      sample:
+        description: Questions to measure, spread evenly over the set (0 = all)
+        type: string
+        default: "0"
+
+permissions:
+  contents: read
+
+env:
+  DATA: ${{ inputs.data }}
+  SAMPLE: ${{ inputs.sample }}
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # 8 GB class
+          - {model: qwen2.5-1.5b-instruct-q4_k_m, cpus: 2, memory: 5.5g, size: small, limit_gb: 5.5}
+          - {model: qwen2.5-1.5b-instruct-q4_k_m, cpus: 4, memory: 5.5g, size: small, limit_gb: 5.5}
+          - {model: qwen2.5-1.5b-instruct-q4_k_m, cpus: 2, memory: 3.5g, size: small, limit_gb: 3.5}
+          - {model: qwen2.5-1.5b-instruct-q4_k_m, cpus: 4, memory: 3.5g, size: small, limit_gb: 3.5}
+          - {model: qwen2.5-1.5b-instruct-q8_0, cpus: 2, memory: 5.5g, size: small, limit_gb: 5.5}
+          - {model: qwen2.5-1.5b-instruct-q8_0, cpus: 4, memory: 5.5g, size: small, limit_gb: 5.5}
+          - {model: qwen2.5-1.5b-instruct-q8_0, cpus: 2, memory: 3.5g, size: small, limit_gb: 3.5}
+          - {model: qwen2.5-1.5b-instruct-q8_0, cpus: 4, memory: 3.5g, size: small, limit_gb: 3.5}
+          # 16 GB class
+          - {model: qwen2.5-7b-instruct-q4_k_m, cpus: 4, memory: 10g, size: large, limit_gb: 10}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      MODEL: ${{ matrix.model }}
+      CPUS: ${{ matrix.cpus }}
+      MEMORY: ${{ matrix.memory }}
+      LIMIT_GB: ${{ matrix.limit_gb }}
+      ADAPTER: ${{ matrix.size == 'small' && inputs.adapter_small || inputs.adapter_large }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Model and adapter (outside the limits)
+        run: |
+          set -euo pipefail
+          [ -f "$DATA" ] || { echo "$DATA is missing; the contract 2 decision set has not landed yet" >&2; exit 1; }
+          python3 tools/fetch_model.py "$MODEL" --dir models
+          if [ -n "$ADAPTER" ]; then
+            [[ "$ADAPTER" =~ ^[a-z0-9][a-z0-9.-]{0,60}$ ]] || { echo "invalid tag" >&2; exit 1; }
+            gh release download "$ADAPTER" --repo "$GITHUB_REPOSITORY" --pattern "$ADAPTER.gguf" \
+              --pattern manifest.json --dir adapter
+            python3 tools/client_cell.py check-adapter adapter/manifest.json
+          fi
+
+      # Building llama.cpp needs more memory than the tightest cell allows, so the
+      # environment is installed once without limits into the mounted folder.
+      - name: Install the CPU build (no limits)
+        run: |
+          docker run --rm -v "$PWD":/w -w /w -e CMAKE_ARGS=-DGGML_NATIVE=OFF python:3.12-slim sh -c \
+            'apt-get update -qq && apt-get install -y -qq build-essential cmake time >/dev/null &&
+             python -m venv /w/.venv && /w/.venv/bin/pip install -q -r requirements.txt'
+
+      - name: Benchmark inside the limits
+        run: |
+          set -uo pipefail
+          lora=""; [ -n "$ADAPTER" ] && lora="/w/adapter/$ADAPTER.gguf"
+          file=$(ls models/"$MODEL"*.gguf | sort | head -n 1)
+          docker run --name cell --cpus "$CPUS" --memory "$MEMORY" --memory-swap "$MEMORY" \
+            -v "$PWD":/w -w /w -e VYVY_LORA_PATH="$lora" python:3.12-slim sh -c \
+            "apt-get update -qq >/dev/null && apt-get install -y -qq time >/dev/null &&
+             /usr/bin/time -v -o /w/time.txt /w/.venv/bin/python runner/bench.py --model /w/$file \
+               --label $MODEL --mode route --threads $CPUS --data $DATA --sample $SAMPLE --json /w/client.json"
+          echo "exit=$?" > exit.txt
+          docker inspect cell --format 'oom={{.State.OOMKilled}}' >> exit.txt
+
+      - name: Numbers
+        if: always()
+        run: |
+          python3 tools/client_cell.py summary --platform "Linux container" --model "$MODEL" --cpus "$CPUS" \
+            --limit-gb "$LIMIT_GB" --limited --result client.json --time time.txt --exit exit.txt \
+            --out "cell-linux-$MODEL-$CPUS-$MEMORY.json" >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: cell-linux-${{ matrix.model }}-${{ matrix.cpus }}-${{ matrix.memory }}
+          path: cell-*.json
+          retention-days: 30
+
+  desktop:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+        cell:
+          - {model: qwen2.5-1.5b-instruct-q4_k_m, threads: 2, size: small, limit_gb: 5.5}
+          - {model: qwen2.5-1.5b-instruct-q4_k_m, threads: 4, size: small, limit_gb: 5.5}
+          - {model: qwen2.5-1.5b-instruct-q8_0, threads: 2, size: small, limit_gb: 5.5}
+          - {model: qwen2.5-1.5b-instruct-q8_0, threads: 4, size: small, limit_gb: 5.5}
+          - {model: qwen2.5-7b-instruct-q4_k_m, threads: 4, size: large, limit_gb: 10}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      MODEL: ${{ matrix.cell.model }}
+      THREADS: ${{ matrix.cell.threads }}
+      LIMIT_GB: ${{ matrix.cell.limit_gb }}
+      ADAPTER: ${{ matrix.cell.size == 'small' && inputs.adapter_small || inputs.adapter_large }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Model and adapter
+        run: |
+          set -euo pipefail
+          [ -f "$DATA" ] || { echo "$DATA is missing; the contract 2 decision set has not landed yet" >&2; exit 1; }
+          python tools/fetch_model.py "$MODEL" --dir models
+          if [ -n "$ADAPTER" ]; then
+            [[ "$ADAPTER" =~ ^[a-z0-9][a-z0-9.-]{0,60}$ ]] || { echo "invalid tag" >&2; exit 1; }
+            gh release download "$ADAPTER" --repo "$GITHUB_REPOSITORY" --pattern "$ADAPTER.gguf" \
+              --pattern manifest.json --dir adapter
+            python tools/client_cell.py check-adapter adapter/manifest.json
+          fi
+
+      - name: Install the CPU build
+        env:
+          CMAKE_ARGS: -DGGML_NATIVE=OFF
+        run: pip install -r requirements.txt
+
+      # No limit is possible on a hosted runner: the run measures, the summary compares its
+      # peak memory (bench.py peak_memory_mb, read per platform) with the class limit.
+      - name: Benchmark without a limit
+        run: |
+          set -uo pipefail
+          lora=""; [ -n "$ADAPTER" ] && lora="adapter/$ADAPTER.gguf"
+          file=$(ls models/"$MODEL"*.gguf | sort | head -n 1)
+          VYVY_LORA_PATH="$lora" python runner/bench.py --model "$file" --label "$MODEL" --mode route \
+            --threads "$THREADS" --data "$DATA" --sample "$SAMPLE" --json client.json
+          echo "exit=$?" > exit.txt
+
+      - name: Numbers
+        if: always()
+        run: |
+          python tools/client_cell.py summary --platform "${{ runner.os }}" --model "$MODEL" --cpus "$THREADS" \
+            --limit-gb "$LIMIT_GB" --result client.json --exit exit.txt \
+            --out "cell-${{ runner.os }}-$MODEL-$THREADS.json" >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: cell-${{ runner.os }}-${{ matrix.cell.model }}-${{ matrix.cell.threads }}
+          path: cell-*.json
+          retention-days: 30
