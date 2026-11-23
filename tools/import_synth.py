@@ -81,7 +81,8 @@ def main(argv: list[str] | None = None,
         if not line.strip():
             continue
         r = json.loads(line)
-        row = {"text": r["text"], "intent": r["intent"], "timeframe": r.get("timeframe"), "entity": r.get("entity")}
+        row = {"text": r["text"], "intent": r["intent"], "timeframe": r.get("timeframe"), "entity": r.get("entity"),
+               "content": r.get("content")}
         if r.get("stratum") in (1, 2, 3, 4):
             row["stratum"] = r["stratum"]
         if not bench.row_fits(row, intents):

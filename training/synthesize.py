@@ -48,19 +48,40 @@ REVISION = "cf98f3b3bbb457ad9e2bb7baf9a0125b6b88caa8"
 SECOND = "microsoft/phi-4"  # MIT
 SECOND_REVISION = "2db69c1c3e91a05d2c64a3185acfbaf36f744e25"
 
-# What each intent means, in the words the teacher gets. Mirrors runner/bench.py INTENT_HELP.
+# What each intent means, in the words the teacher gets (contract 2, 25 intents, in the order of
+# grammars/slots_v2.gbnf). Mirrors runner/bench.py INTENT_HELP.
 INTENTS = {
-    "appointments_today": "fragt nach den eigenen Terminen von heute (was heute ansteht, geplant oder eingetragen ist)",
+    "appointments_today": "fragt nach den eigenen Terminen von heute: Besprechungen, Besuche, feste Zeiten oder wo "
+                          "man heute hin muss",
     "appointments_tomorrow": "fragt nach den eigenen Terminen von morgen",
+    "appointments_search": "sucht eigene Termine nach Stichwort, Person oder einem Zeitraum außer heute und morgen",
+    "daily_agenda": "fragt, was heute insgesamt ansteht: den ganzen Tag über Termine, Aufgaben und Mails, oder "
+                    "allgemein nach heute, ohne es auf eine Art einzugrenzen",
     "tasks_open": "fragt nach eigenen Aufgaben, die noch nicht erledigt sind, egal wann sie fällig sind",
-    "tasks_overdue": "fragt nach eigenen Aufgaben, deren Frist schon vorbei ist, oder nach Vergessenem und Liegengebliebenem",
+    "tasks_overdue": "fragt nach eigenen Aufgaben, deren Frist schon vorbei ist, oder nach Vergessenem und "
+                     "Liegengebliebenem",
+    "tasks_search": "sucht eine bestimmte eigene Aufgabe nach Stichwort oder Person",
     "emails_unread": "fragt nach neuen oder ungelesenen E-Mails im eigenen Postfach",
-    "daily_agenda": "will ausdrücklich einen Überblick über den ganzen Tag: Termine, Aufgaben und Mails zusammen",
+    "emails_search": "sucht eigene E-Mails nach Absender, Betreff oder Stichwort",
+    "email_thread_summary": "will einen eigenen Mailverlauf zusammengefasst haben",
+    "web_search": "will etwas im Internet nachschlagen, auch aktuelle Fakten von draußen wie Wetter, "
+                  "Öffnungszeiten, Preise oder Verkehr",
+    "help_lookup": "fragt, wie man diese Bürosoftware bedient oder was sie kann",
     "create_appointment": "will einen neuen Termin im eigenen Kalender anlegen",
     "create_task": "will eine neue Aufgabe oder To-do anlegen",
-    "unknown": "alles andere: Allgemeinwissen, Smalltalk, Rechnen, IT-Probleme, Fragen zu anderen Personen oder "
-               "Firmen, und Aktionen ohne eigene Funktion wie Termin löschen oder verschieben, Mail senden oder "
-               "beantworten, Aufgabe abhaken, Überweisen",
+    "complete_task": "will eine eigene Aufgabe als erledigt abhaken",
+    "reschedule_task": "will eine eigene Aufgabe auf einen anderen Tag oder eine andere Zeit verschieben",
+    "delete_task": "will eine eigene Aufgabe löschen",
+    "write_email": "will eine neue E-Mail schreiben",
+    "draft_reply": "will eine Antwort auf eine erhaltene E-Mail entwerfen",
+    "start_timer": "will die Erfassung der Arbeitszeit starten",
+    "stop_timer": "will die Erfassung der Arbeitszeit stoppen",
+    "create_project": "will ein neues Projekt anlegen",
+    "create_goal": "will ein neues Ziel setzen",
+    "complete_goal": "will ein Ziel als erreicht markieren",
+    "unknown": "alles andere: feststehendes Allgemeinwissen, Rechnen, Smalltalk, Kalender oder Angelegenheiten "
+               "anderer Personen oder Firmen, und Aktionen ohne eigene Funktion wie Mail senden, Ziel löschen, "
+               "priorisieren, Terminkonflikte prüfen oder Überweisen",
 }
 # Sharper rules for the intents the 2026-W45 round got wrong most often (Qwen's blind
 # check kept only 17 create_task, 28 tasks_open and 13 daily_agenda sentences):
@@ -82,9 +103,10 @@ RULES = {
         ["Wo hänge ich mit meinen Erledigungen schon hinterher?",
          "Bei welchen Erledigungen bin ich inzwischen in Verzug geraten?"]),
     "unknown": (
-        "Der Satz klingt nach Büroarbeit, verlangt aber nichts, was der Assistent kann: Wissen erklären, "
-        "fremde Kalender oder Postfächer, Erledigtes erzählen, eine Aufgabe abhaken oder löschen, einen Termin "
-        "verschieben, eine Mail senden. Er darf Wörter wie Aufgabe, Termin oder Mail enthalten.",
+        "Der Satz klingt nach Büroarbeit, verlangt aber nichts, was der Assistent kann: feststehendes Wissen "
+        "erklären, fremde Kalender oder Postfächer, Erledigtes erzählen, eine Mail senden, ein Ziel löschen, "
+        "Aufgaben priorisieren, Terminkonflikte prüfen, etwas bezahlen. Er darf Wörter wie Aufgabe, Termin oder "
+        "Mail enthalten.",
         ["Was ist eigentlich der Unterschied zwischen einer Aufgabe und einem Projekt?",
          "Die Angebotsmappe für den Neubau hab ich vorhin schon fertig gemacht."]),
     "tasks_open": (
@@ -94,11 +116,22 @@ RULES = {
         ["Was steht auf meiner Liste noch alles aus?",
          "Zeig mir die Sachen, die ich noch abarbeiten muss, egal bis wann."]),
     "daily_agenda": (
-        "Die Person will einen Gesamtüberblick über den heutigen Tag und nennt dafür ausdrücklich mehrere "
-        "Bereiche zusammen (Termine und Aufgaben und Mails) oder sagt klar, dass sie alles für heute auf einmal will. "
-        "Fragt sie nur nach Terminen, ist es kein Tagesüberblick.",
+        "Die Person fragt nach dem heutigen Tag als Ganzem: entweder nennt sie mehrere Bereiche zusammen "
+        "(Termine, Aufgaben, Mails), oder sie fragt allgemein, was heute ansteht, ohne es auf Termine oder auf "
+        "Aufgaben einzugrenzen. Fragt sie nur nach Terminen, sind es die Termine von heute; nur nach offener "
+        "Arbeit, die offenen Aufgaben. Morgen ist nie ein Tagesüberblick.",
         ["Gib mir den kompletten Überblick für heute mit Kalender, offenen Aufgaben und neuer Post.",
-         "Fass mir alles zusammen, was heute ansteht, Termine wie To-dos wie Mails."]),
+         "Wie schaut mein Tag heute eigentlich aus?"]),
+    "web_search": (
+        "Die Person will etwas, das sich ändert oder draußen nachzusehen ist: Wetter, Öffnungszeiten, Preise, "
+        "Verkehr, aktuelle Meldungen. Feststehendes Wissen (Geschichte, Rechnen, Begriffe) ist unbekannt.",
+        ["Hat der Baustoffhandel in Kempten am Samstag offen?",
+         "Wie teuer ist Kupferrohr grad im Netz?"]),
+    "help_lookup": (
+        "Die Person fragt, wie sie in dieser Bürosoftware etwas macht oder ob die Software etwas kann. "
+        "Keine Frage zu anderer Software, keine Bitte, die Sache gleich selbst zu erledigen.",
+        ["Wo stell ich hier ein, dass Aufgaben eine Erinnerung bekommen?",
+         "Kann das Programm Termine auch als Serie anlegen?"]),
 }
 # These intents get twice as many requests per style. 2026-W46: the adapters of
 # 07./08.11. were rejected for create_task, tasks_overdue and regressions on
@@ -132,6 +165,14 @@ NEAR = [
     ("emails_unread", "unknown"), ("unknown", "create_task"), ("unknown", "tasks_overdue"),
     # 2026-W46: the rejected 1.5B adapter of 08.11. turned "unknown" into these two.
     ("unknown", "appointments_tomorrow"), ("unknown", "daily_agenda"),
+    # Contract 2: the new intents and the boundaries the decision of 23.11.2026 spelled out.
+    ("web_search", "unknown"), ("unknown", "web_search"), ("help_lookup", "unknown"),
+    ("appointments_search", "appointments_today"), ("tasks_search", "tasks_open"),
+    ("emails_search", "emails_unread"), ("email_thread_summary", "emails_search"),
+    ("complete_task", "tasks_open"), ("reschedule_task", "create_task"), ("delete_task", "complete_task"),
+    ("write_email", "draft_reply"), ("draft_reply", "write_email"), ("stop_timer", "start_timer"),
+    ("create_project", "create_task"), ("create_goal", "create_task"), ("complete_goal", "complete_task"),
+    ("unknown", "write_email"), ("unknown", "delete_task"),
 ]
 # Every request belongs to one of four strata, from the foundation to the hard cases;
 # each kept sentence carries its stratum and the manifest counts them per stratum.
@@ -145,7 +186,7 @@ STYLE_STRATUM = {STYLES[0]: 1, STYLES[1]: 2, STYLES[7]: 2, STYLES[8]: 2, STYLES[
 DIALECT_SPELLING = (" Schreibe den Dialekt so, wie Leute ihn in Nachrichten tippen, mit gängigen Schreibweisen; "
                     "keine Lautschrift und keine für einen Satz erfundenen Schreibungen.")
 TIMEFRAMES = ("today", "tomorrow", "week", None)
-LETTERS = "ABCDEFGHI"
+LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXY"  # one per intent, in the order of INTENTS
 
 
 def stratum(intent: str, style: str, near: str | None) -> int:
@@ -165,14 +206,21 @@ def gen_prompt(intent: str, style: str, role: str, n: int, near: str | None) -> 
                  f"gehört aber eindeutig zur ersten Beschreibung.")
     return (task + " Erfinde Namen von Personen und Firmen frei, keine echten. Keine Nummerierung, keine "
             "Erklärung. Antworte nur mit einem JSON-Array von Objekten mit den Feldern \"text\" (der Satz), "
-            "\"timeframe\" (\"today\", \"tomorrow\", \"week\" oder null) und \"entity\" (genannte Person oder "
-            "Firma als Text, sonst null).")
+            "\"timeframe\" (\"today\", \"tomorrow\", \"week\" oder null), \"entity\" (genannte Person, Firma "
+            "oder genanntes Projekt als Text, sonst null) und \"content\" (Titel, Betreff oder Suchbegriff genau in "
+            "den Worten des Satzes, sonst null).")
 
 
 def classify_prompt(text: str) -> str:
     options = "\n".join(f"{LETTERS[k]}: {desc}" for k, desc in enumerate(INTENTS.values()))
     return (f"Ein Mitarbeiter sagt zu seinem Büro-Assistenten: \"{text}\"\n\nWas will er? Wähle genau eine "
             f"Möglichkeit.\n{options}\n\nAntworte nur mit dem Buchstaben.")
+
+
+def span(value, text: str, limit: int) -> str | None:
+    """A slot is a piece of the sentence or null: a value not written in the sentence, or too long, is dropped."""
+    v = value.strip() if isinstance(value, str) else ""
+    return v if v and v in text and len(v) <= limit else None
 
 
 def parse_items(reply: str) -> list[dict]:
@@ -191,9 +239,8 @@ def parse_items(reply: str) -> list[dict]:
         if not 3 <= len(text) <= 200:
             continue
         tf = it.get("timeframe")
-        ent = it.get("entity")
         out.append({"text": text, "timeframe": tf if tf in TIMEFRAMES else None,
-                    "entity": ent.strip() if isinstance(ent, str) and ent.strip() and ent.strip() in text else None})
+                    "entity": span(it.get("entity"), text, 80), "content": span(it.get("content"), text, 120)})
     return out
 
 
@@ -340,6 +387,7 @@ def main(argv: list[str] | None = None) -> int:
             k = int(pr.argmax())
             agree = float(pr[names.index(c["intent"])])
             row = {"text": c["text"], "intent": c["intent"], "timeframe": c["timeframe"], "entity": c["entity"],
+                   "content": c.get("content"),
                    "stratum": c["stratum"]}
             if names[k] == c["intent"] and agree >= args.min_agree:
                 kept.append({**row, "teacher": c["teacher"]})

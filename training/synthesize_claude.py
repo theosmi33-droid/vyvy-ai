@@ -51,6 +51,7 @@ from synthesize import (  # noqa: E402
     STYLES,
     TIMEFRAMES,
     WEAK,
+    span,
 )
 
 TEACHER = "claude-sonnet-5-5"
@@ -71,8 +72,9 @@ def gen_prompt(intent: str, style: str, role: str, n: int, near: str | None) -> 
                  f"gehört aber eindeutig zur ersten Beschreibung.")
     return (task + " Erfinde Namen von Personen und Firmen frei, keine echten. Keine Nummerierung, keine "
             "Erklärung. Antworte nur mit einem JSON-Array von Objekten mit den Feldern \"text\" (der Satz), "
-            "\"timeframe\" (\"today\", \"tomorrow\", \"week\" oder null) und \"entity\" (genannte Person oder "
-            "Firma als Text, sonst null).")
+            "\"timeframe\" (\"today\", \"tomorrow\", \"week\" oder null), \"entity\" (genannte Person, Firma "
+            "oder genanntes Projekt als Text, sonst null) und \"content\" (Titel, Betreff oder Suchbegriff genau in "
+            "den Worten des Satzes, sonst null).")
 
 
 def classify_prompt(text: str) -> str:
@@ -97,9 +99,8 @@ def parse_items(reply: str) -> list[dict]:
         if not 3 <= len(text) <= 200:
             continue
         tf = it.get("timeframe")
-        ent = it.get("entity")
         out.append({"text": text, "timeframe": tf if tf in TIMEFRAMES else None,
-                    "entity": ent.strip() if isinstance(ent, str) and ent.strip() and ent.strip() in text else None})
+                    "entity": span(it.get("entity"), text, 80), "content": span(it.get("content"), text, 120)})
     return out
 
 
@@ -210,6 +211,7 @@ def main(argv: list[str] | None = None) -> int:
         judged = (reply or "").strip().lower()
         judge = next((n for n in names if n in judged), None)
         row = {"text": c["text"], "intent": c["intent"], "timeframe": c["timeframe"], "entity": c["entity"],
+               "content": c.get("content"),
                "stratum": c["stratum"]}
         if judge == c["intent"]:
             kept.append({**row, "teacher": "claude"})
