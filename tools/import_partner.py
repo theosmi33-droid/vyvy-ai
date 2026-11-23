@@ -6,13 +6,18 @@ does not trust that. A sentence is dropped if it
 
 - contains an e-mail address, a phone number, an IBAN, a web address or a
   street with a house number,
-- does not fit the output contract (intent, timeframe, entity),
+- does not fit output contract 2 (25 intents; timeframe; entity up to 80 and
+  content up to 120 characters),
+- carries an entity or content that is not written in the sentence (a slot is a
+  piece of the question or null),
 - is at or above --max-similarity (default 0.8, as the generators; the lock is
   0.85) to any holdout sentence, or is already in the training data.
 
 Writes data/train/vyvy_partner_<first 9 hex of the input's SHA-256>.jsonl and a
 .json report with the counts per reason, and prints the path. The files name no
-origin. --check only re-runs the personal-data check on files already in
+origin. A file without the content field is a contract 1 export, whose unknown
+lines hide actions that contract 2 names: it is refused as a whole, nothing is
+written. --check only re-runs the personal-data check on files already in
 data/train/ (Data check workflow) and fails on any hit.
 
     python tools/import_partner.py path/to/partner.jsonl --sha256 <expected>
@@ -84,27 +89,33 @@ def main(argv: list[str] | None = None) -> int:
         return 3
 
     intents = bench.grammar_intents(bench.DEFAULT_GRAMMAR.read_text(encoding="utf-8"))
+    lines = [json.loads(line) for line in raw.decode("utf-8").splitlines() if line.strip()]
+    if lines and not any("content" in r for r in lines):
+        print(f"{args.source}: no line has the content field - a contract 1 export; its unknown lines hide "
+              f"actions contract {bench.CONTRACT_VERSION} names. Export again for contract "
+              f"{bench.CONTRACT_VERSION}; nothing imported.", file=sys.stderr)
+        return 4
     holdout = [i for h in lock.HOLDOUTS if h.exists() for i in json.loads(h.read_text(encoding="utf-8"))["items"]]
     hold_norm = [lock.normalise(h["text"]) for h in holdout]
     seen = {lock.normalise(t) for _, t in lock.load_train(sorted(args.train_dir.glob("*.jsonl")))}
 
-    rows, dropped = [], {"personal": 0, "contract": 0, "near_holdout": 0, "duplicate": 0}
+    rows, dropped = [], {"personal": 0, "contract": 0, "slot_not_in_text": 0, "near_holdout": 0, "duplicate": 0}
     hits_by_kind: dict[str, int] = {}
-    for line in raw.decode("utf-8").splitlines():
-        if not line.strip():
-            continue
-        r = json.loads(line)
+    for r in lines:
         row = {"text": str(r.get("text", "")).strip(), "intent": r.get("intent"),
-               "timeframe": r.get("timeframe"), "entity": r.get("entity")}
-        hits = personal_hits(row["text"]) + (personal_hits(row["entity"]) if isinstance(row["entity"], str) else [])
+               "timeframe": r.get("timeframe"), "entity": r.get("entity"), "content": r.get("content")}
+        hits = personal_hits(row["text"]) + [h for k in ("entity", "content") if isinstance(row[k], str)
+                                             for h in personal_hits(row[k])]
         if hits:
             dropped["personal"] += 1
             for h in hits:
                 hits_by_kind[h] = hits_by_kind.get(h, 0) + 1
             continue
-        answer = json.dumps({**{k: row[k] for k in ("intent", "timeframe", "entity")}, "confidence": 0.9})
-        if not row["text"] or bench.parse_output(answer, intents) is None:
+        if not row["text"] or not bench.row_fits(row, intents):
             dropped["contract"] += 1
+            continue
+        if any(isinstance(row[k], str) and row[k].strip() not in row["text"] for k in ("entity", "content")):
+            dropped["slot_not_in_text"] += 1
             continue
         key = lock.normalise(row["text"])
         if key in seen:
@@ -118,6 +129,7 @@ def main(argv: list[str] | None = None) -> int:
 
     out.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows), encoding="utf-8")
     report = {"source_sha256": digest, "kind": "partner data, synthetic, anonymised", "imported": len(rows),
+              "contract": bench.CONTRACT_VERSION,
               "dropped": dropped, "personal_hits": hits_by_kind, "max_similarity": args.max_similarity,
               "per_intent": {i: sum(r["intent"] == i for r in rows) for i in intents}}
     out.with_suffix(".json").write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8")
