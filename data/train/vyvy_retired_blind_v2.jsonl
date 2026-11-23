@@ -121,7 +121,6 @@
 {"text": "Is wat Neues im Postfach, wat ich noch nich gelesen hab?", "intent": "emails_unread", "timeframe": null, "entity": null}
 {"text": "Ist eine neue Mail von der Spedition Hartwig gekommen?", "intent": "emails_unread", "timeframe": null, "entity": null}
 {"text": "Wos is an ungelesene Mails do?", "intent": "emails_unread", "timeframe": null, "entity": null}
-{"text": "Hab isch ungelese Mails?", "intent": "emails_unread", "timeframe": null, "entity": null}
 {"text": "Wie viele ungelesene Nachrichten hab ich im Postfach?", "intent": "emails_unread", "timeframe": null, "entity": null}
 {"text": "Hod ma wer a Mail gschickt, de i no ned gseng hob?", "intent": "emails_unread", "timeframe": null, "entity": null}
 {"text": "Is vo da Firma Brandlhuber a neichs Mail kemma?", "intent": "emails_unread", "timeframe": null, "entity": null}
