@@ -13,7 +13,9 @@ If either reaches --threshold (default 0.85), the pair is reported and the
 script exits with code 1. Training data: data/train/*.jsonl, one JSON object per
 line with "text" and "intent", plus the example sentences of RULES in
 training/synthesize.py (the teacher would copy a holdout sentence from there
-into many training sentences).
+into many training sentences) and the example questions of the benchmark
+prompts in runner/bench.py (every training line and every measurement carries
+them).
 
     python tools/check_holdout_leak.py
     python tools/check_holdout_leak.py --train path/to/file.jsonl
@@ -48,6 +50,7 @@ TRAIN_DIR = ROOT / "data" / "train"
 # would be copied into training data in many variants, so they are checked too.
 SYNTH = ROOT / "training" / "synthesize.py"
 PATTERNS = ROOT / "training" / "patterns.py"
+BENCH = ROOT / "runner" / "bench.py"
 
 
 def normalise(text: str) -> str:
@@ -88,6 +91,21 @@ def load_prompt_examples(path: Path) -> list[tuple[str, str]]:
     raise SystemExit(f"{path}: no RULES or PATTERNS found; the prompt examples cannot be checked")
 
 
+def load_bench_examples(path: Path = BENCH) -> list[tuple[str, str]]:
+    """The example questions of the current benchmark prompts, read from the prompt texts.
+
+    The frozen contract 1 prompts are history and not checked: their detailed prompt carries a
+    near copy of a blind v3 question (found 23.11.2026), which can no longer be changed."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("bench_for_lock", path)
+    bench = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(bench)
+    prompts = bench.PROMPTS
+    return [(f"{path.name}:PROMPTS[{name}][{i}]", q)
+            for name, text in prompts.items() for i, q in enumerate(re.findall(r'Question: "([^"]+)"', text))]
+
+
 def find_leaks(train: list[tuple[str, str]], holdout: list[dict], threshold: float) -> list[dict]:
     hold = [(h["id"], h["text"], normalise(h["text"])) for h in holdout]
     leaks = []
@@ -120,6 +138,8 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     holdout = [i for h in args.holdout if h.exists() for i in json.loads(h.read_text(encoding="utf-8"))["items"]]
     train = load_train(paths) + [row for path in prompts for row in load_prompt_examples(path)]
+    if args.prompts is None and not args.train:
+        train += load_bench_examples()
     leaks = find_leaks(train, holdout, args.threshold)
     if leaks:
         print(f"Holdout leak: {len(leaks)} training sentence(s) at or above {args.threshold}:", file=sys.stderr)
