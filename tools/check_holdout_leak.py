@@ -68,8 +68,13 @@ def without_fillers(normalised: str) -> str:
     return " ".join(w for w in normalised.split() if w not in FILLERS)
 
 
+def char_similarity(a: str, b: str) -> float:
+    """difflib's ratio depends on the order (0.87 one way, 0.783 the other); take the larger."""
+    return max(difflib.SequenceMatcher(None, x, y, autojunk=False).ratio() for x, y in ((a, b), (b, a)))
+
+
 def similarity(a: str, b: str) -> tuple[float, float]:
-    chars = difflib.SequenceMatcher(None, a, b, autojunk=False).ratio()
+    chars = char_similarity(a, b)
     wa, wb = set(a.split()), set(b.split())
     words = len(wa & wb) / len(wa | wb) if wa | wb else 1.0
     return chars, words

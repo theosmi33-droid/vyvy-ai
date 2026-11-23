@@ -107,3 +107,17 @@ def test_filler_words_alone_are_always_a_leak(held):
 def test_other_words_are_not_fillers():
     rows = [("x:1", "Wer hat die Glühbirne erfunden?")]
     assert not lock.find_leaks(rows, [{"id": "h-1", "text": "Wann wurde die erste Glühbirne in Berlin verkauft?"}], 0.99)
+
+
+ORDER = ("wann ist das naechste treffen mit dem team", "watns iut kasnaechste treffen mit dem tram")
+
+
+def test_character_similarity_does_not_depend_on_the_order():
+    """difflib gives 0.881 one way and 0.786 the other; lock and build missed the second (shadow c2s-0551)."""
+    import holdout_build as build
+    a, b = ORDER
+    for train, held in ((a, b), (b, a)):
+        assert lock.find_leaks([("x:1", train)], [{"id": "h-1", "text": held}], lock.MAX_SIMILARITY)
+        lex = build.Lexical(lock.MAX_SIMILARITY)
+        lex.add_text("training", train)
+        assert lex.near(held) == "training"

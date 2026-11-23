@@ -107,7 +107,7 @@ class Lexical:
             if not n or not other or 2 * min(len(n), len(other)) / (len(n) + len(other)) < self.t:
                 continue
             m = difflib.SequenceMatcher(None, n, other, autojunk=False)
-            if m.quick_ratio() >= self.t and m.ratio() >= self.t:
+            if m.quick_ratio() >= self.t and lock.char_similarity(n, other) >= self.t:
                 return kind
         return None
 
