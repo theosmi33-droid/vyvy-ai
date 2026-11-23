@@ -47,7 +47,9 @@ def decide(base: dict, lora: dict, alpha: float = 0.05) -> dict:
     3. no intent loses more than intent_tolerance(n) questions net
     4. no question of a safety intent ("unknown") gets worse
     """
-    for key in ("mode", "prompt", "n"):
+    # Same output contract and the very same grammar: a contract 1 run and a contract 2 run answer
+    # different questions (other intents, other fields) and are never compared.
+    for key in ("mode", "prompt", "n", "contract", "grammar_sha256"):
         if base.get(key) != lora.get(key):
             raise ValueError(f"not comparable: {key} differs ({base.get(key)} vs {lora.get(key)})")
     bi = {i["id"]: i for i in base["items"]}
@@ -89,6 +91,7 @@ def decide(base: dict, lora: dict, alpha: float = 0.05) -> dict:
         "reason": (f"significant improvement (b={b}, c={c}, p={p:.4f}), no intent noticeably worse"
                    if accepted else "; ".join(reasons)),
         "cpu": lora.get("cpu"), "prompt": lora.get("prompt"), "mode": lora.get("mode"),
+        "contract": lora.get("contract"),
     }
 
 
