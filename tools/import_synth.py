@@ -84,8 +84,7 @@ def main(argv: list[str] | None = None,
         row = {"text": r["text"], "intent": r["intent"], "timeframe": r.get("timeframe"), "entity": r.get("entity")}
         if r.get("stratum") in (1, 2, 3, 4):
             row["stratum"] = r["stratum"]
-        answer = json.dumps({**{k: row[k] for k in ("intent", "timeframe", "entity")}, "confidence": 0.9})
-        if bench.parse_output(answer, intents) is None:
+        if not bench.row_fits(row, intents):
             invalid += 1
             continue
         key = lock.normalise(row["text"])

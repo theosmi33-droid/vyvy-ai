@@ -143,8 +143,7 @@ def main(argv: list[str] | None = None) -> int:
     intents = bench.grammar_intents(bench.DEFAULT_GRAMMAR.read_text(encoding="utf-8"))
     rows, counts, dropped = build(args.seed, args.max_similarity)
     for r in rows:
-        answer = json.dumps({**{k: r[k] for k in ("intent", "timeframe", "entity")}, "confidence": 0.9})
-        if bench.parse_output(answer, intents) is None:
+        if not bench.row_fits(r, intents):
             raise SystemExit(f"not in the output contract: {r}")
     text = hard.render(rows)
     if args.check:

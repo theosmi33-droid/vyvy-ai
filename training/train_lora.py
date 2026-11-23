@@ -49,11 +49,12 @@ def load_rows(paths: list[Path], intents: tuple[str, ...]) -> list[dict]:
             if not line.strip():
                 continue
             r = json.loads(line)
-            answer = {"intent": r.get("intent"), "timeframe": r.get("timeframe"),
-                      "entity": r.get("entity"), "confidence": TARGET_CONFIDENCE}
-            if not isinstance(r.get("text"), str) or bench.parse_output(json.dumps(answer), intents) is None:
+            # The answer in the fields of the current contract; a slot the line does not carry is null.
+            answer = bench.answer_json(r.get("intent"), TARGET_CONFIDENCE, bench.FIELDS,
+                                       **{f: r.get(f) for f in bench.FIELDS if f not in ("intent", "confidence")})
+            if not isinstance(r.get("text"), str) or bench.parse_output(answer, intents, bench.FIELDS) is None:
                 raise SystemExit(f"{path.name}:{no}: not a valid training line: {line[:120]}")
-            rows.append({"text": r["text"], "answer": json.dumps(answer, ensure_ascii=False)})
+            rows.append({"text": r["text"], "answer": answer})
     return rows
 
 
@@ -469,6 +470,11 @@ def main(argv: list[str] | None = None) -> int:
         "llama_cpp_commit": LLAMA_CPP_COMMIT, "training_git_commit": os.environ.get("VYVY_COMMIT"),
         "train_files": {x.name: sha256(x) for x in paths},
         "train_sentences": len(rows), "prompt": prompt_name, "base_weights": quant,
+        # The output contract the adapter was trained for; the catalog and the application
+        # load it only with exactly this grammar.
+        "contract_version": bench.CONTRACT_VERSION,
+        "grammar": bench.DEFAULT_GRAMMAR.relative_to(ROOT).as_posix(),
+        "grammar_sha256": sha256(bench.DEFAULT_GRAMMAR),
         "attempts": attempts, "validation": history, "validation_sentences": len(eval_rows),
         "prompt_sha256": hashlib.sha256(system.encode("utf-8")).hexdigest(), "epochs": args.epochs, "lr": best["lr"],
         "rank": best["rank"], "alpha": 2 * best["rank"], "batch": batch, "grad_accum": accum,

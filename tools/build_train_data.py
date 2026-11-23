@@ -284,8 +284,7 @@ def main(argv: list[str] | None = None) -> int:
         raise SystemExit(f"no core sentences for {sorted(missing)}")
     rows, dropped = build(args.seed, args.per_core, args.max_similarity)
     for r in rows:
-        answer = json.dumps({**{k: r[k] for k in ("intent", "timeframe", "entity")}, "confidence": 0.9})
-        if bench.parse_output(answer, intents) is None:
+        if not bench.row_fits(r, intents):
             raise SystemExit(f"not in the output contract: {r}")
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows), encoding="utf-8")
