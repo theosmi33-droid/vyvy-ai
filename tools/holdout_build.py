@@ -100,8 +100,9 @@ class Lexical:
     def near(self, text: str) -> str | None:
         n = norm(text)
         words = set(n.split())
+        bare = lock.without_fillers(n)
         for kind, other, other_words in self.texts:
-            if jaccard(words, other_words) >= self.t:
+            if jaccard(words, other_words) >= self.t or bare == lock.without_fillers(other):
                 return kind
             if not n or not other or 2 * min(len(n), len(other)) / (len(n) + len(other)) < self.t:
                 continue
@@ -212,7 +213,7 @@ def load_round(folder: Path, spec: str) -> tuple[str, list[dict], dict, dict, di
 
 def build(folder: Path, exclude: dict | None, *, rounds: list[str] = DEFAULT_ROUNDS,
           quotas: dict[str, tuple[str, str]] = DEFAULT_QUOTAS, reserve: tuple[int, int] = DEFAULT_RESERVE,
-          max_similarity: float = 0.8,
+          max_similarity: float = lock.MAX_SIMILARITY,
           max_cosine: float = 0.85, semantic: bool = True, seed: str = "contract-2",
           known: dict[str, list[str]] | None = None, semantic_model=None) -> dict:
     intents = bench.grammar_intents(bench.DEFAULT_GRAMMAR.read_text(encoding="utf-8"))
@@ -362,7 +363,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--reserve", type=int, default=DEFAULT_RESERVE[0], help="reserve per intent and round")
     p.add_argument("--reserve-unknown", type=int, default=DEFAULT_RESERVE[1])
     p.add_argument("--exclude-ids", type=Path, help="candidate ids to strike first (JSON with ausschluss_ids)")
-    p.add_argument("--max-similarity", type=float, default=0.8)
+    p.add_argument("--max-similarity", type=float, default=lock.MAX_SIMILARITY)
     p.add_argument("--max-cosine", type=float, default=0.85)
     p.add_argument("--semantic", choices=("model", "skip"), default="model",
                    help="skip only to try the tool; a set built without it is marked so")

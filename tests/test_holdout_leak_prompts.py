@@ -75,5 +75,35 @@ def test_the_benchmark_prompt_examples_are_checked_too(tmp_path, capsys):
     texts = [t for _, t in rows]
     assert "Wer hat die Glühbirne erfunden?" in texts and not any("v1" in w for w, _ in rows)
     assert any("PROMPTS[detailed]" in w for w, _ in rows)
-    leaks = lock.find_leaks(rows, [{"id": "h-1", "text": "Wer hat denn die Glühbirne erfunden?"}], 0.85)
+    leaks = lock.find_leaks(rows, [{"id": "h-1", "text": "Wer hat eigentlich die Glühbirne erfunden?"}], lock.MAX_SIMILARITY)
     assert leaks and leaks[0]["train"].startswith("bench.py:PROMPTS[")
+
+
+def test_lock_and_build_read_one_threshold(tmp_path, capsys):
+    import inspect
+
+    import holdout_build as build
+    assert lock.MAX_SIMILARITY == 0.8
+    assert inspect.signature(build.build).parameters["max_similarity"].default == lock.MAX_SIMILARITY
+    assert "default=lock.MAX_SIMILARITY" in Path(build.__file__).read_text(encoding="utf-8")
+    train = tmp_path / "t.jsonl"
+    train.write_text(json.dumps({"text": "Wer hat die Glühbirne erfunden?"}) + "\n", encoding="utf-8")
+    held = tmp_path / "h.json"
+    held.write_text(json.dumps({"items": [{"id": "h-1", "text": "Wer hat eigentlich die Glühbirne erfunden?"}]}),
+                    encoding="utf-8")
+    assert lock.main(["--train", str(train), "--holdout", str(held)]) == 1
+    assert "at or above 0.8" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("held", [
+    "Wer hat denn eigentlich bitte mal die Glühbirne erfunden?",
+    "wer HAT doch die glühbirne erfunden!!",
+])
+def test_filler_words_alone_are_always_a_leak(held):
+    rows = [("bench.py:PROMPTS[compact][3]", "Wer hat die Glühbirne erfunden?")]
+    assert lock.find_leaks(rows, [{"id": "h-1", "text": held}], 0.99)
+
+
+def test_other_words_are_not_fillers():
+    rows = [("x:1", "Wer hat die Glühbirne erfunden?")]
+    assert not lock.find_leaks(rows, [{"id": "h-1", "text": "Wann wurde die erste Glühbirne in Berlin verkauft?"}], 0.99)

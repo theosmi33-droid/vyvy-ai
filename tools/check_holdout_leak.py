@@ -9,7 +9,7 @@ normalisation (case, punctuation, whitespace) by two measures:
 - character similarity (difflib ratio, close to a normalised Levenshtein distance)
 - word overlap (Jaccard of the word sets)
 
-If either reaches --threshold (default 0.85), the pair is reported and the
+If either reaches --threshold (default MAX_SIMILARITY, 0.8), the pair is reported and the
 script exits with code 1. Training data: data/train/*.jsonl, one JSON object per
 line with "text" and "intent", plus the example sentences of RULES in
 training/synthesize.py (the teacher would copy a holdout sentence from there
@@ -56,6 +56,16 @@ BENCH = ROOT / "runner" / "bench.py"
 def normalise(text: str) -> str:
     text = re.sub(r"[^\w\s]", " ", text.casefold())
     return " ".join(text.split())
+
+
+# One threshold for this lock and for tools/holdout_build.py.
+MAX_SIMILARITY = 0.8
+# A sentence that differs only by these words (or punctuation and case) is the same sentence.
+FILLERS = frozenset({"eigentlich", "denn", "mal", "bitte", "doch"})
+
+
+def without_fillers(normalised: str) -> str:
+    return " ".join(w for w in normalised.split() if w not in FILLERS)
 
 
 def similarity(a: str, b: str) -> tuple[float, float]:
@@ -113,7 +123,7 @@ def find_leaks(train: list[tuple[str, str]], holdout: list[dict], threshold: flo
         t = normalise(text)
         for hid, htext, h in hold:
             chars, words = similarity(t, h)
-            if max(chars, words) >= threshold:
+            if max(chars, words) >= threshold or without_fillers(t) == without_fillers(h):
                 leaks.append({"train": where, "text": text, "holdout": hid, "holdout_text": htext,
                               "chars": round(chars, 3), "words": round(words, 3)})
     return leaks
@@ -124,7 +134,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--train", type=Path, nargs="*", help="training files (default: data/train/*.jsonl)")
     p.add_argument("--holdout", type=Path, nargs="*", default=GUARDED,
                    help="holdout sets to protect (default: development holdout and blind holdout)")
-    p.add_argument("--threshold", type=float, default=0.85)
+    p.add_argument("--threshold", type=float, default=MAX_SIMILARITY)
     p.add_argument("--prompts", type=Path, nargs="*",
                    help="scripts whose RULES or PATTERNS examples are checked (default: training/synthesize.py and "
                         "training/patterns.py; "
