@@ -1,18 +1,20 @@
 name: Bench LoRA
 
-# Measures a trained adapter against the current default; each holdout set runs
-# on its own runner at the same time (matrix), baseline and candidate always on
-# the same runner (same CPU, same prompt, route mode). Acceptance is decided only on
-# blind holdout v3 (data/holdout_blind_v3.json, 23 to 30 questions per intent, written
-# without knowledge of any errors; active since the rotation of 11.11.2026) by a statistical rule (tools/compare_adapter.py:
-# exact McNemar p < 0.05, b >= 2c, per-intent tolerance, no loss on "unknown");
-# blind holdout v1 and the development holdout are reported for information (v2 is training data since 20.11.2026). The
-# shadow holdout v4 can only veto (tools/shadow_check.py): an adapter significantly
-# worse there is rejected, and after 8 decisions on v3 an issue asks for rotation. The default is the newest accepted
-# adapter for the same base model and prompt, or the base model alone if there is
-# none. The candidate release becomes a regular release (the new default) only
-# with zero regressions and a higher intent accuracy; otherwise it stays a
-# pre-release marked rejected, with the report and the missed questions attached.
+# Measures a trained adapter against the current default on output contract 2 (25 intents).
+# The decision set (DECISION_SET, 40 questions per intent plus 160 unknown, about 1 120) and
+# the shadow set (SHADOW_SET, 20 per intent plus 80 unknown) run in parts on parallel runners
+# (matrix): a 7B run over the whole decision set takes about 2 x 50 min, too close to one
+# job's limit. Baseline and candidate of a part always run on the same runner (same CPU,
+# same prompt, route mode); tools/merge_results.py joins the parts and refuses parts that
+# do not belong together (other baseline, other grammar, a part missing or twice).
+# Acceptance is decided only on the decision set by a statistical rule
+# (tools/compare_adapter.py: exact McNemar p < 0.05, b >= 2c, an intent fails only above its
+# tolerance and binomially noticeable, no loss on "unknown"). The shadow set can only veto
+# (tools/shadow_check.py), and after 8 decisions an issue asks for rotation. The contract 1
+# holdouts (blind v1, v3, v4, development) are no longer measured: their labels follow the
+# 9 intents of contract 1. The default is the newest accepted adapter for the same base model
+# and prompt, or the base model alone if there is none. An adapter trained for another
+# contract or grammar is refused before anything is measured.
 # Started by the Train workflow, or by hand with a release tag.
 on:
   workflow_dispatch:
@@ -37,6 +39,10 @@ concurrency:
   group: bench-lora-${{ inputs.adapter }}
   cancel-in-progress: false
 
+env:
+  DECISION_SET: data/holdout_decision_c2.json
+  SHADOW_SET: data/holdout_shadow_c2.json
+
 jobs:
   measure:
     runs-on: ubuntu-latest
@@ -45,7 +51,13 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        set: [blind, shadow, info]
+        include:
+          - {set: decision, part: 1, parts: 4}
+          - {set: decision, part: 2, parts: 4}
+          - {set: decision, part: 3, parts: 4}
+          - {set: decision, part: 4, parts: 4}
+          - {set: shadow, part: 1, parts: 2}
+          - {set: shadow, part: 2, parts: 2}
     outputs:
       model: ${{ steps.adapter.outputs.model }}
       baseline: ${{ steps.baseline.outputs.name }}
@@ -76,9 +88,15 @@ jobs:
           gguf = f"adapter/{name}.gguf"
           assert m["adapter"] == f"{name}.gguf", m["adapter"]
           assert m["adapter_sha256"] == hashlib.sha256(open(gguf, "rb").read()).hexdigest(), "checksum"
-          models = {"Qwen/Qwen2.5-1.5B-Instruct": ("Qwen/Qwen2.5-1.5B-Instruct-GGUF", "qwen2.5-1.5b-instruct-q8_0"),
+          # 1.5B is measured in Q4_K_M until bench-client has compared Q4_K_M with Q8_0 (decision of 23.11.2026).
+          models = {"Qwen/Qwen2.5-1.5B-Instruct": ("Qwen/Qwen2.5-1.5B-Instruct-GGUF", "qwen2.5-1.5b-instruct-q4_k_m"),
                     "Qwen/Qwen2.5-7B-Instruct": ("Qwen/Qwen2.5-7B-Instruct-GGUF", "qwen2.5-7b-instruct-q4_k_m")}
           repo, model = models[m["base"]]
+          grammar = hashlib.sha256(bench.DEFAULT_GRAMMAR.read_bytes()).hexdigest()
+          if m.get("contract_version", 1) != bench.CONTRACT_VERSION or m.get("grammar_sha256") != grammar:
+              sys.exit(f"adapter was trained for contract {m.get('contract_version', 1)} "
+                       f"(grammar {str(m.get('grammar_sha256'))[:12]}), the benchmark measures contract "
+                       f"{bench.CONTRACT_VERSION} ({grammar[:12]}); retrain before measuring")
           prompt = bench.prompt_for(m["base"])
           current = hashlib.sha256(bench.PROMPTS[prompt].encode("utf-8")).hexdigest()
           if m.get("prompt") != prompt or m.get("prompt_sha256") != current:
@@ -125,41 +143,35 @@ jobs:
           MODEL: ${{ steps.adapter.outputs.model }}
         run: python tools/fetch_model.py "$MODEL" --dir models
 
-      - name: Baseline and candidate on this holdout set
+      - name: Baseline and candidate on this part
         env:
           MODEL: ${{ steps.adapter.outputs.model }}
           GGUF: ${{ steps.adapter.outputs.gguf }}
           BASELINE_GGUF: ${{ steps.baseline.outputs.gguf }}
           SET: ${{ matrix.set }}
+          PART: ${{ matrix.part }}
+          PARTS: ${{ matrix.parts }}
         run: |
           set -euo pipefail
           file=$(ls models/"$MODEL"*.gguf | sort | head -n 1)
-          run() {  # $1 = data set, $2 = output prefix, $3 = adapter or empty
-            VYVY_LORA_PATH="$3" python runner/bench.py --model "$file" --label "$MODEL" --mode route \
-              --data "$1" --threads "$(nproc)" --summary "$GITHUB_STEP_SUMMARY" --json "results/$2.json"
+          case "$SET" in
+            decision) data="$DECISION_SET" ;;
+            shadow) data="$SHADOW_SET" ;;
+          esac
+          [ -f "$data" ] || { echo "$data is missing; the $SET set has not landed yet" >&2; exit 1; }
+          run() {  # $1 = output prefix, $2 = adapter or empty
+            VYVY_LORA_PATH="$2" python runner/bench.py --model "$file" --label "$MODEL" --mode route \
+              --data "$data" --part "$PART/$PARTS" --threads "$(nproc)" --summary "$GITHUB_STEP_SUMMARY" \
+              --json "results/$1_${SET}_p$PART.json"
           }
           mkdir -p results
-          case "$SET" in
-            blind)
-              echo "## Blind holdout v3, 23 to 30 per intent (decides acceptance)" >> "$GITHUB_STEP_SUMMARY"
-              run data/holdout_blind_v3.json base_blind "$BASELINE_GGUF"
-              run data/holdout_blind_v3.json lora_blind "$GGUF" ;;
-            shadow)
-              echo "## Shadow holdout v4 (can only veto)" >> "$GITHUB_STEP_SUMMARY"
-              run data/holdout_blind_v4.json base_shadow "$BASELINE_GGUF"
-              run data/holdout_blind_v4.json lora_shadow "$GGUF" ;;
-            info)
-              echo "## Blind holdout v1 (information only)" >> "$GITHUB_STEP_SUMMARY"
-              run data/holdout_blind_v1.json base_v1 "$BASELINE_GGUF"
-              run data/holdout_blind_v1.json lora_v1 "$GGUF"
-              echo "## Development holdout (information only)" >> "$GITHUB_STEP_SUMMARY"
-              run data/holdout_benchmarks.json base_dev "$BASELINE_GGUF"
-              run data/holdout_benchmarks.json lora_dev "$GGUF" ;;
-          esac
+          echo "## ${SET} set, part $PART of $PARTS" >> "$GITHUB_STEP_SUMMARY"
+          run base "$BASELINE_GGUF"
+          run lora "$GGUF"
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: results-${{ matrix.set }}
+          name: results-${{ matrix.set }}-${{ matrix.part }}
           path: results/*.json
           retention-days: 30
 
@@ -170,8 +182,9 @@ jobs:
     env:
       ADAPTER: ${{ inputs.adapter }}
       GH_TOKEN: ${{ github.token }}
-      # Rotation of 11.11.2026: v3 decides from here on, v4 is the shadow; v2 is training data since 20.11.2026.
-      ACTIVE_SINCE: "2026-11-11T18:00:00Z"
+      # When the contract 2 decision set landed; decisions before it do not count toward its rotation.
+      # Set in the commit that adds the set; until then the Decide step refuses to run.
+      ACTIVE_SINCE: "SET-WHEN-THE-DECISION-SET-LANDS"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -192,6 +205,15 @@ jobs:
           echo "gguf=adapter/$ADAPTER.gguf" >> "$GITHUB_OUTPUT"
           echo "model=${{ needs.measure.outputs.model }}" >> "$GITHUB_OUTPUT"
 
+      - name: Join the parts
+        run: |
+          set -euo pipefail
+          for side in base lora; do
+            for set in decision shadow; do
+              python tools/merge_results.py "${side}_${set}"_p*.json --out "${side}_${set}.json"
+            done
+          done
+
       - name: Decide
         id: decide
         env:
@@ -201,17 +223,14 @@ jobs:
           # before the shadow check and the marking of the release.
           set +e
           set -uo pipefail
-          python tools/compare_adapter.py base_dev.json lora_dev.json --name "$ADAPTER (development holdout)" \
-            --baseline-name "$BASELINE_NAME" | tee -a "$GITHUB_STEP_SUMMARY" || true
-          python tools/compare_adapter.py base_v1.json lora_v1.json --name "$ADAPTER (blind holdout v1)" \
-            --baseline-name "$BASELINE_NAME" | tee -a "$GITHUB_STEP_SUMMARY" || true
-          python tools/compare_adapter.py base_blind.json lora_blind.json --name "$ADAPTER (blind holdout v3)" \
+          [[ "$ACTIVE_SINCE" =~ ^20[0-9]{2}-[0-9]{2}-[0-9]{2}T ]] || { echo "ACTIVE_SINCE is not set" >&2; exit 2; }
+          python tools/compare_adapter.py base_decision.json lora_decision.json --name "$ADAPTER (decision set)" \
             --baseline-name "$BASELINE_NAME" --verdict verdict.json \
             | tee -a "$GITHUB_STEP_SUMMARY"
           code=${PIPESTATUS[0]}
           [ "$code" -le 1 ] || exit "$code"
-          # Decisions already measured on the active holdout (v3 since ACTIVE_SINCE): every release
-          # created after the rotation that is no longer a candidate.
+          # Decisions already measured on the active decision set (since ACTIVE_SINCE): every release
+          # created after it that is no longer a candidate.
           decisions=$(gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --json tagName,name,createdAt \
             --jq "[.[] | select(.tagName != \"$ADAPTER\") | select(.createdAt > \"$ACTIVE_SINCE\") | select(.name | endswith(\"(candidate)\") | not)] | length")
           python tools/shadow_check.py base_shadow.json lora_shadow.json --verdict verdict.json \
@@ -220,13 +239,13 @@ jobs:
           [ "$code" -le 1 ] || exit "$code"
           echo "accepted=$([ "$code" -eq 0 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
           if python -c "import json,sys; sys.exit(0 if json.load(open('verdict.json'))['rotation_due'] else 1)"; then
-            # Only a notice for this holdout counts: the open one for v2 (#8) kept v3 from getting its own.
-            prefix="Holdout rotation due (blind v3 "
+            # Only a notice for this set counts: an open one for an older holdout must not hide it.
+            prefix="Holdout rotation due (decision set c2 "
             title="${prefix}used for $((decisions + 1)) decisions)"
             if ! gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "\"$prefix\" in:title" \
                  --json title --jq '.[].title' | grep -qF "$prefix"; then
               gh issue create --repo "$GITHUB_REPOSITORY" --title "$title" --body \
-                "Blind holdout v3 has decided $((decisions + 1)) adapters. Replace it: v4 (shadow) becomes the active set, a newly written blind set becomes the shadow, and v3 may go into the training data. Opened by bench-lora."
+                "The contract 2 decision set has decided $((decisions + 1)) adapters. Replace it: the shadow set becomes the decision set, a newly built set becomes the shadow, and the old decision set may go into the training data after the relabelling check. Opened by bench-lora."
             fi
           fi
 
@@ -247,10 +266,9 @@ jobs:
             gh release edit "$ADAPTER" --repo "$GITHUB_REPOSITORY" --title "$ADAPTER (rejected)" --notes-file notes.md
           fi
           python tools/release_manifest.py adapter/manifest.json verdict.json \
-            --gguf-key "$MODEL" --run-id "$GITHUB_RUN_ID" --out adapter_manifest.json
-          gh release upload "$ADAPTER" verdict.json adapter_manifest.json base_blind.json lora_blind.json \
-            base_v1.json lora_v1.json base_dev.json lora_dev.json base_shadow.json lora_shadow.json \
-            --repo "$GITHUB_REPOSITORY" --clobber
+            --gguf-key "$MODEL" --run-id "$GITHUB_RUN_ID" --holdout "$DECISION_SET" --out adapter_manifest.json
+          gh release upload "$ADAPTER" verdict.json adapter_manifest.json base_decision.json lora_decision.json \
+            base_shadow.json lora_shadow.json --repo "$GITHUB_REPOSITORY" --clobber
 
       # A remeasurement of a decided release (input remeasure): the release stays as it is - title,
       # status and notes unchanged, no file replaced. The results are added under a dated name;
@@ -263,7 +281,7 @@ jobs:
         run: |
           set -euo pipefail
           title=$(gh release view "$ADAPTER" --repo "$GITHUB_REPOSITORY" --json name --jq .name)
-          # Accepted releases only: a rejected one measured again on v3 would be a second try at the same
+          # Accepted releases only: a rejected one measured again on the decision set would be a second try at the same
           # holdout, and a signed "accepted" must never sit next to a "(rejected)" title.
           [ "$title" = "$ADAPTER" ] || { echo "remeasure is for accepted releases only; title is '$title'" >&2; exit 1; }
           assets=$(gh release view "$ADAPTER" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name')
@@ -271,8 +289,7 @@ jobs:
           prefix="remeasure-$day"
           if grep -q "^$prefix" <<<"$assets"; then echo "a remeasurement of $day is already attached" >&2; exit 1; fi
           files=()
-          for f in verdict.json base_blind.json lora_blind.json base_v1.json lora_v1.json base_dev.json lora_dev.json \
-                   base_shadow.json lora_shadow.json; do
+          for f in verdict.json base_decision.json lora_decision.json base_shadow.json lora_shadow.json; do
             cp "$f" "${prefix}_$f"
             files+=("${prefix}_$f")
           done
@@ -284,7 +301,7 @@ jobs:
             first=$(gh release view "$ADAPTER" --repo "$GITHUB_REPOSITORY" --json body --jq .body \
                       | grep -o 'bench-lora (run [0-9]*): [a-z]*' | head -n 1 || true)
             python tools/release_manifest.py adapter/manifest.json verdict.json \
-              --gguf-key "$MODEL" --run-id "$GITHUB_RUN_ID" --out adapter_manifest.json \
+              --gguf-key "$MODEL" --run-id "$GITHUB_RUN_ID" --holdout "$DECISION_SET" --out adapter_manifest.json \
               --remeasured-on "$day" --first-decision "released $created; $first"
             files+=(adapter_manifest.json)
           fi

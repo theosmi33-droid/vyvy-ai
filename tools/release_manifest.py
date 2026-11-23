@@ -22,8 +22,13 @@ ROOT = Path(__file__).resolve().parent.parent
 SCHEMA = 1
 
 
+DECISION_SET = "data/holdout_decision_c2.json"
+RULE = ("exact McNemar p < 0.05, b >= 2c, an intent fails only above its tolerance and with one-sided "
+        "binomial p < 0.05, no loss on unknown")
+
+
 def build(manifest: dict, verdict: dict, gguf_key: str, run_id: str, models: dict,
-          remeasure: dict | None = None) -> dict:
+          remeasure: dict | None = None, holdout: str = DECISION_SET) -> dict:
     gguf = models["gguf"][gguf_key]
     record = {
         "schema": SCHEMA,
@@ -42,8 +47,8 @@ def build(manifest: dict, verdict: dict, gguf_key: str, run_id: str, models: dic
         "prompt_sha256": manifest["prompt_sha256"],
         "llama_cpp_commit": manifest.get("llama_cpp_commit"),
         "decision": {
-            "holdout": "data/holdout_blind_v3.json",
-            "rule": "exact McNemar p < 0.05, b >= 2c, per-intent tolerance, no loss on unknown",
+            "holdout": holdout,
+            "rule": RULE,
             "n": verdict["n"], "b_fixed": verdict["b_fixed"], "c_broken": verdict["c_broken"],
             "p_value": verdict["p_value"], "baseline_correct": verdict["base_correct"],
             "adapter_correct": verdict["adapter_correct"], "reason": verdict["reason"],
@@ -71,17 +76,19 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--run-id", required=True)
     p.add_argument("--models", type=Path, default=ROOT / "models.json")
     p.add_argument("--out", type=Path, default=Path("adapter_manifest.json"))
+    p.add_argument("--holdout", default=DECISION_SET, help="the set the decision was made on")
     p.add_argument("--remeasured-on", help="date of a remeasurement of an already decided release")
     p.add_argument("--first-decision", help="with --remeasured-on: the release's first decision, e.g. its date and holdout")
     args = p.parse_args(argv)
     remeasure = None
     if args.remeasured_on:
         remeasure = {"remeasured_on": args.remeasured_on,
-                     "rule": "blind holdout v3 decides, shadow holdout v4 can veto",
+                     "rule": f"{args.holdout} decides, the contract 2 shadow set can veto",
                      "first_decision": args.first_decision}
     record = build(json.loads(args.manifest.read_text(encoding="utf-8")),
                    json.loads(args.verdict.read_text(encoding="utf-8")),
-                   args.gguf_key, args.run_id, json.loads(args.models.read_text(encoding="utf-8")), remeasure)
+                   args.gguf_key, args.run_id, json.loads(args.models.read_text(encoding="utf-8")), remeasure,
+                   args.holdout)
     args.out.write_text(json.dumps(record, indent=1) + "\n", encoding="utf-8")
     print(args.out.read_text(encoding="utf-8"))
     return 0

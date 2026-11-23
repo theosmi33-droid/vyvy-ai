@@ -432,6 +432,15 @@ def cpu_features() -> str:
     return llama_cpp.llama_print_system_info().decode().strip()
 
 
+def part_items(items: list[dict], part: str) -> list[dict]:
+    """Part i of m ("i/m"): every m-th item from the i-th on, so the parts are disjoint, cover the
+    set, and each holds about the same share of every intent. tools/merge_results.py joins them."""
+    i, m = (int(x) for x in part.split("/"))
+    if not 1 <= i <= m:
+        raise ValueError(f"part {part}: need 1 <= i <= m")
+    return items[i - 1::m]
+
+
 def sample_items(items: list[dict], n: int) -> list[dict]:
     """n items spread evenly over the dataset (same items on every run)."""
     if n <= 0 or n >= len(items):
@@ -872,6 +881,9 @@ def main(argv: list[str] | None = None) -> int:
                         "route: generate prompt, only the intent branches are computed")
     p.add_argument("--sample", type=int, default=0,
                    help="measure only this many questions, spread evenly over the dataset (0 = all)")
+    p.add_argument("--part", default="1/1",
+                   help="i/m: measure only part i of m of the dataset (bench-lora runs the parts on parallel "
+                        "runners, baseline and candidate of a part on the same runner)")
     p.add_argument("--dry-run", action="store_true", help="no model: grammar check and mock inference")
     args = p.parse_args(argv)
 
@@ -895,7 +907,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Dataset uses intents missing from the grammar: {unknown}", file=sys.stderr)
         return 1
     total = len(items)
-    items = sample_items(items, args.sample)
+    items = sample_items(part_items(items, args.part), args.sample)
 
     global GPU_LAYERS
     GPU_LAYERS = args.gpu_layers
@@ -929,13 +941,17 @@ def main(argv: list[str] | None = None) -> int:
                   f"prompt `{prompt_name}` · "
                   f"{platform.system()} {platform.machine()} · Python {platform.python_version()}"
                   f"\n\n**CPU: {cpu_model()}** · {model.info}\n\n`{cpu_features()}`")
-    if len(items) < total:
+    if args.part != "1/1":
+        header += f"\n\nPart {args.part} of the dataset ({len(items)} of {total} questions)."
+    elif len(items) < total:
         header += f"\n\nSample: {len(items)} of {total} questions, spread evenly over the dataset."
 
     runner = VyvyBenchRunner(model, grammar, IntentParser(intents, FIELDS), args.min_confidence, args.timeout,
                              system=PROMPTS[prompt_name])
     result = runner.run(items)
     result["contract"] = contract
+    result["part"] = args.part
+    result["data"] = args.data.name
     result["grammar_sha256"] = hashlib.sha256(args.grammar.read_bytes()).hexdigest()
     result["mode"] = args.mode
     result["prompt"] = prompt_name

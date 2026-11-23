@@ -24,8 +24,11 @@ UNCHANGED = {
     "Fetch the adapter again (signed with the manifest)": "6eaae8c0f269c6488e2e7319951948f6ee90176c275c9fa01109597ca4045d7e",
     # 22.11.2026: only the duplicate check of the rotation notice changed (one per holdout version,
     # tests/test_bench_lora_notices.py); the decision itself is the same.
-    "Decide": "c6feffa74434dea50989764716b9b736d2b21913abdb1540e3abb3f9a80992bf",
-    "Mark the release": "81799e0e15a3b0d9e15db9974332c4416662301960d20ffacaf3437983b17130",
+    # Contract 2 (23.11.2026): the decision set and the shadow set of contract 2 replace blind v3 and
+    # v4, the information runs on the contract 1 holdouts are gone, ACTIVE_SINCE must be set before a
+    # decision, and the manifest names the decision set (--holdout). The rule is tools/compare_adapter.py.
+    "Decide": "de02bfecedfd8ba1ebe55b7e7156f3562df49afe378e8395952b50bb7b739b77",
+    "Mark the release": "41823d86efc7632aa6f049fddc1cac33aa75fd0aa616554bc17387dafb50de00",
     "actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2":
         "f08f843825b54565145af5c1d0f5acc1f3efcd4b074a38e61a66d61258c8f973",
     "Open the rejection notice": "3896efb2593a9990b87e05883f694f694d6b1961b40ed18b34750de84ae3d747",
