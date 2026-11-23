@@ -10,12 +10,13 @@ names 16 more. Two kinds of contract 1 lines therefore carry a label that is wro
    works, find own appointments, tasks or email, summarize a thread). Paying, sending
    and everything else stay unknown.
 2. "appointments_today" lines that ask what is on today in general, without narrowing
-   it to appointments: they are daily_agenda now.
+   it to appointments: they are daily_agenda now; those that ask only for work (tasks,
+   to-dos, what is to do today) and name no appointment are tasks_open, unless they ask
+   for the day as a whole (overview, schedule, what is on), which stays daily_agenda.
 
 Each rule is a pair of patterns (one must match, none of the exclusions may). A line is
 moved only when exactly one rule fires; a line two rules claim stays as it is and is
-listed for review, as are appointments_today lines that only ask for work (they may be
-tasks_open, which no rule here decides). The committed files in data/train/ are never
+listed for review. The committed files in data/train/ are never
 changed: the result is data/train/relabel_v2.json, one entry per moved line (file, line,
 SHA-256 of the text, old and new label, rule), plus counts and the review lists.
 training/train_lora.py applies it and stops if a listed line no longer matches.
@@ -129,6 +130,8 @@ AGENDA_NARROW = re.compile(
     r"eingetragen|eitraga|eitrogn|ausgmacht|verabred|\buhr\b|\bum \d|\bwo\b|\bwohin\b|persönlich|"
     r"\bbei (?:herrn?|frau|dem|der|den)\b|\bsehe ich\b|\bmit (?:herrn?|frau)\b|stundenplan", IGNORE)
 TASK_WORDS = re.compile(r"aufgab|to-?do|zu tun|\bjobs?\b|erledig|zu schaffe|liste", IGNORE)
+#: Asking for work, but for the day as a whole: daily_agenda, not tasks_open.
+AGENDA_WHOLE = re.compile(r"überblick|\bansteht\b|\bsteht\b.*\ban\b|zeitplan|tagesplan|\bganze[nr]? tag", IGNORE)
 
 
 def text_sha(text: str) -> str:
@@ -136,7 +139,8 @@ def text_sha(text: str) -> str:
 
 
 def rules_sha() -> str:
-    return hashlib.sha256(json.dumps([RULES, AGENDA_GENERAL.pattern, AGENDA_NARROW.pattern, TASK_WORDS.pattern],
+    return hashlib.sha256(json.dumps([RULES, AGENDA_GENERAL.pattern, AGENDA_NARROW.pattern, TASK_WORDS.pattern,
+                                      AGENDA_WHOLE.pattern],
                                      ensure_ascii=False).encode("utf-8")).hexdigest()
 
 
@@ -156,13 +160,19 @@ def classify(row: dict) -> tuple[str | None, str, list[str]]:
         return None, "", hits
     if row["intent"] == "appointments_today":
         t = row["text"]
-        if AGENDA_GENERAL.search(t) and not AGENDA_NARROW.search(t) and not TASK_WORDS.search(t):
+        if AGENDA_NARROW.search(t):
+            return None, "", []
+        if TASK_WORDS.search(t):
+            if AGENDA_WHOLE.search(t):
+                return "daily_agenda", "appointments_today->daily_agenda (whole day with work)", []
+            return "tasks_open", "appointments_today->tasks_open", []
+        if AGENDA_GENERAL.search(t):
             return "daily_agenda", "appointments_today->daily_agenda", []
     return None, "", []
 
 
 def build(train_dir: Path = TRAIN_DIR) -> dict:
-    changes, ambiguous, work_only = [], [], []
+    changes, ambiguous = [], []
     seen_unknown = 0
     per_rule: Counter[str] = Counter()
     per_file: Counter[str] = Counter()
@@ -182,19 +192,15 @@ def build(train_dir: Path = TRAIN_DIR) -> dict:
                 per_file[path.name] += 1
             elif competing:
                 ambiguous.append({**where, "rules": competing})
-            elif row["intent"] == "appointments_today" and TASK_WORDS.search(row["text"]) \
-                    and not AGENDA_NARROW.search(row["text"]):
-                work_only.append(where)
     return {
         "schema": 1,
         "about": "contract 1 training lines relabelled for contract 2 by tools/relabel_v2.py; applied by "
                  "training/train_lora.py; the files in data/train/ stay as committed",
         "rules_sha256": rules_sha(),
         "counts": {"unknown_lines_seen": seen_unknown, "moved": len(changes), "per_rule": dict(sorted(per_rule.items())),
-                   "per_file": dict(sorted(per_file.items())), "ambiguous_kept": len(ambiguous),
-                   "appointments_today_asking_for_work_kept": len(work_only)},
+                   "per_file": dict(sorted(per_file.items())), "ambiguous_kept": len(ambiguous)},
         "changes": changes,
-        "review": {"ambiguous_kept": ambiguous, "appointments_today_asking_for_work_kept": work_only},
+        "review": {"ambiguous_kept": ambiguous},
     }
 
 
@@ -234,8 +240,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0 if same else 1
     out.write_text(text, encoding="utf-8")
     c = result["counts"]
-    print(f"{out}: {c['moved']} lines moved, {c['ambiguous_kept']} ambiguous kept, "
-          f"{c['appointments_today_asking_for_work_kept']} appointments_today lines asking for work kept")
+    print(f"{out}: {c['moved']} lines moved, {c['ambiguous_kept']} ambiguous kept")
     for rule, n in c["per_rule"].items():
         print(f"  {rule}: {n}")
     return 0

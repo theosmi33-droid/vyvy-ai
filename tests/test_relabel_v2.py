@@ -53,7 +53,11 @@ def test_unknown_lines(text, want):
     ("Welche Termine habe ich heute?", None),        # narrows to appointments
     ("Bin ich heute noch bei Herrn Demirci?", None),  # a person: an appointment
     ("Was steht heute in meinem Kalender an?", None),
-    ("Was hab ich heute alles zu tun?", None),        # asks for work: listed for review, not moved
+    ("Was hab ich heute alles zu tun?", "tasks_open"),  # only work, no appointment
+    ("Meine Aufgaben für heute?", "tasks_open"),
+    ("Gib mir den Überblick für heute, was für Jobs ich habe.", "daily_agenda"),  # the day as a whole
+    ("Könntest du mal meinen heutigen Zeitplan auflisten?", "daily_agenda"),
+    ("Gibt es heute noch Aufgaben mit dem Termin bei Firma Lenz?", None),  # names an appointment
 ])
 def test_appointments_today_lines(text, want):
     new, _rule, _competing = rl.classify({"text": text, "intent": "appointments_today"})

@@ -1,12 +1,14 @@
 {
  "schema": 1,
  "about": "contract 1 training lines relabelled for contract 2 by tools/relabel_v2.py; applied by training/train_lora.py; the files in data/train/ stay as committed",
- "rules_sha256": "d7c74c14f0812317a17ce4c0e5871acd5264034f2fd8e93767ac54bc835007ab",
+ "rules_sha256": "c1f9d429348942dca697b1dea940e0ec0d70f080ba5577a8327c21957995d17f",
  "counts": {
   "unknown_lines_seen": 4804,
-  "moved": 471,
+  "moved": 517,
   "per_rule": {
    "appointments_today->daily_agenda": 199,
+   "appointments_today->daily_agenda (whole day with work)": 4,
+   "appointments_today->tasks_open": 42,
    "unknown->complete_task": 19,
    "unknown->create_goal": 3,
    "unknown->create_project": 5,
@@ -22,17 +24,16 @@
    "vyvy_create_boundary_v1.jsonl": 13,
    "vyvy_partner_af84f746d.jsonl": 109,
    "vyvy_retired_blind_v2.jsonl": 3,
-   "vyvy_synth_01ba17a81_2026-11-07-b.jsonl": 84,
-   "vyvy_synth_01ba17a81_2026-11-14.jsonl": 75,
-   "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl": 65,
+   "vyvy_synth_01ba17a81_2026-11-07-b.jsonl": 101,
+   "vyvy_synth_01ba17a81_2026-11-14.jsonl": 85,
+   "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl": 76,
    "vyvy_synth_2e53bbfc8_real-01.jsonl": 7,
    "vyvy_synth_2e53bbfc8_test-04.jsonl": 3,
-   "vyvy_synth_9c0fcc500_2026-W45.jsonl": 55,
+   "vyvy_synth_9c0fcc500_2026-W45.jsonl": 63,
    "vyvy_train_v1.jsonl": 15,
    "vyvy_unknown_hard_v1.jsonl": 42
   },
-  "ambiguous_kept": 0,
-  "appointments_today_asking_for_work_kept": 46
+  "ambiguous_kept": 0
  },
  "changes": [
   {
@@ -1162,6 +1163,33 @@
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 50,
+   "text_sha256": "7489a1aa5feb595e",
+   "text": "Büet, i wüsch de Überblick für heute säge, was für Jobs i ha.",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda (whole day with work)"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 51,
+   "text_sha256": "dd3b6485dd51e75e",
+   "text": "Hallo Büet, was ha i no für Aufgaben für heute?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 54,
+   "text_sha256": "0e89ed11a6f588ba",
+   "text": "Büet, i muess wiessen, was für Aufgaben i ha für hüt.",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
    "line": 80,
    "text_sha256": "f7790c0a57fb25b8",
    "text": "Wie ist das Wetter jetzt eigentlich bei unserem Standort in München?",
@@ -1225,6 +1253,15 @@
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 278,
+   "text_sha256": "13d48fbd8f638faa",
+   "text": "Hallo, könntest du mir nochmal sagen, was heute alles ansteht? Hab ich vielleicht was mit der Firma Blütenreich zu tun?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda (whole day with work)"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
    "line": 279,
    "text_sha256": "10d0ded30f516ef2",
    "text": "Hey, was steht auf meiner Agenda heute? Gibt's vielleicht eine Mail, die ich nicht gesehen habe?",
@@ -1252,6 +1289,69 @@
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 501,
+   "text_sha256": "39cb851d6abbc80f",
+   "text": "Was ham i jetz, was i beim Kunden Schmiedl heute zu erledigga hann?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 504,
+   "text_sha256": "c3ed295ab8773d1f",
+   "text": "Schauts ma jetz, was i heut mit der Baufirma Müller zu schaffe hann?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 505,
+   "text_sha256": "5ae7519dbe5f6a4c",
+   "text": "Wia siehts aus, was i heut zu schaffe hann, besonders morgends?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 529,
+   "text_sha256": "ddfaf28822b5b4c0",
+   "text": "Bitte zeige mir, was ich heute alles zu tun habe.",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 580,
+   "text_sha256": "264bc2f48c1ac40c",
+   "text": "Können wir durchgehen, was ich heute alles zu tun habe?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 582,
+   "text_sha256": "e84b4792e1dade74",
+   "text": "Ich muss wissen, was ich heute alles in meiner Liste stehen hat.",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 584,
+   "text_sha256": "5011b85eed28fe8f",
+   "text": "Ich brauche deine Hilfe, um herauszufinden, was ich heute alles zu tun habe.",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
    "line": 719,
    "text_sha256": "5fba4cefc5216943",
    "text": "Kannste ma sagen, ob da morgen in der Haldenstrasse Stau isch?",
@@ -1276,6 +1376,15 @@
    "from": "appointments_today",
    "to": "daily_agenda",
    "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 752,
+   "text_sha256": "7d1db1fb7970113c",
+   "text": "kannst du mir sagen was ich heut zu tun habe?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
@@ -1513,6 +1622,15 @@
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1236,
+   "text_sha256": "c0442c037e4bda46",
+   "text": "Meine Aufgaben für heute?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
    "line": 1289,
    "text_sha256": "0895c63973c87065",
    "text": "Wat stond heit bei mir noch am Programm im Tagebuch?",
@@ -1555,6 +1673,24 @@
    "from": "unknown",
    "to": "web_search",
    "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1543,
+   "text_sha256": "c9cd95b916150fa3",
+   "text": "Was ist heute zu tun?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1544,
+   "text_sha256": "a129e12b41834ea5",
+   "text": "Liste meine heutigen Aufgaben auf",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
@@ -1657,6 +1793,15 @@
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 1763,
+   "text_sha256": "9669009c13e1f27d",
+   "text": "Hab ich heute noch wat druntergeschrieben zu tun?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
    "line": 1831,
    "text_sha256": "fcfb50f869fbf730",
    "text": "Wat steht noch heeten drunne im Plan?",
@@ -1753,6 +1898,15 @@
    "from": "unknown",
    "to": "web_search",
    "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
+   "line": 2326,
+   "text_sha256": "870435f4266d6dfa",
+   "text": "Muss ich heut noch irgendwas für die Schwiegmutter erledigen?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
@@ -1936,12 +2090,30 @@
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 91,
+   "text_sha256": "c97d86430c050001",
+   "text": "guten morgen assistent bitte liste alle aufgaben auf die ich heute vor dem mittagstand muss",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
    "line": 92,
    "text_sha256": "ee3b99f26e192aa6",
    "text": "hallo assistent was habe ich bis jetzt von marie und der marketingabteilung heute geplant",
    "from": "appointments_today",
    "to": "daily_agenda",
    "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 157,
+   "text_sha256": "d377ae4dfe828852",
+   "text": "Gibt es heute noch Aufgaben, die ich mit der Firma BlauWasser klären muss?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
@@ -1999,6 +2171,15 @@
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 440,
+   "text_sha256": "00faacd85afd59ca",
+   "text": "Was hesch du alles für Aufgaben für heüt zügeordnet?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
    "line": 441,
    "text_sha256": "7a0d83cf69ea5377",
    "text": "Kannsch mir den ganzen Plan vo heüt aufrüefen?",
@@ -2008,12 +2189,30 @@
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 442,
+   "text_sha256": "c171e676b32d2257",
+   "text": "Wes isch i dr Telefonliste für heüt?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
    "line": 520,
    "text_sha256": "564028bdd7469719",
    "text": "könnte das wetter heute morgen schon ein grund für die verspätung sein?",
    "from": "unknown",
    "to": "web_search",
    "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 544,
+   "text_sha256": "31db3d40b990092f",
+   "text": "Also, was gibt es denn heute von dir so für mich zu tun?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
@@ -2158,6 +2357,15 @@
    "from": "unknown",
    "to": "web_search",
    "rule": "unknown->web_search"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 785,
+   "text_sha256": "0a1550b7f2c8084c",
+   "text": "Kannst du mir sagen, was ich heute alles zu tun habe?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
@@ -2347,6 +2555,15 @@
    "from": "appointments_today",
    "to": "daily_agenda",
    "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 1739,
+   "text_sha256": "e79518bbfeb1212c",
+   "text": "Hallo, könntest du bitte mal überprüfen, was ich heute zu tun habe?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
@@ -2584,6 +2801,33 @@
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2674,
+   "text_sha256": "54f86b7ead7ad68d",
+   "text": "was steht heute noch auf der liste für mich ?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2723,
+   "text_sha256": "97bcc65213305ca0",
+   "text": "Ich muss wissen, ob ich heute noch irgendetwas im Büro zu erledigen habe.",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
+   "line": 2724,
+   "text_sha256": "125409ca15b9400a",
+   "text": "Was hat es heute Abend für mich noch zu tun?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
    "line": 2832,
    "text_sha256": "922c86834fe01943",
    "text": "Hoi, wie is denn das Wetter draussen heut?",
@@ -2611,6 +2855,24 @@
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 260,
+   "text_sha256": "012fca2decb0ef2a",
+   "text": "Kiekste, was hab i’ heute zu tun?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 265,
+   "text_sha256": "66ecafcfc89a2565",
+   "text": "Kriegste ne Liste, was ich heute mit dem Projekt XY zu tun hab?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
    "line": 311,
    "text_sha256": "69329e40b7b1f744",
    "text": "Wie is des Wetter morgen eigentlich? Weißt, ob i an Regenjacka anzieh brauch?",
@@ -2629,12 +2891,30 @@
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 485,
+   "text_sha256": "4d6ad920ff3f41b1",
+   "text": "Guten Morgen, Siri, was hab i für Aufgaben heute eingeplant?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
    "line": 486,
    "text_sha256": "5689b9994be87bf1",
    "text": "Grüß Gott, Alexa, was steckt auf meim Plan für heute?",
    "from": "appointments_today",
    "to": "daily_agenda",
    "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 487,
+   "text_sha256": "1994f2f485b520df",
+   "text": "Servus, Google, wie schaut's aus mit meine Aufgaben heute?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
@@ -2689,6 +2969,15 @@
    "from": "appointments_today",
    "to": "daily_agenda",
    "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 596,
+   "text_sha256": "da301e22658bee4f",
+   "text": "Ey, haste heut noch wat für mich in der Liste?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
@@ -2863,6 +3152,15 @@
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1395,
+   "text_sha256": "39e522a6ed26c88d",
+   "text": "Würdest du mir mal sagen können, was ich heute alles zu tun habe?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
    "line": 1529,
    "text_sha256": "b7077df2f0c1d43c",
    "text": "Ey Boss, haste schon mal ne Überblick vom heutigen Programm?",
@@ -2896,6 +3194,24 @@
    "from": "appointments_today",
    "to": "daily_agenda",
    "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1566,
+   "text_sha256": "c722cc79c4221c06",
+   "text": "Zeige mir, was ich heute noch zu tun habe",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 1568,
+   "text_sha256": "66332a2fbe47e039",
+   "text": "Hast du meine Aufgaben für heute?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
@@ -3133,6 +3449,15 @@
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 2486,
+   "text_sha256": "b330fc8a836c803a",
+   "text": "Könntest du mal meinen heutigen Zeitplan auflisten?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda (whole day with work)"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
    "line": 2490,
    "text_sha256": "2139eb97869141d1",
    "text": "Nää, vädere, wat is heiti an der Plan?",
@@ -3148,6 +3473,24 @@
    "from": "appointments_today",
    "to": "daily_agenda",
    "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 2497,
+   "text_sha256": "8b9db9fe13469d83",
+   "text": "Wann muß ich noch heute nix besonderes erledig?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
+   "line": 2501,
+   "text_sha256": "dce62fbd73d352dc",
+   "text": "Hat's noch wat heut zu tun für uns?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
   },
   {
    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
@@ -3265,6 +3608,15 @@
    "from": "unknown",
    "to": "complete_task",
    "rule": "unknown->complete_task"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 67,
+   "text_sha256": "086e18013c1eb915",
+   "text": "Heute ist der Tag, an dem ich gern weiß, was für Aufgaben ansteht, kannst du das schnell mal rausfinden?",
+   "from": "appointments_today",
+   "to": "daily_agenda",
+   "rule": "appointments_today->daily_agenda (whole day with work)"
   },
   {
    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
@@ -3412,6 +3764,15 @@
   },
   {
    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 350,
+   "text_sha256": "87eaf9a3cea6b613",
+   "text": "Ich möchte wissen, welche Aufgaben heute zu erledigen sind.",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
    "line": 403,
    "text_sha256": "bb33161c451ddadf",
    "text": "Gibts eigentlich irgendwo im Netz eine Liste von den neuesten Hydrantenmodellen?",
@@ -3445,6 +3806,24 @@
    "from": "appointments_today",
    "to": "daily_agenda",
    "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 511,
+   "text_sha256": "2097bb071447ff13",
+   "text": "Ich muss wissen, was ich alles heute zu tun habe.",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 515,
+   "text_sha256": "117eacfd430b852d",
+   "text": "Welche Aufgaben stehen heute auf meinem Plan?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
   },
   {
    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
@@ -3511,6 +3890,15 @@
   },
   {
    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 569,
+   "text_sha256": "27a3012d235a598f",
+   "text": "Weißt du, ob ich heute irgendwas zu erledigen habe?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
    "line": 572,
    "text_sha256": "123e2d5129e0e86d",
    "text": "Wollen wir kurz durchgehen, was heute ansteht?",
@@ -3526,6 +3914,15 @@
    "from": "appointments_today",
    "to": "daily_agenda",
    "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 575,
+   "text_sha256": "5f23ec3529f1c1fe",
+   "text": "Sag mal, wüsste das jetzt, ob ich heute noch was zu tun habe?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
   },
   {
    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
@@ -3571,6 +3968,15 @@
    "from": "appointments_today",
    "to": "daily_agenda",
    "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 586,
+   "text_sha256": "c09929afec3efdde",
+   "text": "Heut hat mich sowieso ne Ahnung nicht, ob ich was zu tun hab, kannst du mir helfen?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
   },
   {
    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
@@ -3760,6 +4166,15 @@
    "from": "appointments_today",
    "to": "daily_agenda",
    "rule": "appointments_today->daily_agenda"
+  },
+  {
+   "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
+   "line": 1232,
+   "text_sha256": "a419a94f94a4f871",
+   "text": "was muß ich heute erledigen?",
+   "from": "appointments_today",
+   "to": "tasks_open",
+   "rule": "appointments_today->tasks_open"
   },
   {
    "file": "vyvy_train_v1.jsonl",
@@ -4276,284 +4691,6 @@
   }
  ],
  "review": {
-  "ambiguous_kept": [],
-  "appointments_today_asking_for_work_kept": [
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
-    "line": 50,
-    "text_sha256": "7489a1aa5feb595e",
-    "text": "Büet, i wüsch de Überblick für heute säge, was für Jobs i ha."
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
-    "line": 51,
-    "text_sha256": "dd3b6485dd51e75e",
-    "text": "Hallo Büet, was ha i no für Aufgaben für heute?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
-    "line": 54,
-    "text_sha256": "0e89ed11a6f588ba",
-    "text": "Büet, i muess wiessen, was für Aufgaben i ha für hüt."
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
-    "line": 278,
-    "text_sha256": "13d48fbd8f638faa",
-    "text": "Hallo, könntest du mir nochmal sagen, was heute alles ansteht? Hab ich vielleicht was mit der Firma Blütenreich zu tun?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
-    "line": 501,
-    "text_sha256": "39cb851d6abbc80f",
-    "text": "Was ham i jetz, was i beim Kunden Schmiedl heute zu erledigga hann?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
-    "line": 504,
-    "text_sha256": "c3ed295ab8773d1f",
-    "text": "Schauts ma jetz, was i heut mit der Baufirma Müller zu schaffe hann?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
-    "line": 505,
-    "text_sha256": "5ae7519dbe5f6a4c",
-    "text": "Wia siehts aus, was i heut zu schaffe hann, besonders morgends?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
-    "line": 529,
-    "text_sha256": "ddfaf28822b5b4c0",
-    "text": "Bitte zeige mir, was ich heute alles zu tun habe."
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
-    "line": 580,
-    "text_sha256": "264bc2f48c1ac40c",
-    "text": "Können wir durchgehen, was ich heute alles zu tun habe?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
-    "line": 582,
-    "text_sha256": "e84b4792e1dade74",
-    "text": "Ich muss wissen, was ich heute alles in meiner Liste stehen hat."
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
-    "line": 584,
-    "text_sha256": "5011b85eed28fe8f",
-    "text": "Ich brauche deine Hilfe, um herauszufinden, was ich heute alles zu tun habe."
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
-    "line": 752,
-    "text_sha256": "7d1db1fb7970113c",
-    "text": "kannst du mir sagen was ich heut zu tun habe?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
-    "line": 1236,
-    "text_sha256": "c0442c037e4bda46",
-    "text": "Meine Aufgaben für heute?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
-    "line": 1543,
-    "text_sha256": "c9cd95b916150fa3",
-    "text": "Was ist heute zu tun?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
-    "line": 1544,
-    "text_sha256": "a129e12b41834ea5",
-    "text": "Liste meine heutigen Aufgaben auf"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
-    "line": 1763,
-    "text_sha256": "9669009c13e1f27d",
-    "text": "Hab ich heute noch wat druntergeschrieben zu tun?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-07-b.jsonl",
-    "line": 2326,
-    "text_sha256": "870435f4266d6dfa",
-    "text": "Muss ich heut noch irgendwas für die Schwiegmutter erledigen?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
-    "line": 91,
-    "text_sha256": "c97d86430c050001",
-    "text": "guten morgen assistent bitte liste alle aufgaben auf die ich heute vor dem mittagstand muss"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
-    "line": 157,
-    "text_sha256": "d377ae4dfe828852",
-    "text": "Gibt es heute noch Aufgaben, die ich mit der Firma BlauWasser klären muss?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
-    "line": 440,
-    "text_sha256": "00faacd85afd59ca",
-    "text": "Was hesch du alles für Aufgaben für heüt zügeordnet?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
-    "line": 442,
-    "text_sha256": "c171e676b32d2257",
-    "text": "Wes isch i dr Telefonliste für heüt?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
-    "line": 544,
-    "text_sha256": "31db3d40b990092f",
-    "text": "Also, was gibt es denn heute von dir so für mich zu tun?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
-    "line": 785,
-    "text_sha256": "0a1550b7f2c8084c",
-    "text": "Kannst du mir sagen, was ich heute alles zu tun habe?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
-    "line": 1739,
-    "text_sha256": "e79518bbfeb1212c",
-    "text": "Hallo, könntest du bitte mal überprüfen, was ich heute zu tun habe?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
-    "line": 2674,
-    "text_sha256": "54f86b7ead7ad68d",
-    "text": "was steht heute noch auf der liste für mich ?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
-    "line": 2723,
-    "text_sha256": "97bcc65213305ca0",
-    "text": "Ich muss wissen, ob ich heute noch irgendetwas im Büro zu erledigen habe."
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-14.jsonl",
-    "line": 2724,
-    "text_sha256": "125409ca15b9400a",
-    "text": "Was hat es heute Abend für mich noch zu tun?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
-    "line": 260,
-    "text_sha256": "012fca2decb0ef2a",
-    "text": "Kiekste, was hab i’ heute zu tun?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
-    "line": 265,
-    "text_sha256": "66ecafcfc89a2565",
-    "text": "Kriegste ne Liste, was ich heute mit dem Projekt XY zu tun hab?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
-    "line": 485,
-    "text_sha256": "4d6ad920ff3f41b1",
-    "text": "Guten Morgen, Siri, was hab i für Aufgaben heute eingeplant?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
-    "line": 487,
-    "text_sha256": "1994f2f485b520df",
-    "text": "Servus, Google, wie schaut's aus mit meine Aufgaben heute?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
-    "line": 596,
-    "text_sha256": "da301e22658bee4f",
-    "text": "Ey, haste heut noch wat für mich in der Liste?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
-    "line": 1395,
-    "text_sha256": "39e522a6ed26c88d",
-    "text": "Würdest du mir mal sagen können, was ich heute alles zu tun habe?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
-    "line": 1566,
-    "text_sha256": "c722cc79c4221c06",
-    "text": "Zeige mir, was ich heute noch zu tun habe"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
-    "line": 1568,
-    "text_sha256": "66332a2fbe47e039",
-    "text": "Hast du meine Aufgaben für heute?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
-    "line": 2486,
-    "text_sha256": "b330fc8a836c803a",
-    "text": "Könntest du mal meinen heutigen Zeitplan auflisten?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
-    "line": 2497,
-    "text_sha256": "8b9db9fe13469d83",
-    "text": "Wann muß ich noch heute nix besonderes erledig?"
-   },
-   {
-    "file": "vyvy_synth_01ba17a81_2026-11-21-c00.jsonl",
-    "line": 2501,
-    "text_sha256": "dce62fbd73d352dc",
-    "text": "Hat's noch wat heut zu tun für uns?"
-   },
-   {
-    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
-    "line": 67,
-    "text_sha256": "086e18013c1eb915",
-    "text": "Heute ist der Tag, an dem ich gern weiß, was für Aufgaben ansteht, kannst du das schnell mal rausfinden?"
-   },
-   {
-    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
-    "line": 350,
-    "text_sha256": "87eaf9a3cea6b613",
-    "text": "Ich möchte wissen, welche Aufgaben heute zu erledigen sind."
-   },
-   {
-    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
-    "line": 511,
-    "text_sha256": "2097bb071447ff13",
-    "text": "Ich muss wissen, was ich alles heute zu tun habe."
-   },
-   {
-    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
-    "line": 515,
-    "text_sha256": "117eacfd430b852d",
-    "text": "Welche Aufgaben stehen heute auf meinem Plan?"
-   },
-   {
-    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
-    "line": 569,
-    "text_sha256": "27a3012d235a598f",
-    "text": "Weißt du, ob ich heute irgendwas zu erledigen habe?"
-   },
-   {
-    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
-    "line": 575,
-    "text_sha256": "5f23ec3529f1c1fe",
-    "text": "Sag mal, wüsste das jetzt, ob ich heute noch was zu tun habe?"
-   },
-   {
-    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
-    "line": 586,
-    "text_sha256": "c09929afec3efdde",
-    "text": "Heut hat mich sowieso ne Ahnung nicht, ob ich was zu tun hab, kannst du mir helfen?"
-   },
-   {
-    "file": "vyvy_synth_9c0fcc500_2026-W45.jsonl",
-    "line": 1232,
-    "text_sha256": "a419a94f94a4f871",
-    "text": "was muß ich heute erledigen?"
-   }
-  ]
+  "ambiguous_kept": []
  }
 }

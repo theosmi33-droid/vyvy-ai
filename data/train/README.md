@@ -83,10 +83,10 @@ the `unknown` lines that ask for an action contract 2 names (tick off, move or
 delete a task, write an email, draft a reply, start or stop the timer, create a
 project or goal, look something up on the internet, how this software works,
 search, summarize) and the `appointments_today` lines that ask what is on today
-in general (now `daily_agenda`). Sending, paying and everything else stay
-`unknown`. A line two rules claim stays as it is; it and the
-`appointments_today` lines that only ask for work are listed for review in the
-same file. `training/train_lora.py` reads every line through it and stops if a
+in general (now `daily_agenda`) or only for today's work without an
+appointment (now `tasks_open`, or `daily_agenda` when they ask for the day as
+a whole). Sending, paying and everything else stay `unknown`. A line two rules
+claim stays as it is and is listed for review in the same file. `training/train_lora.py` reads every line through it and stops if a
 listed line has changed; the Data check runs `--check`. Lines that carry the
 `content` field were written for contract 2 and are not touched. A retired
 holdout becomes training data only after this relabelling has run over it.
