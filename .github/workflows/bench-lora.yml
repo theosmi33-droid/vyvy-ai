@@ -8,8 +8,8 @@ name: Bench LoRA
 # same prompt, route mode); tools/merge_results.py joins the parts and refuses parts that
 # do not belong together (other baseline, other grammar, a part missing or twice).
 # Acceptance is decided only on the decision set by a statistical rule
-# (tools/compare_adapter.py: exact McNemar p < 0.05, b >= 2c, an intent fails only above its
-# tolerance and binomially noticeable, no loss on "unknown"). The shadow set can only veto
+# (tools/compare_adapter.py: exact McNemar p < 0.05, b >= 2c, an intent fails above its
+# tolerance if binomially noticeable or 10 % worse, no loss on "unknown"). The shadow set can only veto
 # (tools/shadow_check.py), and after 8 decisions an issue asks for rotation. The contract 1
 # holdouts (blind v1, v3, v4, development) are no longer measured: their labels follow the
 # 9 intents of contract 1. The default is the newest accepted adapter for the same base model

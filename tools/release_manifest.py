@@ -23,8 +23,8 @@ SCHEMA = 1
 
 
 DECISION_SET = "data/holdout_decision_c2.json"
-RULE = ("exact McNemar p < 0.05, b >= 2c, an intent fails only above its tolerance and with one-sided "
-        "binomial p < 0.05, no loss on unknown")
+RULE = ("exact McNemar p < 0.05, b >= 2c, an intent fails above its tolerance if one-sided binomial "
+        "p < 0.05 or its net loss is at least 10 %, no loss on unknown")
 
 
 def build(manifest: dict, verdict: dict, gguf_key: str, run_id: str, models: dict,
