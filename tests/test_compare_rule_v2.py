@@ -51,23 +51,28 @@ def _with_overall_gain(intent_base: list, intent_lora: list) -> tuple[dict, dict
     return result(intent_base + gb), result(intent_lora + gl)
 
 
-@pytest.mark.parametrize("fixed, broken, fails", [
-    (0, 2, False),  # net 2 = tolerance at n=40: never failed
-    (0, 3, False),  # net 3 > 2, p = 0.125: noise, no longer fails
-    (0, 4, False),  # net 4, p = 0.0625
-    (0, 5, True),   # net 5, p = 0.03125 < 0.05: fails
-    (1, 6, False),  # net 5, p = 0.0625
-    (1, 7, True),   # net 6, p = 0.0352
+@pytest.mark.parametrize("n, fixed, broken, fails", [
+    (40, 0, 2, False),  # net 2 = tolerance: never failed
+    (40, 0, 3, False),  # net 3 > 2, p = 0.125, below 10 %: noise
+    (40, 1, 4, False),  # net 3, p = 0.1875
+    (40, 0, 4, True),   # net 4 = 10 % of 40
+    (40, 0, 5, True),   # net 5, p = 0.0312
+    (40, 1, 6, True),   # net 5, p = 0.0625, but 12.5 %
+    (40, 1, 7, True),   # net 6, p = 0.0352
+    (20, 0, 1, False),  # shadow set: net 1 = tolerance 1
+    (20, 0, 2, True),   # net 2 = 10 % of 20
+    (20, 2, 3, False),  # net 1
 ])
-def test_an_intent_fails_only_above_tolerance_and_binomially_noticeable(fixed, broken, fails):
-    ib, il = _intent_rows("create_goal", 40, fixed, broken)
+def test_an_intent_fails_above_tolerance_if_significant_or_large(n, fixed, broken, fails):
+    ib, il = _intent_rows("create_goal", n, fixed, broken)
     v = ca.decide(*_with_overall_gain(ib, il))
     assert any(r.startswith("create_goal lost") for r in v["reason"].split("; ")) == fails
     assert v["per_intent"]["create_goal"]["loss_p"] == round(ca.intent_loss_p(fixed, broken), 6)
 
 
-def test_unknown_stays_hard():
-    ib, il = _intent_rows("unknown", 160, 0, 1)
+@pytest.mark.parametrize("n", [160, 80])
+def test_unknown_stays_hard(n):
+    ib, il = _intent_rows("unknown", n, 0, 1)
     v = ca.decide(*_with_overall_gain(ib, il))
     assert not v["accepted"] and "safety intent unknown got worse on 1" in v["reason"]
 

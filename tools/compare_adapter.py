@@ -39,6 +39,12 @@ def intent_tolerance(n: int) -> int:
     return max(1, math.floor(0.05 * n))
 
 
+def intent_large_loss(n: int) -> int:
+    """A net loss this large fails an intent above its tolerance even without a significant test:
+    10 % of its questions, at least one (40 questions: 4; 20 questions: 2)."""
+    return max(1, math.ceil(0.10 * n))
+
+
 def intent_loss_p(fixed: int, broken: int) -> float:
     """One-sided exact binomial test that an intent got worse: P(X >= broken), X ~ Binomial(fixed + broken, 0.5).
 
@@ -52,8 +58,9 @@ def decide(base: dict, lora: dict, alpha: float = 0.05) -> dict:
     1. exact McNemar p < alpha on the discordant pairs
     2. at least twice as many fixed as broken questions (b >= 2c)
     3. no intent loses noticeably: an intent fails only if its net loss is above
-       intent_tolerance(n) AND the one-sided binomial test of its broken against its
-       fixed questions is below alpha (intent_loss_p); with 25 intents of 40 questions
+       intent_tolerance(n) AND (the one-sided binomial test of its broken against its
+       fixed questions is below alpha (intent_loss_p) OR the net loss is at least
+       intent_large_loss(n), 10 % of its questions); with 25 intents of 40 questions
        a net loss of 3 can come from noise alone, see the commit that added the test
     4. no question of a safety intent ("unknown") gets worse
     """
@@ -88,9 +95,10 @@ def decide(base: dict, lora: dict, alpha: float = 0.05) -> dict:
         net = r["fixed"] - r["broken"]
         if intent in SAFETY_INTENTS and r["broken"]:
             reasons.append(f"safety intent {intent} got worse on {r['broken']} question(s)")
-        elif net < -intent_tolerance(r["n"]) and r["loss_p"] < alpha:
-            reasons.append(f"{intent} lost {-net} net (tolerance {intent_tolerance(r['n'])} of {r['n']}, "
-                           f"binomial p={r['loss_p']:.4f} < {alpha})")
+        elif net < -intent_tolerance(r["n"]) and (r["loss_p"] < alpha or -net >= intent_large_loss(r["n"])):
+            why = (f"binomial p={r['loss_p']:.4f} < {alpha}" if r["loss_p"] < alpha
+                   else f"at least {intent_large_loss(r['n'])} of {r['n']}, 10 %")
+            reasons.append(f"{intent} lost {-net} net (tolerance {intent_tolerance(r['n'])} of {r['n']}, {why})")
     accepted = not reasons
     return {
         "accepted": accepted,
