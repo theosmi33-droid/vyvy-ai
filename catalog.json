@@ -1,23 +1,117 @@
 {
  "schema": 2,
  "contract": {
-  "version": 1,
+  "version": 2,
   "intents": [
    "appointments_today",
    "appointments_tomorrow",
+   "appointments_search",
+   "daily_agenda",
    "tasks_open",
    "tasks_overdue",
+   "tasks_search",
    "emails_unread",
-   "daily_agenda",
+   "emails_search",
+   "email_thread_summary",
+   "web_search",
+   "help_lookup",
    "create_appointment",
    "create_task",
+   "complete_task",
+   "reschedule_task",
+   "delete_task",
+   "write_email",
+   "draft_reply",
+   "start_timer",
+   "stop_timer",
+   "create_project",
+   "create_goal",
+   "complete_goal",
    "unknown"
   ],
-  "grammar": "grammars/slots.gbnf",
-  "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
+  "fields": [
+   "intent",
+   "timeframe",
+   "entity",
+   "content",
+   "confidence"
+  ],
+  "grammar": "grammars/slots_v2.gbnf",
+  "grammar_sha256": "4c8200c6b9a1d5ee3e69233336594b3a5aec1bac4a1edbe025c010c0d5913e33",
   "prompts_sha256": {
-   "compact": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
-   "detailed": "478793e00add0c103b293909c39a334cdab658df605446418f99999837b40c9c"
+   "compact": "75bcfafab67d755d47d95c2f78584929d77dec3afb324914e8dc8149be149d1c",
+   "detailed": "b10de95a25fe9b77fe85eb4beabaa3ab37dc4a13607d48c4ac587df73c3b9b6b"
+  }
+ },
+ "contracts": {
+  "1": {
+   "version": 1,
+   "intents": [
+    "appointments_today",
+    "appointments_tomorrow",
+    "tasks_open",
+    "tasks_overdue",
+    "emails_unread",
+    "daily_agenda",
+    "create_appointment",
+    "create_task",
+    "unknown"
+   ],
+   "fields": [
+    "intent",
+    "timeframe",
+    "entity",
+    "confidence"
+   ],
+   "grammar": "grammars/slots.gbnf",
+   "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
+   "prompts_sha256": {
+    "compact": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+    "detailed": "478793e00add0c103b293909c39a334cdab658df605446418f99999837b40c9c"
+   }
+  },
+  "2": {
+   "version": 2,
+   "intents": [
+    "appointments_today",
+    "appointments_tomorrow",
+    "appointments_search",
+    "daily_agenda",
+    "tasks_open",
+    "tasks_overdue",
+    "tasks_search",
+    "emails_unread",
+    "emails_search",
+    "email_thread_summary",
+    "web_search",
+    "help_lookup",
+    "create_appointment",
+    "create_task",
+    "complete_task",
+    "reschedule_task",
+    "delete_task",
+    "write_email",
+    "draft_reply",
+    "start_timer",
+    "stop_timer",
+    "create_project",
+    "create_goal",
+    "complete_goal",
+    "unknown"
+   ],
+   "fields": [
+    "intent",
+    "timeframe",
+    "entity",
+    "content",
+    "confidence"
+   ],
+   "grammar": "grammars/slots_v2.gbnf",
+   "grammar_sha256": "4c8200c6b9a1d5ee3e69233336594b3a5aec1bac4a1edbe025c010c0d5913e33",
+   "prompts_sha256": {
+    "compact": "75bcfafab67d755d47d95c2f78584929d77dec3afb324914e8dc8149be149d1c",
+    "detailed": "b10de95a25fe9b77fe85eb4beabaa3ab37dc4a13607d48c4ac587df73c3b9b6b"
+   }
   }
  },
  "states": {
@@ -294,6 +388,7 @@
     "version": 1,
     "prompt": "compact",
     "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+    "grammar": "grammars/slots.gbnf",
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
    },
@@ -347,6 +442,7 @@
     "version": 1,
     "prompt": "compact",
     "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+    "grammar": "grammars/slots.gbnf",
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
    },
@@ -515,6 +611,7 @@
     "version": 1,
     "prompt": "compact",
     "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+    "grammar": "grammars/slots.gbnf",
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
    },
@@ -571,6 +668,7 @@
     "version": 1,
     "prompt": "compact",
     "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+    "grammar": "grammars/slots.gbnf",
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
    },
@@ -627,6 +725,7 @@
     "version": 1,
     "prompt": "compact",
     "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+    "grammar": "grammars/slots.gbnf",
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
    },
@@ -683,6 +782,7 @@
     "version": 1,
     "prompt": "compact",
     "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+    "grammar": "grammars/slots.gbnf",
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
    },
@@ -739,6 +839,7 @@
     "version": 1,
     "prompt": "compact",
     "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+    "grammar": "grammars/slots.gbnf",
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
    },
@@ -795,6 +896,7 @@
     "version": 1,
     "prompt": "compact",
     "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+    "grammar": "grammars/slots.gbnf",
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
    },
@@ -851,6 +953,7 @@
     "version": 1,
     "prompt": "compact",
     "prompt_sha256": "8e462da85b42621eab91e9aa75f9dff9f88769bd99ac9384ff88c5b49fe457b1",
+    "grammar": "grammars/slots.gbnf",
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
    },
@@ -911,6 +1014,7 @@
     "version": 1,
     "prompt": "detailed",
     "prompt_sha256": "478793e00add0c103b293909c39a334cdab658df605446418f99999837b40c9c",
+    "grammar": "grammars/slots.gbnf",
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
    },
@@ -971,6 +1075,7 @@
     "version": 1,
     "prompt": "detailed",
     "prompt_sha256": "478793e00add0c103b293909c39a334cdab658df605446418f99999837b40c9c",
+    "grammar": "grammars/slots.gbnf",
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
    },
@@ -1031,6 +1136,7 @@
     "version": 1,
     "prompt": "detailed",
     "prompt_sha256": "478793e00add0c103b293909c39a334cdab658df605446418f99999837b40c9c",
+    "grammar": "grammars/slots.gbnf",
     "grammar_sha256": "4246375388ee2ff9973df7af814f99763e22b0a0665972ffc44389a1332d21dd",
     "grammar_recorded_at_training": false
    },

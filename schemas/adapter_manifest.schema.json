@@ -29,6 +29,8 @@
   "train_files_sha256": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
   "prompt": {"type": "string"},
   "prompt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+  "contract_version": {"enum": [1, 2]},
+  "grammar_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
   "llama_cpp_commit": {"type": ["string", "null"]},
   "decision": {
    "type": "object",

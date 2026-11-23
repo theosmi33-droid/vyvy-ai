@@ -78,10 +78,31 @@ def test_origin_is_kept_apart():
 
 
 def test_every_adapter_names_the_contract_it_was_measured_on():
+    assert CATALOG["contract"] == CATALOG["contracts"][str(CATALOG["contract"]["version"])]
+    assert CATALOG["contract"]["version"] == 2 and len(CATALOG["contract"]["intents"]) == 25
+    assert CATALOG["contracts"]["1"]["grammar"] == "grammars/slots.gbnf"
     for e in CATALOG["entries"]:
         if e["adapter"]:
-            assert e["contract"]["version"] == CATALOG["contract"]["version"] == 1
-            assert e["contract"]["prompt_sha256"] and e["contract"]["grammar_sha256"] == CATALOG["contract"]["grammar_sha256"]
+            con = CATALOG["contracts"][str(e["contract"]["version"])]
+            assert e["contract"]["prompt_sha256"] and e["contract"]["grammar"] == con["grammar"], e["id"]
+            if not e["contract"]["grammar_recorded_at_training"]:
+                # Trained before training recorded the grammar: contract 1, its frozen grammar.
+                assert e["contract"]["version"] == 1 and e["contract"]["grammar_sha256"] == con["grammar_sha256"]
+
+
+def test_entry_contract_follows_the_training_manifest():
+    contracts = {v: build_catalog.contract(v) for v in (1, 2)}
+    old = build_catalog.entry_contract({"prompt": "compact", "prompt_sha256": "a" * 64}, contracts)
+    assert old["version"] == 1 and old["grammar_sha256"] == contracts[1]["grammar_sha256"]
+    assert old["grammar_recorded_at_training"] is False
+    new = build_catalog.entry_contract({"prompt": "compact", "prompt_sha256": "a" * 64, "contract_version": 2,
+                                        "grammar_sha256": contracts[2]["grammar_sha256"]}, contracts)
+    assert new["version"] == 2 and new["grammar"] == "grammars/slots_v2.gbnf"
+    assert new["grammar_recorded_at_training"] is True
+    # A grammar recorded at training that is not today's stays as recorded: an application compares it.
+    stale = build_catalog.entry_contract({"prompt": "compact", "prompt_sha256": "a" * 64, "contract_version": 2,
+                                          "grammar_sha256": "b" * 64}, contracts)
+    assert stale["grammar_sha256"] == "b" * 64
 
 
 def test_selectable_needs_both_files_verified_as_signed_by_bench_lora(monkeypatch):

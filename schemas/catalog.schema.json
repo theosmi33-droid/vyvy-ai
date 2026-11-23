@@ -1,13 +1,15 @@
 {
  "$schema": "https://json-schema.org/draft/2020-12/schema",
  "title": "Vyvy AI model catalog, schema 2",
- "description": "Written by tools/build_catalog.py from models.json and data/catalog_releases.json; never by hand.",
+ "description": "Written by tools/build_catalog.py from models.json and data/catalog_releases.json; never by hand. contract is the current output contract; contracts lists every contract an entry may name (the validator in tools/verify_adapter.py reads no $ref, so the definitions are written out). Each adapter entry carries its own contract: an application loads only entries of the contract it speaks whose grammar_sha256 equals that contract's grammar.",
  "type": "object",
- "required": ["schema", "contract", "states", "snapshot_fetched", "entries"],
+ "required": ["schema", "contract", "contracts", "states", "snapshot_fetched", "entries"],
  "properties": {
   "schema": {"const": 2},
-  "contract": {"type": "object", "required": ["version", "intents", "grammar", "grammar_sha256", "prompts_sha256"],
-               "properties": {"version": {"const": 1}, "grammar_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}},
+  "contract": {"type": "object", "required": ["version", "intents", "fields", "grammar", "grammar_sha256", "prompts_sha256"], "properties": {"version": {"enum": [1, 2]}, "grammar_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}},
+  "contracts": {"type": "object", "required": ["1", "2"], "additionalProperties": {"type": "object", "required": ["version", "intents", "fields", "grammar", "grammar_sha256", "prompts_sha256"], "properties": {"version": {"enum": [1, 2]}, "grammar_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}},
+                "properties": {"1": {"type": "object", "properties": {"version": {"const": 1}}},
+                               "2": {"type": "object", "properties": {"version": {"const": 2}}}}},
   "snapshot_fetched": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T"}
  },
  "$defs": {
@@ -18,6 +20,11 @@
     "state": {"enum": ["selectable", "accepted_unsigned", "candidate", "rejected", "planned"]},
     "base": {"type": "object", "required": ["model", "files", "origin", "author", "licence"],
              "properties": {"origin": {"const": "third-party work, used unchanged"}, "licence": {"const": "Apache-2.0"}}},
+    "contract": {"type": "object",
+                 "required": ["version", "prompt", "prompt_sha256", "grammar", "grammar_sha256",
+                              "grammar_recorded_at_training"],
+                 "properties": {"version": {"enum": [1, 2]},
+                                "grammar_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}},
     "measured": {"type": "object", "required": ["status"], "properties": {"status": {"enum": ["measured", "not measured"]}}}
    }
   },

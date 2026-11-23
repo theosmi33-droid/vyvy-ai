@@ -7,7 +7,7 @@ switches models itself; here is only the list and its rules:
 - Sources, never edited by hand in catalog.json: models.json (base model files and
   their SHA-256), data/catalog_releases.json (a snapshot of the releases and the
   file sizes, written by --refresh from the public GitHub and Hugging Face APIs),
-  grammars/slots.gbnf and the prompts of runner/bench.py (the output contract).
+  the grammars and prompts of runner/bench.py (the output contracts).
 - state per entry, exactly one of: selectable, accepted_unsigned, candidate, rejected,
   planned. What is selectable is decided once, by tools/verify_adapter.release_state;
   an application still runs tools/verify_adapter.py (checksum, signature, base model)
@@ -18,6 +18,9 @@ switches models itself; here is only the list and its rules:
 - Measurements only where measured, each with the machine and the run; otherwise null
   with "not measured". The class names 4GB and 8GB are planning limits, not measurements.
 - 14B and 32B are listed as planned: no files, no adapter, no measurement, no schedule.
+- Every adapter entry names its own contract: version, prompt, grammar and grammar SHA-256.
+  Releases whose training manifest records no contract are contract 1 (frozen history); an
+  application loads only the contract it speaks, with exactly that grammar.
 
     python tools/build_catalog.py            # write catalog.json
     python tools/build_catalog.py --check    # committed catalog.json matches its sources
@@ -47,7 +50,7 @@ OUT = ROOT / "catalog.json"
 SNAPSHOT = ROOT / "data" / "catalog_releases.json"
 MODELS = ROOT / "models.json"
 REPO = "theosmi33-droid/vyvy-ai"
-CONTRACT_VERSION = 1
+CONTRACT_VERSION = bench.CONTRACT_VERSION
 NOT_MEASURED = "not measured"
 LICENCE_CHANGE = "2026-11-11T12:49:56Z"  # vyvy-1.5b-da8577af3, the last adapter under Apache-2.0
 
@@ -69,11 +72,24 @@ def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def contract() -> dict:
-    grammar = bench.DEFAULT_GRAMMAR
-    prompts = {name: hashlib.sha256(text.encode("utf-8")).hexdigest() for name, text in sorted(bench.PROMPTS.items())}
-    return {"version": CONTRACT_VERSION, "intents": list(bench.grammar_intents(grammar.read_text(encoding="utf-8"))),
-            "grammar": "grammars/slots.gbnf", "grammar_sha256": sha256_file(grammar), "prompts_sha256": prompts}
+def contract(version: int = CONTRACT_VERSION) -> dict:
+    grammar = bench.GRAMMARS[version]
+    prompts = {name: hashlib.sha256(text.encode("utf-8")).hexdigest()
+               for name, text in sorted(bench.PROMPTS_BY_CONTRACT[version].items())}
+    return {"version": version, "intents": list(bench.grammar_intents(grammar.read_text(encoding="utf-8"))),
+            "fields": list(bench.FIELDS_BY_CONTRACT[version]), "grammar": grammar.relative_to(ROOT).as_posix(),
+            "grammar_sha256": sha256_file(grammar), "prompts_sha256": prompts}
+
+
+def entry_contract(r: dict, contracts: dict[int, dict]) -> dict:
+    """The contract of one release. Up to contract 1 the training manifest recorded only the prompt,
+    so grammar_sha256 is the frozen contract 1 grammar; from contract 2 on it is what training recorded."""
+    version = r.get("contract_version") or 1
+    con = contracts[version]
+    recorded = r.get("grammar_sha256")
+    return {"version": version, "prompt": r["prompt"], "prompt_sha256": r["prompt_sha256"],
+            "grammar": con["grammar"], "grammar_sha256": recorded or con["grammar_sha256"],
+            "grammar_recorded_at_training": bool(recorded)}
 
 
 def adapter_licence(created: str) -> str:
@@ -150,7 +166,8 @@ def platform_measurements(snap: dict, spec: dict, adapter_file: str | None) -> l
 
 
 def build(models: dict, snap: dict) -> dict:
-    con = contract()
+    contracts = {v: contract(v) for v in sorted(bench.GRAMMARS)}
+    con = contracts[CONTRACT_VERSION]
     entries = []
     for spec in CLASSES:
         base = base_block(spec, models, snap)
@@ -163,10 +180,7 @@ def build(models: dict, snap: dict) -> dict:
                 "adapter": {"tag": r["tag"], "file": r["adapter_file"], "sha256": r["adapter_sha256"],
                             "size": r["adapter_size"], "manifest_sha256": r["manifest_sha256"], "lora_scale": 1.0,
                             "origin": "Vyvy AI", "licence": adapter_licence(r["created"]), "released": r["created"]},
-                # The release manifest records the prompt, not the grammar: grammar_sha256 is today's
-                # grammar, which an application must use with this adapter.
-                "contract": {"version": con["version"], "prompt": r["prompt"], "prompt_sha256": r["prompt_sha256"],
-                             "grammar_sha256": con["grammar_sha256"], "grammar_recorded_at_training": False},
+                "contract": entry_contract(r, contracts),
                 "attestation": r.get("attestation") or {"verified_by": "not verified"},
                 "measured": measured(r),
                 "measured_on_platforms": platform_measurements(snap, spec, r["adapter_file"])})
@@ -175,7 +189,7 @@ def build(models: dict, snap: dict) -> dict:
                         "class_note": "no files, no adapter, no measurement, no schedule", "state": "planned",
                         "selectable": False, "base": {"model": spec["base"], "files": None, **BASE_ORIGIN},
                         "adapter": None, "contract": None, "measured": {"status": NOT_MEASURED}})
-    return {"schema": 2, "contract": con, "states": {
+    return {"schema": 2, "contract": con, "contracts": {str(v): c for v, c in contracts.items()}, "states": {
         "selectable": ("accepted, and both the GGUF and adapter_manifest.json verified as signed by bench-lora on "
                        "main (gh attestation verify, signer workflow and refs/heads/main); may be offered after "
                        "tools/verify_adapter.py passed on the downloaded files"),
@@ -282,6 +296,7 @@ def refresh(models: dict, now: str) -> dict:
         run = re.findall(r"bench-lora \(run (\d+)\)", x.get("body") or "")
         out.append({"tag": tag, "title": x["name"], "prerelease": x["prerelease"], "created": x["created_at"],
                     "base": m["base"], "prompt": m.get("prompt"), "prompt_sha256": m.get("prompt_sha256"),
+                    "contract_version": m.get("contract_version", 1), "grammar_sha256": m.get("grammar_sha256"),
                     "adapter_file": g["name"], "adapter_size": g["size"], "adapter_sha256": digest,
                     "manifest_sha256": assets["manifest.json"]["digest"].removeprefix("sha256:"),
                     "adapter_manifest": signed is not None, "attested": attested, "attestation": how,

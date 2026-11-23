@@ -50,6 +50,12 @@ def build(manifest: dict, verdict: dict, gguf_key: str, run_id: str, models: dic
             "bench_lora_run": run_id,
         },
     }
+    # Optional within schema 1: the output contract the adapter was trained for (contract 2 on).
+    # A manifest without it is contract 1; an application loads only the contract it speaks,
+    # with exactly this grammar.
+    if manifest.get("contract_version"):
+        record["contract_version"] = manifest["contract_version"]
+        record["grammar_sha256"] = manifest["grammar_sha256"]
     # Optional, so readers of schema 1 (tools/verify_adapter.py) are not affected: a decided
     # release measured again under today's rule says so, next to its first decision.
     if remeasure:
