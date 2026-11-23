@@ -1,0 +1,71 @@
+name: Holdout semantic
+
+# The semantic half of building a contract 2 holdout pair (tools/holdout_semantic.py). The
+# sets are built on a computer where no sentence model may run (tools/holdout_build.py,
+# lexical filter only) and pushed to a branch holdout/<name>; this checks their meaning
+# against everything public, replaces a rejected sentence from the reserve of the same
+# intent and round, and commits the checked sets back to that branch. Only sets marked
+# "run (cloud ...)" may be merged; main never runs this.
+on:
+  push:
+    branches: ["holdout/**"]
+    paths: ["data/holdout_decision_c2.json", "data/holdout_shadow_c2.json", "data/holdout_reserve_c2.json"]
+  workflow_dispatch:
+
+permissions:
+  contents: write   # the checked sets go back to the holdout branch, never to main
+
+concurrency:
+  group: holdout-semantic-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  check:
+    if: ${{ github.ref != 'refs/heads/main' && startsWith(github.ref, 'refs/heads/holdout/') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: tools/semantic-requirements.txt
+
+      - name: Install the sentence model's runtime
+        run: pip install -r tools/semantic-requirements.txt
+
+      - name: Check and replace from the reserve
+        id: check
+        run: |
+          set +e
+          python tools/holdout_semantic.py data/holdout_decision_c2.json data/holdout_shadow_c2.json \
+            data/holdout_reserve_c2.json --report semantic_report.json --run "$GITHUB_RUN_ID"
+          code=$?
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          python -c "import json; r = json.load(open('semantic_report.json')); print('## Holdout semantic check'); print(); print('\`\`\`'); print(json.dumps(r, indent=1)); print('\`\`\`')" >> "$GITHUB_STEP_SUMMARY"
+          [ "$code" -le 3 ] || exit "$code"
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: holdout-semantic-report
+          path: semantic_report.json
+          retention-days: 90
+
+      - name: Commit the checked sets to this branch
+        if: steps.check.outputs.code == '0'
+        run: |
+          set -euo pipefail
+          git diff --quiet -- data/holdout_decision_c2.json data/holdout_shadow_c2.json && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/holdout_decision_c2.json data/holdout_shadow_c2.json
+          git commit -m "Holdout semantic check (run $GITHUB_RUN_ID): tools/holdout_semantic.py"
+          git push origin "HEAD:${GITHUB_REF#refs/heads/}"
+
+      - name: Fail when the reserve ran out
+        if: steps.check.outputs.code != '0'
+        run: |
+          echo "The reserve did not cover every semantic hit; the sets stay marked not run." >&2
+          exit 1

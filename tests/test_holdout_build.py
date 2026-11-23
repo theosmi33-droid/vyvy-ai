@@ -165,3 +165,28 @@ def test_fingerprint_matches_itself():
     lex.add_fingerprint("near_sealed", hb.fingerprint_item("Brauche ich morgen einen Schirm?"))
     assert lex.near("brauche ich morgen einen schirm") == "near_sealed"
     assert lex.near("Wann kommt die Lieferung der Fliesen?") is None
+
+
+def test_reserve_follows_both_sets_per_intent_and_round(tmp_path):
+    f = folder_with(tmp_path, rows("1", 8, 9, "ABCD"), rows("2", 5, 6, "FG"))
+    r = hb.build(f, None, quotas=SMALL, reserve=(2, 1), semantic=False, known=NOTHING)
+    spare = r["reserve"]["items"]
+    used = {i["text"] for i in r["decision"]["items"] + r["shadow"]["items"]}
+    assert spare and not used & {i["text"] for i in spare} and {i["set"] for i in spare} == {"reserve"}
+    goal = [i for i in spare if i["expected_intent"] == "create_goal"]
+    assert sorted(i["origin"] for i in goal) == ["round 1", "round 1", "round 2", "round 2"]
+    assert len([i for i in spare if i["expected_intent"] == "unknown"]) == 2
+    assert r["decision"]["semantic_filter"].startswith("NOT RUN (local")
+    assert r["report"]["checked_against"]["sealed"].startswith("NOT CHECKED")
+
+
+def test_fingerprint_subcommand_writes_hashes_only(tmp_path):
+    src = tmp_path / "sealed.json"
+    src.write_text(json.dumps({"items": [{"text": "Leg die Aufgabe Gerüst prüfen an"}]}), encoding="utf-8")
+    out = tmp_path / "fp.json"
+    assert hb.main(["fingerprint", str(src), "--out", str(out)]) == 0
+    fp = json.loads(out.read_text(encoding="utf-8"))
+    assert fp["schema"] == 1 and len(fp["items"]) == 1 and "Gerüst" not in out.read_text(encoding="utf-8")
+    lex = hb.Lexical(0.8)
+    lex.add_fingerprint("near_sealed", fp["items"][0])
+    assert lex.near("Leg die Aufgabe Gerüst prüfen an!") == "near_sealed"

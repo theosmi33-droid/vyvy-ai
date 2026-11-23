@@ -26,8 +26,12 @@ SHA-256(--seed + normalised text), then in turn over the writers so each writer 
 contributes evenly). Quotas per set and round (default: decision 14 from round 2 and 26
 from round 1 per intent, unknown 60 and 100; shadow 7 and 13, unknown 30 and 50). A round
 that falls short is filled from the next one in the list, and the report says how many. No
-sentence is in both sets. Written to --out (also outside the repository): decision.json and
-shadow.json (items with id, set, text, expected_intent, origin), report.json (numbers only:
+sentence is in both sets. After both sets, the next --reserve (6) per intent and round
+(--reserve-unknown 20) go to a reserve: the semantic check runs in the cloud
+(tools/holdout_semantic.py, Holdout semantic workflow) and replaces a sentence it rejects
+by the next reserve sentence of the same intent and round, so a hit there needs no new
+writing round. Written to --out (also outside the repository): decision.json, shadow.json
+and reserve.json (items with id, set, text, expected_intent, origin), report.json (numbers only:
 available per intent and round, drops per reason, taken per round, fills; no sentence) and
 fingerprint.json (per sentence only hashes of the normalised text, its words and its
 character trigrams). No sentence is printed. Exit 0 when every quota is met, 3 when one is
@@ -36,8 +40,13 @@ short (the sets are written and marked incomplete), 2 on bad input.
 Landing a set in data/ and recording its fingerprint need the user's word; this tool
 never writes into the repository.
 
+The fingerprint subcommand writes a fingerprint in the format this tool reads, from any
+sentence files (JSON with items[].text, or JSONL with text), for sets whose text must not
+be shown to the one who builds the next set:
+
     python tools/holdout_build.py --candidates /path/outside --out /path/outside/built \
         --sealed-fingerprint /path/to/fingerprint.json
+    python tools/holdout_build.py fingerprint sealed_a.json sealed_b.json --out fingerprint.json
 """
 
 from __future__ import annotations
@@ -63,6 +72,8 @@ DEFAULT_ROUNDS = ["1:kandidaten.jsonl:labels_1.jsonl:labels_2.jsonl",
                   "2:kandidaten_hart.jsonl:labels_hart_1.jsonl:labels_hart_2.jsonl"]
 # Per set: (quota per intent, quota for unknown), each a list of (round, n) in fill order.
 DEFAULT_QUOTAS = {"decision": ("2:14,1:26", "2:60,1:100"), "shadow": ("2:7,1:13", "2:30,1:50")}
+DEFAULT_RESERVE = (6, 20)  # per intent and round; per round for unknown
+LOCAL_ONLY = "NOT RUN (local; the semantic check runs in the cloud, tools/holdout_semantic.py)"
 REASONS = ("intent_not_in_contract", "duplicate", "blind_missing", "blind_disagrees", "blind_unsure",
            "near_training", "near_holdout", "near_probe", "near_template", "near_sealed", "near_candidate",
            "semantic_training", "semantic_holdout", "semantic_probe", "semantic_template", "semantic_sealed",
@@ -238,7 +249,8 @@ def load_round(folder: Path, spec: str) -> tuple[str, list[dict], dict, dict, di
 
 
 def build(folder: Path, sealed: dict | None, *, rounds: list[str] = DEFAULT_ROUNDS,
-          quotas: dict[str, tuple[str, str]] = DEFAULT_QUOTAS, max_similarity: float = 0.8,
+          quotas: dict[str, tuple[str, str]] = DEFAULT_QUOTAS, reserve: tuple[int, int] = DEFAULT_RESERVE,
+          max_similarity: float = 0.8,
           max_cosine: float = 0.85, semantic: bool = True, seed: str = "contract-2",
           known: dict[str, list[str]] | None = None, semantic_model=None) -> dict:
     intents = bench.grammar_intents(bench.DEFAULT_GRAMMAR.read_text(encoding="utf-8"))
@@ -332,34 +344,78 @@ def build(folder: Path, sealed: dict | None, *, rounds: list[str] = DEFAULT_ROUN
                 per_intent[intent]["taken"][set_name][f"round {round_name}"] = len(got)
             per_intent[intent]["short"] += missing
             complete &= missing == 0
+    sets["reserve"] = []
+    for intent in intents:
+        want = reserve[1] if intent == "unknown" else reserve[0]
+        for (i, round_name), pool in sorted(order.items()):
+            if i != intent:
+                continue
+            start = taken.get((i, round_name), 0)
+            got = pool[start:start + want]
+            taken[(i, round_name)] = start + len(got)
+            sets["reserve"] += [{**r, "set": "reserve"} for r in got]
+            per_intent[intent]["taken"].setdefault("reserve", {})[f"round {round_name}"] = len(got)
 
     def finish(rows: list[dict], prefix: str) -> list[dict]:
         return [{"id": f"{prefix}-{n:04d}", "set": r["set"], "text": r["text"], "expected_intent": r["expected_intent"],
                  "origin": r["origin"]} for n, r in enumerate(rows, 1)]
 
     meta = {"contract": bench.CONTRACT_VERSION, "complete": complete, "description": CAVEAT,
-            "semantic_filter": "run" if sem is not None else "NOT RUN (--semantic skip)"}
+            "semantic_filter": "run" if sem is not None else LOCAL_ONLY,
+            "checked_against": {"training": "data/train/*.jsonl", "holdouts": "every holdout ever used",
+                                "probes": "data/probe_*.json", "templates": "prompt and teacher examples",
+                                "sealed": (f"fingerprint, {len((sealed or {}).get('items', []))} sentences, by hashes"
+                                           if sealed else "NOT CHECKED: no fingerprint given")}}
     decision, shadow = finish(sets["decision"], "c2d"), finish(sets["shadow"], "c2s")
+    spare = finish(sets["reserve"], "c2r")
     return {
         "decision": {**meta, "kind": "decision set", "items": decision},
         "shadow": {**meta, "kind": "shadow set", "items": shadow},
+        "reserve": {**meta, "kind": "reserve for the cloud semantic check; never measured", "items": spare},
         "report": {**meta, "inputs_sha256": hashes,
                    "sealed_fingerprint_items": len((sealed or {}).get("items", [])),
                    "known_sentences": {k: len(v) for k, v in known.items()},
                    "max_similarity": max_similarity, "max_cosine": max_cosine if sem is not None else None,
                    "seed": seed, "quotas": {k: {"per_intent": v[0], "unknown": v[1]} for k, v in quotas.items()},
                    "dropped": {r: dropped.get(r, 0) for r in REASONS}, "per_intent": per_intent,
-                   "decision_items": len(decision), "shadow_items": len(shadow),
+                   "decision_items": len(decision), "shadow_items": len(shadow), "reserve_items": len(spare),
                    "taken_per_round": {s: dict(Counter(r["origin"] for r in rows))
                                        for s, rows in (("decision", decision), ("shadow", shadow))}},
         "fingerprint": {"schema": FINGERPRINT_SCHEMA, "kind": "vyvy holdout fingerprint",
                         "normalise": "tools/check_holdout_leak.py normalise; hashes are SHA-256, the first 16 hex "
                                      "digits for words and character trigrams",
-                        "items": [fingerprint_item(r["text"]) for r in decision + shadow]},
+                        "items": [fingerprint_item(r["text"]) for r in decision + shadow + spare]},
     }
 
 
+def sentences_of(path: Path) -> list[str]:
+    if path.suffix == ".jsonl":
+        return [r["text"] for r in read_jsonl(path)]
+    data = json.loads(path.read_text(encoding="utf-8"))
+    return [i["text"] for i in (data["items"] if isinstance(data, dict) else data)]
+
+
+def fingerprint_main(argv: list[str]) -> int:
+    p = argparse.ArgumentParser(prog="holdout_build.py fingerprint",
+                                description="Write a fingerprint (hashes only) of sentence files")
+    p.add_argument("files", type=Path, nargs="+")
+    p.add_argument("--out", type=Path, required=True)
+    args = p.parse_args(argv)
+    texts = [t for f in args.files for t in sentences_of(f)]
+    fp = {"schema": FINGERPRINT_SCHEMA, "kind": "vyvy holdout fingerprint",
+          "normalise": "tools/check_holdout_leak.py normalise; hashes are SHA-256, the first 16 hex digits for "
+                       "words and character trigrams",
+          "sources_sha256": {f.name: hashlib.sha256(f.read_bytes()).hexdigest() for f in args.files},
+          "items": [fingerprint_item(t) for t in texts]}
+    args.out.write_text(json.dumps(fp, indent=1) + "\n", encoding="utf-8")
+    print(f"{args.out}: {len(texts)} sentences, hashes only")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
+    argv = sys.argv[1:] if argv is None else argv
+    if argv and argv[0] == "fingerprint":
+        return fingerprint_main(argv[1:])
     p = argparse.ArgumentParser(description="Build the contract 2 decision and shadow sets from blind candidates")
     p.add_argument("--candidates", type=Path, required=True, help="folder outside the repository")
     p.add_argument("--out", type=Path, required=True, help="folder outside the repository")
@@ -369,6 +425,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--decision-unknown", default=DEFAULT_QUOTAS["decision"][1])
     p.add_argument("--shadow", default=DEFAULT_QUOTAS["shadow"][0])
     p.add_argument("--shadow-unknown", default=DEFAULT_QUOTAS["shadow"][1])
+    p.add_argument("--reserve", type=int, default=DEFAULT_RESERVE[0], help="reserve per intent and round")
+    p.add_argument("--reserve-unknown", type=int, default=DEFAULT_RESERVE[1])
     p.add_argument("--sealed-fingerprint", type=Path, help="fingerprint of the sealed sets (hashes only)")
     p.add_argument("--max-similarity", type=float, default=0.8)
     p.add_argument("--max-cosine", type=float, default=0.85)
@@ -387,18 +445,20 @@ def main(argv: list[str] | None = None) -> int:
     quotas = {"decision": (args.decision, args.decision_unknown), "shadow": (args.shadow, args.shadow_unknown)}
     try:
         result = build(args.candidates, sealed, rounds=args.rounds or DEFAULT_ROUNDS, quotas=quotas,
+                       reserve=(args.reserve, args.reserve_unknown),
                        max_similarity=args.max_similarity, max_cosine=args.max_cosine,
                        semantic=args.semantic == "model", seed=args.seed)
     except (ValueError, KeyError, json.JSONDecodeError) as e:
         print(f"bad input: {e}", file=sys.stderr)
         return 2
     args.out.mkdir(parents=True, exist_ok=True)
-    for name in ("decision", "shadow", "report", "fingerprint"):
+    for name in ("decision", "shadow", "reserve", "report", "fingerprint"):
         (args.out / f"{name}.json").write_text(json.dumps(result[name], ensure_ascii=False, indent=1) + "\n",
                                                encoding="utf-8")
     r = result["report"]
-    print(f"decision set {r['decision_items']}, shadow set {r['shadow_items']}, complete: {r['complete']}, "
-          f"semantic filter: {r['semantic_filter']}")
+    print(f"decision set {r['decision_items']}, shadow set {r['shadow_items']}, reserve {r['reserve_items']}, "
+          f"complete: {r['complete']}, semantic filter: {r['semantic_filter']}")
+    print(f"sealed: {r['checked_against']['sealed']}")
     print("taken per round: " + json.dumps(r["taken_per_round"]))
     print("dropped: " + ", ".join(f"{k} {v}" for k, v in r["dropped"].items() if v))
     for intent, c in r["per_intent"].items():
