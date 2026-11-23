@@ -75,5 +75,5 @@ def test_the_benchmark_prompt_examples_are_checked_too(tmp_path, capsys):
     texts = [t for _, t in rows]
     assert "Wer hat die Glühbirne erfunden?" in texts and not any("v1" in w for w, _ in rows)
     assert any("PROMPTS[detailed]" in w for w, _ in rows)
-    leaks = lock.find_leaks(rows, [{"id": "h-1", "text": "Wer hat eigentlich die Glühbirne erfunden?"}], 0.85)
+    leaks = lock.find_leaks(rows, [{"id": "h-1", "text": "Wer hat denn die Glühbirne erfunden?"}], 0.85)
     assert leaks and leaks[0]["train"].startswith("bench.py:PROMPTS[")
