@@ -104,7 +104,7 @@ def test_only_sure_agreement_with_the_writer(tmp_path):
     assert not kept & {r1[0]["text"], r1[1]["text"], r1[2]["text"]}
 
 
-def test_lexical_filter_against_known_sentences_sealed_and_each_other(tmp_path):
+def test_lexical_filter_against_known_sentences_and_each_other(tmp_path):
     r1 = rows("1", 8, 8, "ABCD")
     twin = r1[12]
     r2 = rows("2", 4, 5, "FG") + [{**twin, "id": "x1", "text": twin["text"] + "!"},
@@ -112,11 +112,9 @@ def test_lexical_filter_against_known_sentences_sealed_and_each_other(tmp_path):
     f = folder_with(tmp_path, r1, r2)
     known = {"training": [r1[0]["text"].upper()], "holdout": [r1[4]["text"] + "?"], "probe": [r1[5]["text"]],
              "template": [r1[6]["text"]]}
-    sealed = {"schema": 1, "items": [hb.fingerprint_item(r1[8]["text"])]}
-    r = hb.build(f, sealed, quotas=SMALL, semantic=False, known=known)
+    r = hb.build(f, None, quotas=SMALL, semantic=False, known=known)
     d = r["report"]["dropped"]
-    assert (d["near_training"], d["near_holdout"], d["near_probe"], d["near_template"], d["near_sealed"]) == \
-        (1, 1, 1, 1, 1)
+    assert (d["near_training"], d["near_holdout"], d["near_probe"], d["near_template"]) == (1, 1, 1, 1)
     assert d["duplicate"] == 1 and d["near_candidate"] == 1
 
 
@@ -130,7 +128,8 @@ def test_no_text_in_report_or_fingerprint_and_nothing_into_the_repository(tmp_pa
                     "--decision-unknown", "2:3,1:4", "--shadow", "2:1,1:2", "--shadow-unknown", "2:1,1:2"])
     printed = capsys.readouterr()
     assert code in (0, 3)
-    for name in ("report.json", "fingerprint.json"):
+    assert not (out / "fingerprint.json").exists()
+    for name in ("report.json",):
         body = (out / name).read_text(encoding="utf-8")
         for r in r1 + r2:
             assert r["text"] not in body and r["text"] not in printed.out + printed.err
@@ -160,13 +159,6 @@ def test_semantic_filter_uses_the_model_it_is_given(tmp_path):
     assert r["decision"]["semantic_filter"] == "run"
 
 
-def test_fingerprint_matches_itself():
-    lex = hb.Lexical(0.8)
-    lex.add_fingerprint("near_sealed", hb.fingerprint_item("Brauche ich morgen einen Schirm?"))
-    assert lex.near("brauche ich morgen einen schirm") == "near_sealed"
-    assert lex.near("Wann kommt die Lieferung der Fliesen?") is None
-
-
 def test_reserve_follows_both_sets_per_intent_and_round(tmp_path):
     f = folder_with(tmp_path, rows("1", 8, 9, "ABCD"), rows("2", 5, 6, "FG"))
     r = hb.build(f, None, quotas=SMALL, reserve=(2, 1), semantic=False, known=NOTHING)
@@ -180,13 +172,17 @@ def test_reserve_follows_both_sets_per_intent_and_round(tmp_path):
     assert r["report"]["checked_against"]["sealed"].startswith("NOT CHECKED")
 
 
-def test_fingerprint_subcommand_writes_hashes_only(tmp_path):
-    src = tmp_path / "sealed.json"
-    src.write_text(json.dumps({"items": [{"text": "Leg die Aufgabe Gerüst prüfen an"}]}), encoding="utf-8")
-    out = tmp_path / "fp.json"
-    assert hb.main(["fingerprint", str(src), "--out", str(out)]) == 0
-    fp = json.loads(out.read_text(encoding="utf-8"))
-    assert fp["schema"] == 1 and len(fp["items"]) == 1 and "Gerüst" not in out.read_text(encoding="utf-8")
-    lex = hb.Lexical(0.8)
-    lex.add_fingerprint("near_sealed", fp["items"][0])
-    assert lex.near("Leg die Aufgabe Gerüst prüfen an!") == "near_sealed"
+def test_excluded_ids_are_struck_first_and_named_in_the_sets(tmp_path):
+    r1 = rows("1", 8, 9, "ABCD")
+    f = folder_with(tmp_path, r1, rows("2", 5, 6, "FG"))
+    exclude = {"schema": 1, "geprueft_gegen": "sealed", "ausschluss_ids": [r1[0]["id"], r1[1]["id"], "unbekannt"]}
+    r = hb.build(f, exclude, quotas=SMALL, semantic=False, known=NOTHING)
+    kept = {i["text"] for i in r["decision"]["items"] + r["shadow"]["items"] + r["reserve"]["items"]}
+    assert r["report"]["dropped"]["excluded_sealed"] == 2 and not kept & {r1[0]["text"], r1[1]["text"]}
+    assert "by the auditor, 2 excluded" in r["decision"]["description"]
+    assert r["report"]["checked_against"]["sealed"].endswith("2 excluded")
+    assert "ausschluss_ids" not in r["report"]["sealed_check"]
+    bad = tmp_path / "bad.json"
+    bad.write_text(json.dumps({"schema": 1}), encoding="utf-8")
+    assert hb.main(["--candidates", str(f), "--out", str(tmp_path / "o"), "--semantic", "skip",
+                    "--exclude-ids", str(bad)]) == 2

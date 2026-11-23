@@ -10,14 +10,15 @@ labels_hart_1/labels_hart_2):
     candidates  {"id", "writer", "text", "expected_intent"}
     labels      {"id", "intent", "sicher"}     (by id; without id, by text)
 
-A candidate is kept only if
+Candidates whose id is on --exclude-ids are struck before anything else (the auditor's
+check against the sealed sentences, which this tool never sees). A candidate is kept only if
 
 1. its intent is one of the 25 of contract 2 and it is no duplicate of an earlier one,
 2. both assignments exist, both equal the writer's intent and both are marked sure,
 3. it is below --max-similarity (0.8) in characters and in words (tools/check_holdout_leak.py
    measures, after the same normalisation) to every training sentence, every holdout ever
-   used, the probes, the prompt and teacher examples, the sealed fingerprint and every
-   candidate kept before it (near copies across writers and rounds),
+   used, the probes, the prompt and teacher examples and every candidate kept before it
+   (near copies across writers and rounds),
 4. its meaning is below --max-cosine (0.85, the sentence model of tools/check_semantic_leak.py)
    to the same sentences, unless --semantic skip, which the report and the sets then say.
 
@@ -31,22 +32,17 @@ sentence is in both sets. After both sets, the next --reserve (6) per intent and
 (tools/holdout_semantic.py, Holdout semantic workflow) and replaces a sentence it rejects
 by the next reserve sentence of the same intent and round, so a hit there needs no new
 writing round. Written to --out (also outside the repository): decision.json, shadow.json
-and reserve.json (items with id, set, text, expected_intent, origin), report.json (numbers only:
-available per intent and round, drops per reason, taken per round, fills; no sentence) and
-fingerprint.json (per sentence only hashes of the normalised text, its words and its
-character trigrams). No sentence is printed. Exit 0 when every quota is met, 3 when one is
+and reserve.json (items with id, set, text, expected_intent, origin) and report.json (numbers
+only: available per intent and round, drops per reason, taken per round, fills; no sentence).
+No sentence is printed. There is deliberately no hash fingerprint of the sentences: short
+unsalted hashes of words or trigrams can be reversed with a dictionary.
+Exit 0 when every quota is met, 3 when one is
 short (the sets are written and marked incomplete), 2 on bad input.
 
-Landing a set in data/ and recording its fingerprint need the user's word; this tool
-never writes into the repository.
-
-The fingerprint subcommand writes a fingerprint in the format this tool reads, from any
-sentence files (JSON with items[].text, or JSONL with text), for sets whose text must not
-be shown to the one who builds the next set:
+Landing a set in data/ needs the user's word; this tool never writes into the repository.
 
     python tools/holdout_build.py --candidates /path/outside --out /path/outside/built \
-        --sealed-fingerprint /path/to/fingerprint.json
-    python tools/holdout_build.py fingerprint sealed_a.json sealed_b.json --out fingerprint.json
+        --exclude-ids /path/outside/excluded.json
 """
 
 from __future__ import annotations
@@ -67,17 +63,16 @@ sys.path.insert(0, str(ROOT / "runner"))
 import bench  # noqa: E402
 import check_holdout_leak as lock  # noqa: E402
 
-FINGERPRINT_SCHEMA = 1
+EXCLUDE_SCHEMA = 1
 DEFAULT_ROUNDS = ["1:kandidaten.jsonl:labels_1.jsonl:labels_2.jsonl",
                   "2:kandidaten_hart.jsonl:labels_hart_1.jsonl:labels_hart_2.jsonl"]
 # Per set: (quota per intent, quota for unknown), each a list of (round, n) in fill order.
 DEFAULT_QUOTAS = {"decision": ("2:14,1:26", "2:60,1:100"), "shadow": ("2:7,1:13", "2:30,1:50")}
 DEFAULT_RESERVE = (6, 20)  # per intent and round; per round for unknown
 LOCAL_ONLY = "NOT RUN (local; the semantic check runs in the cloud, tools/holdout_semantic.py)"
-REASONS = ("intent_not_in_contract", "duplicate", "blind_missing", "blind_disagrees", "blind_unsure",
-           "near_training", "near_holdout", "near_probe", "near_template", "near_sealed", "near_candidate",
-           "semantic_training", "semantic_holdout", "semantic_probe", "semantic_template", "semantic_sealed",
-           "semantic_candidate")
+REASONS = ("excluded_sealed", "intent_not_in_contract", "duplicate", "blind_missing", "blind_disagrees", "blind_unsure",
+           "near_training", "near_holdout", "near_probe", "near_template", "near_candidate",
+           "semantic_training", "semantic_holdout", "semantic_probe", "semantic_template", "semantic_candidate")
 CAVEAT = ("Writers and blind assigners are the same language model; their agreement shows that the labels are "
           "consistent, not that the sentences are hard. Separation shows only in the first measurement of the "
           "base models: a base model without adapter above 95 % means the set is too easy.")
@@ -87,40 +82,20 @@ def norm(text: str) -> str:
     return lock.normalise(text)
 
 
-def _h(s: str) -> str:
-    return hashlib.sha256(s.encode("utf-8")).hexdigest()[:16]
-
-
-def trigrams(n: str) -> set[str]:
-    padded = f"  {n}  "
-    return {padded[i:i + 3] for i in range(len(padded) - 2)}
-
-
-def fingerprint_item(text: str) -> dict:
-    n = norm(text)
-    return {"sha256": hashlib.sha256(n.encode("utf-8")).hexdigest(), "words": sorted({_h(w) for w in n.split()}),
-            "trigrams": sorted({_h(t) for t in trigrams(n)})}
-
-
 def jaccard(a: set, b: set) -> float:
     return len(a & b) / len(a | b) if a | b else 1.0
 
 
 class Lexical:
-    """Character similarity (difflib ratio) and word overlap against known texts, cheap bounds first,
-    plus fingerprint items known only by hashes (exact text, word and trigram overlap)."""
+    """Character similarity (difflib ratio) and word overlap against known texts, cheap bounds first."""
 
     def __init__(self, threshold: float):
         self.t = threshold
         self.texts: list[tuple[str, str, set[str]]] = []
-        self.prints: list[tuple[str, str, set[str], set[str]]] = []
 
     def add_text(self, kind: str, text: str) -> None:
         n = norm(text)
         self.texts.append((kind, n, set(n.split())))
-
-    def add_fingerprint(self, kind: str, item: dict) -> None:
-        self.prints.append((kind, item["sha256"], set(item["words"]), set(item["trigrams"])))
 
     def near(self, text: str) -> str | None:
         n = norm(text)
@@ -133,12 +108,6 @@ class Lexical:
             m = difflib.SequenceMatcher(None, n, other, autojunk=False)
             if m.quick_ratio() >= self.t and m.ratio() >= self.t:
                 return kind
-        if self.prints:
-            fp = fingerprint_item(text)
-            w, t = set(fp["words"]), set(fp["trigrams"])
-            for kind, sha, pw, pt in self.prints:
-                if sha == fp["sha256"] or jaccard(w, pw) >= self.t or jaccard(t, pt) >= self.t:
-                    return kind
         return None
 
 
@@ -165,13 +134,6 @@ class Semantic:
         v = self.encode(texts)
         self.vectors = v if self.vectors is None else self.np.vstack([self.vectors, v])
         self.kinds += [kind] * len(texts)
-
-    def add_vectors(self, kind: str, vectors: list[list[float]]) -> None:
-        if not vectors:
-            return
-        v = self.np.asarray(vectors, dtype="float32")
-        self.vectors = v if self.vectors is None else self.np.vstack([self.vectors, v])
-        self.kinds += [kind] * len(vectors)
 
     def near(self, text: str) -> str | None:
         if self.vectors is None:
@@ -248,7 +210,7 @@ def load_round(folder: Path, spec: str) -> tuple[str, list[dict], dict, dict, di
     return name, rows, labels(paths["labels_a"]), labels(paths["labels_b"]), hashes
 
 
-def build(folder: Path, sealed: dict | None, *, rounds: list[str] = DEFAULT_ROUNDS,
+def build(folder: Path, exclude: dict | None, *, rounds: list[str] = DEFAULT_ROUNDS,
           quotas: dict[str, tuple[str, str]] = DEFAULT_QUOTAS, reserve: tuple[int, int] = DEFAULT_RESERVE,
           max_similarity: float = 0.8,
           max_cosine: float = 0.85, semantic: bool = True, seed: str = "contract-2",
@@ -261,26 +223,26 @@ def build(folder: Path, sealed: dict | None, *, rounds: list[str] = DEFAULT_ROUN
     for kind, texts in known.items():
         for t in texts:
             lex.add_text(f"near_{kind}", t)
-    for item in (sealed or {}).get("items", []):
-        lex.add_fingerprint("near_sealed", item)
     sem = None
     if semantic:
         sem = semantic_model or Semantic(max_cosine)
         for kind, texts in known.items():
             sem.add(f"semantic_{kind}", texts)
-        # A fingerprint holds no text; its meaning can only be compared if it carries vectors of the same model.
-        sem.add_vectors("semantic_sealed", [i["embedding"] for i in (sealed or {}).get("items", []) if i.get("embedding")])
 
     dropped: Counter[str] = Counter()
     stages: dict[tuple[str, str], Counter] = {}
     kept: dict[tuple[str, str], list[dict]] = {}
     seen: set[str] = set()
     hashes: dict[str, str] = {}
+    excluded = {str(i) for i in (exclude or {}).get("ausschluss_ids", [])}
     # Round by round in the order given, each in rank order, so "kept before it" is deterministic.
     for name, rows, la, lb, h in loaded:
         hashes.update(h)
         for c in sorted(rows, key=lambda r: rank(seed, key(r.get("text", "")))):
             text, intent = key(c.get("text", "")), c.get("expected_intent")
+            if str(c.get("id")) in excluded:
+                dropped["excluded_sealed"] += 1
+                continue
             if intent not in intents or not text:
                 dropped["intent_not_in_contract"] += 1
                 continue
@@ -360,12 +322,15 @@ def build(folder: Path, sealed: dict | None, *, rounds: list[str] = DEFAULT_ROUN
         return [{"id": f"{prefix}-{n:04d}", "set": r["set"], "text": r["text"], "expected_intent": r["expected_intent"],
                  "origin": r["origin"]} for n, r in enumerate(rows, 1)]
 
-    meta = {"contract": bench.CONTRACT_VERSION, "complete": complete, "description": CAVEAT,
+    sealed_note = (f" Checked against the sealed sentences by the auditor, {dropped.get('excluded_sealed', 0)} "
+                   "excluded." if exclude else " Not checked against the sealed sentences.")
+    meta = {"contract": bench.CONTRACT_VERSION, "complete": complete, "description": CAVEAT + sealed_note,
             "semantic_filter": "run" if sem is not None else LOCAL_ONLY,
             "checked_against": {"training": "data/train/*.jsonl", "holdouts": "every holdout ever used",
                                 "probes": "data/probe_*.json", "templates": "prompt and teacher examples",
-                                "sealed": (f"fingerprint, {len((sealed or {}).get('items', []))} sentences, by hashes"
-                                           if sealed else "NOT CHECKED: no fingerprint given")}}
+                                "sealed": (f"checked against the sealed sentences by the auditor, "
+                                           f"{dropped.get('excluded_sealed', 0)} excluded"
+                                           if exclude else "NOT CHECKED: no exclusion list given")}}
     decision, shadow = finish(sets["decision"], "c2d"), finish(sets["shadow"], "c2s")
     spare = finish(sets["reserve"], "c2r")
     return {
@@ -373,7 +338,7 @@ def build(folder: Path, sealed: dict | None, *, rounds: list[str] = DEFAULT_ROUN
         "shadow": {**meta, "kind": "shadow set", "items": shadow},
         "reserve": {**meta, "kind": "reserve for the cloud semantic check; never measured", "items": spare},
         "report": {**meta, "inputs_sha256": hashes,
-                   "sealed_fingerprint_items": len((sealed or {}).get("items", [])),
+                   "sealed_check": {k: v for k, v in (exclude or {}).items() if k != "ausschluss_ids"},
                    "known_sentences": {k: len(v) for k, v in known.items()},
                    "max_similarity": max_similarity, "max_cosine": max_cosine if sem is not None else None,
                    "seed": seed, "quotas": {k: {"per_intent": v[0], "unknown": v[1]} for k, v in quotas.items()},
@@ -381,41 +346,10 @@ def build(folder: Path, sealed: dict | None, *, rounds: list[str] = DEFAULT_ROUN
                    "decision_items": len(decision), "shadow_items": len(shadow), "reserve_items": len(spare),
                    "taken_per_round": {s: dict(Counter(r["origin"] for r in rows))
                                        for s, rows in (("decision", decision), ("shadow", shadow))}},
-        "fingerprint": {"schema": FINGERPRINT_SCHEMA, "kind": "vyvy holdout fingerprint",
-                        "normalise": "tools/check_holdout_leak.py normalise; hashes are SHA-256, the first 16 hex "
-                                     "digits for words and character trigrams",
-                        "items": [fingerprint_item(r["text"]) for r in decision + shadow + spare]},
     }
 
 
-def sentences_of(path: Path) -> list[str]:
-    if path.suffix == ".jsonl":
-        return [r["text"] for r in read_jsonl(path)]
-    data = json.loads(path.read_text(encoding="utf-8"))
-    return [i["text"] for i in (data["items"] if isinstance(data, dict) else data)]
-
-
-def fingerprint_main(argv: list[str]) -> int:
-    p = argparse.ArgumentParser(prog="holdout_build.py fingerprint",
-                                description="Write a fingerprint (hashes only) of sentence files")
-    p.add_argument("files", type=Path, nargs="+")
-    p.add_argument("--out", type=Path, required=True)
-    args = p.parse_args(argv)
-    texts = [t for f in args.files for t in sentences_of(f)]
-    fp = {"schema": FINGERPRINT_SCHEMA, "kind": "vyvy holdout fingerprint",
-          "normalise": "tools/check_holdout_leak.py normalise; hashes are SHA-256, the first 16 hex digits for "
-                       "words and character trigrams",
-          "sources_sha256": {f.name: hashlib.sha256(f.read_bytes()).hexdigest() for f in args.files},
-          "items": [fingerprint_item(t) for t in texts]}
-    args.out.write_text(json.dumps(fp, indent=1) + "\n", encoding="utf-8")
-    print(f"{args.out}: {len(texts)} sentences, hashes only")
-    return 0
-
-
 def main(argv: list[str] | None = None) -> int:
-    argv = sys.argv[1:] if argv is None else argv
-    if argv and argv[0] == "fingerprint":
-        return fingerprint_main(argv[1:])
     p = argparse.ArgumentParser(description="Build the contract 2 decision and shadow sets from blind candidates")
     p.add_argument("--candidates", type=Path, required=True, help="folder outside the repository")
     p.add_argument("--out", type=Path, required=True, help="folder outside the repository")
@@ -427,7 +361,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--shadow-unknown", default=DEFAULT_QUOTAS["shadow"][1])
     p.add_argument("--reserve", type=int, default=DEFAULT_RESERVE[0], help="reserve per intent and round")
     p.add_argument("--reserve-unknown", type=int, default=DEFAULT_RESERVE[1])
-    p.add_argument("--sealed-fingerprint", type=Path, help="fingerprint of the sealed sets (hashes only)")
+    p.add_argument("--exclude-ids", type=Path, help="candidate ids to strike first (JSON with ausschluss_ids)")
     p.add_argument("--max-similarity", type=float, default=0.8)
     p.add_argument("--max-cosine", type=float, default=0.85)
     p.add_argument("--semantic", choices=("model", "skip"), default="model",
@@ -438,13 +372,14 @@ def main(argv: list[str] | None = None) -> int:
         if not outside_repo(getattr(args, name)):
             print(f"--{name} must be outside the repository", file=sys.stderr)
             return 2
-    sealed = json.loads(args.sealed_fingerprint.read_text(encoding="utf-8")) if args.sealed_fingerprint else None
-    if sealed is not None and sealed.get("schema") != FINGERPRINT_SCHEMA:
-        print(f"sealed fingerprint: schema {sealed.get('schema')} is not {FINGERPRINT_SCHEMA}", file=sys.stderr)
+    exclude = json.loads(args.exclude_ids.read_text(encoding="utf-8")) if args.exclude_ids else None
+    if exclude is not None and (exclude.get("schema") != EXCLUDE_SCHEMA
+                                or not isinstance(exclude.get("ausschluss_ids"), list)):
+        print(f"exclusion list: need schema {EXCLUDE_SCHEMA} with a list ausschluss_ids", file=sys.stderr)
         return 2
     quotas = {"decision": (args.decision, args.decision_unknown), "shadow": (args.shadow, args.shadow_unknown)}
     try:
-        result = build(args.candidates, sealed, rounds=args.rounds or DEFAULT_ROUNDS, quotas=quotas,
+        result = build(args.candidates, exclude, rounds=args.rounds or DEFAULT_ROUNDS, quotas=quotas,
                        reserve=(args.reserve, args.reserve_unknown),
                        max_similarity=args.max_similarity, max_cosine=args.max_cosine,
                        semantic=args.semantic == "model", seed=args.seed)
@@ -452,7 +387,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"bad input: {e}", file=sys.stderr)
         return 2
     args.out.mkdir(parents=True, exist_ok=True)
-    for name in ("decision", "shadow", "reserve", "report", "fingerprint"):
+    for name in ("decision", "shadow", "reserve", "report"):
         (args.out / f"{name}.json").write_text(json.dumps(result[name], ensure_ascii=False, indent=1) + "\n",
                                                encoding="utf-8")
     r = result["report"]
