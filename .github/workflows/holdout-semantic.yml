@@ -2,13 +2,13 @@ name: Holdout semantic
 
 # The semantic half of building a contract 2 holdout pair (tools/holdout_semantic.py). The
 # sets are built on a computer where no sentence model may run (tools/holdout_build.py,
-# lexical filter only) and pushed to a branch holdout/<name>; this checks their meaning
+# lexical filter only) and pushed to a branch lokal/holdout-<name>; this checks their meaning
 # against everything public, replaces a rejected sentence from the reserve of the same
 # intent and round, and commits the checked sets back to that branch. Only sets marked
 # "run (cloud ...)" may be merged; main never runs this.
 on:
   push:
-    branches: ["holdout/**"]
+    branches: ["lokal/holdout-**"]
     paths: ["data/holdout_decision_c2.json", "data/holdout_shadow_c2.json", "data/holdout_reserve_c2.json"]
   workflow_dispatch:
 
@@ -21,7 +21,7 @@ concurrency:
 
 jobs:
   check:
-    if: ${{ github.ref != 'refs/heads/main' && startsWith(github.ref, 'refs/heads/holdout/') }}
+    if: ${{ github.ref != 'refs/heads/main' && startsWith(github.ref, 'refs/heads/lokal/holdout-') }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
