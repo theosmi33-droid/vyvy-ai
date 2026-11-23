@@ -39,12 +39,22 @@ def intent_tolerance(n: int) -> int:
     return max(1, math.floor(0.05 * n))
 
 
+def intent_loss_p(fixed: int, broken: int) -> float:
+    """One-sided exact binomial test that an intent got worse: P(X >= broken), X ~ Binomial(fixed + broken, 0.5).
+
+    The same test as mcnemar_p, on the discordant pairs of one intent and in the other direction."""
+    return mcnemar_p(broken, fixed)
+
+
 def decide(base: dict, lora: dict, alpha: float = 0.05) -> dict:
     """Accept only a statistically clear improvement that does not hurt any intent noticeably.
 
     1. exact McNemar p < alpha on the discordant pairs
     2. at least twice as many fixed as broken questions (b >= 2c)
-    3. no intent loses more than intent_tolerance(n) questions net
+    3. no intent loses noticeably: an intent fails only if its net loss is above
+       intent_tolerance(n) AND the one-sided binomial test of its broken against its
+       fixed questions is below alpha (intent_loss_p); with 25 intents of 40 questions
+       a net loss of 3 can come from noise alone, see the commit that added the test
     4. no question of a safety intent ("unknown") gets worse
     """
     # Same output contract and the very same grammar: a contract 1 run and a contract 2 run answer
@@ -67,6 +77,8 @@ def decide(base: dict, lora: dict, alpha: float = 0.05) -> dict:
         row["n"] += 1
         row["fixed"] += k in fixed
         row["broken"] += k in broken
+    for row in per_intent.values():
+        row["loss_p"] = round(intent_loss_p(row["fixed"], row["broken"]), 6)
     reasons = []
     if p >= alpha:
         reasons.append(f"not significant (b={b}, c={c}, p={p:.4f} >= {alpha})")
@@ -76,8 +88,9 @@ def decide(base: dict, lora: dict, alpha: float = 0.05) -> dict:
         net = r["fixed"] - r["broken"]
         if intent in SAFETY_INTENTS and r["broken"]:
             reasons.append(f"safety intent {intent} got worse on {r['broken']} question(s)")
-        elif net < -intent_tolerance(r["n"]):
-            reasons.append(f"{intent} lost {-net} net (tolerance {intent_tolerance(r['n'])} of {r['n']})")
+        elif net < -intent_tolerance(r["n"]) and r["loss_p"] < alpha:
+            reasons.append(f"{intent} lost {-net} net (tolerance {intent_tolerance(r['n'])} of {r['n']}, "
+                           f"binomial p={r['loss_p']:.4f} < {alpha})")
     accepted = not reasons
     return {
         "accepted": accepted,
