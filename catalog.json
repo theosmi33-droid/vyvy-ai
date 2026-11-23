@@ -40,7 +40,7 @@
   "grammar_sha256": "4c8200c6b9a1d5ee3e69233336594b3a5aec1bac4a1edbe025c010c0d5913e33",
   "prompts_sha256": {
    "compact": "75bcfafab67d755d47d95c2f78584929d77dec3afb324914e8dc8149be149d1c",
-   "detailed": "b10de95a25fe9b77fe85eb4beabaa3ab37dc4a13607d48c4ac587df73c3b9b6b"
+   "detailed": "f3b2499a2d100e5095d7df18e9c282c94ba41f9eb57d2a374ae197389f341794"
   }
  },
  "contracts": {
@@ -110,7 +110,7 @@
    "grammar_sha256": "4c8200c6b9a1d5ee3e69233336594b3a5aec1bac4a1edbe025c010c0d5913e33",
    "prompts_sha256": {
     "compact": "75bcfafab67d755d47d95c2f78584929d77dec3afb324914e8dc8149be149d1c",
-    "detailed": "b10de95a25fe9b77fe85eb4beabaa3ab37dc4a13607d48c4ac587df73c3b9b6b"
+    "detailed": "f3b2499a2d100e5095d7df18e9c282c94ba41f9eb57d2a374ae197389f341794"
    }
   }
  },

@@ -73,7 +73,7 @@ def test_real_synthesis_script_has_examples():
 def test_the_benchmark_prompt_examples_are_checked_too(tmp_path, capsys):
     rows = lock.load_bench_examples()
     texts = [t for _, t in rows]
-    assert "Wer hat die Glühbirne erfunden?" in texts and not any("v1" in w for w, _ in rows)
+    assert "Wer hat die Glühbirne erfunden?" in texts and any("PROMPTS_V1[" in w for w, _ in rows)
     assert any("PROMPTS[detailed]" in w for w, _ in rows)
     leaks = lock.find_leaks(rows, [{"id": "h-1", "text": "Wer hat eigentlich die Glühbirne erfunden?"}], lock.MAX_SIMILARITY)
     assert leaks and leaks[0]["train"].startswith("bench.py:PROMPTS[")
@@ -123,23 +123,38 @@ def test_character_similarity_does_not_depend_on_the_order():
         assert lex.near(held) == "training"
 
 
-def _old_pair():
-    rows = [r for r in lock.load_bench_examples() if r[0] == "bench.py:PROMPTS[detailed][2]"]
-    held = [i for i in json.loads((lock.ROOT / "data" / "holdout_blind_v1.json").read_text(encoding="utf-8"))["items"]
-            if i["id"] == "blind-022"]
-    return rows, held
+def _set_item(name, hid):
+    return [i for i in json.loads((lock.ROOT / "data" / name).read_text(encoding="utf-8"))["items"] if i["id"] == hid]
 
 
-def test_exactly_one_known_old_pair():
-    assert len(lock.KNOWN_OLD_PAIRS) == 1
+def test_exactly_two_known_old_pairs_and_all_in_contract_1():
+    assert len(lock.KNOWN_OLD_PAIRS) == 2
+    assert all(place.startswith("bench.py:PROMPTS_V1[") for _, place in lock.KNOWN_OLD_PAIRS)
 
 
-def test_the_known_old_pair_passes_and_every_change_is_red():
-    rows, held = _old_pair()
-    leaks = lock.find_leaks(rows, held, lock.MAX_SIMILARITY)
+def test_a_known_pair_on_a_contract_2_prompt_is_red():
+    rows = [r for r in lock.load_bench_examples() if r[0] == "bench.py:PROMPTS_V1[detailed][2]"]
+    leak = lock.find_leaks(rows, _set_item("holdout_blind_v1.json", "blind-022"), lock.MAX_SIMILARITY)[0]
+    assert lock.known_old_pair(leak)
+    assert not lock.known_old_pair(dict(leak, train="bench.py:PROMPTS[detailed][2]"))
+
+
+def test_contract_2_prompts_have_no_leak():
+    rows = [r for r in lock.load_bench_examples() if r[0].startswith("bench.py:PROMPTS[")]
+    held = [i for h in lock.GUARDED for i in json.loads(h.read_text(encoding="utf-8"))["items"]]
+    assert rows and lock.find_leaks(rows, held, lock.MAX_SIMILARITY) == []
+
+
+@pytest.mark.parametrize(("place", "name", "hid"), [
+    ("bench.py:PROMPTS_V1[detailed][2]", "holdout_blind_v1.json", "blind-022"),
+    ("bench.py:PROMPTS_V1[detailed][4]", "holdout_blind_v3.json", "blind3-124"),
+])
+def test_the_known_old_pairs_pass_and_every_change_is_red(place, name, hid):
+    rows = [r for r in lock.load_bench_examples() if r[0] == place]
+    leaks = lock.find_leaks(rows, _set_item(name, hid), lock.MAX_SIMILARITY)
     assert len(leaks) == 1 and lock.known_old_pair(leaks[0])
     changed_text = dict(leaks[0], holdout_text=leaks[0]["holdout_text"] + " jetzt")
-    other_place = dict(leaks[0], train="bench.py:PROMPTS[compact][2]")
-    other_id = dict(leaks[0], holdout="blind-023")
+    other_place = dict(leaks[0], train=place.replace("[detailed]", "[compact]"))
+    other_id = dict(leaks[0], holdout=hid + "x")
     changed_prompt = dict(leaks[0], text=leaks[0]["text"] + " bitte sofort")
     assert not any(lock.known_old_pair(x) for x in (changed_text, other_place, other_id, changed_prompt))

@@ -142,7 +142,7 @@ DETAILED_PROMPT = "\n".join([
     "Examples:",
     _example("Was liegt heut im Kalender, gell?", "appointments_today", "today", 0.9),
     _example("Was is heut so los bei mir?", "daily_agenda", "today", 0.8),
-    _example("Was muss ich diese Woche noch erledigen?", "tasks_open", "week", 0.9),
+    _example("Was liegt diese Woche noch auf meinem Stapel?", "tasks_open", "week", 0.9),
     _example("Hab ich irgendwas Dringendes verpennt?", "tasks_overdue", None, 0.8),
     _example("Schreib als Aufgabe auf: Leiter beim Verleih zurückgeben", "create_task", None, 0.9,
              content="Leiter beim Verleih zurückgeben"),

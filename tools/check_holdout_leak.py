@@ -108,28 +108,32 @@ def load_prompt_examples(path: Path) -> list[tuple[str, str]]:
 
 
 def load_bench_examples(path: Path = BENCH) -> list[tuple[str, str]]:
-    """The example questions of the current benchmark prompts, read from the prompt texts.
+    """The example questions of the benchmark prompts of both contracts, read from the prompt texts.
 
-    The frozen contract 1 prompts are history and not checked: their detailed prompt carries a
-    near copy of a blind v3 question (found 23.11.2026), which can no longer be changed."""
+    Contract 1 is frozen and measured; its two known near copies of holdout questions are KNOWN_OLD_PAIRS."""
     import importlib.util
 
     spec = importlib.util.spec_from_file_location("bench_for_lock", path)
     bench = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(bench)
-    prompts = bench.PROMPTS
-    return [(f"{path.name}:PROMPTS[{name}][{i}]", q)
+    return [(f"{path.name}:{label}[{name}][{i}]", q)
+            for label, prompts in (("PROMPTS", bench.PROMPTS), ("PROMPTS_V1", bench.PROMPTS_V1))
             for name, text in prompts.items() for i, q in enumerate(re.findall(r'Question: "([^"]+)"', text))]
 
 
-# Known old pairs: exactly this holdout id, this place and both normalised texts. Anything else stays a leak.
+# Known old pairs, contract 1 only (frozen and measured): exactly this holdout id, this place and both
+# normalised texts. Anything else stays a leak; contract 2 has none.
+_V1_WHY = "contract 1 is measured with this prompt example and this holdout sentence; changing either makes old results incomparable"
 KNOWN_OLD_PAIRS = {
-    ("blind-022", "bench.py:PROMPTS[detailed][2]"): {
+    ("blind-022", "bench.py:PROMPTS_V1[detailed][2]"): {
         "train_sha256": "6c7d262bc1797bc19e0cc1c7eba9bb1fc21e0c78bbfd61641ab4733f06ab510f",
         "holdout_sha256": "e65e2c8f9260cec171643514fbc4e8b8bfa07e0748e8a71059e1cf30bb5d2df4",
-        "date": "2026-11-23",
-        "why": "chars 0.833: hidden below the old 0.85, a leak at 0.8. Contract 1 is measured with this prompt "
-               "example and this holdout sentence; changing either makes old results incomparable.",
+        "date": "2026-11-23", "why": "chars 0.833, hidden below the old 0.85; " + _V1_WHY,
+    },
+    ("blind3-124", "bench.py:PROMPTS_V1[detailed][4]"): {
+        "train_sha256": "a71d520944090b7a835f3730a1e4a42bf54b606b28be55a6af4e27bfd1c8157b",
+        "holdout_sha256": "6743a1b7e114725dc8d17bc52fdf715be229f3c5c30fee02e1a2a53980e89290",
+        "date": "2026-11-23", "why": "chars 0.902, found when the lock first read the prompts; " + _V1_WHY,
     },
 }
 
